@@ -125,6 +125,9 @@
     <PackageReference Include="Microsoft.Xaml.Behaviors.Uwp.Managed">
       <Version>2.0.1</Version>
     </PackageReference>
+    <PackageReference Include="Win2D.uwp">
+      <Version>1.24.0</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <PRIResource Include="Strings\en-us\Resources.resw" />
@@ -134,6 +137,43 @@
     <Compile Include="Behaviors\NavigationViewHeaderBehavior.cs" />
     <Compile Include="Behaviors\NavigationViewHeaderMode.cs" />
     <Compile Include="Controls\IModelPageControl.cs" />
+    <Compile Include="Controls\ModelGraph\ModelGraphControl.xaml.cs">
+      <DependentUpon>ModelGraphControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ModelGraph\ModelGraphControlActions.cs" />
+    <Compile Include="Controls\ModelGraph\ModelGraphControlDrawing.cs" />
+    <Compile Include="Controls\ModelGraph\ModelGraphControlEvents.cs" />
+    <Compile Include="Controls\ModelGraph\ModelGraphControlPanel.cs" />
+    <Compile Include="Controls\ModelGraph\ModelGraphControlVisualAids.cs" />
+    <Compile Include="Controls\ModelTree\ModelTreeControl.xaml.cs">
+      <DependentUpon>ModelTreeControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ModelTree\ModelTreeUICache.cs" />
+    <Compile Include="Controls\Shapes\Central.cs" />
+    <Compile Include="Controls\Shapes\Circle.cs" />
+    <Compile Include="Controls\Shapes\Ellipes.cs" />
+    <Compile Include="Controls\Shapes\Line.cs" />
+    <Compile Include="Controls\Shapes\PolyGear.cs" />
+    <Compile Include="Controls\Shapes\Polygon.cs" />
+    <Compile Include="Controls\Shapes\Polyline.cs" />
+    <Compile Include="Controls\Shapes\PolyPulse.cs" />
+    <Compile Include="Controls\Shapes\PolySide.cs" />
+    <Compile Include="Controls\Shapes\PolySpike.cs" />
+    <Compile Include="Controls\Shapes\PolySpline.cs" />
+    <Compile Include="Controls\Shapes\PolySpring.cs" />
+    <Compile Include="Controls\Shapes\PolyStar.cs" />
+    <Compile Include="Controls\Shapes\PolyWave.cs" />
+    <Compile Include="Controls\Shapes\Rectangle.cs" />
+    <Compile Include="Controls\Shapes\RoundedRectangle.cs" />
+    <Compile Include="Controls\Shapes\Shape.cs" />
+    <Compile Include="Controls\Shapes\ShapeData.cs" />
+    <Compile Include="Controls\Shapes\ShapeUtils.cs" />
+    <Compile Include="Controls\SymbolEdit\SymbolEditControl.xaml.cs">
+      <DependentUpon>SymbolEditControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SymbolEdit\SymbolEditControlActions.cs" />
+    <Compile Include="Controls\SymbolEdit\SymbolEditControlDrawing.cs" />
+    <Compile Include="Controls\SymbolEdit\SymbolEditControlEvents.cs" />
     <Compile Include="Helpers\EnumToBooleanConverter.cs" />
     <Compile Include="Helpers\NavHelper.cs" />
     <Compile Include="Helpers\SettingsStorageExtensions.cs" />
@@ -151,13 +191,15 @@
     <Compile Include="Services\ThemeSelectorService.cs" />
     <Compile Include="Services\ViewLifetimeControl.cs" />
     <Compile Include="Services\WindowManagerService.cs" />
-    <Compile Include="Views\ComparePage.xaml.cs">
-      <DependentUpon>ComparePage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ModelPage.xaml.cs" />
+    <Compile Include="Views\ModelPage.xaml.cs">
+      <DependentUpon>ModelPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ComparePage.xaml.cs">
+      <DependentUpon>ComparePage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
@@ -172,6 +214,18 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Controls\ModelGraph\ModelGraphControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ModelTree\ModelTreeControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\SymbolEdit\SymbolEditControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Styles\Page.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -192,10 +246,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\ComparePage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -203,6 +253,10 @@
     <Page Include="Views\ModelPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ComparePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\SettingsPage.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -247,9 +301,7 @@
       <Name>ModelGraph.Core</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="NewFolder1\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

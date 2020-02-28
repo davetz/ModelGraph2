@@ -1,8 +1,11 @@
-﻿using System;
+﻿using ModelGraph.Services;
+using ModelGraph.Core;
+using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Navigation;
 
 namespace ModelGraph.Views
 {
@@ -27,5 +30,14 @@ namespace ModelGraph.Views
         }
 
         private void OnPropertyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+        private async void NewButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            await ModelPageService.Current.CreateNewModelAsync(Dispatcher);
+        }
+        private async void OpenButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            await ModelPageService.Current.OpenModelDataFileAsync(Dispatcher);
+        }
     }
 }

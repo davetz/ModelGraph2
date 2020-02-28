@@ -1,3 +1,3 @@
 ﻿using System.Runtime.CompilerServices;
 [assembly: InternalsVisibleTo("UnitTest_ModelGraph.Core")]
-[assembly: InternalsVisibleTo("RepositoryUWP")]
+[assembly: InternalsVisibleTo("ModelGraph.Repository")]

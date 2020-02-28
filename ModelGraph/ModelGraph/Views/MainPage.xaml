@@ -6,13 +6,26 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Style="{StaticResource PageStyle}"
     mc:Ignorable="d">
-    <Grid x:Name="ContentArea" Margin="{StaticResource MediumLeftRightMargin}">
+    <Page.Resources>
+
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="{ThemeResource ApplicationForegroundThemeBrush}" />
+        </Style>
+
+    </Page.Resources>
+    <Grid
+        x:Name="ContentArea">
         <Grid
             Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}">
-            <!--
-                The SystemControlPageBackgroundChromeLowBrush background represents where you should place your content. 
-                Place your content here.
-            -->
+            <StackPanel>
+                <StackPanel Margin="5">
+                    <Button Name ="New" Style="{StaticResource ButtonStyle}" x:Uid="_100" Click="NewButton_Click"></Button>
+                    <Button Name ="Open" Style="{StaticResource ButtonStyle}" x:Uid="_101" Click="OpenButton_Click"></Button>
+                </StackPanel>
+            </StackPanel>
+
         </Grid>
     </Grid>
 </Page>

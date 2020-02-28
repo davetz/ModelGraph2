@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ModelGraph.Views;
+using System;
 
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -15,6 +16,7 @@ namespace ModelGraph.Services
 
         private static Frame _frame;
         private static object _lastParamUsed;
+        public static ModelPage ActiveModelPage;
 
         public static Frame Frame
         {
