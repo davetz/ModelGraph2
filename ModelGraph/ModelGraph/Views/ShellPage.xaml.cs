@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 using ModelGraph.Helpers;
 using ModelGraph.Services;
-
+using Windows.Foundation;
 using Windows.System;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
@@ -20,8 +21,7 @@ namespace ModelGraph.Views
     // TODO WTS: Change the icons and titles for all NavigationViewItems in ShellPage.xaml.
     public sealed partial class ShellPage : Page, INotifyPropertyChanged
     {
-        private readonly KeyboardAccelerator _altLeftKeyboardAccelerator = BuildKeyboardAccelerator(VirtualKey.Left, VirtualKeyModifiers.Menu);
-        private readonly KeyboardAccelerator _backKeyboardAccelerator = BuildKeyboardAccelerator(VirtualKey.GoBack);
+        private Size _desiredSize = new Size { Height = 600, Width = 600 };
 
         private bool _isBackEnabled;
         private WinUI.NavigationViewItem _selected;
@@ -41,6 +41,9 @@ namespace ModelGraph.Views
         public ShellPage()
         {
             InitializeComponent();
+            ApplicationView.PreferredLaunchViewSize = _desiredSize;
+            ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
+
             DataContext = this;
             Initialize();
         }
@@ -57,8 +60,6 @@ namespace ModelGraph.Views
         {
             // Keyboard accelerators are added here to avoid showing 'Alt + left' tooltip on the page.
             // More info on tracking issue https://github.com/Microsoft/microsoft-ui-xaml/issues/8
-            KeyboardAccelerators.Add(_altLeftKeyboardAccelerator);
-            KeyboardAccelerators.Add(_backKeyboardAccelerator);
             await Task.CompletedTask;
         }
 

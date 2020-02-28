@@ -1,5 +1,5 @@
 ﻿using System;
-
+using ModelGraph.Core;
 using ModelGraph.Helpers;
 
 using Windows.UI.Core;
@@ -31,6 +31,20 @@ namespace ModelGraph.Services
         public int Id { get; private set; }
 
         public string Title { get; set; }
+
+        #region ModelPageService  =============================================
+        public RootModel RootModel { get; set; }
+        public void CloseModel()
+        {
+            if (RootModel is null) return;
+            RootModel = null;
+
+            var task = Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
+            {
+                _window.Close();
+            });
+        }
+        #endregion
 
         public event ViewReleasedHandler Released
         {

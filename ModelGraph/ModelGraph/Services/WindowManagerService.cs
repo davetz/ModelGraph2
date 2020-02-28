@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ModelGraph.Controls;
+using ModelGraph.Core;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -28,6 +30,58 @@ namespace ModelGraph.Services
 
         public CoreDispatcher MainDispatcher { get; private set; }
 
+        #region ModelPageService  =============================================
+        public void CloseRelatedModels(RootModel rootModel)
+        {
+            var views = SecondaryViews.ToArray();
+            foreach (var view in views)
+            {
+                var model = view.RootModel;
+
+                if (model is null) continue;
+                if (model.Chef != rootModel.Chef) continue;
+
+                view.CloseModel();
+            }
+        }
+        public void TryShowModel(IModelPageControl pageControl)
+        {
+
+        }
+        public async Task<ViewLifetimeControl> TryShowAsStandaloneAsync(string windowTitle, Type pageType, RootModel rootModel)
+        {
+            ViewLifetimeControl viewControl = await CreateViewLifetimeControlAsync(windowTitle, pageType, rootModel);
+            SecondaryViews.Add(viewControl);
+            viewControl.StartViewInUse();
+            var viewShown = await ApplicationViewSwitcher.TryShowAsStandaloneAsync(viewControl.Id, ViewSizePreference.Default, ApplicationView.GetForCurrentView().Id, ViewSizePreference.Default);
+            viewControl.StopViewInUse();
+            return viewControl;
+        }
+        private async Task<ViewLifetimeControl> CreateViewLifetimeControlAsync(string windowTitle, Type pageType, RootModel rootModel = null)
+        {
+            ViewLifetimeControl viewControl = null;
+
+            await CoreApplication.CreateNewView().Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                viewControl = ViewLifetimeControl.CreateForCurrentView();
+                viewControl.Title = windowTitle;
+                viewControl.RootModel = rootModel;
+                viewControl.StartViewInUse();
+                var frame = new Frame
+                {
+                    RequestedTheme = ThemeSelectorService.Theme
+                };
+                frame.Navigate(pageType, viewControl);
+                Window.Current.Content = frame;
+                Window.Current.Activate();
+                ApplicationView.GetForCurrentView().Title = viewControl.Title;
+            });
+
+            return viewControl;
+        }
+
+        #endregion
+
         public async Task InitializeAsync()
         {
             await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
@@ -48,6 +102,7 @@ namespace ModelGraph.Services
             viewControl.StopViewInUse();
             return viewControl;
         }
+
 
         // Displays a view in the specified view mode
         public async Task<ViewLifetimeControl> TryShowAsViewModeAsync(string windowTitle, Type pageType, ApplicationViewMode viewMode = ApplicationViewMode.Default)
