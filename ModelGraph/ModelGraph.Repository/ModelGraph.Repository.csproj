@@ -133,6 +133,12 @@
       <Version>6.2.9</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ModelGraph.Core\ModelGraph.Core.csproj">
+      <Project>{a71a8068-a82f-4bec-8ceb-f5ead96b55cc}</Project>
+      <Name>ModelGraph.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

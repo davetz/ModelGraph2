@@ -7,11 +7,11 @@ using Windows.UI.Xaml.Input;
 using ModelGraph.Core;
 using ModelGraph.Helpers;
 using Windows.Storage.Pickers;
-using ModelGraph.Repository;
 using Windows.Storage;
 using ModelGraph.Services;
 using System.Diagnostics;
 using Windows.System;
+using ModelGraph.Repository;
 
 namespace ModelGraph.Controls
 {

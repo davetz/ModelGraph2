@@ -189,4 +189,16 @@
     <value>Compare</value>
     <comment>Navigation view item name for Compare</comment>
   </data>
+  <data name="MainPage_NewButton.Content" xml:space="preserve">
+    <value>Create New Model</value>
+  </data>
+  <data name="MainPage_NewButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Create a new model</value>
+  </data>
+  <data name="MainPage_OpenButton.Content" xml:space="preserve">
+    <value>Open Model Data File</value>
+  </data>
+  <data name="MainPage_OpenButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Open a model data file</value>
+  </data>
 </root>

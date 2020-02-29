@@ -8,11 +8,11 @@
     <OutputType>AppContainerExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ModelGraph</RootNamespace>
-    <AssemblyName>ModelGraph</AssemblyName>
+    <AssemblyName>ModelGraph2</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.18362.0</TargetPlatformVersion>
-    <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
+    <TargetPlatformMinVersion>10.0.18362.0</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -299,6 +299,10 @@
     <ProjectReference Include="..\ModelGraph.Core\ModelGraph.Core.csproj">
       <Project>{A71A8068-A82F-4BEC-8CEB-F5EAD96B55CC}</Project>
       <Name>ModelGraph.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ModelGraph.Repository\ModelGraph.Repository.csproj">
+      <Project>{0A5B6161-E62E-48D6-97CE-6FF44D64D05D}</Project>
+      <Name>ModelGraph.Repository</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
