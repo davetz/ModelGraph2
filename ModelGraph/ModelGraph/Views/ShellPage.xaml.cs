@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-
+using ModelGraph.Core;
 using ModelGraph.Helpers;
 using ModelGraph.Services;
 using Windows.Foundation;
@@ -48,12 +48,80 @@ namespace ModelGraph.Views
             Initialize();
         }
 
+        #region ModelPageService  =============================================
+        //
+        #region InsertModelPage  ==============================================
+        public void InsertModelPage(RootModel model)
+        {
+            model.Chef.SetLocalizer(Helpers.ResourceExtensions.GetLocalizer());
+
+            var item = navigationView.MenuItems
+                            .OfType<NavigationViewItem>()
+                            .FirstOrDefault(menuItem => (menuItem.Name == "Home"));
+
+            if (item is null) return;
+
+            var index = navigationView.MenuItems.IndexOf(item) + 1;
+            var navItem = new WinUI.NavigationViewItem
+            {
+                Content = model.TitleName,
+                Icon = new SymbolIcon(Symbol.AllApps),
+                Tag = model
+            };
+            ToolTipService.SetToolTip(navItem, model.TitleSummary);
+
+            navItem.Loaded += NavItem_Loaded;
+            navigationView.MenuItems.Insert(index, navItem);
+
+            Selected = navItem;
+            NavigationService.Navigate(typeof(ModelPage), model);
+        }
+
+        private static void NavItem_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (sender is NavigationViewItem navItem)
+            {
+                navItem.Loaded -= NavItem_Loaded;
+                navItem.IsSelected = true;
+            }
+        }
+        #endregion
+        //
+        #region RemoveModelPage  ==============================================
+        public void RemoveModelPage(RootModel model)
+        {
+            var item = navigationView.MenuItems
+                            .OfType<NavigationViewItem>()
+                            .FirstOrDefault(menuItem => (menuItem.Tag == model));
+
+            if (item is null) return;
+            navigationView.MenuItems.Remove(item);
+
+            var home = navigationView.MenuItems
+                            .OfType<NavigationViewItem>()
+                            .FirstOrDefault(menuItem => (menuItem.Name == "Home"));
+
+            if (!(home is null))
+            {
+                home.IsSelected = true;
+                NavigationService.Navigate(typeof(MainPage));
+            }
+
+        }
+        #endregion
+        #endregion
+
+
         private void Initialize()
         {
             NavigationService.Frame = shellFrame;
             NavigationService.NavigationFailed += Frame_NavigationFailed;
             NavigationService.Navigated += Frame_Navigated;
             navigationView.BackRequested += OnBackRequested;
+
+            ModelPageService.InsertModelPage = InsertModelPage;
+            ModelPageService.RemoveModelPage = RemoveModelPage;
+            ApplicationView.GetForCurrentView().TryResizeView(_desiredSize);
         }
 
         private async void OnLoaded(object sender, RoutedEventArgs e)
