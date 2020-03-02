@@ -56,12 +56,12 @@ namespace ModelGraph.Views
             model.Chef.SetLocalizer(Helpers.ResourceExtensions.GetLocalizer());
 
             var item = navigationView.MenuItems
-                            .OfType<NavigationViewItem>()
+                            .OfType<WinUI.NavigationViewItem>()
                             .FirstOrDefault(menuItem => (menuItem.Name == "Home"));
 
             if (item is null) return;
 
-            var index = navigationView.MenuItems.IndexOf(item) + 1;
+            var index = navigationView.MenuItems.IndexOf(item) + 2;
             var navItem = new WinUI.NavigationViewItem
             {
                 Content = model.TitleName,
@@ -167,8 +167,21 @@ namespace ModelGraph.Views
             var item = navigationView.MenuItems
                             .OfType<WinUI.NavigationViewItem>()
                             .First(menuItem => (string)menuItem.Content == (string)args.InvokedItem);
-            var pageType = item.GetValue(NavHelper.NavigateToProperty) as Type;
-            NavigationService.Navigate(pageType);
+
+
+            if (item.Tag is RootModel model)
+            {
+                NavigationService.Navigate(typeof(ModelPage), model);
+            }
+            else
+            {
+                var pageType = item.GetValue(NavHelper.NavigateToProperty) as Type;
+                NavigationService.Navigate(pageType);
+            }
+
+
+            //var pageType = item.GetValue(NavHelper.NavigateToProperty) as Type;
+            //NavigationService.Navigate(pageType);
         }
 
         private void OnBackRequested(WinUI.NavigationView sender, WinUI.NavigationViewBackRequestedEventArgs args)

@@ -61,6 +61,10 @@ namespace ModelGraph.Services
             // Don't open the same page multiple times
             if (Frame.Content?.GetType() != pageType || (parameter != null && !parameter.Equals(_lastParamUsed)))
             {
+                var activePage = ActiveModelPage;
+                ActiveModelPage = null;
+                activePage?.NavigatedFrom();
+
                 var navigationResult = Frame.Navigate(pageType, parameter, infoOverride);
                 if (navigationResult)
                 {

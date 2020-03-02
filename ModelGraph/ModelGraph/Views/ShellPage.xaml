@@ -29,7 +29,8 @@
                     <FontIcon Glyph="&#xE80F;"/>
                 </winui:NavigationViewItem.Icon>
             </winui:NavigationViewItem>
-            <winui:NavigationViewItemSeparator x:Name="Seperator"/>
+            <winui:NavigationViewItemSeparator x:Name="Seperator1"/>
+            <winui:NavigationViewItemSeparator x:Name="Seperator2"/>
             <winui:NavigationViewItem x:Name="Compare" x:Uid="ComparePage" helpers:NavHelper.NavigateTo="views:ComparePage">
                 <winui:NavigationViewItem.Icon>
                     <FontIcon Glyph="&#xE773;"/>
