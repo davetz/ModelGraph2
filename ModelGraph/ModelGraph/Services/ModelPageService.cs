@@ -1,5 +1,6 @@
 ﻿using ModelGraph.Controls;
 using ModelGraph.Core;
+using ModelGraph.Repository;
 using ModelGraph.Views;
 using System;
 using System.Threading.Tasks;
@@ -105,11 +106,11 @@ namespace ModelGraph.Services
             {
                 await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
-                    //var rootModel = new RootModel(new RepositoryStorageFile(file))
-                    //{
-                    //    ControlType = ControlType.PrimaryTree
-                    //};
-                    //InsertModelPage(rootModel);
+                    var rootModel = new RootModel(new RepositoryStorageFile(file))
+                    {
+                        ControlType = ControlType.PrimaryTree
+                    };
+                    InsertModelPage(rootModel);
                 });
             }
             return true;
