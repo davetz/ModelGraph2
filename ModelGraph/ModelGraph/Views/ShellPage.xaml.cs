@@ -53,7 +53,7 @@ namespace ModelGraph.Views
         #region InsertModelPage  ==============================================
         public void InsertModelPage(RootModel model)
         {
-            model.Chef.SetLocalizer(Helpers.ResourceExtensions.GetLocalizer());
+            model.Chef.SetLocalizer(Helpers.ResourceExtensions.CoreLocalizer());
 
             var item = navigationView.MenuItems
                             .OfType<WinUI.NavigationViewItem>()

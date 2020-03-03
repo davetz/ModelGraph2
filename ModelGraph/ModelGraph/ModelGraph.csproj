@@ -293,6 +293,7 @@
   <ItemGroup>
     <None Include=".editorconfig" />
     <None Include="ModelGraph_TemporaryKey.pfx" />
+    <PRIResource Include="Strings\en-us\CoreResources.resw" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">

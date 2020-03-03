@@ -8,15 +8,16 @@ namespace ModelGraph.Helpers
     internal static class ResourceExtensions
     {
         private static ResourceLoader _resLoader = new ResourceLoader();
+        private static ResourceLoader _coreResLoader = ResourceLoader.GetForCurrentView("CoreResources");
 
         public static string GetLocalized(this string resourceKey)
         {
             return _resLoader.GetString(resourceKey);
         }
 
-        public static Func<string, string> GetLocalizer()
+        public static Func<string, string> CoreLocalizer()
         {
-            return (s) => _resLoader.GetString(s);
+            return (s) => _coreResLoader.GetString(s);
         }
     }
 }

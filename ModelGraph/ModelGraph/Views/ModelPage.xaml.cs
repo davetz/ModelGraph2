@@ -51,7 +51,7 @@ namespace ModelGraph.Views
             {
                 if (m.PageControl is null)
                 {
-                    m.Chef.SetLocalizer(ResourceExtensions.GetLocalizer());
+                    m.Chef.SetLocalizer(ResourceExtensions.CoreLocalizer());
 
                     switch (m.ControlType)
                     {
