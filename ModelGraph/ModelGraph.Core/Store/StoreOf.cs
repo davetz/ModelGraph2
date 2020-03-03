@@ -9,8 +9,8 @@ namespace ModelGraph.Core
         internal Guid Guid; // all stores have a Guid
 
         #region Constructor  ==================================================
-        internal StoreOf() { }
-        internal StoreOf(Chef owner, Trait trait, Guid guid, int capacity)
+        public StoreOf() { }
+        public StoreOf(Chef owner, Trait trait, Guid guid, int capacity)
         {
             Owner = owner;
             Trait = trait;
