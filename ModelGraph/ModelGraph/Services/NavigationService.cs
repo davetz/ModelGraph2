@@ -16,7 +16,6 @@ namespace ModelGraph.Services
 
         private static Frame _frame;
         private static object _lastParamUsed;
-        public static ModelPage ActiveModelPage;
 
         public static Frame Frame
         {
@@ -42,6 +41,8 @@ namespace ModelGraph.Services
         public static bool CanGoBack => Frame.CanGoBack;
 
         public static bool CanGoForward => Frame.CanGoForward;
+
+        public static ModelPage ActiveModelPage { get; set; }
 
         public static bool GoBack()
         {
