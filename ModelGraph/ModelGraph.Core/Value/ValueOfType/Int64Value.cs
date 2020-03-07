@@ -1,15 +1,68 @@
 ﻿using System;
 using System.Collections.Generic;
+using Windows.Storage.Streams;
 
 namespace ModelGraph.Core
 {
     internal class Int64Value : ValueOfType<Int64>
     {
-        internal Int64Value(IValueStore<Int64> store) { _valueStore = store; }
         internal override ValType ValType => ValType.Int64;
 
-        internal ValueDictionary<Int64> ValueDictionary => _valueStore as ValueDictionary<Int64>;
+        internal ValueDictionary<Int64> ValueDictionary => _valueStore as ValueDictionary<long>;
         internal override bool IsSpecific(Item key) => _valueStore.IsSpecific(key);
+
+        #region Constructor, WriteData  =======================================
+        internal Int64Value(IValueStore<long> store) { _valueStore = store; }
+
+        internal Int64Value(DataReader r, int count, Item[] items)
+        {
+            if (count == 0)
+            {
+                _valueStore = new ValueDictionary<long>(count, default);
+            }
+            else
+            {
+                var vs = new ValueDictionary<long>(count, r.ReadInt64());
+                _valueStore = vs;
+
+                for (int i = 0; i < count; i++)
+                {
+                    var inx = r.ReadInt32();
+                    if (inx < 0 || inx >= items.Length) throw new Exception($"Invalid row index {inx}");
+
+                    var rx = items[inx];
+                    if (rx == null) throw new Exception($"Column row is null, index {inx}");
+
+                    vs.LoadValue(rx, r.ReadInt64());
+                }
+            }
+        }
+        internal void WriteData(DataWriter w, Dictionary<Item, int> itemIndex)
+        {
+            w.WriteByte((byte)ValType);
+
+            var vd = ValueDictionary;
+            var N = vd.Count;
+            w.WriteInt32(N);
+
+            if (N > 0)
+            {
+                w.WriteInt64(vd.DefaultValue);
+
+                var keys = vd.GetKeys();
+                var vals = vd.GetValues();
+
+                for (int i = 0; i < N; i++)
+                {
+                    var key = keys[i];
+                    var val = vals[i];
+
+                    w.WriteInt32(itemIndex[key]);
+                    w.WriteInt64(val);
+                }
+            }
+        }
+        #endregion
 
         #region LoadCache  ====================================================
         internal override bool LoadCache(ComputeX cx, Item key, List<Query> qList)

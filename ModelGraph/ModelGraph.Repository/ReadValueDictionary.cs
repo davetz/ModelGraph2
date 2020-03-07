@@ -585,7 +585,7 @@ namespace ModelGraph.Repository
             }
             else
             {
-                var dic = new ValueDictionary<char[]>(count, null);
+                var dic = new ValueDictionary<char[]>(count, default);
                 cx.Value = new CharArrayValue(dic);
 
                 for (int i = 0; i < count; i++)

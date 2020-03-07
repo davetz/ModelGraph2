@@ -1,15 +1,80 @@
 ﻿using System;
 using System.Collections.Generic;
+using Windows.Storage.Streams;
 
 namespace ModelGraph.Core
 {
     internal class SByteArrayValue : ValueOfArray<sbyte>
     {
-        internal SByteArrayValue(IValueStore<sbyte[]> store) { _valueStore = store; }
         internal override ValType ValType => ValType.SByteArray;
 
         internal ValueDictionary<sbyte[]> ValueDictionary => _valueStore as ValueDictionary<sbyte[]>;
         internal override bool IsSpecific(Item key) => _valueStore.IsSpecific(key);
+
+        #region Constructor, WriteData  =======================================
+        internal SByteArrayValue(IValueStore<sbyte[]> store) { _valueStore = store; }
+        internal SByteArrayValue(DataReader r, int count, Item[] items)
+        {
+            var vs = new ValueDictionary<sbyte[]>(count, null);
+            _valueStore = vs;
+
+            if (count > 0)
+            {
+                for (int i = 0; i < count; i++)
+                {
+                    var inx = r.ReadInt32();
+                    if (inx < 0 || inx >= items.Length) throw new Exception($"Invalid row index {inx}");
+
+                    var rx = items[inx];
+                    if (rx == null) throw new Exception($"Column row is null, index {inx}");
+
+                    var len = r.ReadUInt16();
+
+                    var val = new sbyte[len];
+                    if (len > 0)
+                    {
+                        for (int j = 0; j < len; j++)
+                        {
+                            val[j] = (sbyte)r.ReadByte();
+                        }
+                    }
+                    vs.LoadValue(rx, val);
+                }
+            }
+        }
+        internal void WriteData(DataWriter w, Dictionary<Item, int> itemIndex)
+        {
+            w.WriteByte((byte)ValType);
+
+            var vd = ValueDictionary;
+            var N = vd.Count;
+            w.WriteInt32(N);
+
+            if (N > 0)
+            {
+                var keys = vd.GetKeys();
+                var vals = vd.GetValues();
+
+                for (int i = 0; i < N; i++)
+                {
+                    var key = keys[i];
+                    w.WriteInt32(itemIndex[key]);
+
+                    var val = vals[i];
+                    var len = (val is null) ? 0 : val.Length > ushort.MaxValue ? ushort.MaxValue : val.Length;
+                    w.WriteUInt16((ushort)len);
+
+                    if (len > 0)
+                    {
+                        foreach (var v in val)
+                        {
+                            w.WriteByte((byte)v);
+                        }
+                    }
+                }
+            }
+        }
+        #endregion
 
         #region LoadCache  ====================================================
         internal override bool LoadCache(ComputeX cx, Item key, List<Query> qList)

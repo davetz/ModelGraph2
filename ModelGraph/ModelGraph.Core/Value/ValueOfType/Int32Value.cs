@@ -1,15 +1,68 @@
 ﻿using System;
 using System.Collections.Generic;
+using Windows.Storage.Streams;
 
 namespace ModelGraph.Core
 {
     internal class Int32Value : ValueOfType<int>
     {
-        internal Int32Value(IValueStore<int> store) { _valueStore = store; }
         internal override ValType ValType => ValType.Int32;
 
         internal ValueDictionary<int> ValueDictionary => _valueStore as ValueDictionary<int>;
         internal override bool IsSpecific(Item key) => _valueStore.IsSpecific(key);
+
+        #region Constructor, WriteData  =======================================
+        internal Int32Value(IValueStore<int> store) { _valueStore = store; }
+
+        internal Int32Value(DataReader r, int count, Item[] items)
+        {
+            if (count == 0)
+            {
+                _valueStore = new ValueDictionary<int>(count, default);
+            }
+            else
+            {
+                var vs = new ValueDictionary<int>(count, r.ReadInt32());
+                _valueStore = vs;
+
+                for (int i = 0; i < count; i++)
+                {
+                    var inx = r.ReadInt32();
+                    if (inx < 0 || inx >= items.Length) throw new Exception($"Invalid row index {inx}");
+
+                    var rx = items[inx];
+                    if (rx == null) throw new Exception($"Column row is null, index {inx}");
+
+                    vs.LoadValue(rx, r.ReadInt32());
+                }
+            }
+        }
+        internal void WriteData(DataWriter w, Dictionary<Item, int> itemIndex)
+        {
+            w.WriteByte((byte)ValType);
+
+            var vd = ValueDictionary;
+            var N = vd.Count;
+            w.WriteInt32(N);
+
+            if (N > 0)
+            {
+                w.WriteInt32(vd.DefaultValue);
+
+                var keys = vd.GetKeys();
+                var vals = vd.GetValues();
+
+                for (int i = 0; i < N; i++)
+                {
+                    var key = keys[i];
+                    var val = vals[i];
+
+                    w.WriteInt32(itemIndex[key]);
+                    w.WriteInt32(val);
+                }
+            }
+        }
+        #endregion
 
         #region LoadCache  ====================================================
         internal override bool LoadCache(ComputeX cx, Item key, List<Query> qList)

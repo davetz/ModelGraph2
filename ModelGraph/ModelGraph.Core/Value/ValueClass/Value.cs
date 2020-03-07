@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Windows.Storage.Streams;
 
 namespace ModelGraph.Core
 {
@@ -91,5 +92,58 @@ namespace ModelGraph.Core
         internal virtual bool SetValue(Item key, string[] value) => false;
 
         internal bool NoValue<T>(out T value) { value = default; return false; }
+
+        #region Read String/Bytes  ============================================
+        internal static string ReadString(DataReader r)
+        {
+            var len = (UInt32)r.ReadUInt16();
+            var str = r.ReadString(len);
+            return (str == "^") ? string.Empty : str;
+        }
+        internal static byte[] ReadBytes(DataReader r)
+        {
+            var len = r.ReadInt32();
+            var data = new byte[len];
+            for (int i = 0; i < len; i++)
+            {
+                data[i] = r.ReadByte();
+            }
+            return data;
+        }
+        #endregion
+
+        #region Write String/Bytes  ===========================================
+        internal static void WriteString(DataWriter w, string str)
+        {
+            var txt = str ?? string.Empty;
+            if (txt.Length == 0) txt = "^";
+
+
+            var len = w.MeasureString(txt);
+            if (len > UInt16.MaxValue)
+            {
+                var r = (double)len / (double)UInt16.MaxValue;
+                var n = (UInt16)((txt.Length / r) - 2);
+                var trucated = txt.Substring(0, n);
+                w.WriteUInt16((UInt16)w.MeasureString(trucated));
+                w.WriteString(trucated);
+            }
+            else
+            {
+                w.WriteUInt16((UInt16)len);
+                w.WriteString(txt);
+            }
+        }
+        internal static void WriteBytes(DataWriter w, byte[] data)
+        {
+            var len = data.Length;
+            w.WriteInt32(len);
+            foreach (var b in data)
+            {
+                w.WriteByte(b);
+            }
+        }
+
+        #endregion
     }
 }

@@ -91,8 +91,8 @@ namespace ModelGraph.Core
             {
                 if ((v & t) != 0) break; // found it
 
-                b = b >> 8;  // try the next byte
-                t = t >> 8;
+                b >>= 8;  // try the next byte
+                t >>= 8;
             }
 
             // generate the binary representation
@@ -103,7 +103,7 @@ namespace ModelGraph.Core
                     sb.Append('_');
 
                 sb.Append((v & b) == 0 ? '0' : '1');
-                b = b >> 1;
+                b >>= 1;
             }
 
             return sb.ToString();
