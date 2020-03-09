@@ -7,19 +7,20 @@ namespace ModelGraph.Core
 {
     public class RelationXStore : StoreOf<RelationX>, ISerializer
     {
-        public bool HasData => throw new NotImplementedException();
-
-        public Guid GetGuid()
+        static Guid _serializerGuid = new Guid("D950F508-B774-4838-B81A-757EFDC40518");
+        static Guid _internalItemGuid = new Guid("BD104B70-CB79-42C3-858D-588B6B868269");
+        readonly RelationXLink _linkSerializer;
+        internal RelationXStore(Chef owner) : base(owner, Trait.RelationXStore, 30)
         {
-            throw new NotImplementedException();
+            owner.RegisterInternalItem(this, _internalItemGuid);
+            owner.RegisterItemSerializer((_serializerGuid, this));
+            _linkSerializer = new RelationXLink(owner, this);
         }
+
+        #region ISerializer  ==================================================
+        public int GetCount() => Count;
 
         public void ReadData(DataReader r, Item[] items)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void RegisterSerializer(Chef chef)
         {
             throw new NotImplementedException();
         }
@@ -33,5 +34,6 @@ namespace ModelGraph.Core
         {
             throw new NotImplementedException();
         }
+        #endregion
     }
 }
