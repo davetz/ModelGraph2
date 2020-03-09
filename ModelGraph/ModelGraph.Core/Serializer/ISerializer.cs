@@ -10,6 +10,5 @@ namespace ModelGraph.Core
         bool HasData { get; }
         void ReadData(DataReader r, Item[] items);
         void WriteData(DataWriter w, Dictionary<Item, int> itemIndex);
-        void RegisterSerializer(Chef chef);
     }
 }

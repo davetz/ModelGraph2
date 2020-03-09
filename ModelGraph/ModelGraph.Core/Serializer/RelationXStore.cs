@@ -7,6 +7,8 @@ namespace ModelGraph.Core
 {
     public class RelationXStore : StoreOf<RelationX>, ISerializer
     {
+        public bool HasData => throw new NotImplementedException();
+
         public Guid GetGuid()
         {
             throw new NotImplementedException();
@@ -17,7 +19,17 @@ namespace ModelGraph.Core
             throw new NotImplementedException();
         }
 
+        public void RegisterSerializer(Chef chef)
+        {
+            throw new NotImplementedException();
+        }
+
         public void WriteData(DataWriter w)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void WriteData(DataWriter w, Dictionary<Item, int> itemIndex)
         {
             throw new NotImplementedException();
         }

@@ -7,7 +7,80 @@ namespace ModelGraph.Core
 {
     class RelationXLink : ISerializer
     {
-        public Guid GetGuid() => new Guid("61662F08-F43A-44D9-A9BB-9B0126492B8C");
+        static Guid _serializerGuid => new Guid("61662F08-F43A-44D9-A9BB-9B0126492B8C");
+        readonly RelationXStore _relStore;
+        internal RelationXLink(Chef chef, RelationXStore relStore)
+        {
+            _relStore = relStore;
+            chef.RegisterLinkSerializer((_serializerGuid, this));
+        }
+        public bool HasData => GetHasData();
+        bool GetHasData()
+        {
+            foreach (var itm in _relStore.Items)
+            {
+                if (itm is RelationX rx && rx.GetLinksCount() > 0) return true;
+            }
+            return false;
+        }
+
+        public void WriteData(DataWriter w, Dictionary<Item, int> itemIndex)
+        {
+            foreach (var itm in _relStore.Items)
+            {
+                if (itm is RelationX rx) 
+                {
+                    var count = rx.GetLinksCount();
+                    if (count > 0)
+                    {
+                        ushort len = 0;
+                        rx.GetLinks(out List<Item> parents, out List<Item> children);
+
+                        int N = count;
+                        for (int j = 0; j < count; j++)
+                        {
+                            var child = children[j];
+                            var parent = parents[j];
+                            if (itemIndex.ContainsKey(child) && itemIndex.ContainsKey(parent)) continue;
+
+                            // null out this is link, it should not be serialized
+                            children[j] = null;
+                            parents[j] = null;
+                            N -= 1;
+                        }
+                        if (N == 0) continue;
+
+                        w.WriteByte((byte)Mark.RelationLinkBegin); // type index
+                        w.WriteInt32(itemIndex[rx]);
+                        w.WriteInt32(N);
+
+                        for (int j = 0; j < count; j++)
+                        {
+                            var child = children[j];
+                            var parent = parents[j];
+                            if (child == null || parent == null) continue;
+
+                            if (itm != parent)
+                            {
+                                len = 1;
+                                itm = parent;
+                                for (int k = j + 1; k < count; k++)
+                                {
+                                    if (parents[k] != itm) break;
+                                    if (len < ushort.MaxValue) len += 1;
+                                }
+                            }
+
+                            w.WriteInt32(itemIndex[parent]);
+                            w.WriteInt32(itemIndex[child]);
+                            w.WriteUInt16(len);
+                            len = 0;
+                        }
+                    }
+                }
+
+            }
+        }
 
         public void ReadData(DataReader r, Item[] items)
         {
@@ -36,11 +109,6 @@ namespace ModelGraph.Core
 
                 rel.SetLink(item1, item2, len);
             }
-        }
-
-        public void WriteData(DataWriter w)
-        {
-            throw new NotImplementedException();
         }
     }
 }
