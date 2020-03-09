@@ -11,7 +11,7 @@ namespace ModelGraph.Core
         internal string Description;
 
         #region Constructors  =================================================
-        internal ColumnX(StoreOf<ColumnX> owner)
+        internal ColumnX(StoreOfOld<ColumnX> owner)
         {
             Owner = owner;
             Trait = Trait.ColumnX;
@@ -22,7 +22,7 @@ namespace ModelGraph.Core
 
             owner.Add(this);
         }
-        internal ColumnX(StoreOf<ColumnX> owner, Guid guid)
+        internal ColumnX(StoreOfOld<ColumnX> owner, Guid guid)
         {
             Owner = owner;
             Trait = Trait.ColumnX;

@@ -9,7 +9,7 @@ namespace ModelGraph.Core
         internal string Description;
 
         #region Constructors  =================================================
-        internal RelationX(StoreOf<RelationX> owner)
+        internal RelationX(StoreOfOld<RelationX> owner)
         {
             Guid = Guid.NewGuid();
             Owner = owner;
@@ -21,7 +21,7 @@ namespace ModelGraph.Core
             owner.Add(this);
         }
 
-        internal RelationX(StoreOf<RelationX> owner, Guid guid)
+        internal RelationX(StoreOfOld<RelationX> owner, Guid guid)
         {
             Guid = guid;
             Owner = owner;

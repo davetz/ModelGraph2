@@ -18,7 +18,7 @@ namespace ModelGraph.Core
             Trait = Trait.NodeParm;
             Guid = new Guid("96E6DDD7-4BBA-4DFF-A233-3CEDBD18C5D7");
         }
-        internal QueryX(StoreOf<QueryX> owner, QueryType kind, bool isRoot = false, bool isHead = false)
+        internal QueryX(StoreOfOld<QueryX> owner, QueryType kind, bool isRoot = false, bool isHead = false)
         {
             Owner = owner;
             Trait = Trait.QueryX;
@@ -33,7 +33,7 @@ namespace ModelGraph.Core
 
             owner.Add(this);
         }
-        internal QueryX(StoreOf<QueryX> owner, Guid guid)
+        internal QueryX(StoreOfOld<QueryX> owner, Guid guid)
         {
             Owner = owner;
             Trait = Trait.QueryX;

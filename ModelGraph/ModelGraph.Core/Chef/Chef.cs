@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ModelGraph.Core
 {
-    public partial class Chef : StoreOf<Store>
+    public partial class Chef : StoreOfOld<Store>
     {
         static int _newChefCount;
         private int _newChefNumber;

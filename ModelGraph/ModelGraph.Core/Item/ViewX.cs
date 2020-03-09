@@ -11,7 +11,7 @@ namespace ModelGraph.Core
         internal string Description;
 
         #region Constructor  ======================================================
-        internal ViewX(StoreOf<ViewX> owner)
+        internal ViewX(StoreOfOld<ViewX> owner)
         {
             Owner = owner;
             Trait = Trait.ViewX;

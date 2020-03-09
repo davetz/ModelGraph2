@@ -3,22 +3,33 @@ using System.Collections.Generic;
 
 namespace ModelGraph.Core
 {
-    public abstract class StoreOf<T> : Store where T: Item
+    public class StoreOfOld<T> : Store where T: Item
     {
         private List<T> _items = new List<T>(0);    // list of child items
+        internal Guid Guid; // all stores have a Guid
 
         #region Constructor  ==================================================
-        public StoreOf() { }
-        public StoreOf(Chef owner, Trait trait, int capacity)
+        public StoreOfOld() { }
+        public StoreOfOld(Chef owner, Trait trait, Guid guid, int capacity)
         {
             Owner = owner;
             Trait = trait;
+            Guid = guid;
             SetCapacity(capacity);
 
             owner?.Add(this); // we want this store to be in the dataChef's item tree hierarchy
         }
         internal override void Release()
         {
+            if (Count > 0)
+            {
+                foreach (var item in _items)
+                {
+                    item.Release();
+                }
+                _items = null;
+            }
+            base.Release();
         }
         #endregion
 

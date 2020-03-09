@@ -3,14 +3,14 @@
 namespace ModelGraph.Core
 {/*
  */
-    public class EnumX : StoreOf<PairX>
+    public class EnumX : StoreOfOld<PairX>
     {
         internal string Name;
         internal string Summary;
         internal string Description;
 
         #region Constructors  =================================================
-        internal EnumX(StoreOf<EnumX> owner)
+        internal EnumX(StoreOfOld<EnumX> owner)
         {
             Owner = owner;
             Trait = Trait.EnumX;
@@ -19,7 +19,7 @@ namespace ModelGraph.Core
 
             owner.Add(this);
         }
-        internal EnumX(StoreOf<EnumX> owner, Guid guid)
+        internal EnumX(StoreOfOld<EnumX> owner, Guid guid)
         {
             Owner = owner;
             Trait = Trait.EnumX;

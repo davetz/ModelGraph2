@@ -7,7 +7,6 @@
   <ItemGroup>
     <ProjectReference Include="..\ModelGraph.Common\ModelGraph.Common.csproj" />
     <ProjectReference Include="..\ModelGraph.Core\ModelGraph.Core.csproj" />
-    <ProjectReference Include="..\ModelGraph.Custom\ModelGraph.Custom.csproj" />
   </ItemGroup>
 
   <ItemGroup>

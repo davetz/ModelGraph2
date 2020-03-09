@@ -7,7 +7,7 @@ using Windows.Storage.Streams;
 
 namespace ModelGraph.Control
 {
-    public class Controller
+    public class Controller1
     {
 
     }

@@ -23,7 +23,7 @@ namespace ModelGraph.Core
         #region Constructors  =================================================
         internal RelationOf() { } // dummy parameterless constructor
 
-        internal RelationOf(StoreOf<Relation> owner, Trait trait, Guid guid, Pairing pairing = Pairing.OneToMany, int parentCount = 0, int childCount = 0, bool isRequired = false)
+        internal RelationOf(StoreOfOld<Relation> owner, Trait trait, Guid guid, Pairing pairing = Pairing.OneToMany, int parentCount = 0, int childCount = 0, bool isRequired = false)
         {
             Guid = guid;
             Owner = owner;

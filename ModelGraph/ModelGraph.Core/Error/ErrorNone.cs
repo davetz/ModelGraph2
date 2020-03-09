@@ -5,7 +5,7 @@ namespace ModelGraph.Core
     internal class ErrorNone : Error
     {
         #region Constructor  ==================================================
-        internal ErrorNone(StoreOf<Error> owner, Item item, Trait trait)
+        internal ErrorNone(StoreOfOld<Error> owner, Item item, Trait trait)
         {
             Owner = owner;
             Item = item;
