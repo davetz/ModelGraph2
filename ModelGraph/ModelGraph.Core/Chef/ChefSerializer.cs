@@ -32,6 +32,7 @@ namespace ModelGraph.Core
         #endregion
 
         #region Serialize/Deserialize  ========================================
+        public bool HasData() => true;
         public void Serialize(DataWriter w)
         {
             var itemIndex = new Dictionary<Item, int>();
@@ -40,7 +41,7 @@ namespace ModelGraph.Core
             w.WriteInt32(itemIndex.Count);
             foreach (var (g, s) in _serializers)
             {
-                if (s.HasData)
+                if (s.HasData())
                 {
                     w.WriteGuid(g);
                     s.WriteData(w, itemIndex);

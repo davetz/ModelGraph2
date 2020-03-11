@@ -48,7 +48,7 @@ namespace ModelGraph.Core
 
                             var list1 = rx.GetChildren1Items(itemIndex);
 
-                            w.WriteInt32(list1.Count);   //number of parent/child link pairs in this OntToOne relation
+                            w.WriteInt32(list1.Length);   //number of parent/child link pairs in this OntToOne relation
                             foreach (var (ix1, ix2) in list1)
                             {
                                 w.WriteInt32(ix1);      //parent item
@@ -77,14 +77,14 @@ namespace ModelGraph.Core
                 }
             }
             #region WriteList - (write the compond sublist)  ==================
-            void WriteList(List<(int, List<int>)> list)
+            void WriteList((int, int[])[] list)
             {
-                w.WriteInt32(list.Count);   //number of items in main list
+                w.WriteInt32(list.Length);   //number of items in main list
 
                 var max = 0;
                 foreach (var (_, ls) in list)
                 {
-                    var n = ls.Count;
+                    var n = ls.Length;
                     if (n > max) max = n;
                 }
 
@@ -96,7 +96,7 @@ namespace ModelGraph.Core
                     {
                         w.WriteInt32(ix1);  //item index1
 
-                        w.WriteByte((byte)ix2List.Count); // number sublist items
+                        w.WriteByte((byte)ix2List.Length); // number sublist items
                         foreach (var ix2 in ix2List)
                         {
                             w.WriteInt32(ix2);  // sublist item index2
@@ -111,7 +111,7 @@ namespace ModelGraph.Core
                     {
                         w.WriteInt32(ix1);  // item index1
 
-                        w.WriteUInt16((ushort)ix2Lst.Count); // number sublist items
+                        w.WriteUInt16((ushort)ix2Lst.Length); // number sublist items
                         foreach (var ix2 in ix2Lst)
                         {
                             w.WriteInt32(ix2);  //item index1
@@ -126,7 +126,7 @@ namespace ModelGraph.Core
                     {
                         w.WriteInt32(ix1);  // item index1
 
-                        w.WriteInt32((ushort)ix2Lst.Count); // number sublist items
+                        w.WriteInt32((ushort)ix2Lst.Length); // number sublist items
                         foreach (var ix2 in ix2Lst)
                         {
                             w.WriteInt32(ix2);  //item index1
@@ -163,16 +163,16 @@ namespace ModelGraph.Core
                             {
                                 var count1 = r.ReadInt32(); //number of parent/child link pairs in this OntToOne relation
 
-                                var list1 = new List<(int, int)>(count1);
-                                var list2 = new List<(int, int)>(count1);
+                                var list1 = new (int, int)[count1];
+                                var list2 = new (int, int)[count1];
 
                                 for (int j = 0; j < count1; j++)
                                 {
                                     var ix1 = r.ReadInt32();
                                     var ix2 = r.ReadInt32();
 
-                                    list1.Add((ix1, ix2));
-                                    list2.Add((ix2, ix1));
+                                    list1[j] = (ix1, ix2);
+                                    list2[j] = (ix2, ix1);
                                 }
                                 rx.SetChildren1(list1, items);
                                 rx.SetParents1(list2, items);
@@ -181,8 +181,8 @@ namespace ModelGraph.Core
 
                         case Pairing.OneToMany:
                             {
-                                var (count2, list1) = ReadList();
-                                var list2 = new List<(int, int)>(count2);
+                                var (totalCount, list1) = ReadList();
+                                var list2 = new List<(int, int)>(totalCount);
                                 foreach (var (ix1, ix2List) in list1)
                                 {
                                     foreach (var ix2 in ix2List)
@@ -191,7 +191,7 @@ namespace ModelGraph.Core
                                     }
                                 }
                                 rx.SetChildren2(list1, items);
-                                rx.SetParents1(list2, items);
+                                rx.SetParents1(list2.ToArray(), items);
                             }
                             break;
 
@@ -211,12 +211,11 @@ namespace ModelGraph.Core
                 throw new Exception("RelationXLink ReadData, invalid format version");
 
             #region ReadList - (read the compond sublist)  ====================
-            (int, List<(int, List<int>)>) ReadList()
+            (int, (int, int[])[]) ReadList()
             {
                 var count1 = r.ReadInt32(); //number of items in main list
-                var mainList = new List<(int, List<int>)>(count1);
-
-                var totalCount = count1;
+                var mainList = new (int, int[])[count1];
+                var totalCount = 0;
                 for (int j = 0; j < count1; j++)
                 {
                     var code = r.ReadByte(); //type code for the size of the max count of items in sublist
@@ -226,12 +225,12 @@ namespace ModelGraph.Core
                             {
                                 var ix1 = r.ReadInt32();
                                 var count2 = r.ReadByte();   //read number sublist items
-                                var ix2List = new List<int>(count2);
+                                var ix2List = new int[count2];
                                 for (int k = 0; k < count2; k++)
                                 {
-                                    ix2List.Add(r.ReadInt32());
+                                    ix2List[k] = r.ReadInt32();
                                 }
-                                mainList.Add((ix1, ix2List));
+                                mainList[j] = (ix1, ix2List);
                                 totalCount += count2;
                             }
                             break;
@@ -240,12 +239,12 @@ namespace ModelGraph.Core
                             {
                                 var ix1 = r.ReadInt32();
                                 var count2 = r.ReadUInt16();   //read number sublist items
-                                var ix2List = new List<int>(count2);
+                                var ix2List = new int[count2];
                                 for (int k = 0; k < count2; k++)
                                 {
-                                    ix2List.Add(r.ReadInt32());
+                                    ix2List[k] = r.ReadInt32();
                                 }
-                                mainList.Add((ix1, ix2List));
+                                mainList[j] = (ix1, ix2List);
                                 totalCount += count2;
                             }
                             break;
@@ -254,12 +253,12 @@ namespace ModelGraph.Core
                             {
                                 var ix1 = r.ReadInt32();
                                 var count2 = r.ReadInt32();   //read number sublist items
-                                var ix2List = new List<int>(count2);
+                                var ix2List = new int[count2];
                                 for (int k = 0; k < count2; k++)
                                 {
-                                    ix2List.Add(r.ReadInt32());
+                                    ix2List[k] = r.ReadInt32();
                                 }
-                                mainList.Add((ix1, ix2List));
+                                mainList[j] = (ix1, ix2List);
                                 totalCount += count2;
                             }
                             break;

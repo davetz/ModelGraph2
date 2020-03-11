@@ -460,21 +460,21 @@ namespace ModelGraph.Core
         #endregion
 
         #region Serializer  ===================================================
-        internal List<(int, int)> GetChildren1Items(Dictionary<Item, int> itemIndex)
+        internal (int, int)[] GetChildren1Items(Dictionary<Item, int> itemIndex)
         {
             if (_children1 is null)
                 throw new Exception("RelationOf GetChildren1Items() _children1 is null");
 
             return _children1.GetItems(itemIndex);
         }
-        internal List<(int, int)> GetParent1Items(Dictionary<Item, int> itemIndex)
+        internal (int, int)[] GetParent1Items(Dictionary<Item, int> itemIndex)
         {
             if (_parents1 is null)
                 throw new Exception("RelationOf GetChildren1Items() _parents1 is null");
 
             return _parents1.GetItems(itemIndex);
         }
-        internal List<(int, List<int>)> GetChildren2Items(Dictionary<Item, int> itemIndex)
+        internal (int, int[])[] GetChildren2Items(Dictionary<Item, int> itemIndex)
         {
             if (_children2 is null)
                 throw new Exception("RelationOf GetChildren1Items() _children2 is null");
@@ -482,7 +482,7 @@ namespace ModelGraph.Core
             return _children2.GetItems(itemIndex);
         }
 
-        internal List<(int, List<int>)> GetParents2Items(Dictionary<Item, int> itemIndex)
+        internal (int, int[])[] GetParents2Items(Dictionary<Item, int> itemIndex)
         {
             if (_parents2 is null)
                 throw new Exception("RelationOf GetChildren1Items() _parents2 is null");
@@ -490,22 +490,22 @@ namespace ModelGraph.Core
             return _parents2.GetItems(itemIndex);
         }
 
-        internal void SetChildren1(List<(int, int)> items, Item[] itemArray)
+        internal void SetChildren1((int, int)[] items, Item[] itemArray)
         {
             _children2 = null;
             _children1 = new MapToOne<T2>(items, itemArray);
         }
-        internal void SetParents1(List<(int, int)> items, Item[] itemArray)
+        internal void SetParents1((int, int)[] items, Item[] itemArray)
         {
             _parents2 = null;
             _parents1 = new MapToOne<T1>(items, itemArray);
         }
-        internal void SetChildren2(List<(int, List<int>)> items, Item[] itemArray)
+        internal void SetChildren2((int, int[])[] items, Item[] itemArray)
         {
             _children1 = null;
             _children2 = new MapToMany<T2>(items, itemArray);
         }
-        internal void SetParents2(List<(int, List<int>)> items, Item[] itemArray)
+        internal void SetParents2((int, int[])[] items, Item[] itemArray)
         {
             _parents1 = null;
             _parents2 = new MapToMany<T1>(items, itemArray);

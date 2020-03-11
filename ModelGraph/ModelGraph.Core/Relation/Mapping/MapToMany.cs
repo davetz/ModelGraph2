@@ -11,7 +11,7 @@ namespace ModelGraph.Core
         internal int ValueCount { get { var n = 0; foreach (var e in this) { n += e.Value.Count; } return n; } }
 
         #region Serializer  ===================================================
-        internal MapToMany(List<(int, List<int>)> items, Item[] itemArray ) : base(items.Count)
+        internal MapToMany((int, int[])[] items, Item[] itemArray ) : base(items.Length)
         {
             foreach (var (ix1, ix2List) in items)
             {
@@ -22,7 +22,7 @@ namespace ModelGraph.Core
                 if (p is null)
                     throw new Exception($"MapToMany item1 is null for index1: {ix1}");
 
-                var lst = new List<T>(ix2List.Count);
+                var lst = new List<T>(ix2List.Length);
                 foreach (var ix2 in ix2List)
                 {
                     if (ix2 < 0 || ix2 > itemArray.Length)
@@ -37,9 +37,10 @@ namespace ModelGraph.Core
             }
         }
 
-        internal List<(int, List<int>)> GetItems(Dictionary<Item, int> itemIndex)
+        internal (int, int[])[] GetItems(Dictionary<Item, int> itemIndex)
         {
-            var items = new List<(int, List<int>)>(Count);
+            var items = new (int, int[])[Count];
+            var i = 0;
             foreach (var e in this)
             {
                 if (!itemIndex.TryGetValue(e.Key, out int ix1)) 
@@ -47,15 +48,16 @@ namespace ModelGraph.Core
 
                 if (e.Value != null && e.Value.Count > 0)
                 {
-                    var ix2List = new List<int>(e.Value.Count);
+                    var ix2List = new int[e.Value.Count];
+                    var j = 0;
                     foreach (var item in e.Value)
                     {
                         if (!itemIndex.TryGetValue(item, out int ix2))
                             throw new Exception("MaptoMany GetItems: item not in itemIndex dictionary");
 
-                        ix2List.Add(ix2);
+                        ix2List[j++] = ix2;
                     }
-                    items.Add((ix1, ix2List));
+                    items[i++] = (ix1, ix2List);
                 }
             }
             return items;

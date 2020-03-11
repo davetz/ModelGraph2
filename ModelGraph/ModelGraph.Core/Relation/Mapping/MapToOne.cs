@@ -8,7 +8,7 @@ namespace ModelGraph.Core
         internal MapToOne(int capacity = 0) : base(capacity) { }
 
         #region Serializer  ===================================================
-        internal MapToOne(List<(int, int)> items, Item[] itemArray) : base(items.Count)
+        internal MapToOne((int, int)[] items, Item[] itemArray) : base(items.Length)
         {
             foreach (var (ix1, ix2) in items)
             {
@@ -28,9 +28,10 @@ namespace ModelGraph.Core
                 this[p] = c;
             }
         }
-        internal List<(int, int)> GetItems(Dictionary<Item, int> itemIndex)
+        internal (int, int)[] GetItems(Dictionary<Item, int> itemIndex)
         {
-            var items = new List<(int, int)>(Count);
+            var items = new (int, int)[Count];
+            var i = 0;
             foreach (var e in this)
             {
                 if (!itemIndex.TryGetValue(e.Key, out int ix1))
@@ -39,7 +40,7 @@ namespace ModelGraph.Core
                 if (!itemIndex.TryGetValue(e.Value, out int ix2))
                     throw new Exception("MaptoMany GetItems: item not in itemIndex dictionary");
 
-                items.Add((ix1, ix2));
+                items[i++] = (ix1, ix2);
             }
             return items;
         }
