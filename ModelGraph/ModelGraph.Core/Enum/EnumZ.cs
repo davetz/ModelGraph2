@@ -3,10 +3,10 @@
 namespace ModelGraph.Core
 {/*
  */
-    public class EnumZ : StoreOfOld<PairZ>
+    public class EnumZ : StoreOf<PairZ>
     {
         #region Constructor  ==================================================
-        internal EnumZ(StoreOfOld<EnumZ> owner, Trait trait)
+        internal EnumZ(StoreOf<EnumZ> owner, Trait trait)
         {
             Owner = owner;
             Trait = trait;

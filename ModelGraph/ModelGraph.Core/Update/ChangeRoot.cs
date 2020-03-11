@@ -1,6 +1,6 @@
 ﻿namespace ModelGraph.Core
 {
-    public class ChangeRoot : StoreOfOld<ChangeSet>
+    public class ChangeRoot : StoreOf<ChangeSet>
     {
         #region Constructor  ==================================================
         internal ChangeRoot(Chef owner)

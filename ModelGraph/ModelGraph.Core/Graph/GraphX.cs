@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ModelGraph.Core
 {
-    public class GraphX : StoreOfOld<Graph>
+    public class GraphX : StoreOf<Graph>
     {
         internal Color Color = new Color();
         internal HashSet<Store> NodeOwners = new HashSet<Store>();

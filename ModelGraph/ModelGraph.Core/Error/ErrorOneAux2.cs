@@ -8,7 +8,7 @@ namespace ModelGraph.Core
         internal Item Aux2;
 
         #region Constructor  ==================================================
-        internal ErrorOneAux2(StoreOfOld<Error> owner, Item item, Item aux1, Item aux2, Trait trait, string text = null) : base(owner, item, trait, text)
+        internal ErrorOneAux2(StoreOf<Error> owner, Item item, Item aux1, Item aux2, Trait trait, string text = null) : base(owner, item, trait, text)
         {
             Aux1 = aux1;
             Aux2 = aux2;

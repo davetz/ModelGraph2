@@ -1,30 +1,19 @@
-﻿using System;
-
+﻿
 namespace ModelGraph.Core
-{/*
- */
-    public class EnumX : StoreOfOld<PairX>
+{
+    public class EnumX : StoreOf<PairX>
     {
         internal string Name;
         internal string Summary;
         internal string Description;
 
         #region Constructors  =================================================
-        internal EnumX(StoreOfOld<EnumX> owner)
+        internal EnumX(EnumX owner, bool autoExpandRight = false)
         {
             Owner = owner;
             Trait = Trait.EnumX;
-            Guid = Guid.NewGuid();
-            AutoExpandRight = true;
 
-            owner.Add(this);
-        }
-        internal EnumX(StoreOfOld<EnumX> owner, Guid guid)
-        {
-            Owner = owner;
-            Trait = Trait.EnumX;
-            Guid = guid;
-
+            if (autoExpandRight) AutoExpandRight = true;
             owner.Add(this);
         }
         #endregion

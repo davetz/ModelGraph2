@@ -7,7 +7,7 @@ namespace ModelGraph.Core
         internal Item Aux;
 
         #region Constructor  ==================================================
-        internal ErrorOneAux(StoreOfOld<Error> owner, Item item, Item aux, Trait trait, string text = null) : base(owner,item,trait, text)
+        internal ErrorOneAux(StoreOf<Error> owner, Item item, Item aux, Trait trait, string text = null) : base(owner,item,trait, text)
         {
             Aux = aux;
         }

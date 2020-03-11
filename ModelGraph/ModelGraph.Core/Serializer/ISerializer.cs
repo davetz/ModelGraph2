@@ -7,7 +7,7 @@ namespace ModelGraph.Core
 {
     public interface ISerializer
     {
-        int GetCount();
+        bool HasData();
         void ReadData(DataReader r, Item[] items);
         void WriteData(DataWriter w, Dictionary<Item, int> itemIndex);
     }

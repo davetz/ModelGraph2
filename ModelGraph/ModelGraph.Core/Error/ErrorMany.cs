@@ -8,7 +8,7 @@ namespace ModelGraph.Core
         internal List<string> List => _list;
 
         #region Constructor  ==================================================
-        internal ErrorMany(StoreOfOld<Error> owner, Item item, Trait trait, string text = null)
+        internal ErrorMany(StoreOf<Error> owner, Item item, Trait trait, string text = null)
         {
             Owner = owner;
             Item = item;

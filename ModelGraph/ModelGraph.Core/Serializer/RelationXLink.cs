@@ -8,107 +8,270 @@ namespace ModelGraph.Core
     class RelationXLink : ISerializer
     {
         static Guid _serializerGuid => new Guid("61662F08-F43A-44D9-A9BB-9B0126492B8C");
-        readonly RelationXStore _relStore;
-        internal RelationXLink(Chef chef, RelationXStore relStore)
+        static byte _formatVersion = 1;
+        readonly RelationXStore _rxStore;
+
+        internal RelationXLink(Chef chef, RelationXStore rxStore)
         {
-            _relStore = relStore;
-            chef.RegisterLinkSerializer((_serializerGuid, this));
+            _rxStore = rxStore;
+            chef.RegisterSerializer((_serializerGuid, this), true);
         }
-        public bool HasData => GetHasData();
-        bool GetHasData()
+
+        #region ISerializer  ==================================================
+        public bool HasData()
         {
-            foreach (var itm in _relStore.Items)
+            foreach (var rx in _rxStore.Items)
             {
-                if (itm is RelationX rx && rx.GetLinksCount() > 0) return true;
+                if (rx.HasLinks) return true;
             }
             return false;
         }
-
         public void WriteData(DataWriter w, Dictionary<Item, int> itemIndex)
         {
-            foreach (var itm in _relStore.Items)
+            var N = 0;
+            foreach (var rx in _rxStore.Items) { if (rx.HasLinks) N++; } //count number of serialized relations 
+
+            w.WriteGuid(_serializerGuid);   //serializer guid
+            w.WriteInt32(N);                //number of  serialized relations 
+            w.WriteByte(_formatVersion);    //format version
+
+            foreach (var rx in _rxStore.Items)  //foreach relation entry
             {
-                if (itm is RelationX rx) 
+                if (rx.HasLinks)
                 {
-                    var count = rx.GetLinksCount();
-                    if (count > 0)
+                    w.WriteInt32(itemIndex[rx]);    //relation index
+                    w.WriteByte((byte)rx.Pairing);  //pairing cross check, it should match the relation.pairing on reading
+
+                    switch (rx.Pairing)
                     {
-                        ushort len = 0;
-                        rx.GetLinks(out List<Item> parents, out List<Item> children);
+                        case Pairing.OneToOne:
 
-                        int N = count;
-                        for (int j = 0; j < count; j++)
-                        {
-                            var child = children[j];
-                            var parent = parents[j];
-                            if (itemIndex.ContainsKey(child) && itemIndex.ContainsKey(parent)) continue;
+                            var list1 = rx.GetChildren1Items(itemIndex);
 
-                            // null out this is link, it should not be serialized
-                            children[j] = null;
-                            parents[j] = null;
-                            N -= 1;
-                        }
-                        if (N == 0) continue;
-
-                        w.WriteByte((byte)Mark.RelationLinkBegin); // type index
-                        w.WriteInt32(itemIndex[rx]);
-                        w.WriteInt32(N);
-
-                        for (int j = 0; j < count; j++)
-                        {
-                            var child = children[j];
-                            var parent = parents[j];
-                            if (child == null || parent == null) continue;
-
-                            if (itm != parent)
+                            w.WriteInt32(list1.Count);   //number of parent/child link pairs in this OntToOne relation
+                            foreach (var (ix1, ix2) in list1)
                             {
-                                len = 1;
-                                itm = parent;
-                                for (int k = j + 1; k < count; k++)
-                                {
-                                    if (parents[k] != itm) break;
-                                    if (len < ushort.MaxValue) len += 1;
-                                }
+                                w.WriteInt32(ix1);      //parent item
+                                w.WriteInt32(ix2);      //child item
                             }
+                            break;
 
-                            w.WriteInt32(itemIndex[parent]);
-                            w.WriteInt32(itemIndex[child]);
-                            w.WriteUInt16(len);
-                            len = 0;
+                        case Pairing.OneToMany:
+
+                            var list2 = rx.GetChildren2Items(itemIndex);
+
+                            WriteList(list2);   //write the  parent/childList link pairs
+                            break;
+
+                        case Pairing.ManyToMany:
+
+                            var list3 = rx.GetChildren2Items(itemIndex);
+
+                            WriteList(list3);   //write the  parent/childList link pairs
+
+                            var list4 = rx.GetParents2Items(itemIndex);
+
+                            WriteList(list4);  //write the  child/parentList link pairs
+                            break;
+                    }
+                }
+            }
+            #region WriteList - (write the compond sublist)  ==================
+            void WriteList(List<(int, List<int>)> list)
+            {
+                w.WriteInt32(list.Count);   //number of items in main list
+
+                var max = 0;
+                foreach (var (_, ls) in list)
+                {
+                    var n = ls.Count;
+                    if (n > max) max = n;
+                }
+
+                if (max < 256)
+                {
+                    w.WriteByte(1); //type code for the size of the max count of items in sublist
+
+                    foreach (var (ix1, ix2List) in list)
+                    {
+                        w.WriteInt32(ix1);  //item index1
+
+                        w.WriteByte((byte)ix2List.Count); // number sublist items
+                        foreach (var ix2 in ix2List)
+                        {
+                            w.WriteInt32(ix2);  // sublist item index2
                         }
                     }
                 }
+                if (max < 65536)
+                {
+                    w.WriteByte(2); //type code for the size of the max count of items in sublist
 
+                    foreach (var (ix1, ix2Lst) in list)
+                    {
+                        w.WriteInt32(ix1);  // item index1
+
+                        w.WriteUInt16((ushort)ix2Lst.Count); // number sublist items
+                        foreach (var ix2 in ix2Lst)
+                        {
+                            w.WriteInt32(ix2);  //item index1
+                        }
+                    }
+                }
+                else
+                {
+                    w.WriteByte(4); //type code for the size of the max count of items in sublist
+
+                    foreach (var (ix1, ix2Lst) in list)
+                    {
+                        w.WriteInt32(ix1);  // item index1
+
+                        w.WriteInt32((ushort)ix2Lst.Count); // number sublist items
+                        foreach (var ix2 in ix2Lst)
+                        {
+                            w.WriteInt32(ix2);  //item index1
+                        }
+                    }
+                }
             }
+            #endregion
         }
-
         public void ReadData(DataReader r, Item[] items)
         {
-            var index = r.ReadInt32();
-            var count = r.ReadInt32();
+            var N = r.ReadInt32();      //number of  serialized relations 
+            var fv = r.ReadByte();      //format version
 
-            if (index < 0 || index >= items.Length) throw new Exception($"Invalid relation index {index}");
-
-            var rel = items[index] as RelationX;
-            if (rel is null) throw new Exception("The item is not a relation");
-
-            for (int i = 0; i < count; i++)
+            if (fv == 1)
             {
-                var index1 = r.ReadUInt32();
-                var index2 = r.ReadUInt32();
-                var len = r.ReadUInt16();
+                for (int i = 0; i < N; i++)
+                {
+                    var irx = r.ReadInt32();    //read relation index
+                    if (irx < 0 || irx > items.Length)
+                        throw new Exception($"RelationXLink ReadData, invalid relation index: {irx}");
 
-                if (index1 >= items.Length) throw new Exception($"Invalid index1 {index1}");
-                if (index2 >= items.Length) throw new Exception($"Invalid index2 {index2}");
+                    var rx = items[irx] as RelationX;
+                    if (rx is null)
+                        throw new Exception($"RelationXLink ReadData, null relation for index: {irx}");
 
-                var item1 = items[index1];
-                if (item1 is null) throw new Exception("The item1 does not exist");
+                    var pairing = (Pairing)r.ReadByte();  //read pairing type
+                    if (rx.Pairing != pairing)
+                        throw new Exception($"RelationXLink ReadData, invalid relation pairing type");
 
-                var item2 = items[index2];
-                if (item2 is null) throw new Exception("The item2 does not exist");
+                    switch (pairing)
+                    {
+                        case Pairing.OneToOne:
+                            {
+                                var count1 = r.ReadInt32(); //number of parent/child link pairs in this OntToOne relation
 
-                rel.SetLink(item1, item2, len);
+                                var list1 = new List<(int, int)>(count1);
+                                var list2 = new List<(int, int)>(count1);
+
+                                for (int j = 0; j < count1; j++)
+                                {
+                                    var ix1 = r.ReadInt32();
+                                    var ix2 = r.ReadInt32();
+
+                                    list1.Add((ix1, ix2));
+                                    list2.Add((ix2, ix1));
+                                }
+                                rx.SetChildren1(list1, items);
+                                rx.SetParents1(list2, items);
+                            }
+                            break;
+
+                        case Pairing.OneToMany:
+                            {
+                                var (count2, list1) = ReadList();
+                                var list2 = new List<(int, int)>(count2);
+                                foreach (var (ix1, ix2List) in list1)
+                                {
+                                    foreach (var ix2 in ix2List)
+                                    {
+                                        list2.Add((ix2, ix1));
+                                    }
+                                }
+                                rx.SetChildren2(list1, items);
+                                rx.SetParents1(list2, items);
+                            }
+                            break;
+
+                        case Pairing.ManyToMany:
+                            {
+                                var (_, list1) = ReadList();
+                                var (_, list2) = ReadList();
+
+                                rx.SetChildren2(list1, items);
+                                rx.SetParents2(list2, items);
+                            }
+                            break;
+                    }
+                }
             }
+            else
+                throw new Exception("RelationXLink ReadData, invalid format version");
+
+            #region ReadList - (read the compond sublist)  ====================
+            (int, List<(int, List<int>)>) ReadList()
+            {
+                var count1 = r.ReadInt32(); //number of items in main list
+                var mainList = new List<(int, List<int>)>(count1);
+
+                var totalCount = count1;
+                for (int j = 0; j < count1; j++)
+                {
+                    var code = r.ReadByte(); //type code for the size of the max count of items in sublist
+                    switch (code)
+                    {
+                        case 1:
+                            {
+                                var ix1 = r.ReadInt32();
+                                var count2 = r.ReadByte();   //read number sublist items
+                                var ix2List = new List<int>(count2);
+                                for (int k = 0; k < count2; k++)
+                                {
+                                    ix2List.Add(r.ReadInt32());
+                                }
+                                mainList.Add((ix1, ix2List));
+                                totalCount += count2;
+                            }
+                            break;
+
+                        case 2:
+                            {
+                                var ix1 = r.ReadInt32();
+                                var count2 = r.ReadUInt16();   //read number sublist items
+                                var ix2List = new List<int>(count2);
+                                for (int k = 0; k < count2; k++)
+                                {
+                                    ix2List.Add(r.ReadInt32());
+                                }
+                                mainList.Add((ix1, ix2List));
+                                totalCount += count2;
+                            }
+                            break;
+
+                        case 4:
+                            {
+                                var ix1 = r.ReadInt32();
+                                var count2 = r.ReadInt32();   //read number sublist items
+                                var ix2List = new List<int>(count2);
+                                for (int k = 0; k < count2; k++)
+                                {
+                                    ix2List.Add(r.ReadInt32());
+                                }
+                                mainList.Add((ix1, ix2List));
+                                totalCount += count2;
+                            }
+                            break;
+
+                        default:
+                            throw new Exception($"RelationXLink ReadData ReadList, invalid list sizing code type");
+                    }
+                }
+                return (totalCount, mainList);
+            }
+            #endregion
         }
+        #endregion
     }
 }

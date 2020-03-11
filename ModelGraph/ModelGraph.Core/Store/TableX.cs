@@ -3,14 +3,14 @@
 namespace ModelGraph.Core
 {/*
  */
-    public class TableX : StoreOfOld<RowX>
+    public class TableX : StoreOf<RowX>
     {
         internal string Name;
         internal string Summary;
         internal string Description;
 
         #region Constructors  =================================================
-        internal TableX(StoreOfOld<TableX> owner)
+        internal TableX(StoreOf<TableX> owner)
         {
             Owner = owner;
             Trait = Trait.TableX;
@@ -19,7 +19,7 @@ namespace ModelGraph.Core
 
             owner.Add(this);
         }
-        internal TableX(StoreOfOld<TableX> owner, Guid guid)
+        internal TableX(StoreOf<TableX> owner, Guid guid)
         {
             Owner = owner;
             Trait = Trait.TableX;

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace ModelGraph.Core
 {
@@ -8,6 +9,58 @@ namespace ModelGraph.Core
 
         internal int KeyCount => Count;
         internal int ValueCount { get { var n = 0; foreach (var e in this) { n += e.Value.Count; } return n; } }
+
+        #region Serializer  ===================================================
+        internal MapToMany(List<(int, List<int>)> items, Item[] itemArray ) : base(items.Count)
+        {
+            foreach (var (ix1, ix2List) in items)
+            {
+                if (ix1 < 0 || ix1 > itemArray.Length)
+                    throw new Exception($"MapToMany invalid index1: {ix1}");
+
+                var p = itemArray[ix1];
+                if (p is null)
+                    throw new Exception($"MapToMany item1 is null for index1: {ix1}");
+
+                var lst = new List<T>(ix2List.Count);
+                foreach (var ix2 in ix2List)
+                {
+                    if (ix2 < 0 || ix2 > itemArray.Length)
+                        throw new Exception($"MapToMany invalid index2: {ix2}");
+
+                    if (!(itemArray[ix2] is T c))
+                        throw new Exception($"MapToMany item2 is null for index2: {ix2}");
+
+                    lst.Add(c);
+                }
+                this[p] = lst;
+            }
+        }
+
+        internal List<(int, List<int>)> GetItems(Dictionary<Item, int> itemIndex)
+        {
+            var items = new List<(int, List<int>)>(Count);
+            foreach (var e in this)
+            {
+                if (!itemIndex.TryGetValue(e.Key, out int ix1)) 
+                    throw new Exception("MaptoMany GetItems: item not in itemIndex dictionary");
+
+                if (e.Value != null && e.Value.Count > 0)
+                {
+                    var ix2List = new List<int>(e.Value.Count);
+                    foreach (var item in e.Value)
+                    {
+                        if (!itemIndex.TryGetValue(item, out int ix2))
+                            throw new Exception("MaptoMany GetItems: item not in itemIndex dictionary");
+
+                        ix2List.Add(ix2);
+                    }
+                    items.Add((ix1, ix2List));
+                }
+            }
+            return items;
+        }
+        #endregion
 
 
         internal int GetLinksCount()

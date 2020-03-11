@@ -1,5 +1,4 @@
-﻿using System;
-
+﻿
 namespace ModelGraph.Core
 {
     public class RelationX : RelationOf<RowX, RowX>
@@ -9,25 +8,13 @@ namespace ModelGraph.Core
         internal string Description;
 
         #region Constructors  =================================================
-        internal RelationX(StoreOfOld<RelationX> owner)
+        internal RelationX(RelationXStore owner, bool autoExpandRight = false)
         {
-            Guid = Guid.NewGuid();
             Owner = owner;
             Trait = Trait.RelationX;
             Pairing = Pairing.OneToMany;
 
-            AutoExpandRight = true;
-
-            owner.Add(this);
-        }
-
-        internal RelationX(StoreOfOld<RelationX> owner, Guid guid)
-        {
-            Guid = guid;
-            Owner = owner;
-            Trait = Trait.RelationX;
-            Pairing = Pairing.OneToMany;
-
+            if (autoExpandRight) AutoExpandRight = true;
             owner.Add(this);
         }
         #endregion

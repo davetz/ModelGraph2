@@ -14,18 +14,17 @@ namespace ModelGraph.Core
         Dictionary<Item, Guid> _internalItems = new Dictionary<Item, Guid>();
 
         #region Register  =====================================================
-        public void RegisterItemSerializer((Guid, ISerializer) serializer )
+        public void RegisterSerializer((Guid, ISerializer) serializer, bool isLinkSerializer = false )
         {
             if (_serializers.Count == 0)
-                _serializers.Add((_serilizerGuid, this));
+                _serializers.Add((_serilizerGuid, this)); //the internal reference serializer should be first
 
-            _serializers.Insert(1, serializer);
+            if (isLinkSerializer)
+                _serializers.Add(serializer); //link serializers should be called last
+            else
+            _serializers.Insert(1, serializer); //item serializers are in the middle
         }
-        public void RegisterLinkSerializer((Guid, ISerializer) serializer)
-        {
-            _serializers.Add(serializer);
-        }
-        public void RegisterInternalItem(Item item, Guid guid)
+        public void RegisterReference(Item item, Guid guid)
         {
             _internalItems[item] = guid;
             _internalGuids[guid] = item;

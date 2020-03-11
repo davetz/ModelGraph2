@@ -15,7 +15,7 @@ namespace ModelGraph.Core
         internal CompuType CompuType; // type of computation
 
         #region Constructors  =================================================
-        internal ComputeX(StoreOfOld<ComputeX> owner)
+        internal ComputeX(StoreOf<ComputeX> owner)
         {
             Owner = owner;
             Trait = Trait.ComputeX;
@@ -24,7 +24,7 @@ namespace ModelGraph.Core
 
             owner.Add(this);
         }
-        internal ComputeX(StoreOfOld<ComputeX> owner, Guid guid)
+        internal ComputeX(StoreOf<ComputeX> owner, Guid guid)
         {
             Owner = owner;
             Trait = Trait.ComputeX;

@@ -3,12 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace ModelGraph.Core
-{/*
-    RelationOf
-
-    It maintains two maps (parent -> child) and (child -> parent). 
-    This allows for a bidirectional traversal.
- */
+{
     public class RelationOf<T1, T2> : Relation where T1 : Item where T2 : Item
     {
         static ArgumentException _invalidPairingException = new ArgumentException("Invalid Pairing");
@@ -18,14 +13,17 @@ namespace ModelGraph.Core
         private MapToMany<T1> _parents2;
         private MapToMany<T2> _children2;
 
+        public List<Item> GetKeysOfParents() => (_parents1 != null) ? _parents1.GetKeys() : (_parents2 != null) ? _parents2.GetKeys() : new List<Item>(0);
+        public List<Item> GetKeysOfChildren() => (_children1 != null) ? _children1.GetKeys() : (_children2 != null) ? _children2.GetKeys() : new List<Item>(0);
+
+
         override internal bool IsValidParentChild(Item parentItem, Item childItem) { return (parentItem is T1 && childItem is T2); }
 
         #region Constructors  =================================================
         internal RelationOf() { } // dummy parameterless constructor
 
-        internal RelationOf(StoreOfOld<Relation> owner, Trait trait, Guid guid, Pairing pairing = Pairing.OneToMany, int parentCount = 0, int childCount = 0, bool isRequired = false)
+        internal RelationOf(StoreOf<Relation> owner, Trait trait, Pairing pairing = Pairing.OneToMany, int parentCount = 0, int childCount = 0, bool isRequired = false)
         {
-            Guid = guid;
             Owner = owner;
             Trait = trait;
             Pairing = pairing;
@@ -461,6 +459,60 @@ namespace ModelGraph.Core
         }
         #endregion
 
+        #region Serializer  ===================================================
+        internal List<(int, int)> GetChildren1Items(Dictionary<Item, int> itemIndex)
+        {
+            if (_children1 is null)
+                throw new Exception("RelationOf GetChildren1Items() _children1 is null");
+
+            return _children1.GetItems(itemIndex);
+        }
+        internal List<(int, int)> GetParent1Items(Dictionary<Item, int> itemIndex)
+        {
+            if (_parents1 is null)
+                throw new Exception("RelationOf GetChildren1Items() _parents1 is null");
+
+            return _parents1.GetItems(itemIndex);
+        }
+        internal List<(int, List<int>)> GetChildren2Items(Dictionary<Item, int> itemIndex)
+        {
+            if (_children2 is null)
+                throw new Exception("RelationOf GetChildren1Items() _children2 is null");
+
+            return _children2.GetItems(itemIndex);
+        }
+
+        internal List<(int, List<int>)> GetParents2Items(Dictionary<Item, int> itemIndex)
+        {
+            if (_parents2 is null)
+                throw new Exception("RelationOf GetChildren1Items() _parents2 is null");
+
+            return _parents2.GetItems(itemIndex);
+        }
+
+        internal void SetChildren1(List<(int, int)> items, Item[] itemArray)
+        {
+            _children2 = null;
+            _children1 = new MapToOne<T2>(items, itemArray);
+        }
+        internal void SetParents1(List<(int, int)> items, Item[] itemArray)
+        {
+            _parents2 = null;
+            _parents1 = new MapToOne<T1>(items, itemArray);
+        }
+        internal void SetChildren2(List<(int, List<int>)> items, Item[] itemArray)
+        {
+            _children1 = null;
+            _children2 = new MapToMany<T2>(items, itemArray);
+        }
+        internal void SetParents2(List<(int, List<int>)> items, Item[] itemArray)
+        {
+            _parents1 = null;
+            _parents2 = new MapToMany<T1>(items, itemArray);
+        }
+
+        #endregion
+
         #region HasKey<1,2>  ==================================================
         /// <summary>
         /// Does the key item have at least one child item?
@@ -499,6 +551,7 @@ namespace ModelGraph.Core
 
         #region Load/Save  ====================================================
         // properties and methods primarily used by the Load and Store operation 
+
         internal override int KeyCount => GetKeyCount();
         private int GetKeyCount()
         {

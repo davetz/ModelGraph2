@@ -1,10 +1,49 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace ModelGraph.Core
 {
     public class MapToOne<T> : Dictionary<Item, T> where T : Item
     {
         internal MapToOne(int capacity = 0) : base(capacity) { }
+
+        #region Serializer  ===================================================
+        internal MapToOne(List<(int, int)> items, Item[] itemArray) : base(items.Count)
+        {
+            foreach (var (ix1, ix2) in items)
+            {
+                if (ix1 < 0 || ix1 > itemArray.Length)
+                    throw new Exception($"MapToMany invalid index1: {ix1}");
+
+                var p = itemArray[ix1];
+                if (p is null)
+                    throw new Exception($"MapToMany item1 is null for index1: {ix1}");
+
+                if (ix2 < 0 || ix2 > itemArray.Length)
+                    throw new Exception($"MapToMany invalid index2: {ix2}");
+
+                if (!(itemArray[ix2] is T c))
+                    throw new Exception($"MapToMany item2 is null for index2: {ix2}");
+
+                this[p] = c;
+            }
+        }
+        internal List<(int, int)> GetItems(Dictionary<Item, int> itemIndex)
+        {
+            var items = new List<(int, int)>(Count);
+            foreach (var e in this)
+            {
+                if (!itemIndex.TryGetValue(e.Key, out int ix1))
+                    throw new Exception("MaptoMany GetItems: item not in itemIndex dictionary");
+
+                if (!itemIndex.TryGetValue(e.Value, out int ix2))
+                    throw new Exception("MaptoMany GetItems: item not in itemIndex dictionary");
+
+                items.Add((ix1, ix2));
+            }
+            return items;
+        }
+        #endregion
 
         internal int KeyCount { get { return Count; } }
         internal int ValueCount { get { return Count; } }
