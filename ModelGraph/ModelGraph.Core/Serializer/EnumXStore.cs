@@ -8,16 +8,28 @@ namespace ModelGraph.Core.Serializer
     public class EnumXStore : StoreOf<EnumX>, ISerializer
     {
         static Guid _serializerGuid = new Guid("8D4CEAD8-E3C5-4342-88AC-1B4B625A9A4C");
-        static Guid _internalItemGuid = new Guid("EC7B6089-AD64-4100-8F65-BA8130969EB0");
+        static byte _formatVersion = 1;
 
         internal EnumXStore(Chef owner) : base(owner, Trait.EnumXStore, 10)
         {
-            owner.RegisterReference(this, _internalItemGuid);
+            owner.RegisterInernalItem(this);
             owner.RegisterSerializer((_serializerGuid, this));
         }
 
         #region ISerializer  ==================================================
         public bool HasData() => Count > 0;
+
+        public void PopulateItemIndex(Dictionary<Item, int> itemIndex)
+        {
+            foreach (var ex in Items)
+            {
+                itemIndex[ex] = 0;
+                foreach (var px in ex.Items)
+                {
+                    itemIndex[px] = 0;
+                }
+            }
+        }
 
         public void ReadData(DataReader r, Item[] items)
         {

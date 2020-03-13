@@ -13,10 +13,6 @@ namespace ModelGraph.Core
         private MapToMany<T1> _parents2;
         private MapToMany<T2> _children2;
 
-        public List<Item> GetKeysOfParents() => (_parents1 != null) ? _parents1.GetKeys() : (_parents2 != null) ? _parents2.GetKeys() : new List<Item>(0);
-        public List<Item> GetKeysOfChildren() => (_children1 != null) ? _children1.GetKeys() : (_children2 != null) ? _children2.GetKeys() : new List<Item>(0);
-
-
         override internal bool IsValidParentChild(Item parentItem, Item childItem) { return (parentItem is T1 && childItem is T2); }
 
         #region Constructors  =================================================

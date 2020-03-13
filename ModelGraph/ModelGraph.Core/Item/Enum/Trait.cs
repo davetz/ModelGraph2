@@ -16,7 +16,15 @@ namespace ModelGraph.Core
         #region Flags  ========================================================
         Empty = 0,
 
-        IsExternal = 0x8000, // Item, specify load/save to storage file
+        // There will be transient items which are never serialized and 
+        // never should referenced by an external item which is serialized.
+        // Internal items are created whenever a new dataChef is created,
+        // and any reference link from an external item to an internal item
+        // is permited and the link will be preserved when serializing /
+        // deserializing to/from the model's repository storage.
+        //=====================================================================
+        IsExternal = 0x8000, // This item is serialized/deserialize to/from a repository
+        IsTransient = 0x4000, // This item can never be referenced by an external item                            
 
         IsCovert = 0x4000, // Property - don't include in model change log
         IsReadOnly = 0x2000, // Property

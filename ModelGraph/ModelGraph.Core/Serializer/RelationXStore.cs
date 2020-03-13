@@ -8,12 +8,11 @@ namespace ModelGraph.Core
     public class RelationXStore : StoreOf<RelationX>, ISerializer
     {
         static Guid _serializerGuid = new Guid("D950F508-B774-4838-B81A-757EFDC40518");
-        static Guid _internalItemGuid = new Guid("BD104B70-CB79-42C3-858D-588B6B868269");
         static byte _formatVersion = 1;
 
         internal RelationXStore(Chef owner) : base(owner, Trait.RelationXStore, 30)
         {
-            owner.RegisterReference(this, _internalItemGuid);
+            owner.RegisterInernalItem(this);
             owner.RegisterSerializer((_serializerGuid, this));
 
             new RelationXLink(owner, this);
@@ -21,6 +20,14 @@ namespace ModelGraph.Core
 
         #region ISerializer  ==================================================
         public bool HasData() => Count > 0;
+        public void PopulateItemIndex(Dictionary<Item, int> itemIndex)
+        {
+            foreach (var item in Items)
+            {
+                itemIndex[item] = 0;
+            }
+        }
+
         public void WriteData(DataWriter w, Dictionary<Item, int> itemIndex)
         {
             w.WriteGuid(_serializerGuid);

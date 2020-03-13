@@ -103,7 +103,6 @@ namespace ModelGraph.Core
 
             ReleaseEnums();
             ReleaseStores();
-            ReleaseRelations();
             ReleaseProperties();
             ReleaseModelActions();
 

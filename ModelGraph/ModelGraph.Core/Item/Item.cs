@@ -16,6 +16,8 @@ namespace ModelGraph.Core
 
         #region Trait  ========================================================
         internal bool IsExternal => (Trait & Trait.IsExternal) != 0;
+        internal bool IsTransient => (Trait & Trait.IsTransient) != 0;
+
         internal bool IsDataChef => (Trait == Trait.DataChef);
         internal bool IsViewX => (Trait == Trait.ViewX);
         internal bool IsPairX => (Trait == Trait.PairX);
@@ -45,6 +47,8 @@ namespace ModelGraph.Core
         internal bool IsCovert => (Trait & Trait.IsCovert) != 0;
         internal bool IsReadOnly => (Trait & Trait.IsReadOnly) != 0;
         internal bool CanMultiline => (Trait & Trait.CanMultiline) != 0;
+
+        internal int ItemKey => (int)(Trait & Trait.KeyMask);
 
         internal byte TraitIndex => (byte)(Trait & Trait.IndexMask);
         internal byte TraitIndexOf(Trait trait) => (byte)(trait & Trait.IndexMask);

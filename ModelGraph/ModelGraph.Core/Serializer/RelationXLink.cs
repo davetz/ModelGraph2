@@ -32,7 +32,7 @@ namespace ModelGraph.Core
             foreach (var rx in _rxStore.Items) { if (rx.HasLinks) N++; } //count number of serialized relations 
 
             w.WriteGuid(_serializerGuid);   //serializer guid
-            w.WriteInt32(N);                //number of  serialized relations 
+            w.WriteInt32(N);                //number of serialized relations 
             w.WriteByte(_formatVersion);    //format version
 
             foreach (var rx in _rxStore.Items)  //foreach relation entry

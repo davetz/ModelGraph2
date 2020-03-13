@@ -88,6 +88,17 @@ namespace ModelGraph.Core
             }
         }
         internal override void Move(Item item, int index) => Move(Cast(item), index);
+
+        internal override int GetSerializerCount()
+        {
+            var N = 0;
+            foreach (var item in Items)
+            {
+                if (item.IsExternal || !item.IsTransient) N++;
+                if (item is Store sto) N += sto.GetSerializerCount();
+            }
+            return N;
+        }
         #endregion
 
         #region Flags  ========================================================

@@ -10,8 +10,7 @@ namespace ModelGraph.Core
         Guid _serilizerGuid = new Guid("DE976A9D-0C50-4B4E-9B46-74404A64A703");
 
         List<(Guid, ISerializer)> _serializers = new List<(Guid, ISerializer)>();
-        Dictionary<Guid, Item> _internalGuids = new Dictionary<Guid, Item>();
-        Dictionary<Item, Guid> _internalItems = new Dictionary<Item, Guid>();
+        Dictionary<int, Item> _internalItems = new Dictionary<int, Item>();
 
         #region Register  =====================================================
         public void RegisterSerializer((Guid, ISerializer) serializer, bool isLinkSerializer = false )
@@ -24,18 +23,20 @@ namespace ModelGraph.Core
             else
             _serializers.Insert(1, serializer); //item serializers are in the middle
         }
-        public void RegisterReference(Item item, Guid guid)
+        public void RegisterInernalItem(Item item)
         {
-            _internalItems[item] = guid;
-            _internalGuids[guid] = item;
+            _internalItems.Add(item.ItemKey, item);
+        }
+        public void PopulateItemIndex(Dictionary<Item, int> itemIndex)
+        {
         }
         #endregion
 
         #region Serialize/Deserialize  ========================================
-        public bool HasData() => true;
         public void Serialize(DataWriter w)
         {
-            var itemIndex = new Dictionary<Item, int>();
+            var itemIndex = new Dictionary<Item, int>(GetSerializerCount());
+            foreach (var (_, s) in _serializers) { s.PopulateItemIndex(itemIndex); }
 
             w.WriteGuid(_formatGuid);
             w.WriteInt32(itemIndex.Count);
@@ -72,7 +73,7 @@ namespace ModelGraph.Core
         #endregion
 
         #region ISerializer  ==================================================
-        public bool HasData => true;
+        public bool HasData() => true;
         public void ReadData(DataReader r, Item[] items)
         {
             var count = r.ReadInt32();
@@ -81,43 +82,36 @@ namespace ModelGraph.Core
 
             for (int i = 0; i < count; i++)
             {
-                var guid = r.ReadGuid();
-                if (!_internalGuids.TryGetValue(guid, out Item item))
-                    throw new Exception("Unkown guid reference");
+                var key = r.ReadInt32();
+                if (!_internalItems.TryGetValue(key, out Item item))
+                    throw new Exception("Unkown key reference");
 
                 items[i] = item;
             }
         }
 
-        public void RegisterSerializer(Chef chef) { }
-
         public void WriteData(DataWriter w, Dictionary<Item, int> itemIndex)
         {
-            var referenceItemGuids = new List<(Item, Guid)>();
+            var referenceItems = new List<Item>(50);
             var index = 0;
             var items = itemIndex.Keys;
-            foreach( var item in items)
-            {
-                if (_internalItems.TryGetValue(item, out Guid guid))
-                {
-                    itemIndex[item] = index;
-                    referenceItemGuids[index++] = (item, guid);
-                }
-            }
-            var N = referenceItemGuids.Count;
-
-            if (N > 0)
-            {
-                w.WriteInt32(N);
-                foreach ( var (_, guid) in referenceItemGuids)
-                { 
-                    w.WriteGuid(guid);
-                }
-            }
             foreach (var item in items)
             {
-                if (_internalItems.ContainsKey(item)) continue;
+                if (item.IsExternal) continue;
+
+                referenceItems.Add(item);
                 itemIndex[item] = index++;
+            }
+
+            w.WriteInt32(index);
+            foreach (var item in referenceItems)
+            {
+                w.WriteInt32(item.ItemKey); //referenced internal item
+            }
+
+            foreach (var item in items)
+            {
+                if (item.IsExternal) itemIndex[item] = index++;
             }
         }
         #endregion
