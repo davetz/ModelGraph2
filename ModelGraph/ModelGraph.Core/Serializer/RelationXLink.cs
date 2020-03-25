@@ -26,6 +26,11 @@ namespace ModelGraph.Core
             }
             return false;
         }
+
+        public void PopulateItemIndex(Dictionary<Item, int> itemIndex)
+        {
+            // all rows are already in the itemIndex, so there is nothing else to do
+        }
         public void WriteData(DataWriter w, Dictionary<Item, int> itemIndex)
         {
             var N = 0;

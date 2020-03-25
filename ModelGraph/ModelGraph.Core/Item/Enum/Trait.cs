@@ -24,7 +24,7 @@ namespace ModelGraph.Core
         // deserializing to/from the model's repository storage.
         //=====================================================================
         IsExternal = 0x8000, // This item is serialized/deserialize to/from a repository
-        IsTransient = 0x4000, // This item can never be referenced by an external item                            
+        IsInternal = 0x4000, // This item can be referenced by an external item                            
 
         IsCovert = 0x4000, // Property - don't include in model change log
         IsReadOnly = 0x2000, // Property
@@ -109,17 +109,21 @@ namespace ModelGraph.Core
         GroupStore = 0x0F3,
         PropertyStore = 0x0F4,
         RelationStore = 0x0F5,
-        RelationZStore = 0x0F6,
+        PropertyZStore = 0x0F6,
+        RelationZStore = 0x0F7,
 
+
+        DummyStore = 0x0FC,
+        PrivateStores = 0x0FD,
+        InternalStores = 0x0FE,
+        ExternalStores = 0x0FF,
         #endregion
 
         #region Item  ================================================(100-1FF)
 
         //=========================================
-        Dummy = 0x100,
+        Dummy = 0x100 | IsInternal,
         NodeParm = 0x101,
-        ImportBinaryReader = 0x102,
-        ExportBinaryWriter = 0x103,
 
         DataChef = 0x112,
 

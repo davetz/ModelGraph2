@@ -5,12 +5,12 @@ using Windows.Storage.Streams;
 
 namespace ModelGraph.Core
 {
-    public class ViewXStore : ExternalStore<ViewX>, ISerializer
+    public class TableXStore : ExternalStore<TableX>, ISerializer
     {
-        static Guid _serializerGuid = new Guid("396EC955-832E-4BEA-9E5C-C2A203ADAD23");
+        static Guid _serializerGuid = new Guid("93EC136C-6C38-474D-844B-6B8326526CB5");
         static byte _formatVersion = 1;
 
-        internal ViewXStore(Chef owner) : base(owner, Trait.ViewXStore, 30)
+        internal TableXStore(Chef owner) : base(owner, Trait.ViewXStore, 30)
         {
             owner.RegisterSerializer((_serializerGuid, this));
         }

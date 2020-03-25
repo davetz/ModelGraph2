@@ -8,7 +8,7 @@ namespace ModelGraph.Core
         internal string Description;
 
         #region Constructors  =================================================
-        internal EnumX(EnumX owner, bool autoExpandRight = false)
+        internal EnumX(EnumXStore owner, bool autoExpandRight = false)
         {
             Owner = owner;
             Trait = Trait.EnumX;

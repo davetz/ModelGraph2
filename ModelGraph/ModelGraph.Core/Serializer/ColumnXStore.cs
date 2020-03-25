@@ -1,36 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using Windows.Storage.Streams;
 
 namespace ModelGraph.Core
 {
-    public class ColumnXStore : StoreOf<ColumnX>, ISerializer
+    public class ColumnXStore : ExternalStore<ColumnX>, ISerializer
     {
         static Guid _serializerGuid = new Guid("3E7097FE-22D5-43B2-964A-9DB843F6D55B");
         static byte _formatVersion = 1;
 
         internal ColumnXStore(Chef owner) : base(owner, Trait.ColumnXStore, 30)
         {
-            owner.RegisterInernalItem(this);
             owner.RegisterSerializer((_serializerGuid, this));
         }
 
         #region ISerializer  ==================================================
-        public bool HasData() => Count > 0;
-
-        public void PopulateItemIndex(Dictionary<Item, int> itemIndex)
-        {
-            foreach (var item in Items)
-            {
-                itemIndex[item] = 0;
-            }
-        }
-
         public void ReadData(DataReader r, Item[] items)
         {
             var N = r.ReadInt32();
-            if (N < 0) throw new Exception($"Invalid count {N}");
+            if (N < 1) throw new Exception($"Invalid count {N}");
             SetCapacity(N);
 
             var fv = r.ReadByte();

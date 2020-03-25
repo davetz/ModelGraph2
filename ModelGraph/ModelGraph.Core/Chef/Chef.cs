@@ -12,7 +12,7 @@ namespace ModelGraph.Core
         private bool ShowItemIndex;
 
         #region Constructor  ==================================================
-        internal Chef(IRepository repository = null) : base(null, Trait.DataChef, Guid.Empty, 0)
+        internal Chef(IRepository repository = null) : base(null, Trait.DataChef, 0)
         {
             Initialize();
 
@@ -23,7 +23,7 @@ namespace ModelGraph.Core
             else
                 Repository.Read(this);
         }
-        internal Chef(bool createTestModel) : base(null, Trait.DataChef, Guid.Empty, 0)
+        internal Chef(bool createTestModel) : base(null, Trait.DataChef, 0)
         {
             Initialize();
 

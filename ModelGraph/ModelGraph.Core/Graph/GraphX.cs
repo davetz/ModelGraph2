@@ -28,16 +28,7 @@ namespace ModelGraph.Core
         {
             Owner = owner;
             Trait = Trait.GraphX;
-            Guid = Guid.NewGuid();
             AutoExpandRight = true;
-
-            owner.Add(this);
-        }
-        internal GraphX(Store owner, Guid guid)
-        {
-            Owner = owner;
-            Trait = Trait.GraphX;
-            Guid = guid;
 
             owner.Add(this);
         }

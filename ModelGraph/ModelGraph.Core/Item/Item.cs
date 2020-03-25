@@ -16,7 +16,7 @@ namespace ModelGraph.Core
 
         #region Trait  ========================================================
         internal bool IsExternal => (Trait & Trait.IsExternal) != 0;
-        internal bool IsTransient => (Trait & Trait.IsTransient) != 0;
+        internal bool IsInternal => (Trait & Trait.IsInternal) != 0;
 
         internal bool IsDataChef => (Trait == Trait.DataChef);
         internal bool IsViewX => (Trait == Trait.ViewX);

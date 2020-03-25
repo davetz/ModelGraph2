@@ -9,14 +9,6 @@ namespace ModelGraph.Core
 
         #region Constructor  ==================================================
         public StoreOf() { }
-        public StoreOf(Chef owner, Trait trait, int capacity)
-        {
-            Owner = owner;
-            Trait = trait;
-            SetCapacity(capacity);
-
-            owner?.Add(this); // we want this store to be in the dataChef's item tree hierarchy
-        }
         internal override void Release()
         {
         }
@@ -94,7 +86,7 @@ namespace ModelGraph.Core
             var N = 0;
             foreach (var item in Items)
             {
-                if (item.IsExternal || !item.IsTransient) N++;
+                if (item.IsExternal || item.IsInternal) N++;
                 if (item is Store sto) N += sto.GetSerializerCount();
             }
             return N;

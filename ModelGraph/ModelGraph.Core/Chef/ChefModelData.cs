@@ -3813,7 +3813,7 @@ namespace ModelGraph.Core
                     if (doDrop)
                     {
                         var gd = m.Item as GraphX;
-                        var sym = new SymbolX(SymbolStore);
+                        var sym = new SymbolX(SymbolXStore);
                         ItemCreated(sym);
                         AppendLink(GraphX_SymbolX, gd, sym);
                         m.IsExpandedLeft = true;
@@ -3851,7 +3851,7 @@ namespace ModelGraph.Core
             void Insert(ItemModel model)
             {
                 var gd = model.Item as GraphX;
-                var sym = new SymbolX(SymbolStore);
+                var sym = new SymbolX(SymbolXStore);
                 ItemCreated(sym);
                 AppendLink(GraphX_SymbolX, gd, sym);
                 model.IsExpandedLeft = true;
@@ -8877,7 +8877,7 @@ namespace ModelGraph.Core
                     AddChildModel(prev, m,  Trait.InternalStore_M, TableXStore, null, null, InternalStore_X);
                     AddChildModel(prev, m, Trait.InternalStore_M, GraphXStore, null, null, InternalStore_X);
                     AddChildModel(prev, m, Trait.InternalStore_M, QueryXStore, null, null, InternalStore_X);
-                    AddChildModel(prev, m, Trait.InternalStore_M, SymbolStore, null, null, InternalStore_X);
+                    AddChildModel(prev, m, Trait.InternalStore_M, SymbolXStore, null, null, InternalStore_X);
                     AddChildModel(prev, m,  Trait.InternalStore_M, ColumnXStore, null, null, InternalStore_X);
                     AddChildModel(prev, m, Trait.InternalStore_M, RelationXStore, null, null, InternalStore_X);
                     AddChildModel(prev, m, Trait.InternalStore_M, ComputeXStore, null, null, InternalStore_X);

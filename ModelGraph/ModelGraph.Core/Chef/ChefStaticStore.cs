@@ -2,16 +2,26 @@
 using System.Collections.Generic;
 
 namespace ModelGraph.Core
-{/*
-
- */
+{
     public partial class Chef
     {
         internal static IList<Item> EmptyItemList = new List<Item>(0).AsReadOnly();
+
+        internal InternalStore<Item> DummyStore;
+        internal PrivateStore<Store> PrivateStores;
+        internal PrivateStore<Store> InternalStores;
+        internal PrivateStore<Store> ExternalStores;
+
+        internal PrivateStore<Error> ErrorStore { get; private set; }
+        internal PrivateStore<EnumZ> EnumZStore { get; private set; }
+        internal PrivateStore<Property> PropertyZStore { get; private set; }
+        internal PrivateStore<Relation> RelationZStore { get; private set; }
+
+        internal InternalStore<Property> PropertyStore { get; private set; }
+        internal InternalStore<Relation> RelationStore { get; private set; }
+
         internal Dummy Dummy { get; private set; }
 
-        internal ImportBinaryReader ImportBinaryReader { get; private set; }
-        internal ExportBinaryWriter ExportBinaryWriter { get; private set; }
         internal QueryX QueryXNode { get; private set; }
 
         internal ChangeSet ChangeSet { get; private set; }
@@ -21,9 +31,9 @@ namespace ModelGraph.Core
         internal int ChangeSequence { get; private set; }
 
         internal Store[] PrimeStores { get; private set; }
-        internal StoreOf<EnumX> EnumXStore { get; private set; }
+        internal EnumXStore EnumXStore { get; private set; }
 
-        internal StoreOf<ViewX> ViewXStore { get; private set; }
+        internal ViewXStore ViewXStore { get; private set; }
 
         internal StoreOf<TableX> TableXStore { get; private set; }
 
@@ -33,51 +43,53 @@ namespace ModelGraph.Core
 
         internal StoreOf<ColumnX> ColumnXStore { get; private set; }
 
-        internal StoreOf<SymbolX> SymbolStore { get; private set; }
+        internal StoreOf<SymbolX> SymbolXStore { get; private set; }
 
         internal StoreOf<ComputeX> ComputeXStore { get; private set; }
 
-        internal StoreOf<RelationX> RelationXStore { get; private set; }
+        internal RelationXStore RelationXStore { get; private set; }
 
-        internal StoreOf<Error> ErrorStore { get; private set; }
-        internal StoreOf<EnumZ> EnumZStore { get; private set; }
 
-        internal StoreOf<Property> PropertyStore { get; private set; }
 
-        internal StoreOf<Relation> RelationStore { get; private set; }
 
-        internal StoreOf<Property> PropertyZStore { get; private set; }
-
-        internal StoreOf<Relation> RelationZStore { get; private set; }
 
         #region InitializeStores  =============================================
         private void InitializeStores()
         {
+            PrivateStores = new PrivateStore<Store>(this, Trait.PrivateStores, 20);
+            Add(PrivateStores);
+
+            InternalStores = new PrivateStore<Store>(this, Trait.InternalStores, 20);
+            Add(InternalStores);
+
+            ExternalStores = new PrivateStore<Store>(this, Trait.ExternalStores, 20);
+            Add(ExternalStores);
+
+            DummyStore = new InternalStore<Item>(this, Trait.DummyStore, 1);
             Dummy = new Dummy(this);
-            ImportBinaryReader = new ImportBinaryReader(this);
-            ExportBinaryWriter = new ExportBinaryWriter(this);
 
             QueryXNode = new QueryX(this);
             ChangeRoot = new ChangeRoot(this);
             ChangeSequence = 1;
             ChangeSet = new ChangeSet(ChangeRoot, ChangeSequence);
 
-            PropertyZStore = new StoreOf<Property>(this, Trait.PropertyStore, Guid.Empty, 30);
-            RelationZStore = new StoreOf<Relation>(this, Trait.RelationZStore, Guid.Empty, 10);
-            EnumZStore = new StoreOf<EnumZ>(this, Trait.EnumZStore, Guid.Empty, 10);
-            ErrorStore = new StoreOf<Error>(this, Trait.ErrorStore, Guid.Empty, 10);
+            ErrorStore = new PrivateStore<Error>(this, Trait.ErrorStore, 20);
+            EnumZStore = new PrivateStore<EnumZ>(this, Trait.EnumZStore, 20);
+            PropertyZStore = new PrivateStore<Property>(this, Trait.PropertyZStore, 10);
+            RelationZStore = new PrivateStore<Relation>(this, Trait.RelationZStore, 10);
 
-            PropertyStore = new StoreOf<Property>(this, Trait.PropertyStore, new System.Guid("BA10F400-9A33-4F65-80A1-C2259D17A938"), 100);
-            RelationStore = new StoreOf<Relation>(this, Trait.RelationStore, new System.Guid("42743CEF-2172-4C55-A575-9A26357E4FB5"), 30);
-            EnumXStore = new StoreOf<EnumX>(this, Trait.EnumXStore, new System.Guid("EC7B6089-AD64-4100-8F65-BA8130969EB0"), 10);
-            ViewXStore = new StoreOf<ViewX>(this, Trait.ViewXStore, new System.Guid("C11EAF6E-20A2-4F2E-AF19-0BC49DF561AB"), 10);
-            TableXStore = new StoreOf<TableX>(this, Trait.TableXStore, new System.Guid("0E00F963-18F6-4C7C-A6E9-71C4CCE001DC"), 30);
+            PropertyStore = new InternalStore<Property>(this, Trait.PropertyStore, 100);
+            RelationStore = new InternalStore<Relation>(this, Trait.RelationStore, 100);
+
+            EnumXStore = new EnumXStore(this);
+            ViewXStore = new ViewXStore(this);
+            TableXStore = new TableXStore(this);
             GraphXStore = new StoreOf<GraphX>(this, Trait.GraphXStore, new System.Guid("72C2BEC8-B8C8-44A1-ADF0-3832416820F3"), 30);
             QueryXStore = new StoreOf<QueryX>(this, Trait.QueryXStore, new System.Guid("085A1887-03FE-4DA1-9B54-9BED3B34F518"), 300);
-            ColumnXStore = new StoreOf<ColumnX>(this, Trait.ColumnXStore, new System.Guid("44F4B1B2-927C-40DF-A8E6-60A1E4DA58A6"), 300);
-            SymbolStore = new StoreOf<SymbolX>(this, Trait.SymbolXStore, new System.Guid("4ED54C41-4EDD-41D6-8451-2FEF0967C12F"), 100);
+            ColumnXStore = new ColumnXStore(this);
+            SymbolXStore = new StoreOf<SymbolX>(this, Trait.SymbolXStore, new System.Guid("4ED54C41-4EDD-41D6-8451-2FEF0967C12F"), 100);
             ComputeXStore = new StoreOf<ComputeX>(this, Trait.ComputeXStore, new System.Guid("A3F850B4-B498-4339-94B8-4F0E355BAD92"), 300);
-            RelationXStore = new StoreOf<RelationX>(this, Trait.RelationXStore, new System.Guid("BD104B70-CB79-42C3-858D-588B6B868269"), 300);
+            RelationXStore = new RelationXStore(this);
 
             PrimeStores = new Store[]
             {
@@ -87,7 +99,7 @@ namespace ModelGraph.Core
                 GraphXStore,
                 QueryXStore,
                 ColumnXStore,
-                SymbolStore,
+                SymbolXStore,
                 ComputeXStore,
                 RelationXStore,
                 RelationStore,
@@ -100,8 +112,6 @@ namespace ModelGraph.Core
         private void ReleaseStores()
         {
             Dummy = null;
-            ImportBinaryReader = null;
-            ExportBinaryWriter = null;
 
             QueryXNode = null;
             ChangeRoot = null;
@@ -120,7 +130,7 @@ namespace ModelGraph.Core
             GraphXStore = null;
             QueryXStore = null;
             ColumnXStore = null;
-            SymbolStore = null;
+            SymbolXStore = null;
             ComputeXStore = null;
             RelationXStore = null;
 

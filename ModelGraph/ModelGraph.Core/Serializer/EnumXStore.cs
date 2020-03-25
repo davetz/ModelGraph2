@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using Windows.Storage.Streams;
 
-namespace ModelGraph.Core.Serializer
+namespace ModelGraph.Core
 {
     public class EnumXStore : StoreOf<EnumX>, ISerializer
     {
@@ -17,20 +16,6 @@ namespace ModelGraph.Core.Serializer
         }
 
         #region ISerializer  ==================================================
-        public bool HasData() => Count > 0;
-
-        public void PopulateItemIndex(Dictionary<Item, int> itemIndex)
-        {
-            foreach (var ex in Items)
-            {
-                itemIndex[ex] = 0;
-                foreach (var px in ex.Items)
-                {
-                    itemIndex[px] = 0;
-                }
-            }
-        }
-
         public void ReadData(DataReader r, Item[] items)
         {
             var N = r.ReadInt32();

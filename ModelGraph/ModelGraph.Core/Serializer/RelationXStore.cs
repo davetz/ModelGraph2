@@ -12,22 +12,12 @@ namespace ModelGraph.Core
 
         internal RelationXStore(Chef owner) : base(owner, Trait.RelationXStore, 30)
         {
-            owner.RegisterInernalItem(this);
             owner.RegisterSerializer((_serializerGuid, this));
 
             new RelationXLink(owner, this);
         }
 
         #region ISerializer  ==================================================
-        public bool HasData() => Count > 0;
-        public void PopulateItemIndex(Dictionary<Item, int> itemIndex)
-        {
-            foreach (var item in Items)
-            {
-                itemIndex[item] = 0;
-            }
-        }
-
         public void WriteData(DataWriter w, Dictionary<Item, int> itemIndex)
         {
             w.WriteGuid(_serializerGuid);

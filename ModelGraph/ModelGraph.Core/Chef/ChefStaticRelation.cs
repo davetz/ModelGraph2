@@ -80,7 +80,7 @@ namespace ModelGraph.Core
             AddIntegrityCheck(Store_ComputeX, ColumnXStore, ComputeXStore);
             AddIntegrityCheck(Store_ComputeX, RelationXStore, ComputeXStore);
             AddIntegrityCheck(Store_ComputeX, ViewXStore, ComputeXStore);
-            AddIntegrityCheck(Store_ComputeX, SymbolStore, ComputeXStore);
+            AddIntegrityCheck(Store_ComputeX, SymbolXStore, ComputeXStore);
             AddIntegrityCheck(Store_ComputeX, ComputeXStore, ComputeXStore);
             AddIntegrityCheck(Store_ComputeX, PropertyStore, ComputeXStore);
             AddIntegrityCheck(Store_ComputeX, RelationStore, ComputeXStore);
@@ -113,7 +113,7 @@ namespace ModelGraph.Core
             AddIntegrityCheck(GraphX_SymbolQueryX, GraphXStore, QueryXStore);
 
             GraphX_SymbolX = new RelationOf<GraphX, SymbolX>(RelationStore, Trait.GraphX_SymbolX, Pairing.OneToMany, 25, 25, true);
-            AddIntegrityCheck(GraphX_SymbolX, GraphXStore, SymbolStore);
+            AddIntegrityCheck(GraphX_SymbolX, GraphXStore, SymbolXStore);
 
             GraphX_ColorColumnX = new RelationOf<GraphX, ColumnX>(RelationStore, Trait.GraphX_ColorColumnX, Pairing.OneToOne, 25, 25);
             AddIntegrityCheck(GraphX_ColorColumnX, GraphXStore, ColumnXStore);
@@ -140,7 +140,7 @@ namespace ModelGraph.Core
             AddIntegrityCheck(Store_QueryX, TableXStore, QueryXStore);
             AddIntegrityCheck(Store_QueryX, QueryXStore, QueryXStore);
             AddIntegrityCheck(Store_QueryX, QueryXStore, QueryXStore);
-            AddIntegrityCheck(Store_QueryX, SymbolStore, QueryXStore);
+            AddIntegrityCheck(Store_QueryX, SymbolXStore, QueryXStore);
             AddIntegrityCheck(Store_QueryX, ColumnXStore, QueryXStore);
             AddIntegrityCheck(Store_QueryX, ComputeXStore, QueryXStore);
             AddIntegrityCheck(Store_QueryX, ComputeXStore, QueryXStore);
@@ -150,7 +150,7 @@ namespace ModelGraph.Core
 
 
             SymbolX_QueryX = new RelationOf<SymbolX, QueryX>(RelationStore, Trait.SymbolX_QueryX, Pairing.OneToMany, 25, 25, true);
-            AddIntegrityCheck(SymbolX_QueryX, SymbolStore, QueryXStore);
+            AddIntegrityCheck(SymbolX_QueryX, SymbolXStore, QueryXStore);
 
             Relation_QueryX = new RelationOf<Relation, QueryX>(RelationStore, Trait.Relation_QueryX, Pairing.OneToMany, 25, 25, true);
             AddIntegrityCheck(Relation_QueryX, RelationXStore, QueryXStore);

@@ -14,16 +14,7 @@ namespace ModelGraph.Core
         {
             Owner = owner;
             Trait = Trait.TableX;
-            Guid = Guid.NewGuid();
             AutoExpandRight = true;
-
-            owner.Add(this);
-        }
-        internal TableX(StoreOf<TableX> owner, Guid guid)
-        {
-            Owner = owner;
-            Trait = Trait.TableX;
-            Guid = guid;
 
             owner.Add(this);
         }

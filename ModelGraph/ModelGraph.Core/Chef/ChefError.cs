@@ -11,11 +11,11 @@ namespace ModelGraph.Core
         #region RepositoryError  ==============================================
         public void AddRepositorReadError(string text)
         {
-            _itemError[ImportBinaryReader] = new ErrorOne(ErrorStore, this, Trait.ImportError, text);
+            //_itemError[ImportBinaryReader] = new ErrorOne(ErrorStore, this, Trait.ImportError, text);
         }
         public void AddRepositorWriteError(string text)
         {
-            _itemError[ExportBinaryWriter] = new ErrorOne(ErrorStore, this, Trait.ExportError, text);
+            //_itemError[ExportBinaryWriter] = new ErrorOne(ErrorStore, this, Trait.ExportError, text);
         }
         #endregion
 

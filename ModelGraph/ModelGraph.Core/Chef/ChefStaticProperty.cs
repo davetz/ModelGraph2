@@ -360,7 +360,7 @@ namespace ModelGraph.Core
                 p.Value = new StringValue(p);
                 props.Add(p);
             }
-            Store_Property.SetLink(SymbolStore, props);
+            Store_Property.SetLink(SymbolXStore, props);
             #endregion
 
             #region QueryX  ===================================================

@@ -5,7 +5,6 @@ namespace ModelGraph.Core
 {
     public abstract class Store : Item
     {
-        internal abstract int GetSerializerCount();
         internal abstract void Add(Item item);
         internal abstract void Move(Item item, int index);
         internal abstract void Insert(Item item, int index);
