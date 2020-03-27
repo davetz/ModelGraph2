@@ -8,7 +8,7 @@ namespace ModelGraph.Core
     {
         internal override ValType ValType => ValType.DateTimeArray;
 
-        internal ValueDictionary<DateTime[]> ValueDictionary => _valueStore as ValueDictionary<DateTime[]>;
+        internal ValueDictionaryOf<DateTime[]> ValueDictionary => _valueStore as ValueDictionaryOf<DateTime[]>;
         internal override bool IsSpecific(Item key) => _valueStore.IsSpecific(key);
 
         #region Constructor, WriteData  =======================================
@@ -16,7 +16,7 @@ namespace ModelGraph.Core
 
         internal DateTimeArrayValue(DataReader r, int count, Item[] items)
         {
-            var vs = new ValueDictionary<DateTime[]>(count, default);
+            var vs = new ValueDictionaryOf<DateTime[]>(count, default);
             _valueStore = vs;
 
             if (count > 0)
@@ -43,7 +43,7 @@ namespace ModelGraph.Core
                 }
             }
         }
-        internal void WriteData(DataWriter w, Dictionary<Item, int> itemIndex)
+        internal override void WriteData(DataWriter w, Dictionary<Item, int> itemIndex)
         {
             w.WriteByte((byte)ValType);
 

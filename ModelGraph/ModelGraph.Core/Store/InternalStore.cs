@@ -5,15 +5,11 @@ namespace ModelGraph.Core
 {
     public class InternalStore<T> : StoreOf<T> where T : Item
     {
-        public InternalStore(Chef owner, Trait trait, int capacity)
-        {
-            Owner = owner;
-            Trait = trait;
-            SetCapacity(capacity);
+        public InternalStore(Chef owner, Trait trait, int capacity = 0) : base(owner, trait, capacity) { }
 
-            owner.InternalStores.Add(this);  // collect by stores type
-        }
-        internal void RegisterInternal(Dictionary<int, Item> internalItems)
+        internal override bool HasDesendantCount => true;
+
+        internal override void RegisterInternal(Dictionary<int, Item> internalItems)
         {
             internalItems.Add(ItemKey, this);
             foreach (var item in Items)

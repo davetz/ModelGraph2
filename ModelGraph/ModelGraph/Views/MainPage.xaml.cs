@@ -33,11 +33,11 @@ namespace ModelGraph.Views
 
         private async void NewButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            await ModelPageService.Current.CreateNewModelAsync(Dispatcher);
+            await ModelPageService.Current.CreateNewModelAsync(Dispatcher).ConfigureAwait(false);
         }
         private async void OpenButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            await ModelPageService.Current.OpenModelDataFileAsync(Dispatcher);
+            await ModelPageService.Current.OpenModelDataFileAsync(Dispatcher).ConfigureAwait(false);
         }
     }
 }

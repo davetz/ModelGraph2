@@ -31,40 +31,20 @@ namespace ModelGraph.Core
         internal int ChangeSequence { get; private set; }
 
         internal Store[] PrimeStores { get; private set; }
+
         internal EnumXStore EnumXStore { get; private set; }
-
         internal ViewXStore ViewXStore { get; private set; }
-
-        internal StoreOf<TableX> TableXStore { get; private set; }
-
-        internal StoreOf<GraphX> GraphXStore { get; private set; }
-
-        internal StoreOf<QueryX> QueryXStore { get; private set; }
-
-        internal StoreOf<ColumnX> ColumnXStore { get; private set; }
-
-        internal StoreOf<SymbolX> SymbolXStore { get; private set; }
-
-        internal StoreOf<ComputeX> ComputeXStore { get; private set; }
-
+        internal TableXStore TableXStore { get; private set; }
+        internal GraphXStore GraphXStore { get; private set; }
+        internal QueryXStore QueryXStore { get; private set; }
+        internal ColumnXStore ColumnXStore { get; private set; }
+        internal SymbolXStore SymbolXStore { get; private set; }
+        internal ComputeXStore ComputeXStore { get; private set; }
         internal RelationXStore RelationXStore { get; private set; }
-
-
-
-
 
         #region InitializeStores  =============================================
         private void InitializeStores()
         {
-            PrivateStores = new PrivateStore<Store>(this, Trait.PrivateStores, 20);
-            Add(PrivateStores);
-
-            InternalStores = new PrivateStore<Store>(this, Trait.InternalStores, 20);
-            Add(InternalStores);
-
-            ExternalStores = new PrivateStore<Store>(this, Trait.ExternalStores, 20);
-            Add(ExternalStores);
-
             DummyStore = new InternalStore<Item>(this, Trait.DummyStore, 1);
             Dummy = new Dummy(this);
 
@@ -79,16 +59,16 @@ namespace ModelGraph.Core
             RelationZStore = new PrivateStore<Relation>(this, Trait.RelationZStore, 10);
 
             PropertyStore = new InternalStore<Property>(this, Trait.PropertyStore, 100);
-            RelationStore = new InternalStore<Relation>(this, Trait.RelationStore, 100);
+            RelationStore = new RelationStore(this);
 
             EnumXStore = new EnumXStore(this);
             ViewXStore = new ViewXStore(this);
             TableXStore = new TableXStore(this);
-            GraphXStore = new StoreOf<GraphX>(this, Trait.GraphXStore, new System.Guid("72C2BEC8-B8C8-44A1-ADF0-3832416820F3"), 30);
-            QueryXStore = new StoreOf<QueryX>(this, Trait.QueryXStore, new System.Guid("085A1887-03FE-4DA1-9B54-9BED3B34F518"), 300);
+            GraphXStore = new GraphXStore(this);
+            QueryXStore = new QueryXStore(this);
             ColumnXStore = new ColumnXStore(this);
-            SymbolXStore = new StoreOf<SymbolX>(this, Trait.SymbolXStore, new System.Guid("4ED54C41-4EDD-41D6-8451-2FEF0967C12F"), 100);
-            ComputeXStore = new StoreOf<ComputeX>(this, Trait.ComputeXStore, new System.Guid("A3F850B4-B498-4339-94B8-4F0E355BAD92"), 300);
+            SymbolXStore = new SymbolXStore(this);
+            ComputeXStore = new ComputeXStore(this);
             RelationXStore = new RelationXStore(this);
 
             PrimeStores = new Store[]
@@ -105,36 +85,6 @@ namespace ModelGraph.Core
                 RelationStore,
                 PropertyStore,
             };
-        }
-        #endregion
-
-        #region ReleaseStores  ================================================
-        private void ReleaseStores()
-        {
-            Dummy = null;
-
-            QueryXNode = null;
-            ChangeRoot = null;
-            ChangeSet = null;
-
-            PropertyZStore = null;
-            RelationZStore = null;
-            EnumZStore = null;
-            ErrorStore = null;
-
-            PropertyStore = null;
-            RelationStore = null;
-            EnumXStore = null;
-            ViewXStore = null;
-            TableXStore = null;
-            GraphXStore = null;
-            QueryXStore = null;
-            ColumnXStore = null;
-            SymbolXStore = null;
-            ComputeXStore = null;
-            RelationXStore = null;
-
-            PrimeStores = null;
         }
         #endregion
     }

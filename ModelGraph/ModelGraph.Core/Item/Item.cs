@@ -44,9 +44,9 @@ namespace ModelGraph.Core
         internal bool IsItemLinkMoved => Trait == Trait.ItemChildMoved;
 
 
-        internal bool IsCovert => (Trait & Trait.IsCovert) != 0;
-        internal bool IsReadOnly => (Trait & Trait.IsReadOnly) != 0;
-        internal bool CanMultiline => (Trait & Trait.CanMultiline) != 0;
+        internal bool IsCovert => (Trait & Trait.SubMask) == Trait.IsCovert;
+        internal bool IsReadOnly => (Trait & Trait.SubMask) == Trait.IsReadOnly;
+        internal bool CanMultiline => (Trait & Trait.SubMask) == Trait.CanMultiline;
 
         internal int ItemKey => (int)(Trait & Trait.KeyMask);
 
@@ -139,11 +139,6 @@ namespace ModelGraph.Core
             var item = this;
             while (item != null) { if (item.IsDataChef) return item as Chef; item = item.Owner; }
             throw new Exception("Corrupted item hierarchy"); // I seriously hope this never happens
-        }
-
-        internal virtual void Release()
-        {
-            Owner = null;
         }
         #endregion
     }

@@ -19,14 +19,6 @@ namespace ModelGraph.Core
 
             owner.Add(this);
         }
-        void IValueStore<T2>.Release() => Release();
-        override internal void Release()
-        {
-            EnumZ = null;
-            GetValFunc = null;
-            SetValFunc = null;
-            GetItemNameFunc = null;
-        }
         #endregion
 
         #region Property  =====================================================

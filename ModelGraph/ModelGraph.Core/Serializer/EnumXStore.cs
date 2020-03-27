@@ -4,14 +4,13 @@ using Windows.Storage.Streams;
 
 namespace ModelGraph.Core
 {
-    public class EnumXStore : StoreOf<EnumX>, ISerializer
+    public class EnumXStore : ExternalStore<EnumX>, ISerializer
     {
         static Guid _serializerGuid = new Guid("8D4CEAD8-E3C5-4342-88AC-1B4B625A9A4C");
         static byte _formatVersion = 1;
 
         internal EnumXStore(Chef owner) : base(owner, Trait.EnumXStore, 10)
         {
-            owner.RegisterInernalItem(this);
             owner.RegisterSerializer((_serializerGuid, this));
         }
 

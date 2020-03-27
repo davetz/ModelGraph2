@@ -21,6 +21,18 @@ namespace ModelGraph.Core
             return !HasChildLink(key);
         }
 
+        #region Serializer  ===================================================
+        internal abstract (int, int)[] GetChildren1Items(Dictionary<Item, int> itemIndex);
+        internal abstract (int, int)[] GetParent1Items(Dictionary<Item, int> itemIndex);
+        internal abstract (int, int[])[] GetChildren2Items(Dictionary<Item, int> itemIndex);
+        internal abstract (int, int[])[] GetParents2Items(Dictionary<Item, int> itemIndex);
+        internal abstract void SetChildren1((int, int)[] items, Item[] itemArray);
+        internal abstract void SetParents1((int, int)[] items, Item[] itemArray);
+        internal abstract void SetChildren2((int, int[])[] items, Item[] itemArray);
+        internal abstract void SetParents2((int, int[])[] items, Item[] itemArray);
+        internal abstract bool HasLinks { get; }
+        #endregion
+
         #region RequiredMethods  ==============================================
         internal abstract bool IsValidParentChild(Item parentItem, Item childItem);
         internal abstract int ChildCount(Item key);

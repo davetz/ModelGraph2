@@ -119,8 +119,8 @@ namespace ModelGraph.Views
             NavigationService.Navigated += Frame_Navigated;
             navigationView.BackRequested += OnBackRequested;
 
-            ModelPageService.InsertModelPage = InsertModelPage;
-            ModelPageService.RemoveModelPage = RemoveModelPage;
+            ModelPageService.Current.InsertModelPage = InsertModelPage;
+            ModelPageService.Current.RemoveModelPage = RemoveModelPage;
             ApplicationView.GetForCurrentView().TryResizeView(_desiredSize);
         }
 

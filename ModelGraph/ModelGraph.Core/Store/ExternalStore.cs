@@ -5,26 +5,18 @@ namespace ModelGraph.Core
 {
     public class ExternalStore<T> : StoreOf<T> where T : Item
     {
-        public ExternalStore(Chef owner, Trait trait, int capacity)
-        {
-            Owner = owner;
-            Trait = trait;
-            SetCapacity(capacity);
+        public ExternalStore(Chef owner, Trait trait, int capacity = 0) : base(owner, trait, capacity) { }
 
-            owner.ExternalStores.Add(this);  // collect by stores type
-        }
-        internal void RegisterInternal(Dictionary<int, Item> internalItems)
-        {
-            internalItems.Add(ItemKey, this);
-        }
+        internal override bool HasDesendantCount => true;
+
         public bool HasData() => Count > 0;
-
         public void PopulateItemIndex(Dictionary<Item, int> itemIndex)
         {
-            foreach (var item in Items)
-            {
-                itemIndex[item] = 0;
-            }
+            PopululateChildItemIndex(itemIndex);
+        }
+        internal override void RegisterInternal(Dictionary<int, Item> internalItems)
+        {
+            internalItems.Add(ItemKey, this);
         }
     }
 }

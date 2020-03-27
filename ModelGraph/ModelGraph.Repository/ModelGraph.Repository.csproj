@@ -121,11 +121,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReadValueDictionary.cs" />
     <Compile Include="Repository.cs" />
-    <Compile Include="RepositoryRead.cs" />
-    <Compile Include="RepositoryWrite.cs" />
-    <Compile Include="WriteValueDictionary.cs" />
     <EmbeddedResource Include="Properties\ModelGraph.Repository.rd.xml" />
   </ItemGroup>
   <ItemGroup>

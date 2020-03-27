@@ -26,9 +26,10 @@ namespace ModelGraph.Core
         IsExternal = 0x8000, // This item is serialized/deserialize to/from a repository
         IsInternal = 0x4000, // This item can be referenced by an external item                            
 
-        IsCovert = 0x4000, // Property - don't include in model change log
-        IsReadOnly = 0x2000, // Property
+        SubMask      = 0x3000,
+        IsReadOnly   = 0x2000, // Property
         CanMultiline = 0x1000, // Property
+        IsCovert     = 0x3000, // Property - don't include in model change log
 
         GetStorageFile = 0x1000, // Command
 
@@ -92,31 +93,27 @@ namespace ModelGraph.Core
         #region Store ================================================(0E0-0FF)
         // root level containers for the hierarchal item trees
 
-        EnumXStore = 0x0E1,
-        ViewXStore = 0x0E2,
-        TableXStore = 0x0E3,
-        GraphXStore = 0x0E4,
-        QueryXStore = 0x0E5,
-        ValueXStore = 0x0E6,
-        SymbolXStore = 0x0E7,
-        ColumnXStore = 0x0E8,
-        ComputeXStore = 0x0E9,
-        RelationXStore = 0x0EA,
+        EnumXStore = 0x0E1 | IsInternal,
+        ViewXStore = 0x0E2 | IsInternal,
+        TableXStore = 0x0E3 | IsInternal,
+        GraphXStore = 0x0E4 | IsInternal,
+        QueryXStore = 0x0E5 | IsInternal,
+        ValueXStore = 0x0E6 | IsInternal,
+        SymbolXStore = 0x0E7 | IsInternal,
+        ColumnXStore = 0x0E8 | IsInternal,
+        ComputeXStore = 0x0E9 | IsInternal,
+        RelationXStore = 0x0EA | IsInternal,
 
         PrimeStore = 0x0F0, // exposes internal tables (metadata / configuration)
         EnumZStore = 0x0F1,
         ErrorStore = 0x0F2,
         GroupStore = 0x0F3,
-        PropertyStore = 0x0F4,
-        RelationStore = 0x0F5,
+        PropertyStore = 0x0F4 | IsInternal,
+        RelationStore = 0x0F5 | IsInternal,
         PropertyZStore = 0x0F6,
         RelationZStore = 0x0F7,
+        DummyStore = 0xFF,
 
-
-        DummyStore = 0x0FC,
-        PrivateStores = 0x0FD,
-        InternalStores = 0x0FE,
-        ExternalStores = 0x0FF,
         #endregion
 
         #region Item  ================================================(100-1FF)
@@ -235,51 +232,51 @@ namespace ModelGraph.Core
         Relation = 0x300,
 
         //=========================================
-        EnumX_ColumnX = 0x311,
-        TableX_ColumnX = 0x312,
-        TableX_NameProperty = 0x313,
-        TableX_SummaryProperty = 0x314,
-        TableX_ChildRelationX = 0x315,
-        TableX_ParentRelationX = 0x316,
+        EnumX_ColumnX = 0x311 | IsInternal,
+        TableX_ColumnX = 0x312 | IsInternal,
+        TableX_NameProperty = 0x313 | IsInternal,
+        TableX_SummaryProperty = 0x314 | IsInternal,
+        TableX_ChildRelationX = 0x315 | IsInternal,
+        TableX_ParentRelationX = 0x316 | IsInternal,
 
         //=========================================
-        TableChildRelationGroup = 0x321,
-        TableParentRelationGroup = 0x322,
-        TableReverseRelationGroup = 0x323,
-        TableRelationGroupRelation = 0x324,
-        ParentRelationGroupRelation = 0x325,
-        ReverseRelationGroupRelation = 0x326,
+        TableChildRelationGroup = 0x321 | IsInternal,
+        TableParentRelationGroup = 0x322 | IsInternal,
+        TableReverseRelationGroup = 0x323 | IsInternal,
+        TableRelationGroupRelation = 0x324 | IsInternal,
+        ParentRelationGroupRelation = 0x325 | IsInternal,
+        ReverseRelationGroupRelation = 0x326 | IsInternal,
 
         //=========================================
         Item_Error = 0x331,
-        ViewX_ViewX = 0x332,
-        ViewX_QueryX = 0x333,
-        QueryX_ViewX = 0x334,
-        Property_ViewX = 0x335,
-        Relation_ViewX = 0x336,
-        ViewX_Property = 0x337,
-        QueryX_Property = 0x338,
+        ViewX_ViewX = 0x332 | IsInternal,
+        ViewX_QueryX = 0x333 | IsInternal,
+        QueryX_ViewX = 0x334 | IsInternal,
+        Property_ViewX = 0x335 | IsInternal,
+        Relation_ViewX = 0x336 | IsInternal,
+        ViewX_Property = 0x337 | IsInternal,
+        QueryX_Property = 0x338 | IsInternal,
 
         //=========================================
-        GraphX_SymbolX = 0x341,
-        SymbolX_QueryX = 0x342,
-        GraphX_QueryX = 0x343,
-        QueryX_QueryX = 0x344,
-        GraphX_ColorColumnX = 0x345,
-        GraphX_SymbolQueryX = 0x346,
+        GraphX_SymbolX = 0x341 | IsInternal,
+        SymbolX_QueryX = 0x342 | IsInternal,
+        GraphX_QueryX = 0x343 | IsInternal,
+        QueryX_QueryX = 0x344 | IsInternal,
+        GraphX_ColorColumnX = 0x345 | IsInternal,
+        GraphX_SymbolQueryX = 0x346 | IsInternal,
 
         //=========================================
-        Store_QueryX = 0x351,
-        Relation_QueryX = 0x352,
+        Store_QueryX = 0x351 | IsInternal,
+        Relation_QueryX = 0x352 | IsInternal,
 
         //=========================================
-        Store_ComputeX = 0x361,
-        ComputeX_QueryX = 0x362,
+        Store_ComputeX = 0x361 | IsInternal,
+        ComputeX_QueryX = 0x362 | IsInternal,
 
         //=========================================
-        Store_Property = 0x3FD,
-        Store_ChildRelation = 0x3FE,
-        Store_ParentRelation = 0x3FF,
+        Store_Property = 0x3FD | IsInternal,
+        Store_ChildRelation = 0x3FE | IsInternal,
+        Store_ParentRelation = 0x3FF | IsInternal,
 
         #endregion
 
@@ -288,74 +285,74 @@ namespace ModelGraph.Core
         Property = 0x400,
 
         //=========================================
-        ViewName_P = 0x401,
-        ViewSummary_P = 0x402,
+        ViewName_P = 0x401 | IsInternal,
+        ViewSummary_P = 0x402 | IsInternal,
         IncludeItemIdentityIndex_P = 0x403 | IsCovert,
 
         //=========================================
-        EnumName_P = 0x411,
-        EnumSummary_P = 0x412,
-        EnumText_P = 0x413,
-        EnumValue_P = 0x414,
+        EnumName_P = 0x411 | IsInternal,
+        EnumSummary_P = 0x412 | IsInternal,
+        EnumText_P = 0x413 | IsInternal,
+        EnumValue_P = 0x414 | IsInternal,
 
         //=========================================
-        TableName_P = 0x421,
-        TableSummary_P = 0x422,
+        TableName_P = 0x421 | IsInternal,
+        TableSummary_P = 0x422 | IsInternal,
 
         //=========================================
-        ColumnName_P = 0x431,
-        ColumnSummary_P = 0x432,
-        ColumnValueType_P = 0x433,
-        ColumnAccess_P = 0x434,
-        ColumnInitial_P = 0x435,
-        ColumnIsChoice_P = 0x436,
+        ColumnName_P = 0x431 | IsInternal,
+        ColumnSummary_P = 0x432 | IsInternal,
+        ColumnValueType_P = 0x433 | IsInternal,
+        ColumnAccess_P = 0x434 | IsInternal,
+        ColumnInitial_P = 0x435 | IsInternal,
+        ColumnIsChoice_P = 0x436 | IsInternal,
 
         //=========================================
-        RelationName_P = 0x441,
-        RelationSummary_P = 0x442,
-        RelationPairing_P = 0x443,
-        RelationIsRequired_P = 0x444,
-        RelationIsReference_P = 0x445,
-        RelationMinOccurance_P = 0x446,
-        RelationMaxOccurance_P = 0x447,
+        RelationName_P = 0x441 | IsInternal,
+        RelationSummary_P = 0x442 | IsInternal,
+        RelationPairing_P = 0x443 | IsInternal,
+        RelationIsRequired_P = 0x444 | IsInternal,
+        RelationIsReference_P = 0x445 | IsInternal,
+        RelationMinOccurance_P = 0x446 | IsInternal,
+        RelationMaxOccurance_P = 0x447 | IsInternal,
 
         //=========================================
-        GraphName_P = 0x451,
-        GraphSummary_P = 0x452,
-        GraphTerminalLength_P = 0x453,
-        GraphTerminalSpacing_P = 0x454,
-        GraphTerminalStretch_P = 0x455,
-        GraphSymbolSize_P = 0x456,
+        GraphName_P = 0x451 | IsInternal,
+        GraphSummary_P = 0x452 | IsInternal,
+        GraphTerminalLength_P = 0x453 | IsInternal,
+        GraphTerminalSpacing_P = 0x454 | IsInternal,
+        GraphTerminalStretch_P = 0x455 | IsInternal,
+        GraphSymbolSize_P = 0x456 | IsInternal,
 
         //=========================================
-        QueryXSelect_P = 0x460 | CanMultiline,
-        QueryXWhere_P = 0x461 | CanMultiline,
+        QueryXSelect_P = 0x460 | CanMultiline | IsInternal,
+        QueryXWhere_P = 0x461 | CanMultiline | IsInternal,
 
-        QueryXConnect1_P = 0x462,
-        QueryXConnect2_P = 0x463,
+        QueryXConnect1_P = 0x462 | IsInternal,
+        QueryXConnect2_P = 0x463 | IsInternal,
 
-        QueryXRelation_P = 0x466,
-        QueryXIsReversed_P = 0x467,
-        QueryXIsImmediate_P = 0x468,
-        QueryXIsPersistent_P = 0x469,
-        QueryXIsBreakPoint_P = 0x46A,
-        QueryXExclusiveKey_P = 0x46B,
-        QueryXAllowSelfLoop_P = 0x46C,
-        QueryXIsPathReversed_P = 0x46D,
-        QueryXIsFullTableRead_P = 0x46E,
-        QueryXFacet1_P = 0x46F,
-        QueryXFacet2_P = 0x470,
-        ValueXWhere_P = 0x471 | CanMultiline,
-        ValueXSelect_P = 0x472 | CanMultiline,
-        ValueXIsReversed_P = 0x473,
+        QueryXRelation_P = 0x466 | IsInternal,
+        QueryXIsReversed_P = 0x467 | IsInternal,
+        QueryXIsImmediate_P = 0x468 | IsInternal,
+        QueryXIsPersistent_P = 0x469 | IsInternal,
+        QueryXIsBreakPoint_P = 0x46A | IsInternal,
+        QueryXExclusiveKey_P = 0x46B | IsInternal,
+        QueryXAllowSelfLoop_P = 0x46C | IsInternal,
+        QueryXIsPathReversed_P = 0x46D | IsInternal,
+        QueryXIsFullTableRead_P = 0x46E | IsInternal,
+        QueryXFacet1_P = 0x46F | IsInternal,
+        QueryXFacet2_P = 0x470 | IsInternal,
+        ValueXWhere_P = 0x471 | CanMultiline | IsInternal,
+        ValueXSelect_P = 0x472 | CanMultiline | IsInternal,
+        ValueXIsReversed_P = 0x473 | IsInternal,
         ValueXValueType_P = 0x474 | IsReadOnly,
-        QueryXLineStyle_P = 0x475,
-        QueryXDashStyle_P = 0x476,
-        QueryXLineColor_P = 0x477,
+        QueryXLineStyle_P = 0x475 | IsInternal,
+        QueryXDashStyle_P = 0x476 | IsInternal,
+        QueryXLineColor_P = 0x477 | IsInternal,
 
         //=========================================
-        SymbolXName_P = 0x481,
-        SymbolXAttatch_P = 0x486,
+        SymbolXName_P = 0x481 | IsInternal,
+        SymbolXAttatch_P = 0x486 | IsInternal,
 
         //=========================================
         NodeCenterXY_P = 0x491 | IsCovert,
@@ -375,18 +372,18 @@ namespace ModelGraph.Core
         EdgeConnect2_P = 0x4A6 | IsCovert,
 
         //=========================================
-        ComputeXName_P = 0x4B1,
-        ComputeXSummary_P = 0x4B2,
-        ComputeXCompuType_P = 0x4B3,
-        ComputeXWhere_P = 0x4B4,
-        ComputeXSelect_P = 0x4B5,
-        ComputeXSeparator_P = 0x4B6,
+        ComputeXName_P = 0x4B1 | IsInternal,
+        ComputeXSummary_P = 0x4B2 | IsInternal,
+        ComputeXCompuType_P = 0x4B3 | IsInternal,
+        ComputeXWhere_P = 0x4B4 | IsInternal,
+        ComputeXSelect_P = 0x4B5 | IsInternal,
+        ComputeXSeparator_P = 0x4B6 | IsInternal,
         ComputeXValueType_P = 0x4B7 | IsReadOnly,
-        ComputeXNumericSet_P = 0x4B8,
-        ComputeXResults_P = 0x4B9,
-        ComputeXSorting_P = 0x4BA,
-        ComputeXTakeSet_P = 0x4BB,
-        ComputeXTakeLimit_P = 0x4BC,
+        ComputeXNumericSet_P = 0x4B8 | IsInternal,
+        ComputeXResults_P = 0x4B9 | IsInternal,
+        ComputeXSorting_P = 0x4BA | IsInternal,
+        ComputeXTakeSet_P = 0x4BB | IsInternal,
+        ComputeXTakeLimit_P = 0x4BC | IsInternal,
         #endregion
 
         #region Model ================================================(600-7FF)

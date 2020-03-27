@@ -59,7 +59,6 @@ namespace ModelGraph.Core
                     }
                 }
             }
-            if (_rootModels.Count == 0) Release();
         }
         private void RegisterGraphInstance(Graph g)
         {
@@ -87,26 +86,6 @@ namespace ModelGraph.Core
             InitializeReferences();
 
             InitializeModelActions();
-        }
-        #endregion
-
-        #region Release  ======================================================
-        internal override void Release()
-        {
-            Repository = null;
-            GraphParms = null;
-            Property_Enum = null;
-            _itemIdentity = null;
-            _localize = null;
-            _rootModels = null;
-            _graphRefereceCount.Clear();
-
-            ReleaseEnums();
-            ReleaseStores();
-            ReleaseProperties();
-            ReleaseModelActions();
-
-            base.Release();
         }
         #endregion
     }

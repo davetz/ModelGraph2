@@ -5,52 +5,66 @@ using Windows.Storage.Streams;
 
 namespace ModelGraph.Core
 {
-    class RelationXLink : ISerializer
+    class RelationLink : ISerializer
     {
-        static Guid _serializerGuid => new Guid("61662F08-F43A-44D9-A9BB-9B0126492B8C");
+        static Guid _serializerGuid => new Guid("6E4E6626-98BC-483E-AC9B-C7799511ECF2");
         static byte _formatVersion = 1;
-        readonly RelationXStore _rxStore;
+        readonly RelationStore _relStore;
 
-        internal RelationXLink(Chef chef, RelationXStore rxStore)
+        internal RelationLink(Chef chef, RelationStore relStore)
         {
-            _rxStore = rxStore;
+            _relStore = relStore;
             chef.RegisterSerializer((_serializerGuid, this), true);
         }
 
         #region ISerializer  ==================================================
         public bool HasData()
         {
-            foreach (var rx in _rxStore.Items)
+            foreach (var rel in _relStore.Items)
             {
-                if (rx.HasLinks) return true;
+                if (rel.HasLinks) return true;
             }
             return false;
         }
 
         public void PopulateItemIndex(Dictionary<Item, int> itemIndex)
         {
-            // all rows are already in the itemIndex, so there is nothing else to do
+            foreach (var rel in _relStore.Items)
+            {
+                if (rel.HasLinks)
+                {
+                    itemIndex[rel] = 0;
+                    var len = rel.GetLinks(out List<Item> parents, out List<Item> children);
+                    for (int i = 0; i < len; i++)
+                    {
+                        itemIndex[parents[i]] = 0;
+                        itemIndex[children[i]] = 0;
+                    }
+                }
+            }
         }
+
+        #region WriteData  ====================================================
         public void WriteData(DataWriter w, Dictionary<Item, int> itemIndex)
         {
             var N = 0;
-            foreach (var rx in _rxStore.Items) { if (rx.HasLinks) N++; } //count number of serialized relations 
+            foreach (var rel in _relStore.Items) { if (rel.HasLinks) N++; } //count number of serialized relations 
 
             w.WriteInt32(N);                //number of serialized relations 
             w.WriteByte(_formatVersion);    //format version
 
-            foreach (var rx in _rxStore.Items)  //foreach relation entry
+            foreach (var rel in _relStore.Items)  //foreach relation entry
             {
-                if (rx.HasLinks)
+                if (rel.HasLinks)
                 {
-                    w.WriteInt32(itemIndex[rx]);    //relation index
-                    w.WriteByte((byte)rx.Pairing);  //pairing cross check, it should match the relation.pairing on reading
+                    w.WriteInt32(itemIndex[rel]);    //relation index
+                    w.WriteByte((byte)rel.Pairing);  //pairing cross check, it should match the relation.pairing on reading
 
-                    switch (rx.Pairing)
+                    switch (rel.Pairing)
                     {
                         case Pairing.OneToOne:
 
-                            var list1 = rx.GetChildren1Items(itemIndex);
+                            var list1 = rel.GetChildren1Items(itemIndex);
 
                             w.WriteInt32(list1.Length);   //number of parent/child link pairs in this OntToOne relation
                             foreach (var (ix1, ix2) in list1)
@@ -62,18 +76,18 @@ namespace ModelGraph.Core
 
                         case Pairing.OneToMany:
 
-                            var list2 = rx.GetChildren2Items(itemIndex);
+                            var list2 = rel.GetChildren2Items(itemIndex);
 
                             WriteList(list2);   //write the  parent/childList link pairs
                             break;
 
                         case Pairing.ManyToMany:
 
-                            var list3 = rx.GetChildren2Items(itemIndex);
+                            var list3 = rel.GetChildren2Items(itemIndex);
 
                             WriteList(list3);   //write the  parent/childList link pairs
 
-                            var list4 = rx.GetParents2Items(itemIndex);
+                            var list4 = rel.GetParents2Items(itemIndex);
 
                             WriteList(list4);  //write the  child/parentList link pairs
                             break;
@@ -107,7 +121,7 @@ namespace ModelGraph.Core
                         }
                     }
                 }
-                if (max < 65536)
+                else if (max < 65536)
                 {
                     w.WriteByte(2); //type code for the size of the max count of items in sublist
 
@@ -140,25 +154,29 @@ namespace ModelGraph.Core
             }
             #endregion
         }
+        #endregion
+
+        #region ReadData  =====================================================
         public void ReadData(DataReader r, Item[] items)
         {
             var N = r.ReadInt32();      //number of  serialized relations 
             var fv = r.ReadByte();      //format version
 
             if (fv == 1)
+            #region FormatVersion-1  ==========================================
             {
                 for (int i = 0; i < N; i++)
                 {
-                    var irx = r.ReadInt32();    //read relation index
-                    if (irx < 0 || irx > items.Length)
-                        throw new Exception($"RelationXLink ReadData, invalid relation index: {irx}");
+                    var irel = r.ReadInt32();    //read relation index
+                    if (irel < 0 || irel > items.Length)
+                        throw new Exception($"RelationXLink ReadData, invalid relation index: {irel}");
 
-                    var rx = items[irx] as RelationX;
-                    if (rx is null)
-                        throw new Exception($"RelationXLink ReadData, null relation for index: {irx}");
+                    var rel = items[irel] as Relation;
+                    if (rel is null)
+                        throw new Exception($"RelationXLink ReadData, null relation for index: {irel}");
 
                     var pairing = (Pairing)r.ReadByte();  //read pairing type
-                    if (rx.Pairing != pairing)
+                    if (rel.Pairing != pairing)
                         throw new Exception($"RelationXLink ReadData, invalid relation pairing type");
 
                     switch (pairing)
@@ -178,8 +196,8 @@ namespace ModelGraph.Core
                                     list1[j] = (ix1, ix2);
                                     list2[j] = (ix2, ix1);
                                 }
-                                rx.SetChildren1(list1, items);
-                                rx.SetParents1(list2, items);
+                                rel.SetChildren1(list1, items);
+                                rel.SetParents1(list2, items);
                             }
                             break;
 
@@ -194,8 +212,8 @@ namespace ModelGraph.Core
                                         list2.Add((ix2, ix1));
                                     }
                                 }
-                                rx.SetChildren2(list1, items);
-                                rx.SetParents1(list2.ToArray(), items);
+                                rel.SetChildren2(list1, items);
+                                rel.SetParents1(list2.ToArray(), items);
                             }
                             break;
 
@@ -204,13 +222,14 @@ namespace ModelGraph.Core
                                 var (_, list1) = ReadList();
                                 var (_, list2) = ReadList();
 
-                                rx.SetChildren2(list1, items);
-                                rx.SetParents2(list2, items);
+                                rel.SetChildren2(list1, items);
+                                rel.SetParents2(list2, items);
                             }
                             break;
                     }
                 }
             }
+            #endregion
             else
                 throw new Exception("RelationXLink ReadData, invalid format version");
 
@@ -275,6 +294,7 @@ namespace ModelGraph.Core
             }
             #endregion
         }
+        #endregion
         #endregion
     }
 }

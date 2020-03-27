@@ -16,7 +16,6 @@ namespace ModelGraph.Core
         internal override void Remove(Item key) { }
         internal override bool IsSpecific(Item key) => true;
 
-        internal override void Release() { }
         #endregion
     }
 }

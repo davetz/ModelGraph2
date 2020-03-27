@@ -33,6 +33,8 @@ namespace ModelGraph.Services
         #region Dispatch  =====================================================
         public async Task<bool> Dispatch(UIRequest rq, IModelPageControl ctrl)
         {
+            if (rq is null || ctrl is null) return false;
+
             switch (rq.RequestType)
             {
                 case RequestType.Save:
@@ -57,7 +59,7 @@ namespace ModelGraph.Services
 
                 case RequestType.CreatePage:
                     var rootModel = new RootModel(rq);
-                    var viewLifetimeControl = await WindowManagerService.Current.TryShowAsStandaloneAsync(rootModel.TitleName, typeof(ModelPage), rootModel);
+                    var viewLifetimeControl = await WindowManagerService.Current.TryShowAsStandaloneAsync(rootModel.TitleName, typeof(ModelPage), rootModel).ConfigureAwait(true);
                     viewLifetimeControl.Released += ViewLifetimeControl_Released;
                     return true;
             }
@@ -79,6 +81,8 @@ namespace ModelGraph.Services
         #region CreateNewModel  ===============================================
         public async Task<bool> CreateNewModelAsync(CoreDispatcher dispatcher)
         {
+            if (dispatcher is null) return false;
+
             await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
                 var rootModel = new RootModel()
@@ -95,29 +99,31 @@ namespace ModelGraph.Services
         #region OpenModelDataFile  ============================================\
         public async Task<bool> OpenModelDataFileAsync(CoreDispatcher dispatcher)
         {
+            if (dispatcher is null) return false;
+
             var openPicker = new FileOpenPicker
             {
                 ViewMode = PickerViewMode.List,
                 SuggestedStartLocation = PickerLocationId.DocumentsLibrary
             };
-            openPicker.FileTypeFilter.Add(".mgdf");
+            openPicker.FileTypeFilter.Add(".mgd");
             StorageFile file = await openPicker.PickSingleFileAsync();
-            if (file != null)
+
+            if (file is null) return false;
+
+            await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
-                await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                var rootModel = new RootModel(new RepositoryStorageFile(file))
                 {
-                    var rootModel = new RootModel(new RepositoryStorageFile(file))
-                    {
-                        ControlType = ControlType.PrimaryTree
-                    };
-                    InsertModelPage(rootModel);
-                });
-            }
+                    ControlType = ControlType.PrimaryTree
+                };
+                InsertModelPage(rootModel);
+            });
             return true;
         }
         #endregion
 
-        public static Action<RootModel> InsertModelPage; //coordination with ShellPage NavigationView
-        public static Action<RootModel> RemoveModelPage; //coordination with ShellPage NavigationView
+        public Action<RootModel> InsertModelPage { get; set; } //coordination with ShellPage NavigationView
+        public Action<RootModel> RemoveModelPage { get; set; } //coordination with ShellPage NavigationView
     }
 }

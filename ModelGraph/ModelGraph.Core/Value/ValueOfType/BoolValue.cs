@@ -8,7 +8,7 @@ namespace ModelGraph.Core
     {
         internal override ValType ValType => ValType.Bool;
 
-        internal ValueDictionary<bool> ValueDictionary => _valueStore as ValueDictionary<bool>;
+        internal ValueDictionaryOf<bool> ValueDictionary => _valueStore as ValueDictionaryOf<bool>;
 
         internal override bool IsSpecific(Item key) => _valueStore.IsSpecific(key);
 
@@ -19,11 +19,11 @@ namespace ModelGraph.Core
         {
             if (count == 0)
             {
-                _valueStore = new ValueDictionary<bool>(count, default);
+                _valueStore = new ValueDictionaryOf<bool>(count, default);
             }
             else
             {
-                var vs = new ValueDictionary<bool>(count, r.ReadBoolean());
+                var vs = new ValueDictionaryOf<bool>(count, r.ReadBoolean());
 
                 for (int i = 0; i < count; i++)
                 {
@@ -37,7 +37,7 @@ namespace ModelGraph.Core
                 }
             }
         }
-        void WriteData(DataWriter w, Dictionary<Item, int> itemIndex)
+        internal override void WriteData(DataWriter w, Dictionary<Item, int> itemIndex)
         {
             w.WriteByte((byte)ValType);
 

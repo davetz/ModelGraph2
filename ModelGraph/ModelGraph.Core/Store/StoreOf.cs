@@ -9,16 +9,41 @@ namespace ModelGraph.Core
 
         #region Constructor  ==================================================
         public StoreOf() { }
-        internal override void Release()
+        public StoreOf(Store owner, Trait trait, int capacity = 0)
         {
+            Owner = owner;
+            Trait = trait;
+            SetCapacity(capacity);
+            owner?.Add(this);
         }
+
         #endregion
 
-        #region Count/Items/ItemsReversed  ====================================
+        #region Count/Items/GetItems  =========================================
         internal IList<T> Items => _items.AsReadOnly(); // protected from accidental corruption
         internal override int Count => (_items == null) ? 0 : _items.Count;
         internal override List<Item> GetItems() => new List<Item>(_items);
         internal override void RemoveAll() { _items.Clear(); UpdateDelta(); }
+        internal override int GetDesdantCount()
+        {
+            if (IsInternal) ;
+
+            var count = 0;
+            foreach (var item in Items)
+            {
+                if (item.IsExternal || item.IsInternal) count++;
+                if (item is Store sto) count += sto.GetDesdantCount();
+            }
+            return count;
+        }
+        internal override void PopululateChildItemIndex(Dictionary<Item, int> itemIndex)
+        {
+            foreach (var item in Items)
+            {
+                if (item.IsExternal) itemIndex[item] = 0;
+                if (item is Store sto) sto.PopululateChildItemIndex(itemIndex);
+            }
+        }
         #endregion
 
         #region Methods  ======================================================
@@ -27,9 +52,12 @@ namespace ModelGraph.Core
 
         internal void SetCapacity(int exactCount)
         {
-            var cap = (int)((exactCount + 1) * 1.1); // allow for modest expansion
+            if (exactCount > 0)
+            {
+                var cap = (int)((exactCount + 1) * 1.1); // allow for modest expansion
 
-            _items.Capacity = cap;
+                _items.Capacity = cap;
+            }
         }
 
         // Add  =============================================================
@@ -81,16 +109,6 @@ namespace ModelGraph.Core
         }
         internal override void Move(Item item, int index) => Move(Cast(item), index);
 
-        internal override int GetSerializerCount()
-        {
-            var N = 0;
-            foreach (var item in Items)
-            {
-                if (item.IsExternal || item.IsInternal) N++;
-                if (item is Store sto) N += sto.GetSerializerCount();
-            }
-            return N;
-        }
         #endregion
 
         #region Flags  ========================================================

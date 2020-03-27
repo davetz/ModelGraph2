@@ -8,7 +8,7 @@ namespace ModelGraph.Core
     {
         internal override ValType ValType => ValType.Int32Array;
 
-        internal ValueDictionary<int[]> ValueDictionary => _valueStore as ValueDictionary<int[]>;
+        internal ValueDictionaryOf<int[]> ValueDictionary => _valueStore as ValueDictionaryOf<int[]>;
         internal override bool IsSpecific(Item key) => _valueStore.IsSpecific(key);
 
         #region Constructor, WriteData  =======================================
@@ -16,7 +16,7 @@ namespace ModelGraph.Core
 
         internal Int32ArrayValue(DataReader r, int count, Item[] items)
         {
-            var vs = new ValueDictionary<int[]>(count, default);
+            var vs = new ValueDictionaryOf<int[]>(count, default);
             _valueStore = vs;
 
             if (count > 0)
@@ -43,7 +43,7 @@ namespace ModelGraph.Core
                 }
             }
         }
-        internal void WriteData(DataWriter w, Dictionary<Item, int> itemIndex)
+        internal override void WriteData(DataWriter w, Dictionary<Item, int> itemIndex)
         {
             w.WriteByte((byte)ValType);
 

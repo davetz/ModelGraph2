@@ -4,7 +4,6 @@ namespace ModelGraph.Core
 {
     public class QueryX : Item
     {
-        internal Guid Guid;
         internal WhereSelect Where;
         internal WhereSelect Select;
         internal PathParm PathParm;
@@ -16,13 +15,11 @@ namespace ModelGraph.Core
         {
             Owner = owner;
             Trait = Trait.NodeParm;
-            Guid = new Guid("96E6DDD7-4BBA-4DFF-A233-3CEDBD18C5D7");
         }
-        internal QueryX(StoreOf<QueryX> owner, QueryType kind, bool isRoot = false, bool isHead = false)
+        internal QueryX(QueryXStore owner, QueryType kind, bool isRoot = false, bool isHead = false)
         {
             Owner = owner;
             Trait = Trait.QueryX;
-            Guid = Guid.NewGuid();
             QueryKind = kind;
             IsRoot = isRoot;
             IsHead = isHead;
@@ -33,11 +30,10 @@ namespace ModelGraph.Core
 
             owner.Add(this);
         }
-        internal QueryX(StoreOf<QueryX> owner, Guid guid)
+        internal QueryX(QueryXStore owner)
         {
             Owner = owner;
             Trait = Trait.QueryX;
-            Guid = guid;
 
             owner.Add(this);
         }

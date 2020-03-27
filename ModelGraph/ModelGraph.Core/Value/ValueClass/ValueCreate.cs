@@ -71,50 +71,50 @@ namespace ModelGraph.Core
         }
         static Func<int, string, Value>[] _valCreate = new Func<int, string, Value>[]
         {
-            (c,s) => new BoolValue(new ValueDictionary<bool>(c, (bool.TryParse(s, out bool v)) ? v : default)), // 0 Bool
-            (c,s) => new BoolArrayValue(new ValueDictionary<bool[]>(c, null)), // 1 BoolArray
+            (c,s) => new BoolValue(new ValueDictionaryOf<bool>(c, (bool.TryParse(s, out bool v)) ? v : default)), // 0 Bool
+            (c,s) => new BoolArrayValue(new ValueDictionaryOf<bool[]>(c, null)), // 1 BoolArray
 
-            (c,s) => new CharValue(new ValueDictionary<char>(c, (char.TryParse(s, out char v)) ? v : default)), // 2 Char
-            (c,s) => new CharArrayValue(new ValueDictionary<char[]>(c, null)), // 3 CharArray
+            (c,s) => new CharValue(new ValueDictionaryOf<char>(c, (char.TryParse(s, out char v)) ? v : default)), // 2 Char
+            (c,s) => new CharArrayValue(new ValueDictionaryOf<char[]>(c, null)), // 3 CharArray
 
-            (c,s) => new ByteValue(new ValueDictionary<byte>(c, (byte.TryParse(s, out byte v)) ? v : default)), // 4 Bype
-            (c,s) => new ByteArrayValue(new ValueDictionary<byte[]>(c, null)), // 5 BypeArray
+            (c,s) => new ByteValue(new ValueDictionaryOf<byte>(c, (byte.TryParse(s, out byte v)) ? v : default)), // 4 Bype
+            (c,s) => new ByteArrayValue(new ValueDictionaryOf<byte[]>(c, null)), // 5 BypeArray
 
-            (c,s) => new SByteValue(new ValueDictionary<sbyte>(c, (sbyte.TryParse(s, out sbyte v)) ? v : default)), // 6 SByte
-            (c,s) => new SByteArrayValue(new ValueDictionary<sbyte[]>(c, null)), // 7 SByteArray
+            (c,s) => new SByteValue(new ValueDictionaryOf<sbyte>(c, (sbyte.TryParse(s, out sbyte v)) ? v : default)), // 6 SByte
+            (c,s) => new SByteArrayValue(new ValueDictionaryOf<sbyte[]>(c, null)), // 7 SByteArray
 
-            (c,s) => new Int16Value(new ValueDictionary<short>(c, (short.TryParse(s, out short v)) ? v : default)), // 8 Int16
-            (c,s) => new Int16ArrayValue(new ValueDictionary<short[]>(c, null)), // 9 Int16Array
+            (c,s) => new Int16Value(new ValueDictionaryOf<short>(c, (short.TryParse(s, out short v)) ? v : default)), // 8 Int16
+            (c,s) => new Int16ArrayValue(new ValueDictionaryOf<short[]>(c, null)), // 9 Int16Array
 
-            (c,s) => new UInt16Value(new ValueDictionary<ushort>(c, (ushort.TryParse(s, out ushort v)) ? v : default)), // 10 UInt16
-            (c,s) => new UInt16ArrayValue(new ValueDictionary<ushort[]>(c, null)), // 11 UInt16Array
+            (c,s) => new UInt16Value(new ValueDictionaryOf<ushort>(c, (ushort.TryParse(s, out ushort v)) ? v : default)), // 10 UInt16
+            (c,s) => new UInt16ArrayValue(new ValueDictionaryOf<ushort[]>(c, null)), // 11 UInt16Array
 
-            (c,s) => new Int32Value(new ValueDictionary<int>(c, (int.TryParse(s, out int v)) ? v : default)), // 12 Int32
-            (c,s) => new Int32ArrayValue(new ValueDictionary<int[]>(c, null)), // 13 Int32Array
+            (c,s) => new Int32Value(new ValueDictionaryOf<int>(c, (int.TryParse(s, out int v)) ? v : default)), // 12 Int32
+            (c,s) => new Int32ArrayValue(new ValueDictionaryOf<int[]>(c, null)), // 13 Int32Array
 
-            (c,s) => new UInt32Value(new ValueDictionary<uint>(c, (uint.TryParse(s, out uint v)) ? v : default)), // 14 UInt32
-            (c,s) => new UInt32ArrayValue(new ValueDictionary<uint[]>(c, null)), // 15 UInt32Array
+            (c,s) => new UInt32Value(new ValueDictionaryOf<uint>(c, (uint.TryParse(s, out uint v)) ? v : default)), // 14 UInt32
+            (c,s) => new UInt32ArrayValue(new ValueDictionaryOf<uint[]>(c, null)), // 15 UInt32Array
 
-            (c,s) => new Int64Value(new ValueDictionary<Int64>(c, (Int64.TryParse(s, out Int64 v)) ? v : default)), // 16 Int64
-            (c,s) => new Int64ArrayValue(new ValueDictionary<Int64[]>(c, null)), // 17 Int64Array
+            (c,s) => new Int64Value(new ValueDictionaryOf<Int64>(c, (Int64.TryParse(s, out Int64 v)) ? v : default)), // 16 Int64
+            (c,s) => new Int64ArrayValue(new ValueDictionaryOf<Int64[]>(c, null)), // 17 Int64Array
 
-            (c,s) => new UInt64Value(new ValueDictionary<ulong>(c, (ulong.TryParse(s, out ulong v)) ? v : default)), // 18 UInt64
-            (c,s) => new UInt64ArrayValue(new ValueDictionary<ulong[]>(c, null)), // 19 UInt64Array
+            (c,s) => new UInt64Value(new ValueDictionaryOf<ulong>(c, (ulong.TryParse(s, out ulong v)) ? v : default)), // 18 UInt64
+            (c,s) => new UInt64ArrayValue(new ValueDictionaryOf<ulong[]>(c, null)), // 19 UInt64Array
 
-            (c,s) => new SingleValue(new ValueDictionary<float>(c, (float.TryParse(s, out float v)) ? v : default)), // 20 Single
-            (c,s) => new SingleArrayValue(new ValueDictionary<float[]>(c, null)), // 21 SingleArray
+            (c,s) => new SingleValue(new ValueDictionaryOf<float>(c, (float.TryParse(s, out float v)) ? v : default)), // 20 Single
+            (c,s) => new SingleArrayValue(new ValueDictionaryOf<float[]>(c, null)), // 21 SingleArray
 
-            (c,s) => new DoubleValue(new ValueDictionary<double>(c, (double.TryParse(s, out double v)) ? v : default)), // 22 Double
-            (c,s) => new DoubleArrayValue(new ValueDictionary<double[]>(c, null)), // 23 DoubleArray
+            (c,s) => new DoubleValue(new ValueDictionaryOf<double>(c, (double.TryParse(s, out double v)) ? v : default)), // 22 Double
+            (c,s) => new DoubleArrayValue(new ValueDictionaryOf<double[]>(c, null)), // 23 DoubleArray
 
-            (c,s) => new DecimalValue(new ValueDictionary<decimal>(c, (decimal.TryParse(s, out decimal v)) ? v : default)), // 24 Decimal
-            (c,s) => new DecimalArrayValue(new ValueDictionary<decimal[]>(c, null)), // 25 DecimalArray
+            (c,s) => new DecimalValue(new ValueDictionaryOf<decimal>(c, (decimal.TryParse(s, out decimal v)) ? v : default)), // 24 Decimal
+            (c,s) => new DecimalArrayValue(new ValueDictionaryOf<decimal[]>(c, null)), // 25 DecimalArray
 
-            (c,s) => new DateTimeValue(new ValueDictionary<DateTime>(c, (DateTime.TryParse(s, out DateTime v)) ? v : default)), // 26 DateTime
-            (c,s) => new DateTimeArrayValue(new ValueDictionary<DateTime[]>(c, null)), // 27 DateTimeArray
+            (c,s) => new DateTimeValue(new ValueDictionaryOf<DateTime>(c, (DateTime.TryParse(s, out DateTime v)) ? v : default)), // 26 DateTime
+            (c,s) => new DateTimeArrayValue(new ValueDictionaryOf<DateTime[]>(c, null)), // 27 DateTimeArray
 
-            (c,s) => new StringValue(new ValueDictionary<string>(c, s)), // 28 String
-            (c,s) => new StringArrayValue(new ValueDictionary<string[]>(c, null)), // 29 StringArray
+            (c,s) => new StringValue(new ValueDictionaryOf<string>(c, s)), // 28 String
+            (c,s) => new StringArrayValue(new ValueDictionaryOf<string[]>(c, null)), // 29 StringArray
         };
     }
 }

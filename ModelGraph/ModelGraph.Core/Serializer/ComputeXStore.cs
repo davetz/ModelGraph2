@@ -4,12 +4,12 @@ using Windows.Storage.Streams;
 
 namespace ModelGraph.Core
 {
-    public class ColumnXStore : ExternalStore<ColumnX>, ISerializer
+    public class ComputeXStore : ExternalStore<ComputeX>, ISerializer
     {
-        static Guid _serializerGuid = new Guid("3E7097FE-22D5-43B2-964A-9DB843F6D55B");
+        static Guid _serializerGuid = new Guid("35522B27-A925-4CE0-8D65-EDEF451097F2");
         static byte _formatVersion = 1;
 
-        internal ColumnXStore(Chef owner) : base(owner, Trait.ColumnXStore)
+        internal ComputeXStore(Chef owner) : base(owner, Trait.ComputeXStore)
         {
             owner.RegisterSerializer((_serializerGuid, this));
         }
@@ -29,7 +29,7 @@ namespace ModelGraph.Core
                     var index = r.ReadInt32();
                     if (index < 0 || index >= items.Length) throw new Exception($"Invalid index {index}");
 
-                    var cx = new ColumnX(this);
+                    var cx = new ComputeX(this);
                     items[index] = cx;
 
                     var b = r.ReadByte();
@@ -37,8 +37,8 @@ namespace ModelGraph.Core
                     if ((b & B2) != 0) cx.Name = Value.ReadString(r);
                     if ((b & B3) != 0) cx.Summary = Value.ReadString(r);
                     if ((b & B4) != 0) cx.Description = Value.ReadString(r);
-
-                    ValueDictionary.ReadData(r, cx, items);
+                    if ((b & B5) != 0) cx.Separator = Value.ReadString(r);
+                    if ((b & B6) != 0) cx.CompuType = (CompuType)r.ReadByte();
                 }
             }
             else
@@ -61,14 +61,16 @@ namespace ModelGraph.Core
                     if (!string.IsNullOrWhiteSpace(cx.Name)) b |= B2;
                     if (!string.IsNullOrWhiteSpace(cx.Summary)) b |= B3;
                     if (!string.IsNullOrWhiteSpace(cx.Description)) b |= B4;
+                    if (cx.Separator != ComputeX.DefaultSeparator) b |= B5;
+                    if (cx.CompuType != CompuType.RowValue) b |= B6;
 
                     w.WriteByte(b);
                     if ((b & B1) != 0) w.WriteUInt16(cx.GetState());
                     if ((b & B2) != 0) Value.WriteString(w, cx.Name);
                     if ((b & B3) != 0) Value.WriteString(w, cx.Summary);
                     if ((b & B4) != 0) Value.WriteString(w, cx.Description);
-
-                    cx.Value.WriteData(w, itemIndex);
+                    if ((b & B5) != 0) Value.WriteString(w, (cx.Separator ?? string.Empty));
+                    if ((b & B6) != 0) w.WriteByte((byte)cx.CompuType);
                 }
             }
         }

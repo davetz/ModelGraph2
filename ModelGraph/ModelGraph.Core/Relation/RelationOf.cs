@@ -28,15 +28,6 @@ namespace ModelGraph.Core
 
             owner.Add(this);
         }
-        internal override void Release()
-        {
-            _parents1 = null;
-            _parents2 = null;
-            _children1 = null;
-            _children2 = null;
-
-            base.Release();
-        }
         #endregion
 
         #region Initialize  ===================================================
@@ -456,21 +447,30 @@ namespace ModelGraph.Core
         #endregion
 
         #region Serializer  ===================================================
-        internal (int, int)[] GetChildren1Items(Dictionary<Item, int> itemIndex)
+        internal override bool HasLinks => GetHasLinks();
+        private bool GetHasLinks()
+        {
+            if (Pairing == Pairing.OneToOne &&
+                _children1 != null && _children1.KeyCount > 0) return true;
+            if (_children2 != null && _children2.KeyCount > 0) return true;
+
+            return false;
+        }
+        internal override (int, int)[] GetChildren1Items(Dictionary<Item, int> itemIndex)
         {
             if (_children1 is null)
                 throw new Exception("RelationOf GetChildren1Items() _children1 is null");
 
             return _children1.GetItems(itemIndex);
         }
-        internal (int, int)[] GetParent1Items(Dictionary<Item, int> itemIndex)
+        internal override (int, int)[] GetParent1Items(Dictionary<Item, int> itemIndex)
         {
             if (_parents1 is null)
                 throw new Exception("RelationOf GetChildren1Items() _parents1 is null");
 
             return _parents1.GetItems(itemIndex);
         }
-        internal (int, int[])[] GetChildren2Items(Dictionary<Item, int> itemIndex)
+        internal override (int, int[])[] GetChildren2Items(Dictionary<Item, int> itemIndex)
         {
             if (_children2 is null)
                 throw new Exception("RelationOf GetChildren1Items() _children2 is null");
@@ -478,7 +478,7 @@ namespace ModelGraph.Core
             return _children2.GetItems(itemIndex);
         }
 
-        internal (int, int[])[] GetParents2Items(Dictionary<Item, int> itemIndex)
+        internal override (int, int[])[] GetParents2Items(Dictionary<Item, int> itemIndex)
         {
             if (_parents2 is null)
                 throw new Exception("RelationOf GetChildren1Items() _parents2 is null");
@@ -486,22 +486,22 @@ namespace ModelGraph.Core
             return _parents2.GetItems(itemIndex);
         }
 
-        internal void SetChildren1((int, int)[] items, Item[] itemArray)
+        internal override void SetChildren1((int, int)[] items, Item[] itemArray)
         {
             _children2 = null;
             _children1 = new MapToOne<T2>(items, itemArray);
         }
-        internal void SetParents1((int, int)[] items, Item[] itemArray)
+        internal override void SetParents1((int, int)[] items, Item[] itemArray)
         {
             _parents2 = null;
             _parents1 = new MapToOne<T1>(items, itemArray);
         }
-        internal void SetChildren2((int, int[])[] items, Item[] itemArray)
+        internal override void SetChildren2((int, int[])[] items, Item[] itemArray)
         {
             _children1 = null;
             _children2 = new MapToMany<T2>(items, itemArray);
         }
-        internal void SetParents2((int, int[])[] items, Item[] itemArray)
+        internal override void SetParents2((int, int[])[] items, Item[] itemArray)
         {
             _parents1 = null;
             _parents2 = new MapToMany<T1>(items, itemArray);
@@ -575,15 +575,6 @@ namespace ModelGraph.Core
             return 0;
         }
 
-        internal bool HasLinks => GetHasLinks();
-        private bool GetHasLinks()
-        {
-            if (Pairing == Pairing.OneToOne &&
-                _children1 != null && _children1.KeyCount > 0) return true;
-            if (_children2 != null && _children2.KeyCount > 0) return true;
-
-            return false;
-        }
         internal override int GetLinks(out List<Item> parents, out List<Item> children)
         {
             if (Pairing == Pairing.OneToOne &&

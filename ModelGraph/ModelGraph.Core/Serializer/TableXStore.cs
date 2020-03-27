@@ -10,7 +10,7 @@ namespace ModelGraph.Core
         static Guid _serializerGuid = new Guid("93EC136C-6C38-474D-844B-6B8326526CB5");
         static byte _formatVersion = 1;
 
-        internal TableXStore(Chef owner) : base(owner, Trait.ViewXStore, 30)
+        internal TableXStore(Chef owner) : base(owner, Trait.TableXStore, 30)
         {
             owner.RegisterSerializer((_serializerGuid, this));
         }
@@ -29,13 +29,26 @@ namespace ModelGraph.Core
                     var index = r.ReadInt32();
                     if (index < 0 || index >= items.Length) throw new Exception($"Invalid index {index}");
 
-                    var vx = new ViewX(this);
-                    items[index] = vx;
+                    var tx = new TableX(this);
+                    items[index] = tx;
 
                     var b = r.ReadByte();
-                    if ((b & B1) != 0) vx.Name = Value.ReadString(r);
-                    if ((b & B2) != 0) vx.Summary = Value.ReadString(r);
-                    if ((b & B3) != 0) vx.Description = Value.ReadString(r);
+                    if ((b & B1) != 0) tx.SetState(r.ReadUInt16());
+                    if ((b & B2) != 0) tx.Name = Value.ReadString(r);
+                    if ((b & B3) != 0) tx.Summary = Value.ReadString(r);
+                    if ((b & B4) != 0) tx.Description = Value.ReadString(r);
+
+                    var rxCount = r.ReadInt32();
+                    if (rxCount < 0) throw new Exception($"Invalid row count {rxCount}");
+                    if (rxCount > 0) tx.SetCapacity(rxCount);
+
+                    for (int j = 0; j < rxCount; j++)
+                    {
+                        var index2 = r.ReadInt32();
+                        if (index2 < 0 || index2 >= items.Length) throw new Exception($"Invalid row index {index2}");
+
+                        items[index2] = new RowX(tx);
+                    }
                 }
             }
             else
@@ -49,19 +62,34 @@ namespace ModelGraph.Core
                 w.WriteInt32(Count);
                 w.WriteByte(_formatVersion);
 
-                foreach (var view in Items)
+                foreach (var tx in Items)
                 {
-                    w.WriteInt32(itemIndex[view]);
+                    w.WriteInt32(itemIndex[tx]);
 
                     var b = BZ;
-                    if (!string.IsNullOrWhiteSpace(view.Name)) b |= B1;
-                    if (!string.IsNullOrWhiteSpace(view.Summary)) b |= B2;
-                    if (!string.IsNullOrWhiteSpace(view.Description)) b |= B3;
+                    if (tx.HasState()) b |= B1;
+                    if (!string.IsNullOrWhiteSpace(tx.Name)) b |= B2;
+                    if (!string.IsNullOrWhiteSpace(tx.Summary)) b |= B3;
+                    if (!string.IsNullOrWhiteSpace(tx.Description)) b |= B4;
 
                     w.WriteByte(b);
-                    if ((b & B1) != 0) Value.WriteString(w, view.Name);
-                    if ((b & B2) != 0) Value.WriteString(w, view.Summary);
-                    if ((b & B3) != 0) Value.WriteString(w, view.Description);
+                    if ((b & B1) != 0) w.WriteUInt16(tx.GetState());
+                    if ((b & B2) != 0) Value.WriteString(w, tx.Name);
+                    if ((b & B3) != 0) Value.WriteString(w, tx.Summary);
+                    if ((b & B4) != 0) Value.WriteString(w, tx.Description);
+
+                    if (tx.Count > 0)
+                    {
+                        w.WriteInt32(tx.Count);
+                        foreach (var rx in tx.Items)
+                        {
+                            w.WriteInt32(itemIndex[rx]);
+                        }
+                    }
+                    else
+                    {
+                        w.WriteInt32(0);
+                    }
                 }
             }
         }

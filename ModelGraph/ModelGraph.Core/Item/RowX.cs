@@ -5,25 +5,14 @@ namespace ModelGraph.Core
  */
     public class RowX : Item
     {
-        internal Guid Guid;
-
         #region Constructors  =================================================
-        internal RowX(TableX owner) // user created row
+        internal RowX(TableX owner, bool autoExpand = false)
         {
             Owner = owner;
             Trait = Trait.RowX;
-            Guid = Guid.NewGuid();
-            AutoExpandRight = true;
+            if (autoExpand) AutoExpandRight = true;
 
             owner.Add(this);
-        }
-        internal RowX(TableX owner, Guid guid) // used by Load operation
-        {
-            Owner = owner;
-            Trait = Trait.RowX;
-            Guid = guid;
-
-            owner.Add(this); // no need to check for null
         }
         #endregion
 

@@ -27,11 +27,5 @@ namespace ModelGraph.Core
             }
             return false;
         }
-
-        internal override void Release()
-        {
-            base.Release();
-        }
-
     }
 }

@@ -8,7 +8,7 @@ namespace ModelGraph.Core
     {
         internal override ValType ValType => ValType.Double;
 
-        internal ValueDictionary<double> ValueDictionary => _valueStore as ValueDictionary<double>;
+        internal ValueDictionaryOf<double> ValueDictionary => _valueStore as ValueDictionaryOf<double>;
         internal override bool IsSpecific(Item key) => _valueStore.IsSpecific(key);
 
         #region Constructor, WriteData  =======================================
@@ -18,11 +18,11 @@ namespace ModelGraph.Core
         {
             if (count == 0)
             {
-                _valueStore = new ValueDictionary<double>(count, default);
+                _valueStore = new ValueDictionaryOf<double>(count, default);
             }
             else
             {
-                var vs = new ValueDictionary<double>(count, r.ReadDouble());
+                var vs = new ValueDictionaryOf<double>(count, r.ReadDouble());
                 _valueStore = vs;
 
                 for (int i = 0; i < count; i++)
@@ -37,7 +37,7 @@ namespace ModelGraph.Core
                 }
             }
         }
-        internal void WriteData(DataWriter w, Dictionary<Item, int> itemIndex)
+        internal override void WriteData(DataWriter w, Dictionary<Item, int> itemIndex)
         {
             w.WriteByte((byte)ValType);
 
