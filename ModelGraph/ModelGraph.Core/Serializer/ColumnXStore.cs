@@ -11,7 +11,7 @@ namespace ModelGraph.Core
 
         internal ColumnXStore(Chef owner) : base(owner, Trait.ColumnXStore)
         {
-            owner.RegisterSerializer((_serializerGuid, this));
+            owner.RegisterItemSerializer((_serializerGuid, this));
         }
 
         #region ISerializer  ==================================================

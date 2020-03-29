@@ -11,7 +11,7 @@ namespace ModelGraph.Core
 
         internal ComputeXStore(Chef owner) : base(owner, Trait.ComputeXStore)
         {
-            owner.RegisterSerializer((_serializerGuid, this));
+            owner.RegisterItemSerializer((_serializerGuid, this));
         }
 
         #region ISerializer  ==================================================

@@ -5,22 +5,30 @@ using Windows.Storage.Streams;
 
 namespace ModelGraph.Core
 {
-    public class RelationXStore : ExternalStore<RelationX>, ISerializer
+    public class RelationXStore : ExternalStore<RelationX>, ISerializer, IRelationStore
     {
         static Guid _serializerGuid = new Guid("D950F508-B774-4838-B81A-757EFDC40518");
         static byte _formatVersion = 1;
 
         internal RelationXStore(Chef owner) : base(owner, Trait.RelationXStore)
         {
-            owner.RegisterSerializer((_serializerGuid, this));
+            owner.RegisterItemSerializer((_serializerGuid, this));
 
             new RelationXLink(owner, this);
+        }
+        public Relation[] GetRelationArray()
+        {
+            var relationArray = new Relation[Count];
+            for (int i = 0; i < Count; i++)
+            {
+                relationArray[i] = Items[i];
+            }
+            return relationArray;
         }
 
         #region ISerializer  ==================================================
         public void WriteData(DataWriter w, Dictionary<Item, int> itemIndex)
         {
-            w.WriteGuid(_serializerGuid);
             w.WriteInt32(Count);
             w.WriteByte(_formatVersion);
 

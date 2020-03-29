@@ -11,7 +11,7 @@ namespace ModelGraph.Core
 
         internal SymbolXStore(Chef owner) : base(owner, Trait.SymbolXStore)
         {
-            owner.RegisterSerializer((_serializerGuid, this));
+            owner.RegisterItemSerializer((_serializerGuid, this));
         }
 
         #region ISerializer  ==================================================

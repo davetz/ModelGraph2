@@ -11,7 +11,7 @@ namespace ModelGraph.Core
 
         internal EnumXStore(Chef owner) : base(owner, Trait.EnumXStore, 10)
         {
-            owner.RegisterSerializer((_serializerGuid, this));
+            owner.RegisterItemSerializer((_serializerGuid, this));
         }
 
         #region ISerializer  ==================================================

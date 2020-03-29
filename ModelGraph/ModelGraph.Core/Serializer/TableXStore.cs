@@ -12,7 +12,7 @@ namespace ModelGraph.Core
 
         internal TableXStore(Chef owner) : base(owner, Trait.TableXStore, 30)
         {
-            owner.RegisterSerializer((_serializerGuid, this));
+            owner.RegisterItemSerializer((_serializerGuid, this));
         }
 
         #region ISerializer  ==================================================

@@ -12,7 +12,7 @@ namespace ModelGraph.Core
 
         internal ViewXStore(Chef owner) : base(owner, Trait.ViewXStore, 30)
         {
-            owner.RegisterSerializer((_serializerGuid, this));
+            owner.RegisterItemSerializer((_serializerGuid, this));
         }
 
         #region ISerializer  ==================================================

@@ -10,18 +10,19 @@ namespace ModelGraph.Core
         Guid _serilizerGuid = new Guid("DE976A9D-0C50-4B4E-9B46-74404A64A703");
 
         readonly List<(Guid, ISerializer)> _itemSerializers = new List<(Guid, ISerializer)>();
-        readonly List<(Guid, ISerializer)> _linkSerializers = new List<(Guid, ISerializer)>();
+        readonly List<(Guid, ISerializer)> _linkSerializers = new List<(Guid, ISerializer)>(10);
 
         #region Register  =====================================================
-        public void RegisterSerializer((Guid, ISerializer) serializer, bool isLinkSerializer = false )
+        public void RegisterItemSerializer((Guid, ISerializer) serializer)
         {
             if (_itemSerializers.Count == 0)
                 _itemSerializers.Add((_serilizerGuid, this)); //the internal reference serializer should be first
 
-            if (isLinkSerializer)
-                _linkSerializers.Add(serializer); //link serializers will be called last
-            else
-                _itemSerializers.Add(serializer); //item serializers added according to registration order
+            _itemSerializers.Add(serializer); //item serializers added according to registration order
+        }
+        public void RegisterLinkSerializer((Guid, ISerializer) serializer)
+        {
+            _linkSerializers.Add(serializer); //link serializers will be called last
         }
         public void PopulateItemIndex(Dictionary<Item, int> itemIndex)
         {
