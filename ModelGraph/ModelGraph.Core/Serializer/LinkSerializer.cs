@@ -25,6 +25,164 @@ namespace ModelGraph.Core
             return false;
         }
 
+        #region ListSizeCode  =================================================
+        const byte BZ = 0x00;
+
+        const byte B01 = 0x01;
+        const byte B02 = 0x02;
+        const byte B03 = 0x03;
+
+        const byte B04 = 0x04;
+        const byte B08 = 0x08;
+        const byte B0C = 0x0C;
+
+        const byte B10 = 0x010;
+        const byte B20 = 0x020;
+        const byte B30 = 0x030;
+
+        const byte B40 = 0x40;
+        const byte B80 = 0x80;
+        const byte BC0 = 0xC0;
+
+        byte GetCompositeCode((int, int)[] list) //OneToOne
+        {
+            var len = list.Length;
+            if (len < 256) return B10;
+            if (len < 65356) return B20;
+            return B30;
+        }
+        byte GetCompositeCode((int, int[])[] children) //OneToMany
+        {
+            var code = BZ;
+            var len1 = 0;
+            var len3 = children.Length;
+            foreach (var (ix1, ix2List) in children)
+            {
+                var len = ix2List.Length;
+                if (len > len1) len1 = len;
+            }
+            if (len1 < 256) code |= B01;
+            else if (len1 < 65356) code |= B02;
+            else code |= B03;
+
+            if (len3 < 256) code |= B10;
+            else if (len3 < 65536) code |= B20;
+            else code |= B30;
+
+            return code;
+        }
+        byte GetCompositeCode((int, int[])[] parents, (int, int[])[] children) //ManyToMany
+        {
+            var code = BZ;
+            var len1 = 0;
+            var len2 = 0;
+            var len3 = children.Length;
+            var len4 = parents.Length;
+            foreach (var (ix1, ix2List) in children)
+            {
+                var len = ix2List.Length;
+                if (len > len1) len1 = len;
+            }
+            if (len1 < 256) code |= B01;
+            else if (len1 < 65356) code |= B02;
+            else code |= B03;
+
+            foreach (var (ix1, ix2List) in parents)
+            {
+                var len = ix2List.Length;
+                if (len > len2) len2 = len;
+            }
+            if (len2 < 256) code |= B04;
+            else if (len2 < 65356) code |= B08;
+            else code |= B0C;
+
+            if (len3 < 256) code |= B10;
+            else if (len3 < 65536) code |= B20;
+            else code |= B30;
+
+            if (len4 < 256) code |= B40;
+            else if (len4 < 65536) code |= B80;
+            else code |= BC0;
+
+            return code;
+        }
+
+
+        byte SizeCodeOneToOne(byte code)
+        {
+            if (code == B10) return B10;
+            if (code == B20) return B20;
+            if (code == B30) return B40;
+            throw new Exception($"LinkSerializer ReadData, invalid list size code");
+        }
+        byte SizeCodeOneToMany(byte code)
+        {
+            var code1 = BZ;
+            if ((code & B03) == B01) 
+                code1 |= B01;
+            else if ((code & B03) == B02) 
+                code1 |= B02;
+            else if ((code & B03) == B03) 
+                code1 |= B04;
+            else
+                throw new Exception($"LinkSerializer ReadData, invalid list size code");
+
+            if ((code & B30) == B10)
+                code1 |= B10;
+            else if ((code & B30) == B20)
+                code1 |= B20;
+            else if ((code & B30) == B30)
+                code1 |= B40;
+            else
+                throw new Exception($"LinkSerializer ReadData, invalid list size code");
+
+            return code1;
+        }
+        (byte, byte) SizeCodeManyToMany(byte code)
+        {
+            var code1 = BZ;
+            var code2 = BZ;
+
+            if ((code & B03) == B01)
+                code1 |= B01;
+            else if ((code & B03) == B02)
+                code1 |= B02;
+            else if ((code & B03) == B03)
+                code1 |= B04;
+            else
+                throw new Exception($"LinkSerializer ReadData, invalid list size code");
+
+            if ((code & B0C) == B04)
+                code2 |= B01;
+            else if ((code & B0C) == B08)
+                code2 |= B02;
+            else if ((code & B0C) == B0C)
+                code2 |= B04;
+            else
+                throw new Exception($"LinkSerializer ReadData, invalid list size code");
+
+            if ((code & B30) == B10)
+                code1 |= B10;
+            else if ((code & B30) == B20)
+                code1 |= B20;
+            else if ((code & B30) == B30)
+                code1 |= B40;
+            else
+                throw new Exception($"LinkSerializer ReadData, invalid list size code");
+
+            if ((code & BC0) == B40)
+                code2 |= B10;
+            else if ((code & BC0) == B80)
+                code2 |= B20;
+            else if ((code & BC0) == BC0)
+                code2 |= B40;
+            else
+                throw new Exception($"LinkSerializer ReadData, invalid list size code");
+
+            return (code2, code1);
+        }
+        #endregion
+
         #region WriteData  ====================================================
         public void WriteData(DataWriter w, Dictionary<Item, int> itemIndex)
         {
@@ -47,8 +205,26 @@ namespace ModelGraph.Core
                         case Pairing.OneToOne:
 
                             var list1 = rel.GetChildren1Items(itemIndex);
+                            var len = list1.Length;
 
-                            w.WriteInt32(list1.Length);   //number of parent/child link pairs in this OntToOne relation
+                            var code1 = GetCompositeCode(list1);
+                            w.WriteByte(code1);//===================write composite sizing code;
+
+                            var listSize1 = SizeCodeOneToOne(code1);
+
+                            if ((listSize1 & B10) != 0)
+                            {//============================list length < 256
+                                w.WriteByte((byte)len);
+                            }
+                            else if ((listSize1 & B20) != 0)
+                            {//============================list length < 65536
+                                w.WriteUInt16((ushort)len);
+                            }
+                            else
+                            {//============================list length > 65535
+                                w.WriteInt32(len);
+                            }
+
                             foreach (var (ix1, ix2) in list1)
                             {
                                 w.WriteInt32(ix1);      //parent item
@@ -60,18 +236,26 @@ namespace ModelGraph.Core
 
                             var list2 = rel.GetChildren2Items(itemIndex);
 
-                            WriteList(w, list2);   //write the compound list
+                            var code2 = GetCompositeCode(list2);
+                            w.WriteByte(code2);//===================write composite sizing code;
+
+                            var listSize2 = SizeCodeOneToMany(code2);
+
+                            WriteList(w, list2, listSize2);   //write the compound list
                             break;
 
                         case Pairing.ManyToMany:
 
                             var list3 = rel.GetChildren2Items(itemIndex);
-
-                            WriteList(w, list3);   //write the compound list
-
                             var list4 = rel.GetParents2Items(itemIndex);
 
-                            WriteList(w, list4);  //write the compound list
+                            var code3 = GetCompositeCode(list4, list3);
+                            w.WriteByte(code3);//===================write composite sizing code;
+
+                            var (listSize4, listSize3) = SizeCodeManyToMany(code3);
+
+                            WriteList(w, list3, listSize3);   //write the compound list
+                            WriteList(w, list4, listSize4);  //write the compound list
                             break;
                     }
                 }
@@ -89,27 +273,43 @@ namespace ModelGraph.Core
             {
                 if (fv == 1)
                 {
-                    var irel = r.ReadInt32();    //read relation index
+                    var irel = r.ReadInt32();//=============== read relation index
                     if (irel < 0 || irel > items.Length)
                         throw new Exception($"LinkSerializer ReadData, invalid relation index: {irel}");
 
                     if (!(items[irel] is Relation rel))
                         throw new Exception($"LinkSerializer ReadData, null relation for index: {irel}");
 
-                    var pairing = (Pairing)r.ReadByte();  //read pairing type
+                    var pairing = (Pairing)r.ReadByte();//==== read pairing type
                     if (rel.Pairing != pairing)
                         throw new Exception($"LinkSerializer ReadData, invalid relation pairing type");
+
+                    var sizeCode = r.ReadByte();//============ read list size code        
 
                     switch (pairing)
                     {
                         case Pairing.OneToOne:
                             {
-                                var count1 = r.ReadInt32(); //number of parent/child link pairs in this OntToOne relation
+                                int len;
+                                var listSize = SizeCodeOneToOne(sizeCode);
 
-                                var list1 = new (int, int)[count1];
-                                var list2 = new (int, int)[count1];
+                                if ((listSize & B10) != 0)
+                                {//============================list length < 256
+                                    len = r.ReadByte();
+                                }
+                                else if ((listSize & B20) != 0)
+                                {//============================list length < 65536
+                                    len = r.ReadUInt16();
+                                }
+                                else
+                                {//============================list length > 65535
+                                    len = r.ReadInt32();
+                                }
 
-                                for (int j = 0; j < count1; j++)
+                                var list1 = new (int, int)[len];
+                                var list2 = new (int, int)[len];
+
+                                for (int j = 0; j < len; j++)
                                 {
                                     var ix1 = r.ReadInt32();
                                     var ix2 = r.ReadInt32();
@@ -124,7 +324,9 @@ namespace ModelGraph.Core
 
                         case Pairing.OneToMany:
                             {
-                                var (len, list1) = ReadList(r);
+                                var listSize = SizeCodeOneToMany(sizeCode);
+
+                                var (len, list1) = ReadList(r, listSize);
                                 var list2 = new List<(int, int)>(len);
                                 foreach (var (ix1, ix2List) in list1)
                                 {
@@ -137,8 +339,10 @@ namespace ModelGraph.Core
 
                         case Pairing.ManyToMany:
                             {
-                                var (_, list1) = ReadList(r);
-                                var (_, list2) = ReadList(r);
+                                var (parentsSize, childrenSize) = SizeCodeManyToMany(sizeCode);
+
+                                var (_, list1) = ReadList(r, childrenSize);
+                                var (_, list2) = ReadList(r, parentsSize);
 
                                 rel.SetChildren2(list1, items);
                                 rel.SetParents2(list2, items);
@@ -155,112 +359,97 @@ namespace ModelGraph.Core
         #endregion
 
         #region WriteList - write the compond list  ===========================
-        void WriteList(DataWriter w, (int, int[])[] list)
+        void WriteList(DataWriter w, (int, int[])[] list, byte listSize)
         {
             var len = list.Length;
-            if (len < 256)
-            {
-                w.WriteByte(1); //type code specifing there are fewer than 256 items
+
+            if ((listSize & B10) != 0)
+            {//============================list length < 256
                 w.WriteByte((byte)len);
             }
-            else if (len < 65536)
-            {
-                w.WriteByte(2); //type code specifing there are fewer than 65536 items
+            else if ((listSize & B20) != 0)
+            {//============================list length < 65536
                 w.WriteUInt16((ushort)len);
             }
             else
-            {
-                w.WriteByte(4); //type code specifing there are more than 65555 items
+            {//============================list length > 65535
                 w.WriteInt32(len);
             }
-            foreach (var ent in list)
-            {
-                WriteOneToMany(w, ent);
-            }
+
+            foreach (var ent in list) { WriteOneToMany(w, ent, listSize); }
         }
         #endregion
 
         #region ReadList - read the compond list  =============================
-        (int, (int, int[])[]) ReadList(DataReader r)
+        (int, (int, int[])[]) ReadList(DataReader r, byte listSize)
         {
-            var len = 0;
-            var typeCode = r.ReadByte(); //type code for the size of the compound list
-
-            switch (typeCode)
-            {
-                case 1:
-                    len = r.ReadByte();
-                    break;
-                case 2:
-                    len  = r.ReadUInt16();
-                    break;
-                case 4:
-                    len = r.ReadInt32();
-                    break;
-                 default:
-                    throw new Exception($"LinkSerializer ReadData ReadList, invalid list sizing code type");
+            int len;
+            if ((listSize & B10) != 0)
+            {//============================list length < 256
+                len = r.ReadByte();
+            }
+            else if ((listSize & B20) != 0)
+            {//============================list length < 65536
+                len = r.ReadUInt16();
+            }
+            else
+            {//============================list length > 65535
+                len = r.ReadInt32();
             }
 
             var list = new (int, int[])[len];
-            for (int i = 0; i < len; i++) { list[i] = ReadOneToMany(r); }
+            for (int i = 0; i < len; i++) { list[i] = ReadOneToMany(r, listSize); }
 
             return (len, list);
         }
         #endregion
 
         #region WriteOneToMany  ===============================================
-        void WriteOneToMany(DataWriter w, (int, int[]) pcList)
+        void WriteOneToMany(DataWriter w, (int, int[]) pcList, byte listSize)
         {
             var (ix1, ix2List) = pcList;
             w.WriteInt32(ix1);
 
-            var len = ix2List.Length;            
-            if (len < 256)
-            {
-                w.WriteByte(1); //type code specifing there are fewer than 256 sublist items
+            var len = ix2List.Length;
+            if ((listSize & B01) != 0)
+            {//============================list length < 256
                 w.WriteByte((byte)len);
             }
-            else if (len < 65536)
-            {
-                w.WriteByte(2); //type code specifing there are fewer than 65526 sublist items
+            else if ((listSize & B02) != 0)
+            {//============================list length < 65536
                 w.WriteUInt16((ushort)len);
             }
             else
-            {
-                w.WriteByte(4); //type code specifing there are more than 65525 sublist items
+            {//============================list length > 65535
                 w.WriteInt32(len);
             }
+
             foreach (var ix2 in ix2List) { w.WriteInt32(ix2); }
         }
         #endregion
 
         #region ReadOneToMany  ================================================
-        (int, int[]) ReadOneToMany(DataReader r)
+        (int, int[]) ReadOneToMany(DataReader r, byte listSize)
         {
+            int len;
             var ix1 = r.ReadInt32();
-            var typeCode = r.ReadByte();
-            switch (typeCode)
-            {
-                case 1:
-                    var len1 = r.ReadByte();
-                    var lst1 = new int[len1];
-                    for (int i = 0; i < len1; i++) { lst1[i] = r.ReadInt32(); }
-                    return (ix1, lst1);
-                case 2:
-                    var len2 = r.ReadUInt16();
-                    var lst2 = new int[len2];
-                    for (int i = 0; i < len2; i++) { lst2[i] = r.ReadInt32(); }
-                    return (ix1, lst2);
-                case 4:
-                    var len4 = r.ReadUInt32();
-                    var lst4 = new int[len4];
-                    for (int i = 0; i < len4; i++) { lst4[i] = r.ReadInt32(); }
-                    return (ix1, lst4);
-                default:
-                    throw new Exception($"LinkSerializer ReadOneToMany, invalid Ix2List type code");
+
+            if ((listSize & B01) != 0)
+            {//============================list length < 256
+                len = r.ReadByte();
             }
+            else if ((listSize & B02) != 0)
+            {//============================list length < 65536
+                len = r.ReadUInt16();
+            }
+            else 
+            {//============================list length > 65535
+                len = r.ReadInt32();
+            }
+            var ix2List = new int[len];
+            for (int i = 0; i < len; i++) { ix2List[i] = r.ReadInt32(); }
+            return (ix1, ix2List);
         }
         #endregion
-
     }
 }

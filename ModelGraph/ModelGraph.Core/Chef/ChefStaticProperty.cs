@@ -49,7 +49,6 @@ namespace ModelGraph.Core
 
         private PropertyOf<QueryX, string> _queryXRelationProperty;
         private PropertyOf<QueryX, bool> _queryXIsReversedProperty;
-        private PropertyOf<QueryX, bool> _queryXIsPersistentProperty;
         private PropertyOf<QueryX, bool> _queryXIsBreakPointProperty;
         private PropertyOf<QueryX, byte> _queryXExclusiveKeyProperty;
         private PropertyOf<QueryX, string> _queryXWhereProperty;
@@ -436,13 +435,6 @@ namespace ModelGraph.Core
                 props.Add(p);
             }
             {
-                var p = _queryXIsPersistentProperty = new PropertyOf<QueryX, bool>(PropertyStore, Trait.QueryXIsPersistent_P);
-                p.GetValFunc = (item) => p.Cast(item).IsPersistent;
-                p.SetValFunc = (item, value) => { p.Cast(item).IsPersistent = value; return true; };
-                p.Value = new BoolValue(p);
-                props.Add(p);
-            }
-            {
                 var p = _queryXIsBreakPointProperty = new PropertyOf<QueryX, bool>(PropertyStore, Trait.QueryXIsBreakPoint_P);
                 p.GetValFunc = (item) => p.Cast(item).IsBreakPoint;
                 p.SetValFunc = (item, value) => { p.Cast(item).IsBreakPoint = value; return true; };
@@ -584,7 +576,6 @@ namespace ModelGraph.Core
             _queryXFacet2Property = null;
             _queryXRelationProperty = null;
             _queryXIsReversedProperty = null;
-            _queryXIsPersistentProperty = null;
             _queryXIsBreakPointProperty = null;
             _queryXExclusiveKeyProperty = null;
             _queryXWhereProperty = null;

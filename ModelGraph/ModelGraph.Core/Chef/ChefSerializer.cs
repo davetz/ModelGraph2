@@ -71,7 +71,7 @@ namespace ModelGraph.Core
                     s.ReadData(r, items);
                     break;
                 }
-                if (!found) throw new Exception("Unknown guid reference");
+                if (!found) throw new Exception("Unknown serializer guid reference");
             }
         }
         int GetItemIndexMaxSize()
