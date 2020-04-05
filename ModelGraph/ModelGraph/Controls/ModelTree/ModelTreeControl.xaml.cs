@@ -130,10 +130,10 @@ namespace ModelGraph.Controls
         #endregion
 
         #region IModelControl  ================================================
-        public void Save()
+        public void Apply()
         {
         }
-        public void Reload()
+        public void Revert()
         {
         }
         public (int Width, int Height) PreferredSize => (400, 320);
@@ -367,32 +367,11 @@ namespace ModelGraph.Controls
         #endregion
 
         #region AppButton_Click  ==============================================
-        private async void AppButton_Click(object sender, RoutedEventArgs e)
+        private void AppButton_Click(object sender, RoutedEventArgs e)
         {
             var btn = sender as Button;
             var cmd = btn.Tag as ModelCommand;
-            if (cmd.IsStorageFileParameter1)
-            {
-                if (cmd.IsSaveAsCommand)
-                {
-                    var savePicker = new FileSavePicker
-                    {
-                        SuggestedStartLocation = PickerLocationId.DocumentsLibrary,
-                        SuggestedFileName = string.Empty
-                    };
-                    savePicker.FileTypeChoices.Add("DataFile", new List<string>() { ".mgd" });
-                    StorageFile file = await savePicker.PickSaveFileAsync();
-                    if (file != null)
-                    {
-                        cmd.Parameter1 = new RepositoryStorageFile(file);
-                        cmd.Execute();
-                    }
-                }
-            }
-            else
-            {
-                cmd.Execute();
-            }
+            cmd.Execute();
         }
         #endregion
 

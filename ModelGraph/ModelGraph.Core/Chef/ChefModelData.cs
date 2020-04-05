@@ -859,7 +859,7 @@ namespace ModelGraph.Core
                 case ControlType.PartialTree:
                 case ControlType.GraphDisplay:
                 case ControlType.SymbolEditor:
-                    return GetRepositoryName();
+                    return Repository.Name;
             }
             return BlankName;
         }
@@ -904,10 +904,10 @@ namespace ModelGraph.Core
                     return GetName(Trait.AppRootModelTab);
 
                 case ControlType.PrimaryTree:
-                    return GetRepositoryName();
+                    return RepoName();
 
                 case ControlType.PartialTree:
-                    return $"{GetRepositoryName()} - {GetName(root.Trait)}";
+                    return $"{RepoName()} - {GetName(root.Trait)}";
 
                 case ControlType.GraphDisplay:
                     var g = root.Graph;
@@ -922,6 +922,8 @@ namespace ModelGraph.Core
                     return $"{GetName(Trait.EditSymbol)} : {GetIdentity(root.Item, IdentityStyle.Single)}";
             }
             return BlankName;
+
+            string RepoName() => (Repository == null) ? BlankName : Repository.Name;
         }
         #endregion
 
@@ -1554,14 +1556,17 @@ namespace ModelGraph.Core
                     switch (root.ControlType)
                     {
                         case ControlType.PrimaryTree:
-                            if (root.Chef.Repository == null)
+                            if (root.Chef.Repository == null || root.Chef.Repository.HasNoStorage)
+                            {
                                 bc.Add(new ModelCommand(this, root, Trait.SaveAsCommand, SaveAsModel));
+                                bc.Add(new ModelCommand(this, root, Trait.CloseCommand, CloseModel));
+                            }
                             else
+                            {
                                 bc.Add(new ModelCommand(this, root, Trait.SaveCommand, SaveModel));
-
-                            bc.Add(new ModelCommand(this, root, Trait.CloseCommand, CloseModel));
-                            if (root.Chef.Repository != null)
+                                bc.Add(new ModelCommand(this, root, Trait.CloseCommand, CloseModel));
                                 bc.Add(new ModelCommand(this, root, Trait.ReloadCommand, ReloadModel));
+                            }
                             break;
 
                         case ControlType.PartialTree:
@@ -1600,20 +1605,19 @@ namespace ModelGraph.Core
             (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
 
             #region ButtonCommands  ===========================================
-            void SaveAsModel(ItemModel model, Object parm1)
+            void SaveAsModel(ItemModel model)
             {
-                var repo = parm1 as IRepository;
                 var root = model as RootModel;
-                var dataChef = root.Chef;
-                dataChef.SaveToRepository(repo);
                 root.IsChanged = true;
+                root.UIRequestSaveAsModel();
             }
             void SaveModel(ItemModel model)
             {
                 var root = model as RootModel;
                 var dataChef = root.Chef;
-                dataChef.SaveToRepository();
+                root.UIRequestSaveModel();
             }
+
             void CloseModel(ItemModel m) => m.GetRootModel().UIRequestCloseModel();
             void AppSaveSymbol(ItemModel m) => m.GetRootModel().UIRequestSaveModel();
             void AppReloadSymbol(ItemModel m) => m.GetRootModel().UIRequestReloadModel();
@@ -1622,7 +1626,7 @@ namespace ModelGraph.Core
             {
                 var repo = Repository;
                 var root = m.GetRootModel();
-                var dataChef = new Chef(repo);
+                var dataChef = new Chef();
 
                 root.UIRequestCloseModel();
                 root.UIRequestCreateView(ControlType.PrimaryTree, Trait.DataChef_M, dataChef, dataChef.DataChef_X);

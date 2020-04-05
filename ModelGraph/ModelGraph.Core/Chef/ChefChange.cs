@@ -30,7 +30,7 @@ namespace ModelGraph.Core
         #region CongealChanges  ===============================================
         // Consolidate the current change items and freeze them so that the changes
         // can not be undone, also remove any change items wich have been undon. 
-        private void CongealChanges()
+        public void CongealChanges()
         {
             ChangeRoot.CongealChanges();
             ChangeRoot.ChildDelta++;

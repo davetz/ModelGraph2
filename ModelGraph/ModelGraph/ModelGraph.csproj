@@ -185,6 +185,7 @@
     <Compile Include="Models\DragDropCompletedData.cs" />
     <Compile Include="Models\DragDropData.cs" />
     <Compile Include="Models\DragDropStartingData.cs" />
+    <Compile Include="Repository\StorageFileRepo.cs" />
     <Compile Include="Services\ActivationService.cs" />
     <Compile Include="Activation\DefaultActivationHandler.cs" />
     <Compile Include="Services\DragAndDrop\DragDropService.cs" />
@@ -305,10 +306,6 @@
     <ProjectReference Include="..\ModelGraph.Core\ModelGraph.Core.csproj">
       <Project>{A71A8068-A82F-4BEC-8CEB-F5EAD96B55CC}</Project>
       <Name>ModelGraph.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ModelGraph.Repository\ModelGraph.Repository.csproj">
-      <Project>{0A5B6161-E62E-48D6-97CE-6FF44D64D05D}</Project>
-      <Name>ModelGraph.Repository</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

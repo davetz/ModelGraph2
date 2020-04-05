@@ -21,10 +21,10 @@ namespace ModelGraph.Core
         #region Constructors  =================================================
 
         // Primary-RootModel: Created by ModelPageService
-        public RootModel(IRepository repository = null)
+        public RootModel()
         {
             Trait = Trait.DataChef_M;
-            Item = Chef = new Chef(repository);
+            Item = Chef = new Chef();
             Get = Chef.DataChef_X;
 
             ControlType = ControlType.PrimaryTree;
@@ -71,6 +71,7 @@ namespace ModelGraph.Core
         internal void UIRequestSaveModel() => _requestQueue?.Enqueue(UIRequest.SaveModel(this));
         internal void UIRequestCloseModel() => _requestQueue?.Enqueue(UIRequest.CloseModel(this));
         internal void UIRequestReloadModel() => _requestQueue?.Enqueue(UIRequest.ReloadModel(this));
+        internal void UIRequestSaveAsModel() => _requestQueue?.Enqueue(UIRequest.SaveAsModel(this));
         internal void UIRequestRefreshModel() => _requestQueue?.Enqueue(UIRequest.RefreshModel(this));
 
         internal void UIRequestCreateView(ControlType type, Trait trait, Item item, ModelAction get) =>

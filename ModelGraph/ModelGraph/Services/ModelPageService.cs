@@ -3,6 +3,7 @@ using ModelGraph.Core;
 using ModelGraph.Repository;
 using ModelGraph.Views;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.Storage.Pickers;
@@ -37,17 +38,30 @@ namespace ModelGraph.Services
 
             switch (rq.RequestType)
             {
-                case RequestType.Save:
-                    await ctrl.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => { ctrl.Save(); });
+                case RequestType.Apply:
+                    await ctrl.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => { ctrl.Apply(); });
                     return true;
 
-                case RequestType.Reload:
-                    await ctrl.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => { ctrl.Reload(); });
+                case RequestType.Revert:
+                    await ctrl.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => { ctrl.Revert(); });
+                    return true;
+
+                case RequestType.Save:
+                    await ctrl.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => { ctrl.RootModel.Chef.Repository.SaveAsync(ctrl.RootModel.Chef); });
+                    return true;
+
+                case RequestType.SaveAs:
+                    await ctrl.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => { ctrl.RootModel.Chef.Repository.SaveAS(ctrl.RootModel.Chef); });
                     return true;
 
                 case RequestType.Refresh:
                     await ctrl.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => { ctrl.Refresh(); });
                     return true;
+
+                case RequestType.Reload:
+                    await ctrl.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => { ReloadModelAsync(ctrl); });
+                    return true;
+
 
                 case RequestType.Close:
                     await ctrl.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => { RemoveModelPage(ctrl.RootModel); WindowManagerService.Current.CloseRelatedModels(ctrl.RootModel); ctrl.Release(); });
@@ -78,17 +92,47 @@ namespace ModelGraph.Services
         }
         #endregion
 
+        #region ReloadModel  ===============================================
+        public async Task<bool> ReloadModelAsync(IModelPageControl ctrl)
+        {
+            var oldRootModel = ctrl.RootModel;
+            var oldChef = oldRootModel.Chef;
+            var repo = oldChef.Repository;
+
+            RemoveModelPage(oldRootModel);
+            WindowManagerService.Current.CloseRelatedModels(oldRootModel);
+
+            var rootModel = new RootModel()
+            {
+                ControlType = ControlType.PrimaryTree
+            };
+            var newChef = rootModel.Chef;
+
+            bool success = await repo.ReloadAsync(newChef).ConfigureAwait(true);
+
+            await ctrl.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                InsertModelPage(rootModel);
+            });
+
+            return true;
+        }
+        #endregion
         #region CreateNewModel  ===============================================
         public async Task<bool> CreateNewModelAsync(CoreDispatcher dispatcher)
         {
             if (dispatcher is null) return false;
 
+            var rootModel = new RootModel()
+            {
+                ControlType = ControlType.PrimaryTree
+            };
+
+            var repo = new StorageFileRepo();
+            repo.New(rootModel.Chef);
+
             await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
-                var rootModel = new RootModel()
-                {
-                    ControlType = ControlType.PrimaryTree
-                };
                 InsertModelPage(rootModel);
             });
 
@@ -100,26 +144,22 @@ namespace ModelGraph.Services
         public async Task<bool> OpenModelDataFileAsync(CoreDispatcher dispatcher)
         {
             if (dispatcher is null) return false;
-
-            var openPicker = new FileOpenPicker
+            
+            var rootModel = new RootModel()
             {
-                ViewMode = PickerViewMode.List,
-                SuggestedStartLocation = PickerLocationId.DocumentsLibrary
+                ControlType = ControlType.PrimaryTree
             };
-            openPicker.FileTypeFilter.Add(".mgd");
-            StorageFile file = await openPicker.PickSingleFileAsync();
 
-            if (file is null) return false;
+            var repo = new StorageFileRepo();
+            bool success = await repo.OpenAsync(rootModel.Chef).ConfigureAwait(true);
+
 
             await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
-                var rootModel = new RootModel(new RepositoryStorageFile(file))
-                {
-                    ControlType = ControlType.PrimaryTree
-                };
                 InsertModelPage(rootModel);
             });
-            return true;
+
+            return success;
         }
         #endregion
 

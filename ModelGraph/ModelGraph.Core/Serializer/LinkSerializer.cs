@@ -26,32 +26,35 @@ namespace ModelGraph.Core
         }
 
         #region ListSizeCode  =================================================
+        // Endode the size range info { (n < 256), (n < 65536), (n > 65535) }
+        // for the four lists that occur in a Relation object.
+
         const byte BZ = 0x00;
-
-        const byte B01 = 0x01;
-        const byte B02 = 0x02;
-        const byte B03 = 0x03;
-
+        //-------------------------List1
+        const byte B01 = 0x01;  // n < 256   -- the list size is stored in a byte
+        const byte B02 = 0x02;  // n < 65536 -- the list size is stored in a ushort
+        const byte B03 = 0x03;  // n > 65535 -- the list size is stored in an int
+        //-------------------------List2
         const byte B04 = 0x04;
         const byte B08 = 0x08;
         const byte B0C = 0x0C;
-
-        const byte B10 = 0x010;
-        const byte B20 = 0x020;
-        const byte B30 = 0x030;
-
+        //-------------------------List3
+        const byte B10 = 0x10;
+        const byte B20 = 0x20;
+        const byte B30 = 0x30;
+        //-------------------------List4
         const byte B40 = 0x40;
         const byte B80 = 0x80;
         const byte BC0 = 0xC0;
 
-        byte GetCompositeCode((int, int)[] list) //OneToOne
+        byte GetCompositeCode((int, int)[] list) //=== OneToOne Relation
         {
             var len = list.Length;
             if (len < 256) return B10;
             if (len < 65356) return B20;
             return B30;
         }
-        byte GetCompositeCode((int, int[])[] children) //OneToMany
+        byte GetCompositeCode((int, int[])[] children) //=== OneToMany Relation
         {
             var code = BZ;
             var len1 = 0;
@@ -71,7 +74,7 @@ namespace ModelGraph.Core
 
             return code;
         }
-        byte GetCompositeCode((int, int[])[] parents, (int, int[])[] children) //ManyToMany
+        byte GetCompositeCode((int, int[])[] parents, (int, int[])[] children) //=== ManyToMany Relation
         {
             var code = BZ;
             var len1 = 0;
@@ -107,32 +110,34 @@ namespace ModelGraph.Core
             return code;
         }
 
-
+        //=====================================================================
+        // Extract the list size information from the composite sizing code
+        // and express it in a regular format for each of relation pairing type         
         byte SizeCodeOneToOne(byte code)
         {
-            if (code == B10) return B10;
-            if (code == B20) return B20;
-            if (code == B30) return B40;
+            if (code == B10) return B10;// n < 256   -- the list size is stored in a byte
+            if (code == B20) return B20;// n < 65536 -- the list size is stored in a ushort
+            if (code == B30) return B40;// n > 65535 -- the list size is stored in an int
             throw new Exception($"LinkSerializer ReadData, invalid list size code");
         }
         byte SizeCodeOneToMany(byte code)
         {
             var code1 = BZ;
             if ((code & B03) == B01) 
-                code1 |= B01;
+                code1 |= B01;// n < 256   -- the sub list size is stored in a byte
             else if ((code & B03) == B02) 
-                code1 |= B02;
+                code1 |= B02;// n < 256   -- the sub list size is stored in a byte
             else if ((code & B03) == B03) 
-                code1 |= B04;
+                code1 |= B04;// n < 256   -- the sub list size is stored in a byte
             else
                 throw new Exception($"LinkSerializer ReadData, invalid list size code");
 
             if ((code & B30) == B10)
-                code1 |= B10;
+                code1 |= B10;// n < 256   -- the list size is stored in a byte
             else if ((code & B30) == B20)
-                code1 |= B20;
+                code1 |= B20;// n < 256   -- the list size is stored in a byte
             else if ((code & B30) == B30)
-                code1 |= B40;
+                code1 |= B40;// n < 256   -- the list size is stored in a byte
             else
                 throw new Exception($"LinkSerializer ReadData, invalid list size code");
 

@@ -5,7 +5,7 @@ using Windows.Storage.Streams;
 
 namespace ModelGraph.Core
 {
-    public class RelationStore : InternalStore<Relation>, IRelationStore
+    public class RelationStore : InternalStoreOf<Relation>, IRelationStore
     {
         internal RelationStore(Chef owner) : base(owner, Trait.RelationStore, 30)
         {

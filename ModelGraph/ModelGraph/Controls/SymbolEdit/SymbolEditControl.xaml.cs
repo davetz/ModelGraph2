@@ -106,7 +106,7 @@ namespace ModelGraph.Controls
 
         #region IModelControl  ================================================
         public RootModel RootModel => _rootModel;
-        public void Save()
+        public void Apply()
         {
             EditorCanvas.Invalidate();
         }
@@ -134,7 +134,7 @@ namespace ModelGraph.Controls
                 PickerCanvas = null;
             }
         }
-        public void Reload()
+        public void Revert()
         {
             EditorCanvas.Invalidate();
         }

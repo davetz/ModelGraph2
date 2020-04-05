@@ -5,25 +5,13 @@ namespace ModelGraph.Core
 {
     public partial class Chef : StoreOf<Store>
     {
-        static int _newChefCount;
-        private int _newChefNumber;
+        public IRepository Repository { get; set; }
         public static ItemModel DragDropSource; 
 
         private bool ShowItemIndex;
 
         #region Constructor  ==================================================
-        internal Chef(IRepository repository = null) : base(null, Trait.DataChef, 0)
-        {
-            Initialize();
-
-            Repository = repository;
-
-            if (repository == null)
-                _newChefNumber = (_newChefCount += 1);
-            else
-                Repository.Read(this);
-        }
-        internal Chef(bool createTestModel) : base(null, Trait.DataChef, 0)
+        internal Chef(bool createTestModel = false) : base(null, Trait.DataChef, 0)
         {
             Initialize();
 

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace ModelGraph.Core
 {
-    public class ExternalStore<T> : StoreOf<T> where T : Item
+    public class ExternalStoreOf<T> : StoreOf<T> where T : Item
     {
-        public ExternalStore(Chef owner, Trait trait, int capacity = 0) : base(owner, trait, capacity) { }
+        public ExternalStoreOf(Chef owner, Trait trait, int capacity = 0) : base(owner, trait, capacity) { }
 
         internal override bool HasDesendantCount => true;
 

@@ -201,4 +201,7 @@
   <data name="MainPage_OpenButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>Open a model data file</value>
   </data>
+  <data name="StorageFileRepo_New" xml:space="preserve">
+    <value>New Model</value>
+  </data>
 </root>

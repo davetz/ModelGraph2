@@ -4,7 +4,7 @@ using Windows.Storage.Streams;
 
 namespace ModelGraph.Core
 {
-    public class ComputeXStore : ExternalStore<ComputeX>, ISerializer
+    public class ComputeXStore : ExternalStoreOf<ComputeX>, ISerializer
     {
         static Guid _serializerGuid = new Guid("35522B27-A925-4CE0-8D65-EDEF451097F2");
         static byte _formatVersion = 1;

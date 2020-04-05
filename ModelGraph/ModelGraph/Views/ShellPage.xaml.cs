@@ -53,6 +53,8 @@ namespace ModelGraph.Views
         #region InsertModelPage  ==============================================
         public void InsertModelPage(RootModel model)
         {
+            if (model is null) return;
+
             model.Chef.SetLocalizer(Helpers.ResourceExtensions.CoreLocalizer());
 
             var item = navigationView.MenuItems
@@ -73,7 +75,9 @@ namespace ModelGraph.Views
             navItem.Loaded += NavItem_Loaded;
             navigationView.MenuItems.Insert(index, navItem);
 
-            Selected = navItem;
+            //navigationView.SelectedItem = navItem;
+            //Selected = navItem;
+
             NavigationService.Navigate(typeof(ModelPage), model);
         }
 
@@ -91,14 +95,14 @@ namespace ModelGraph.Views
         public void RemoveModelPage(RootModel model)
         {
             var item = navigationView.MenuItems
-                            .OfType<NavigationViewItem>()
+                            .OfType<WinUI.NavigationViewItem>()
                             .FirstOrDefault(menuItem => (menuItem.Tag == model));
 
             if (item is null) return;
             navigationView.MenuItems.Remove(item);
 
             var home = navigationView.MenuItems
-                            .OfType<NavigationViewItem>()
+                            .OfType<WinUI.NavigationViewItem>()
                             .FirstOrDefault(menuItem => (menuItem.Name == "Home"));
 
             if (!(home is null))

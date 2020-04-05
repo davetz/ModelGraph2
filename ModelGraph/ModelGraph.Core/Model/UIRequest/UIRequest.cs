@@ -25,6 +25,22 @@ namespace ModelGraph.Core
                 RequestType = RequestType.Save
             };
         }
+        public static UIRequest ApplyModel(RootModel root)
+        {
+            return new UIRequest()
+            {
+                Root = root,
+                RequestType = RequestType.Apply
+            };
+        }
+        public static UIRequest RevertModel(RootModel root)
+        {
+            return new UIRequest()
+            {
+                Root = root,
+                RequestType = RequestType.Revert
+            };
+        }
         public static UIRequest CloseModel(RootModel root)
         {
             return new UIRequest()
@@ -39,6 +55,14 @@ namespace ModelGraph.Core
             {
                 Root = root,
                 RequestType = RequestType.Reload
+            };
+        }
+        internal static UIRequest SaveAsModel(RootModel root)
+        {
+            return new UIRequest()
+            {
+                Root = root,
+                RequestType = RequestType.SaveAs
             };
         }
         internal static UIRequest SaveSymbol(RootModel root)

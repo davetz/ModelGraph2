@@ -60,7 +60,7 @@ namespace ModelGraph.Controls
         #endregion
 
         #region IModelControl  ================================================
-        public void Save() { }
+        public void Apply() { }
         public void Release()
         {
             if (EditorCanvas == null) return;
@@ -71,7 +71,7 @@ namespace ModelGraph.Controls
             EditorCanvas = null;
             RootModel?.Release();
         }
-        public void Reload() { }
+        public void Revert() { }
         public void Refresh()
         {
             if (EditorCanvas == null) return;

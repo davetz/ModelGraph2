@@ -7,18 +7,18 @@ namespace ModelGraph.Core
     {
         internal static IList<Item> EmptyItemList = new List<Item>(0).AsReadOnly();
 
-        internal InternalStore<Item> DummyStore;
-        internal PrivateStore<Store> PrivateStores;
-        internal PrivateStore<Store> InternalStores;
-        internal PrivateStore<Store> ExternalStores;
+        internal InternalStoreOf<Item> DummyStore;
+        internal StoreOf<Store> PrivateStores;
+        internal StoreOf<Store> InternalStores;
+        internal StoreOf<Store> ExternalStores;
 
-        internal PrivateStore<Error> ErrorStore { get; private set; }
-        internal PrivateStore<EnumZ> EnumZStore { get; private set; }
-        internal PrivateStore<Property> PropertyZStore { get; private set; }
-        internal PrivateStore<Relation> RelationZStore { get; private set; }
+        internal StoreOf<Error> ErrorStore { get; private set; }
+        internal StoreOf<EnumZ> EnumZStore { get; private set; }
+        internal StoreOf<Property> PropertyZStore { get; private set; }
+        internal StoreOf<Relation> RelationZStore { get; private set; }
 
-        internal InternalStore<Property> PropertyStore { get; private set; }
-        internal InternalStore<Relation> RelationStore { get; private set; }
+        internal InternalStoreOf<Property> PropertyStore { get; private set; }
+        internal InternalStoreOf<Relation> RelationStore { get; private set; }
 
         internal Dummy Dummy { get; private set; }
 
@@ -45,7 +45,7 @@ namespace ModelGraph.Core
         #region InitializeStores  =============================================
         private void InitializeStores()
         {
-            DummyStore = new InternalStore<Item>(this, Trait.DummyStore, 1);
+            DummyStore = new InternalStoreOf<Item>(this, Trait.DummyStore, 1);
             Dummy = new Dummy(this);
 
             QueryXNode = new QueryX(this);
@@ -53,12 +53,12 @@ namespace ModelGraph.Core
             ChangeSequence = 1;
             ChangeSet = new ChangeSet(ChangeRoot, ChangeSequence);
 
-            ErrorStore = new PrivateStore<Error>(this, Trait.ErrorStore, 20);
-            EnumZStore = new PrivateStore<EnumZ>(this, Trait.EnumZStore, 20);
-            PropertyZStore = new PrivateStore<Property>(this, Trait.PropertyZStore, 10);
-            RelationZStore = new PrivateStore<Relation>(this, Trait.RelationZStore, 10);
+            ErrorStore = new StoreOf<Error>(this, Trait.ErrorStore, 20);
+            EnumZStore = new StoreOf<EnumZ>(this, Trait.EnumZStore, 20);
+            PropertyZStore = new StoreOf<Property>(this, Trait.PropertyZStore, 10);
+            RelationZStore = new StoreOf<Relation>(this, Trait.RelationZStore, 10);
 
-            PropertyStore = new InternalStore<Property>(this, Trait.PropertyStore, 100);
+            PropertyStore = new InternalStoreOf<Property>(this, Trait.PropertyStore, 100);
             RelationStore = new RelationStore(this);
 
             EnumXStore = new EnumXStore(this);
