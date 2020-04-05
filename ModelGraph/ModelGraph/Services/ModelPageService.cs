@@ -59,7 +59,7 @@ namespace ModelGraph.Services
                     return true;
 
                 case RequestType.Reload:
-                    await ctrl.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => { ReloadModelAsync(ctrl); });
+                    await ctrl.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => { _ = ReloadModelAsync(ctrl); });
                     return true;
 
 
@@ -92,7 +92,7 @@ namespace ModelGraph.Services
         }
         #endregion
 
-        #region ReloadModel  ===============================================
+        #region ReloadModel  ==================================================
         public async Task<bool> ReloadModelAsync(IModelPageControl ctrl)
         {
             var oldRootModel = ctrl.RootModel;
@@ -118,6 +118,7 @@ namespace ModelGraph.Services
             return true;
         }
         #endregion
+
         #region CreateNewModel  ===============================================
         public async Task<bool> CreateNewModelAsync(CoreDispatcher dispatcher)
         {

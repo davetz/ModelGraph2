@@ -1626,10 +1626,7 @@ namespace ModelGraph.Core
             {
                 var repo = Repository;
                 var root = m.GetRootModel();
-                var dataChef = new Chef();
-
-                root.UIRequestCloseModel();
-                root.UIRequestCreateView(ControlType.PrimaryTree, Trait.DataChef_M, dataChef, dataChef.DataChef_X);
+                root.UIRequestReloadModel();
             }
             #endregion
         }
