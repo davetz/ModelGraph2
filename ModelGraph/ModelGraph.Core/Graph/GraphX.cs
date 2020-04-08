@@ -7,6 +7,7 @@ namespace ModelGraph.Core
     {
         internal Color Color = new Color();
         internal HashSet<Store> NodeOwners = new HashSet<Store>();
+        internal Dictionary<Item, Dictionary<QueryX, List<NodeEdge>>> GraphParms = new Dictionary<Item, Dictionary<QueryX, List<NodeEdge>>>(10);
 
         internal string Name;
         internal string Summary;

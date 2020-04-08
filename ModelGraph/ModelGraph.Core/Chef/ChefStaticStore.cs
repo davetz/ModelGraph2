@@ -7,7 +7,6 @@ namespace ModelGraph.Core
     {
         internal static IList<Item> EmptyItemList = new List<Item>(0).AsReadOnly();
 
-        internal InternalStoreOf<Item> DummyStore;
         internal StoreOf<Store> PrivateStores;
         internal StoreOf<Store> InternalStores;
         internal StoreOf<Store> ExternalStores;
@@ -20,9 +19,8 @@ namespace ModelGraph.Core
         internal InternalStoreOf<Property> PropertyStore { get; private set; }
         internal InternalStoreOf<Relation> RelationStore { get; private set; }
 
-        internal Dummy Dummy { get; private set; }
-
-        internal QueryX QueryXNode { get; private set; }
+        internal Dummy DummyItemRef { get; private set; }
+        internal QueryX DummyQueryXRef { get; private set; }
 
         internal ChangeSet ChangeSet { get; private set; }
 
@@ -45,10 +43,9 @@ namespace ModelGraph.Core
         #region InitializeStores  =============================================
         private void InitializeStores()
         {
-            DummyStore = new InternalStoreOf<Item>(this, Trait.DummyStore, 1);
-            Dummy = new Dummy(this);
+            DummyItemRef = new Dummy(this);
+            DummyQueryXRef = new QueryX(this);
 
-            QueryXNode = new QueryX(this);
             ChangeRoot = new ChangeRoot(this);
             ChangeSequence = 1;
             ChangeSet = new ChangeSet(ChangeRoot, ChangeSequence);

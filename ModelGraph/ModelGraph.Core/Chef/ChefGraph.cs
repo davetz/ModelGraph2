@@ -5,16 +5,13 @@ namespace ModelGraph.Core
 {
     public partial class Chef
     {
-        private void InitializeGraphParams() { GraphParms.Clear(); }
-
-        internal Dictionary<GraphX, Dictionary<Item, Dictionary<QueryX, List<NodeEdge>>>> GraphParms { get; set; } = new Dictionary<GraphX, Dictionary<Item, Dictionary<QueryX, List<NodeEdge>>>>();
 
         #region ValidateGraphParms  ===========================================
         // Ensure all edges and nodes have parameters.
         bool ValidateGraphParms(Graph g)
         {
             var gx = g.GraphX;
-            var rt = (g.SeedItem == null) ? Dummy : g.SeedItem;
+            var rt = (g.SeedItem == null) ? DummyItemRef : g.SeedItem;
             var anyChange = false;
 
             #region Build validPathPairs dictionary  ==========================
@@ -43,16 +40,10 @@ namespace ModelGraph.Core
 
             if (g.NodeItems.Count > 0)
             {
-
-                if (!GraphParms.TryGetValue(gx, out Dictionary<Item, Dictionary<QueryX, List<NodeEdge>>> rtQxParams))
-                {
-                    rtQxParams = new Dictionary<Item, Dictionary<QueryX, List<NodeEdge>>>();
-                    GraphParms.Add(gx, rtQxParams);
-                }
-                if (!rtQxParams.TryGetValue(rt, out Dictionary<QueryX, List<NodeEdge>> qxParams))
+                if (!gx.GraphParms.TryGetValue(rt, out Dictionary<QueryX, List<NodeEdge>> qxParams))
                 {
                     qxParams = new Dictionary<QueryX, List<NodeEdge>>();
-                    rtQxParams.Add(rt, qxParams);
+                    gx.GraphParms[rt] = qxParams;
                 }
 
                 #region Remove invalid QxParams  ==============================
@@ -63,7 +54,7 @@ namespace ModelGraph.Core
                 foreach (var e1 in qxParams)
                 {
                     List<NodeEdge> invalidParams = null;
-                    if (e1.Key == QueryXNode)
+                    if (e1.Key == DummyQueryXRef)
                     {
 
                         foreach (var pm in e1.Value)
@@ -141,13 +132,13 @@ namespace ModelGraph.Core
 
                 #region Add new QxParams  =====================================
 
-                if (!qxParams.TryGetValue(QueryXNode, out List<NodeEdge> parmList))
+                if (!qxParams.TryGetValue(DummyQueryXRef, out List<NodeEdge> parmList))
                 {
                     // there weren't any existing node parms,
                     // so create all new ones
                     anyChange = true;
                     parmList = new List<NodeEdge>(g.NodeItems.Count);
-                    qxParams.Add(QueryXNode, parmList);
+                    qxParams.Add(DummyQueryXRef, parmList);
                     foreach (var item in g.NodeItems)
                     {
                         Node node1 = new Node
@@ -192,7 +183,7 @@ namespace ModelGraph.Core
                 foreach (var e1 in validPathPairs)
                 {
                     // skip over the nodes, they are already done
-                    if (e1.Key == QueryXNode) continue;
+                    if (e1.Key == DummyQueryXRef) continue;
 
                     if (!qxParams.TryGetValue(e1.Key, out List<NodeEdge> paramList))
                     {
@@ -274,8 +265,7 @@ namespace ModelGraph.Core
             }
             else
             {
-                if (rt == Dummy) GraphParms.Remove(gx);
-                else if (GraphParms.ContainsKey(gx)) GraphParms[gx].Remove(rt);
+                gx.GraphParms.Remove(rt);
             }
 
             #region OpenPathIndex  ============================================

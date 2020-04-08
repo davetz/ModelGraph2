@@ -7,7 +7,6 @@ namespace ModelGraph.Core
         {
             Owner = owner;
             Trait = Trait.Dummy;
-            owner.DummyStore.Add(this);
         }
     }
 }

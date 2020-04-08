@@ -12,6 +12,8 @@ namespace ModelGraph.Core
         internal GraphXStore(Chef owner) : base(owner, Trait.GraphXStore)
         {
             owner.RegisterItemSerializer((_serializerGuid, this));
+
+            new GraphXParams(owner, this);
         }
 
         #region ISerializer  ==================================================

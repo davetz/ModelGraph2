@@ -111,6 +111,8 @@ namespace ModelGraph.Core
         Dictionary<int, Item> GetInternalItems()
         {
             var internalItem = new Dictionary<int, Item>(100);
+            internalItem.Add(DummyItemRef.ItemKey, DummyItemRef);
+            internalItem.Add(DummyQueryXRef.ItemKey, DummyQueryXRef);
             foreach (var sto in Items)
             {
                 if (sto.IsInternal || sto.IsExternal) 

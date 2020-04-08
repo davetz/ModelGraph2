@@ -112,7 +112,7 @@ namespace ModelGraph.Core
         RelationStore = 0x0F5 | IsInternal,
         PropertyZStore = 0x0F6,
         RelationZStore = 0x0F7,
-        DummyStore = 0xFF,
+        DummyStore = 0xFF | IsInternal,
 
         #endregion
 

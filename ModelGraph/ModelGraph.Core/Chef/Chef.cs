@@ -63,7 +63,6 @@ namespace ModelGraph.Core
         {
             ClearItemErrors();
             InitializeItemIdentity();
-            InitializeGraphParams();
 
             InitializeStores();
             InitializeRelations();
