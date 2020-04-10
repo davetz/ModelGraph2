@@ -30,7 +30,7 @@ namespace ModelGraph.Core
 
             owner.Add(this);
         }
-        internal QueryX(QueryXStore owner)
+        internal QueryX(QueryXStore owner) 
         {
             Owner = owner;
             Trait = Trait.QueryX;
@@ -81,9 +81,9 @@ namespace ModelGraph.Core
         #region Property/Method  ==============================================
         internal bool IsExclusive => ExclusiveKey != 0;
 
-        internal bool HasWhere => (Where != null);
-        internal bool HasSelect => (Select != null);
-        internal bool HasValidSelect => (Select != null && Select.IsValid);
+        internal bool HasWhere => Where != null;
+        internal bool HasSelect => Select != null;
+        internal bool HasValidSelect => Select != null && Select.IsValid;
 
         internal bool AnyChange => (HasWhere && Where.AnyChange) || (HasSelect && Select.AnyChange);
 

@@ -13,6 +13,8 @@ namespace ModelGraph.Core
         {
             g.Forest = null;
             var gx = g.GraphX;
+
+            RebuildGraphX_ARGBList_NodeOwners(gx);
             if (GraphX_QueryX.TryGetChildren(gx, out IList<QueryX> roots))
             {
                 var workList = new List<Query>();
@@ -181,13 +183,16 @@ namespace ModelGraph.Core
             if (qx.IsTail)
             {
                 var q1 = q2.GetHeadQuery();
+
+                if (qx.QueryKind ==  QueryType.Path)
+                {
+                    g.PathQuerys.Add((q1, q2));
+                }
+
                 if (q2.ItemCount == 1 && q1.Item != q2.Items[0])
                 {
                     switch (qx.QueryKind)
                     {
-                        case QueryType.Path:
-                            g.PathQuerys.Add((q1, q2));
-                            break;
                         case QueryType.Group:
                             g.GroupQuerys.Add((q1, q2));
                             break;

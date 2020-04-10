@@ -20,7 +20,7 @@ namespace ModelGraph.Core
             Items = items;
             Parent = parent;
 
-            SetState(qx.GetState()); // copy the queryX flags
+            SetState(qx.GetState()); // copy the queryX state flags
         }
         #endregion
 

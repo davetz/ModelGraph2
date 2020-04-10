@@ -380,9 +380,10 @@ namespace ModelGraph.Core
 
             return true;
         }
-        private void RefreshGraphX(GraphX gx)
+
+
+        private void RebuildGraphX_ARGBList_NodeOwners(GraphX gx)
         {
-            #region Rebuild ARGBList, NodeOwners  =========================
             gx.Color.Reset();
             gx.NodeOwners.Clear();
 
@@ -422,14 +423,18 @@ namespace ModelGraph.Core
                         GetHeadTail(qt, out Store h, out Store tail);
                         gx.NodeOwners.Add(tail);
                     }
-
                 }
-                #endregion
+            }
+        }
 
-                foreach (var g in gx.Items)
-                {
-                    RefreshGraph(g);
-                }
+
+        private void RefreshGraphX(GraphX gx)
+        {
+            RebuildGraphX_ARGBList_NodeOwners(gx);
+
+            foreach (var g in gx.Items)
+            {
+                RefreshGraph(g);
             }
         }
 
