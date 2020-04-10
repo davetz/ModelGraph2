@@ -5,7 +5,6 @@ namespace ModelGraph.Core
 {
     public class SymbolX : Item
     {
-        internal Guid Guid;
         public string Name;
         public string Summary;
         public string Description;
@@ -16,20 +15,11 @@ namespace ModelGraph.Core
         public byte Version;
 
         #region Constructors  =================================================
-        public SymbolX(Store owner)
+        public SymbolX(Store owner, bool autoExpand = false)
         {
-            Guid = Guid.NewGuid();
             Trait = Trait.SymbolX;
             Owner = owner;
-            AutoExpandRight = true;
-
-            owner.Add(this);
-        }
-        public SymbolX(Store owner, Guid guid)
-        {
-            Guid = guid;
-            Trait = Trait.SymbolX;
-            Owner = owner;
+            if (autoExpand) AutoExpandRight = true;
 
             owner.Add(this);
         }

@@ -25,11 +25,11 @@ namespace ModelGraph.Core
         public List<(byte A, byte R, byte G, byte B)> ARGBList => Color.ARGBList;
 
         #region Constructors  =================================================
-        internal GraphX(Store owner)
+        internal GraphX(Store owner, bool autoExpand = false)
         {
             Owner = owner;
             Trait = Trait.GraphX;
-            AutoExpandRight = true;
+            if (autoExpand) AutoExpandRight = true;
 
             owner.Add(this);
         }

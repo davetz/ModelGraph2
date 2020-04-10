@@ -10,11 +10,11 @@ namespace ModelGraph.Core
         internal string Description;
 
         #region Constructors  =================================================
-        internal TableX(StoreOf<TableX> owner)
+        internal TableX(StoreOf<TableX> owner, bool autoExpand = false)
         {
             Owner = owner;
             Trait = Trait.TableX;
-            AutoExpandRight = true;
+            if (autoExpand) AutoExpandRight = true;
 
             owner.Add(this);
         }

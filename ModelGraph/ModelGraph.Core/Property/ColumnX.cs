@@ -4,29 +4,19 @@ namespace ModelGraph.Core
 {
     public class ColumnX : Property
     {
-        internal Guid Guid;
         internal string Name;
         internal string Summary;
         internal string Initial;
         internal string Description;
 
         #region Constructors  =================================================
-        internal ColumnX(StoreOf<ColumnX> owner)
+        internal ColumnX(StoreOf<ColumnX> owner, bool autoExpand = false)
         {
             Owner = owner;
             Trait = Trait.ColumnX;
-            Guid = Guid.NewGuid();
-            AutoExpandRight = true;
+            if (autoExpand) AutoExpandRight = true;
 
             Value = Value.Create(ValType.String);
-
-            owner.Add(this);
-        }
-        internal ColumnX(StoreOf<ColumnX> owner, Guid guid)
-        {
-            Owner = owner;
-            Trait = Trait.ColumnX;
-            Guid = guid;
 
             owner.Add(this);
         }

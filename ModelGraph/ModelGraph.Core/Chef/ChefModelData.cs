@@ -2914,7 +2914,7 @@ namespace ModelGraph.Core
 
             void Insert(ItemModel model)
             {
-                ItemCreated(new ViewX(ViewXStore));
+                ItemCreated(new ViewX(ViewXStore, true));
             }
         }
         #endregion
@@ -3083,7 +3083,7 @@ namespace ModelGraph.Core
 
             void Insert(ItemModel model)
             {
-                var vx = new ViewX(ViewXStore);
+                var vx = new ViewX(ViewXStore, true);
                 ItemCreated(vx);
                 AppendLink(ViewX_ViewX, model.Item, vx);
             }
@@ -3233,7 +3233,7 @@ namespace ModelGraph.Core
 
             void Insert(ItemModel model)
             {
-                var vx = new ViewX(ViewXStore);
+                var vx = new ViewX(ViewXStore, true);
                 ItemCreated(vx);
                 AppendLink(QueryX_ViewX, model.Item, vx);
             }
@@ -3629,7 +3629,7 @@ namespace ModelGraph.Core
 
             void Insert(ItemModel model)
             {
-                ItemCreated(new EnumX(EnumXStore));
+                ItemCreated(new EnumX(EnumXStore, true));
             }
         }
         #endregion
@@ -3697,7 +3697,7 @@ namespace ModelGraph.Core
 
             void Insert(ItemModel model)
             {
-                ItemCreated(new TableX(TableXStore));
+                ItemCreated(new TableX(TableXStore, true));
             }
         }
         #endregion
@@ -3765,7 +3765,7 @@ namespace ModelGraph.Core
 
             void Insert(ItemModel model)
             {
-                ItemCreated(new GraphX(GraphXStore));
+                ItemCreated(new GraphX(GraphXStore, true));
                 model.IsExpandedLeft = true;
             }
         }
@@ -3814,7 +3814,7 @@ namespace ModelGraph.Core
                     if (doDrop)
                     {
                         var gd = m.Item as GraphX;
-                        var sym = new SymbolX(SymbolXStore);
+                        var sym = new SymbolX(SymbolXStore, true);
                         ItemCreated(sym);
                         AppendLink(GraphX_SymbolX, gd, sym);
                         m.IsExpandedLeft = true;
@@ -3852,7 +3852,7 @@ namespace ModelGraph.Core
             void Insert(ItemModel model)
             {
                 var gd = model.Item as GraphX;
-                var sym = new SymbolX(SymbolXStore);
+                var sym = new SymbolX(SymbolXStore, true);
                 ItemCreated(sym);
                 AppendLink(GraphX_SymbolX, gd, sym);
                 model.IsExpandedLeft = true;
@@ -4141,7 +4141,7 @@ namespace ModelGraph.Core
 
             void Insert(ItemModel m)
             {
-                ItemCreated(new PairX(m.EnumX));
+                ItemCreated(new PairX(m.EnumX, true));
             }
         }
         #endregion
@@ -4659,7 +4659,7 @@ namespace ModelGraph.Core
 
             void Insert(ItemModel model)
             {
-                var col = new ColumnX(ColumnXStore);
+                var col = new ColumnX(ColumnXStore, true);
                 ItemCreated(col); AppendLink(TableX_ColumnX, model.Item, col);
             }
         }
@@ -4796,7 +4796,7 @@ namespace ModelGraph.Core
 
             void Insert(ItemModel model)
             {
-                var rel = new RelationX(RelationXStore); ItemCreated(rel);
+                var rel = new RelationX(RelationXStore, true); ItemCreated(rel);
                 AppendLink(TableX_ParentRelationX, model.Item, rel);
             }
         }
@@ -4868,7 +4868,7 @@ namespace ModelGraph.Core
 
             void Insert(ItemModel model)
             {
-                ItemCreated(new PairX(model.Item as EnumX));
+                ItemCreated(new PairX(model.Item as EnumX, true));
             }
         }
         #endregion
@@ -6881,7 +6881,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            void Insert(ItemModel m) => ItemCreated(new RowX(m.TableX));
+            void Insert(ItemModel m) => ItemCreated(new RowX(m.TableX, true));
         }
         #endregion
 
