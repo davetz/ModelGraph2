@@ -8,6 +8,7 @@ namespace ModelGraph.Core
     {
         Guid _formatGuid = new Guid("3DB85BFF-F448-465C-996D-367E6284E913");
         Guid _serilizerGuid = new Guid("DE976A9D-0C50-4B4E-9B46-74404A64A703");
+        static byte _formatVersion = 1;
 
         readonly List<(Guid, ISerializer)> _itemSerializers = new List<(Guid, ISerializer)>();
         readonly List<(Guid, ISerializer)> _linkSerializers = new List<(Guid, ISerializer)>(10);
@@ -93,20 +94,28 @@ namespace ModelGraph.Core
         public bool HasData() => true;
         public void ReadData(DataReader r, Item[] items)
         {
-            var count = r.ReadInt32();
-            if (count < 0 || count > items.Length)
+            var count = r.ReadUInt16();
+            if (count > items.Length)
                 throw new Exception("Invalid number of guid references");
 
             var internalItem = GetInternalItems();
 
-            for (int i = 0; i < count; i++)
-            {
-                var key = r.ReadInt32();
-                if (!internalItem.TryGetValue(key, out Item item))
-                    throw new Exception("Unkown key reference");
+            var fv = r.ReadByte();
 
-                items[i] = item;
+            if (fv == 1)
+            {
+                for (int i = 0; i < count; i++)
+                {
+                    var key = r.ReadUInt16();
+                    if (!internalItem.TryGetValue(key, out Item item))
+                        throw new Exception("Unkown key reference");
+
+                    items[i] = item;
+                }
             }
+            else
+                throw new Exception($"Chef ReadData, unknown format version: {fv}");
+
         }
         Dictionary<int, Item> GetInternalItems()
         {
@@ -134,10 +143,11 @@ namespace ModelGraph.Core
                 itemIndex[item] = index++;
             }
 
-            w.WriteInt32(index);
+            w.WriteUInt16((ushort)index);
+            w.WriteByte(_formatVersion);
             foreach (var item in referenceItems)
             {
-                w.WriteInt32(item.ItemKey); //referenced internal item
+                w.WriteUInt16((ushort)item.ItemKey); //referenced internal item
             }
 
             foreach (var item in items)

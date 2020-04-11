@@ -22,7 +22,10 @@ namespace ModelGraph.Core
             }
             else
             {
-                var vs = new ValueDictionaryOf<decimal>(count, (decimal)r.ReadDouble());
+                var str = ReadString(r);
+                var val = decimal.Parse(str);
+
+                var vs = new ValueDictionaryOf<decimal>(count, val);
                 _valueStore = vs;
 
                 for (int i = 0; i < count; i++)
@@ -33,7 +36,10 @@ namespace ModelGraph.Core
                     var rx = items[inx];
                     if (rx == null) throw new Exception($"Column row is null, index {inx}");
 
-                    vs.LoadValue(rx, (decimal)r.ReadDouble());
+                    str = ReadString(r);
+                    val = decimal.Parse(str);
+
+                    vs.LoadValue(rx, val);
                 }
             }
         }
@@ -47,7 +53,7 @@ namespace ModelGraph.Core
 
             if (N > 0)
             {
-                w.WriteDouble((double)vd.DefaultValue);
+                WriteString(w, vd.DefaultValue.ToString());
 
                 var keys = vd.GetKeys();
                 var vals = vd.GetValues();
@@ -58,7 +64,7 @@ namespace ModelGraph.Core
                     var val = vals[i];
 
                     w.WriteInt32(itemIndex[key]);
-                    w.WriteDouble((double)val);
+                    WriteString(w, val.ToString());
                 }
             }
         }
