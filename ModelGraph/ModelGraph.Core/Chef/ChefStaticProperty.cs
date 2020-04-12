@@ -23,7 +23,6 @@ namespace ModelGraph.Core
         private PropertyOf<ColumnX, string> _columnXNameProperty;
         private PropertyOf<ColumnX, string> _columnXSummaryProperty;
         private PropertyOf<ColumnX, string> _columnXTypeOfProperty;
-        private PropertyOf<ColumnX, string> _columnXInitialProperty;
         private PropertyOf<ColumnX, bool> _columnXIsChoiceProperty;
 
         private PropertyOf<ComputeX, string> _computeXNameProperty;
@@ -196,12 +195,6 @@ namespace ModelGraph.Core
                 p.GetValFunc = (item) => p.Cast(item).IsChoice;
                 p.SetValFunc = (item, value) => p.Cast(item).IsChoice = value;
                 p.Value = new BoolValue(p);
-                props.Add(p);
-            }
-            {
-                var p = _columnXInitialProperty = new PropertyOf<ColumnX, string>(PropertyStore, Trait.ColumnInitial_P);
-                p.GetValFunc = (item) => p.Cast(item).Initial;
-                p.Value = new StringValue(p);
                 props.Add(p);
             }
             Store_Property.SetLink(ColumnXStore, props);

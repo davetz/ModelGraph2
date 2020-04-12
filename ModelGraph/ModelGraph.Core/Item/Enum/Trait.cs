@@ -303,8 +303,6 @@ namespace ModelGraph.Core
         ColumnName_P = 0x431 | IsInternal,
         ColumnSummary_P = 0x432 | IsInternal,
         ColumnValueType_P = 0x433 | IsInternal,
-        ColumnAccess_P = 0x434 | IsInternal,
-        ColumnInitial_P = 0x435 | IsInternal,
         ColumnIsChoice_P = 0x436 | IsInternal,
 
         //=========================================

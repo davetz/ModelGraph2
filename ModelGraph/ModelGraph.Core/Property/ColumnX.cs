@@ -6,7 +6,6 @@ namespace ModelGraph.Core
     {
         internal string Name;
         internal string Summary;
-        internal string Initial;
         internal string Description;
 
         #region Constructors  =================================================
@@ -25,11 +24,6 @@ namespace ModelGraph.Core
         #region Property  =====================================================
         internal override bool HasItemName => false;
         internal override string GetItemName(Item key) => null;
-
-        internal void Initialize(ValType type, string defaultVal, int rowCount)
-        {
-            Value = Value.Create(type, rowCount, defaultVal);
-        }
         #endregion
     }
 }

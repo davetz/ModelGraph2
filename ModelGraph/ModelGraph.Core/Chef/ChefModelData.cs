@@ -4395,7 +4395,6 @@ namespace ModelGraph.Core
                     AddProperyModel(prev, m, _columnXSummaryProperty);
                     AddProperyModel(prev, m, _columnXTypeOfProperty);
                     AddProperyModel(prev, m, _columnXIsChoiceProperty);
-                    AddProperyModel(prev, m, _columnXInitialProperty);
 
                     return (true, true);
                 }
