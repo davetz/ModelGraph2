@@ -50,7 +50,7 @@ namespace ModelGraph.Core
         {
             if (item is null) return BlankName;
             //if (item.TraitKey == 0x1AD) item.SetTrait(Trait.QueryXNodeSymbol);
-            return $"{BlankName} {item.Trait.ToString()}";
+            return $"Internal {item.Trait.ToString()}";
         }
         private string Index_Identity(Item item)
         {

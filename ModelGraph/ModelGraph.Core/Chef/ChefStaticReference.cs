@@ -15,9 +15,9 @@ namespace ModelGraph.Core
             // static enum properties
             Property_Enum = new Dictionary<Property, EnumZ>
             {
-                { _columnXTypeOfProperty, _valueTypeEnum },
+                { _columnXTypeOfProperty, ValueTypeEnum },
 
-                { _relationXPairingProperty, _pairingEnum },
+                { _relationXPairingProperty, PairingEnum },
 
                 { _nodeOrientationProperty, _orientationEnum },
                 { _nodeLabelingProperty, _labelingEnum },

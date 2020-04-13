@@ -3,9 +3,9 @@ namespace ModelGraph.Core
 {
     public class EnumX : StoreOf<PairX>
     {
-        internal string Name;
-        internal string Summary;
-        internal string Description;
+        override internal string Name { get; set; }
+        override internal string Summary { get; set; }
+        override internal string Description { get; set; }
 
         #region Constructors  =================================================
         internal EnumX(EnumXStore owner, bool autoExpandRight = false)

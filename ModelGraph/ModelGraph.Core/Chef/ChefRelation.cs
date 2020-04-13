@@ -33,20 +33,23 @@ namespace ModelGraph.Core
         private const string parentNameSuffix = " --> ";
         private const string childNameSuffix = "       (";
         private const string identitySuffix = ")";
-        internal string GetRelationName(RelationX rel)
+        internal string GetRelationName(Relation rel)
         {
-            var identity = string.IsNullOrWhiteSpace(rel.Name) ? string.Empty : rel.Name;
+            if (rel is null)
+            {
+                var x = rel;
+            }
+            var id = string.IsNullOrWhiteSpace(rel.Name) ? string.Empty : rel.Name;
+            var identity = $"({id})  ";
             var childName = BlankName;
             var parentName = BlankName;
             if (TableX_ParentRelationX.TryGetParent(rel, out TableX childTable)) childName = childTable.Name;
             if (TableX_ChildRelationX.TryGetParent(rel, out TableX parentTable)) parentName = parentTable.Name;
             StringBuilder sb = new StringBuilder(132);
+            sb.Append(identity);
             sb.Append(parentName);
             sb.Append(parentNameSuffix);
             sb.Append(childName);
-            sb.Append(childNameSuffix);
-            sb.Append(identity);
-            sb.Append(identitySuffix);
             return sb.ToString();
         }
         internal void SetRelationName(RelationX rel, string value)
@@ -63,7 +66,7 @@ namespace ModelGraph.Core
         }
         string GetRelationName(QueryX sd)
         {
-            return (Relation_QueryX.TryGetParent(sd, out Relation rel) ? GetRelationName(rel as RelationX) : null);
+            return (Relation_QueryX.TryGetParent(sd, out Relation rel) ? GetRelationName(rel) : null);
         }
         #endregion
 

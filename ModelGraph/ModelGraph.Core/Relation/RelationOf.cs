@@ -611,7 +611,7 @@ namespace ModelGraph.Core
                     break;
             }
         }
-        internal void SetLink(T1 key, List<T2> vals)
+        internal void SetLink(T1 key, IList<T2> vals)
         {
             var cap = vals.Count;
             foreach (var val in vals)

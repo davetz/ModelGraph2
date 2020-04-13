@@ -35,7 +35,7 @@ namespace ModelGraph.Core
         #endregion
 
         #region SetColumnValueType  ===========================================
-        private bool SetColumnValueType(ColumnX col, int val)
+        internal bool SetColumnValueType(ColumnX col, int val)
         {
             if (val < 0 || val >= (int)ValType.MaximumType) return false;
 

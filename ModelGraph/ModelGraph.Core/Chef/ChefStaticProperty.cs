@@ -20,10 +20,10 @@ namespace ModelGraph.Core
         private PropertyOf<TableX, string> _tableXNameProperty;
         private PropertyOf<TableX, string> _tableXSummaryProperty;
 
-        private PropertyOf<ColumnX, string> _columnXNameProperty;
-        private PropertyOf<ColumnX, string> _columnXSummaryProperty;
-        private PropertyOf<ColumnX, string> _columnXTypeOfProperty;
-        private PropertyOf<ColumnX, bool> _columnXIsChoiceProperty;
+        private PropertyOf<ColumnX, string> _columnXNameProperty => ColumnXStore.NameProperty;
+        private PropertyOf<ColumnX, string> _columnXSummaryProperty => ColumnXStore.SummaryProperty;
+        private PropertyOf<ColumnX, string> _columnXTypeOfProperty => ColumnXStore.TypeOfProperty;
+        private PropertyOf<ColumnX, bool> _columnXIsChoiceProperty => ColumnXStore.IsChoiceProperty;
 
         private PropertyOf<ComputeX, string> _computeXNameProperty;
         private PropertyOf<ComputeX, string> _computeXSummaryProperty;
@@ -167,39 +167,6 @@ namespace ModelGraph.Core
             Store_Property.SetLink(TableXStore, props);
             #endregion
 
-            #region ColumnX  ==================================================
-            props.Clear();
-            {
-                var p = _columnXNameProperty = new PropertyOf<ColumnX, string>(PropertyStore, Trait.ColumnName_P);
-                p.GetValFunc = (item) => p.Cast(item).Name;
-                p.SetValFunc = (item, value) => { p.Cast(item).Name = value; return true; };
-                p.Value = new StringValue(p);
-                props.Add(p);
-            }
-            {
-                var p = _columnXSummaryProperty = new PropertyOf<ColumnX, string>(PropertyStore, Trait.ColumnSummary_P);
-                p.GetValFunc = (item) => p.Cast(item).Summary;
-                p.SetValFunc = (item, value) => { p.Cast(item).Summary = value; return true; };
-                p.Value = new StringValue(p);
-                props.Add(p);
-            }
-            {
-                var p = _columnXTypeOfProperty = new PropertyOf<ColumnX, string>(PropertyStore, Trait.ColumnValueType_P, _valueTypeEnum);
-                p.GetValFunc = (item) => GetEnumZName(p.EnumZ, (int)p.Cast(item).Value.ValType);
-                p.SetValFunc = (item, value) => SetColumnValueType(p.Cast(item), GetEnumZKey(p.EnumZ, value));
-                p.Value = new StringValue(p);
-                props.Add(p);
-            }
-            {
-                var p = _columnXIsChoiceProperty = new PropertyOf<ColumnX, bool>(PropertyStore, Trait.ColumnIsChoice_P);
-                p.GetValFunc = (item) => p.Cast(item).IsChoice;
-                p.SetValFunc = (item, value) => p.Cast(item).IsChoice = value;
-                p.Value = new BoolValue(p);
-                props.Add(p);
-            }
-            Store_Property.SetLink(ColumnXStore, props);
-            #endregion
-
             #region ComputeX  =================================================
             props.Clear();
             {
@@ -247,7 +214,7 @@ namespace ModelGraph.Core
                 props.Add(p);
             }
             {
-                var p = _computeXValueTypeProperty = new PropertyOf<ComputeX, string>(PropertyStore, Trait.ComputeXValueType_P, _valueTypeEnum);
+                var p = _computeXValueTypeProperty = new PropertyOf<ComputeX, string>(PropertyStore, Trait.ComputeXValueType_P, ValueTypeEnum);
                 p.GetValFunc = (item) => GetEnumZName(p.EnumZ, (int)p.Cast(item).Value.ValType);
                 p.Value = new StringValue(p);
                 props.Add(p);
@@ -272,7 +239,7 @@ namespace ModelGraph.Core
                 props.Add(p);
             }
             {
-                var p = _relationXPairingProperty = new PropertyOf<RelationX, string>(PropertyStore, Trait.RelationPairing_P, _pairingEnum);
+                var p = _relationXPairingProperty = new PropertyOf<RelationX, string>(PropertyStore, Trait.RelationPairing_P, PairingEnum);
                 p.GetValFunc = (item) => GetEnumZName(p.EnumZ, (int)p.Cast(item).Pairing);
                 p.SetValFunc = (item, value) => p.Cast(item).TrySetPairing((Pairing)GetEnumZKey(p.EnumZ, value));
                 p.Value = new StringValue(p);
@@ -458,7 +425,7 @@ namespace ModelGraph.Core
                 props.Add(p);
             }
             {
-                var p = _queryXValueTypeProperty = new PropertyOf<QueryX, string>(PropertyStore, Trait.ValueXValueType_P, _valueTypeEnum);
+                var p = _queryXValueTypeProperty = new PropertyOf<QueryX, string>(PropertyStore, Trait.ValueXValueType_P, ValueTypeEnum);
                 p.GetValFunc = (item) => GetEnumZName(p.EnumZ, GetValueType(p.Cast(item)));
                 p.Value = new StringValue(p);
                 props.Add(p);
@@ -568,7 +535,7 @@ namespace ModelGraph.Core
 
         private string GetQueryXRelationName(Item item)
         {
-            return Relation_QueryX.TryGetParent(item, out Relation rel) ? GetRelationName(rel as RelationX) : string.Empty;
+            return Relation_QueryX.TryGetParent(item, out Relation rel) ? GetRelationName(rel) : string.Empty;
         }
         #endregion
     }

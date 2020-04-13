@@ -5,7 +5,7 @@ namespace ModelGraph.Core
     {
 
         #region GetEnumZKey  ==================================================
-        int GetEnumZKey(EnumZ e, string name)
+        internal int GetEnumZKey(EnumZ e, string name)
         {
             if (e != null && e.Count > 0)
             {
@@ -43,7 +43,7 @@ namespace ModelGraph.Core
         #endregion
 
         #region GetEnumZName  =================================================
-        string GetEnumZName(EnumZ e, int key)
+        internal string GetEnumZName(EnumZ e, int key)
         {
             if (e != null && e.Count > 0)
             {

@@ -4,15 +4,63 @@ using Windows.Storage.Streams;
 
 namespace ModelGraph.Core
 {
-    public class ColumnXStore : ExternalStoreOf<ColumnX>, ISerializer
+    public class ColumnXStore : ExternalStoreOf<ColumnX>, ISerializer, IPropertyManager
     {
         static Guid _serializerGuid = new Guid("3E7097FE-22D5-43B2-964A-9DB843F6D55B");
         static byte _formatVersion = 1;
 
-        internal ColumnXStore(Chef owner) : base(owner, Trait.ColumnXStore)
+        internal PropertyOf<ColumnX, string> NameProperty { get; private set; }
+        internal PropertyOf<ColumnX, string> SummaryProperty { get; private set; }
+        internal PropertyOf<ColumnX, string> TypeOfProperty { get; private set; }
+        internal PropertyOf<ColumnX, bool> IsChoiceProperty { get; private set; }
+
+        internal ColumnXStore(Chef chef) : base(chef, Trait.ColumnXStore)
         {
-            owner.RegisterItemSerializer((_serializerGuid, this));
+            chef.RegisterItemSerializer((_serializerGuid, this));
+            CreateProperties(chef);
         }
+
+        #region CreateProperties  ===========================================
+        private void CreateProperties(Chef chef)
+        {
+            var propertyStore = chef.PropertyStore;
+            var valueTypeEnum = chef.ValueTypeEnum;
+            {
+                var p = NameProperty = new PropertyOf<ColumnX, string>(propertyStore, Trait.ColumnName_P);
+                p.GetValFunc = (item) => p.Cast(item).Name;
+                p.SetValFunc = (item, value) => { p.Cast(item).Name = value; return true; };
+                p.Value = new StringValue(p);
+            }
+            {
+                var p = SummaryProperty = new PropertyOf<ColumnX, string>(propertyStore, Trait.ColumnSummary_P);
+                p.GetValFunc = (item) => p.Cast(item).Summary;
+                p.SetValFunc = (item, value) => { p.Cast(item).Summary = value; return true; };
+                p.Value = new StringValue(p);
+            }
+            {
+                var p = TypeOfProperty = new PropertyOf<ColumnX, string>(propertyStore, Trait.ColumnValueType_P, valueTypeEnum);
+                p.GetValFunc = (item) => chef.GetEnumZName(p.EnumZ, (int)p.Cast(item).Value.ValType);
+                p.SetValFunc = (item, value) => chef.SetColumnValueType(p.Cast(item), chef.GetEnumZKey(p.EnumZ, value));
+                p.Value = new StringValue(p);
+            }
+            {
+                var p = IsChoiceProperty = new PropertyOf<ColumnX, bool>(propertyStore, Trait.ColumnIsChoice_P);
+                p.GetValFunc = (item) => p.Cast(item).IsChoice;
+                p.SetValFunc = (item, value) => p.Cast(item).IsChoice = value;
+                p.Value = new BoolValue(p);
+            }
+        }
+        #endregion
+
+        #region IPropertyManager  =============================================
+        public Property[] GetPropreties(ItemModel model = null) => new Property[]
+        {
+            NameProperty,
+            SummaryProperty,
+            TypeOfProperty,
+            IsChoiceProperty,
+        };
+        #endregion
 
         #region ISerializer  ==================================================
         public void ReadData(DataReader r, Item[] items)

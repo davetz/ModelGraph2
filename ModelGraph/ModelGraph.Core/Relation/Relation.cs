@@ -7,7 +7,11 @@ namespace ModelGraph.Core
  */
     public abstract class Relation : Item // used by undo/redo changes and StoreOf<Relation> _relationStore
     {
-        internal Guid Guid;
+        internal virtual string Name 
+        {
+            get { return "Internal"; }
+            set { }
+        }
         internal Pairing Pairing;
 
         internal abstract bool HasChildLink(Item key);

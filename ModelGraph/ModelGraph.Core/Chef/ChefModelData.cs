@@ -4387,7 +4387,7 @@ namespace ModelGraph.Core
                 Validate = (m,prev) =>
                 {
                     if (!m.IsExpandedRight) return (false, false);
-                    if (m.ChildModelCount == 5) return (true, false);
+                    if (m.ChildModelCount == 4) return (true, false);
 
                     m.InitChildModels(prev);
 
@@ -7859,7 +7859,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (m.RowX.TableX.Name, GetRowName(m.RowX));
+            (string, string) GetKindName(ItemModel m) => m.Item.KindName;
         }
         #endregion
 
@@ -8544,7 +8544,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, m.TableX.Name);
+            (string, string) GetKindName(ItemModel m) => m.Item.KindName;
         }
         #endregion
 
@@ -8908,6 +8908,7 @@ namespace ModelGraph.Core
 
                     m.CanExpandLeft = count > 0;
                     m.CanFilter = count > 2;
+                    m.CanDrag = true;
                     m.CanSort = (m.IsExpandedLeft && count > 1);
 
                     return (kind, name, count, ModelType.Default);
@@ -8962,6 +8963,7 @@ namespace ModelGraph.Core
 
                     m.CanExpandLeft = count > 0;
                     m.CanFilter = count > 2;
+                    m.CanDrag = true;
                     m.CanSort = (m.IsExpandedLeft && count > 1);
 
                     return (kind, name, count, ModelType.Default);

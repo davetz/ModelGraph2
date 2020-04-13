@@ -6,29 +6,21 @@ namespace ModelGraph.Core
     {
         internal const string DefaultSeparator = " : ";
 
-        internal Guid Guid;
-        internal string Name;
-        internal string Summary;
-        internal string Description;
+        override internal string Name { get; set; }
+        override internal string Summary { get; set; }
+        override internal string Description { get; set; }
+
         internal string Separator = DefaultSeparator;
 
         internal CompuType CompuType; // type of computation
 
         #region Constructors  =================================================
-        internal ComputeX(StoreOf<ComputeX> owner)
+        internal ComputeX(StoreOf<ComputeX> owner, bool autoExpand = false)
         {
             Owner = owner;
             Trait = Trait.ComputeX;
-            Guid = Guid.NewGuid();
-            AutoExpandRight = true;
 
-            owner.Add(this);
-        }
-        internal ComputeX(StoreOf<ComputeX> owner, Guid guid)
-        {
-            Owner = owner;
-            Trait = Trait.ComputeX;
-            Guid = guid;
+            if (autoExpand) AutoExpandRight = true;
 
             owner.Add(this);
         }

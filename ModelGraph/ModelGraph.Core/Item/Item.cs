@@ -112,6 +112,29 @@ namespace ModelGraph.Core
         const byte B4 = 0x8;
         #endregion
 
+        #region Identity  =====================================================
+        internal virtual (string, string) KindName => (Kind, Name);
+        internal virtual string Kind
+        {
+            get { return GetChef().GetKind(Trait); }
+        }
+        internal virtual string Name
+        {
+            get { return GetChef().GetName(Trait); }
+            set { }
+        }
+        internal virtual string Summary
+        {
+            get { return GetChef().GetSummary(Trait); }
+            set { }
+        }
+        internal virtual string Description
+        {
+            get { return GetChef().GetDescription(Trait); }
+            set { }
+        }
+        #endregion
+
         #region StringKeys  ===================================================
         internal string KindKey => GetKindKey(Trait);
         internal string NameKey => GetNameKey(Trait);
@@ -138,7 +161,13 @@ namespace ModelGraph.Core
         {
             var item = this;
             while (item != null) { if (item.IsDataChef) return item as Chef; item = item.Owner; }
-            throw new Exception("Corrupted item hierarchy"); // I seriously hope this never happens
+            throw new Exception("GetChef: Corrupted item hierarchy"); // I seriously hope this never happens
+        }
+        internal IPropertyManager GetPropertyManager()
+        {
+            var item = this;
+            while (item != null) { if (item is IPropertyManager pm) return pm; item = item.Owner; }
+            throw new Exception("GetPropertyManager: Corrupted item hierarchy");
         }
         #endregion
     }

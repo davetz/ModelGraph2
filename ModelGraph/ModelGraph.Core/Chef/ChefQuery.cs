@@ -460,8 +460,7 @@ namespace ModelGraph.Core
         {
             if (Relation_QueryX.TryGetParent(m.Item, out Relation parent))
             {
-                var rel = parent as RelationX;
-                return GetRelationName(rel);
+                return GetRelationName(parent);
             }
             return null;
         }

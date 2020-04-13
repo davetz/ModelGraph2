@@ -1,11 +1,9 @@
 ﻿namespace ModelGraph.Core
-{/*
-
- */
+{
     public partial class Chef
     {
-        EnumZ _valueTypeEnum;
-        EnumZ _pairingEnum;
+        internal EnumZ ValueTypeEnum;
+        internal EnumZ PairingEnum;
 
         EnumZ _orientationEnum;
         EnumZ _labelingEnum;
@@ -23,41 +21,41 @@
 
         private void InitializeEnums()
         {
-            _valueTypeEnum = new EnumZ(EnumZStore,Trait.ValueTypeEnum);
-            new PairZ(_valueTypeEnum, Trait.ValueType_Bool);
-            new PairZ(_valueTypeEnum, Trait.ValueType_Char);
-            new PairZ(_valueTypeEnum, Trait.ValueType_SByte);
-            new PairZ(_valueTypeEnum, Trait.ValueType_Int16);
-            new PairZ(_valueTypeEnum, Trait.ValueType_Int32);
-            new PairZ(_valueTypeEnum, Trait.ValueType_Int64);
-            new PairZ(_valueTypeEnum, Trait.ValueType_Single);
-            new PairZ(_valueTypeEnum, Trait.ValueType_Double);
-            new PairZ(_valueTypeEnum, Trait.ValueType_Decimal);
-            new PairZ(_valueTypeEnum, Trait.ValueType_DateTime);
-            new PairZ(_valueTypeEnum, Trait.ValueType_String);
-            new PairZ(_valueTypeEnum, Trait.ValueType_Byte);
-            new PairZ(_valueTypeEnum, Trait.ValueType_UInt16);
-            new PairZ(_valueTypeEnum, Trait.ValueType_UInt32);
-            new PairZ(_valueTypeEnum, Trait.ValueType_UInt64);
-            new PairZ(_valueTypeEnum, Trait.ValueType_BoolArray);
-            new PairZ(_valueTypeEnum, Trait.ValueType_CharArray);
-            new PairZ(_valueTypeEnum, Trait.ValueType_SByteArray);
-            new PairZ(_valueTypeEnum, Trait.ValueType_Int16Array);
-            new PairZ(_valueTypeEnum, Trait.ValueType_Int32Array);
-            new PairZ(_valueTypeEnum, Trait.ValueType_Int64Array);
-            new PairZ(_valueTypeEnum, Trait.ValueType_SingleArray);
-            new PairZ(_valueTypeEnum, Trait.ValueType_DoubleArray);
-            new PairZ(_valueTypeEnum, Trait.ValueType_DecimalArray);
-            new PairZ(_valueTypeEnum, Trait.ValueType_StringArray);
-            new PairZ(_valueTypeEnum, Trait.ValueType_ByteArray);
-            new PairZ(_valueTypeEnum, Trait.ValueType_UInt16Array);
-            new PairZ(_valueTypeEnum, Trait.ValueType_UInt32Array);
-            new PairZ(_valueTypeEnum, Trait.ValueType_UInt64Array);
+            ValueTypeEnum = new EnumZ(EnumZStore,Trait.ValueTypeEnum);
+            new PairZ(ValueTypeEnum, Trait.ValueType_Bool);
+            new PairZ(ValueTypeEnum, Trait.ValueType_Char);
+            new PairZ(ValueTypeEnum, Trait.ValueType_SByte);
+            new PairZ(ValueTypeEnum, Trait.ValueType_Int16);
+            new PairZ(ValueTypeEnum, Trait.ValueType_Int32);
+            new PairZ(ValueTypeEnum, Trait.ValueType_Int64);
+            new PairZ(ValueTypeEnum, Trait.ValueType_Single);
+            new PairZ(ValueTypeEnum, Trait.ValueType_Double);
+            new PairZ(ValueTypeEnum, Trait.ValueType_Decimal);
+            new PairZ(ValueTypeEnum, Trait.ValueType_DateTime);
+            new PairZ(ValueTypeEnum, Trait.ValueType_String);
+            new PairZ(ValueTypeEnum, Trait.ValueType_Byte);
+            new PairZ(ValueTypeEnum, Trait.ValueType_UInt16);
+            new PairZ(ValueTypeEnum, Trait.ValueType_UInt32);
+            new PairZ(ValueTypeEnum, Trait.ValueType_UInt64);
+            new PairZ(ValueTypeEnum, Trait.ValueType_BoolArray);
+            new PairZ(ValueTypeEnum, Trait.ValueType_CharArray);
+            new PairZ(ValueTypeEnum, Trait.ValueType_SByteArray);
+            new PairZ(ValueTypeEnum, Trait.ValueType_Int16Array);
+            new PairZ(ValueTypeEnum, Trait.ValueType_Int32Array);
+            new PairZ(ValueTypeEnum, Trait.ValueType_Int64Array);
+            new PairZ(ValueTypeEnum, Trait.ValueType_SingleArray);
+            new PairZ(ValueTypeEnum, Trait.ValueType_DoubleArray);
+            new PairZ(ValueTypeEnum, Trait.ValueType_DecimalArray);
+            new PairZ(ValueTypeEnum, Trait.ValueType_StringArray);
+            new PairZ(ValueTypeEnum, Trait.ValueType_ByteArray);
+            new PairZ(ValueTypeEnum, Trait.ValueType_UInt16Array);
+            new PairZ(ValueTypeEnum, Trait.ValueType_UInt32Array);
+            new PairZ(ValueTypeEnum, Trait.ValueType_UInt64Array);
 
-            _pairingEnum = new EnumZ(EnumZStore, Trait.PairingEnum);
-            new PairZ(_pairingEnum, Trait.Pairing_OneToOne);
-            new PairZ(_pairingEnum, Trait.Pairing_OneToMany);
-            new PairZ(_pairingEnum, Trait.Pairing_ManyToMany);
+            PairingEnum = new EnumZ(EnumZStore, Trait.PairingEnum);
+            new PairZ(PairingEnum, Trait.Pairing_OneToOne);
+            new PairZ(PairingEnum, Trait.Pairing_OneToMany);
+            new PairZ(PairingEnum, Trait.Pairing_ManyToMany);
 
             _orientationEnum = new EnumZ(EnumZStore, Trait.AspectEnum);
             new PairZ(_orientationEnum, Trait.Aspect_Point);
@@ -161,8 +159,8 @@
 
         private void ReleaseEnums()
         {
-            _valueTypeEnum = null;
-            _pairingEnum = null;
+            ValueTypeEnum = null;
+            PairingEnum = null;
 
             _orientationEnum = null;
             _labelingEnum = null;

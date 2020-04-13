@@ -6,12 +6,12 @@ namespace ModelGraph.Core
 {
     internal class Color
     {
-        public List<(byte A, byte R, byte G, byte B)> ARGBList = new List<(byte A, byte R, byte G, byte B)>() { _invalidColor };
+        public List<(byte A, byte R, byte G, byte B)> ARGBList = new List<(byte A, byte R, byte G, byte B)>() { _defaultColor };
 
         internal void Reset()
         {
             ARGBList.Clear();
-            ARGBList.Add(_invalidColor);
+            ARGBList.Add(_defaultColor);
         }
         internal void BuildARGBList(string argbString)
         {
@@ -54,22 +54,22 @@ namespace ModelGraph.Core
         internal static bool HasARGB(string argbStr)
         {
             if (IsInvalid(argbStr)) return false;
-            return (Compare(GetARGB(argbStr), _invalidColor) == 0);
+            return (Compare(GetARGB(argbStr), _defaultColor) == 0);
         }
         internal static (byte, byte, byte, byte) GetARGB(string argbStr)
         {
-            if (IsInvalid(argbStr)) return _invalidColor;
-            var argb = _invalidColor; // default color when there is a bad color string
+            if (IsInvalid(argbStr)) return _defaultColor;
+            var argb = _defaultColor; // default color when there is a bad color string
 
             var ca = argbStr.ToLower().ToCharArray();
-            if (ca[0] != '#') return _invalidColor;
+            if (ca[0] != '#') return _defaultColor;
 
             var N = _argbLength;
             int[] va = new int[N];
             for (int j = 1; j < N; j++)
             {
                 va[j] = _hexValues.IndexOf(ca[j]);
-                if (va[j] < 0) return _invalidColor;
+                if (va[j] < 0) return _defaultColor;
             }
             return ((byte)((va[1] << 4) | va[2]), (byte)((va[3] << 4) | va[4]), (byte)((va[5] << 4) | va[6]), (byte)((va[7] << 4) | va[8]));
         }
@@ -92,7 +92,7 @@ namespace ModelGraph.Core
         }
         static bool IsValid(string argbStr) => !IsInvalid(argbStr);
         static bool IsInvalid(string argbStr) => (string.IsNullOrWhiteSpace(argbStr) || argbStr.Length != _argbLength);
-        static readonly (byte, byte, byte, byte) _invalidColor = (0x88, 0x87, 0x86, 0x85);
+        static readonly (byte, byte, byte, byte) _defaultColor = (0xFF, 0xF7, 0xE6, 0xD5);
         static readonly string _hexValues = "0123456789abcdef";
         const int _argbLength = 9;
         #endregion
