@@ -655,10 +655,6 @@ namespace ModelGraph.Core
             var inx = tbl.IndexOf(row);
             return $"#{inx.ToString()}";
         }
-        internal string RowSummary(ItemModel model)
-        {
-            return RowSummary(model.Item as RowX);
-        }
         internal string RowSummary(RowX row)
         {
             if (TableX_SummaryProperty.TryGetChild(row.Owner, out Property prop))

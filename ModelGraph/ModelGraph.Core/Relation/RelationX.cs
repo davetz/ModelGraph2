@@ -3,9 +3,9 @@ namespace ModelGraph.Core
 {
     public class RelationX : RelationOf<RowX, RowX>
     {
-        override internal string Name { get; set; }
-        override internal string Summary { get; set; }
-        override internal string Description { get; set; }
+        internal string Name;
+        internal string Summary;
+        internal string Description;
 
         #region Constructors  =================================================
         internal RelationX(RelationXStore owner, bool autoExpandRight = false)

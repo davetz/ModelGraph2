@@ -112,29 +112,6 @@ namespace ModelGraph.Core
         const byte B4 = 0x8;
         #endregion
 
-        #region Identity  =====================================================
-        internal virtual (string, string) KindName => (Kind, Name);
-        internal virtual string Kind
-        {
-            get { return GetChef().GetKind(Trait); }
-        }
-        internal virtual string Name
-        {
-            get { return GetChef().GetName(Trait); }
-            set { }
-        }
-        internal virtual string Summary
-        {
-            get { return GetChef().GetSummary(Trait); }
-            set { }
-        }
-        internal virtual string Description
-        {
-            get { return GetChef().GetDescription(Trait); }
-            set { }
-        }
-        #endregion
-
         #region StringKeys  ===================================================
         internal string KindKey => GetKindKey(Trait);
         internal string NameKey => GetNameKey(Trait);

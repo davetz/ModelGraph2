@@ -7809,7 +7809,6 @@ namespace ModelGraph.Core
         #endregion
 
 
-
         #region 6D1 QueryRootItem  ============================================
         ModelAction QueryRootItem_X;
         void Initer_QueryRootItem_X()
@@ -7859,7 +7858,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => m.Item.KindName;
+            (string, string) GetKindName(ItemModel m) => (m.RowX.TableX.Name, GetRowName(m.RowX));
         }
         #endregion
 
@@ -8544,7 +8543,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => m.Item.KindName;
+            (string, string) GetKindName(ItemModel m) => (null, m.TableX.Name);
         }
         #endregion
 

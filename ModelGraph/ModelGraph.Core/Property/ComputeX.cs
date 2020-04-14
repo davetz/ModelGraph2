@@ -6,9 +6,9 @@ namespace ModelGraph.Core
     {
         internal const string DefaultSeparator = " : ";
 
-        override internal string Name { get; set; }
-        override internal string Summary { get; set; }
-        override internal string Description { get; set; }
+        internal string Name;
+        internal string Summary;
+        internal string Description;
 
         internal string Separator = DefaultSeparator;
 
