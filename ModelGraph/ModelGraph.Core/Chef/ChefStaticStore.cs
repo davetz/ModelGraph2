@@ -5,12 +5,6 @@ namespace ModelGraph.Core
 {
     public partial class Chef
     {
-        internal static IList<Item> EmptyItemList = new List<Item>(0).AsReadOnly();
-
-        internal StoreOf<Store> PrivateStores;
-        internal StoreOf<Store> InternalStores;
-        internal StoreOf<Store> ExternalStores;
-
         internal StoreOf<Error> ErrorStore { get; private set; }
         internal StoreOf<EnumZ> EnumZStore { get; private set; }
         internal StoreOf<Property> PropertyZStore { get; private set; }
@@ -23,9 +17,7 @@ namespace ModelGraph.Core
         internal QueryX DummyQueryXRef { get; private set; }
 
         internal ChangeSet ChangeSet { get; private set; }
-
         internal ChangeRoot ChangeRoot { get; private set; }
-
         internal int ChangeSequence { get; private set; }
 
         internal Store[] PrimeStores { get; private set; }
@@ -34,6 +26,7 @@ namespace ModelGraph.Core
         internal ViewXStore ViewXStore { get; private set; }
         internal TableXStore TableXStore { get; private set; }
         internal GraphXStore GraphXStore { get; private set; }
+        internal GraphParams GraphParams { get; private set; }
         internal QueryXStore QueryXStore { get; private set; }
         internal ColumnXStore ColumnXStore { get; private set; }
         internal SymbolXStore SymbolXStore { get; private set; }
@@ -62,6 +55,8 @@ namespace ModelGraph.Core
             ViewXStore = new ViewXStore(this);
             TableXStore = new TableXStore(this);
             GraphXStore = new GraphXStore(this);
+            GraphParams = new GraphParams(this, GraphXStore);
+
             QueryXStore = new QueryXStore(this);
             ColumnXStore = new ColumnXStore(this);
             SymbolXStore = new SymbolXStore(this);

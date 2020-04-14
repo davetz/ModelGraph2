@@ -35,11 +35,8 @@ namespace ModelGraph.Core
         private const string identitySuffix = ")";
         internal string GetRelationName(Relation rel)
         {
-            if (rel is null)
-            {
-                var x = rel;
-            }
-            var id = string.IsNullOrWhiteSpace(rel.Name) ? string.Empty : rel.Name;
+            var name = (rel is RelationX rx) ? rx.Name : "Internal";
+            var id = string.IsNullOrWhiteSpace(name) ? string.Empty : name;
             var identity = $"({id})  ";
             var childName = BlankName;
             var parentName = BlankName;

@@ -4,18 +4,85 @@ using Windows.Storage.Streams;
 
 namespace ModelGraph.Core
 {
-    public class GraphXParams : ISerializer
+    public class GraphParams : ISerializer
     {
         static Guid _serializerGuid = new Guid("88223880-DC1E-40DD-BFB2-711372B7BA2D");
         static byte _formatVersion = 1;
 
+        internal PropertyOf<Node, int[]> CenterXYProperty;
+        internal PropertyOf<Node, int[]> SizeWHProperty;
+        internal PropertyOf<Node, string> LabelingProperty;
+        internal PropertyOf<Node, string> ResizingProperty;
+        internal PropertyOf<Node, string> BarWidthProperty;
+        internal PropertyOf<Node, string> OrientationProperty;
+
+        internal PropertyOf<Edge, string> Facet1Property;
+        internal PropertyOf<Edge, string> Facet2Property;
+
+
         GraphXStore _graphXStore;
 
-        internal GraphXParams(Chef chef, GraphXStore graphXStore)
+        internal GraphParams(Chef chef, GraphXStore graphXStore)
         {
             _graphXStore = graphXStore;
+            CreateProperties(chef);
+
             chef.RegisterLinkSerializer((_serializerGuid, this));
         }
+
+        #region CreateProperties  =============================================
+        private void CreateProperties(Chef chef)
+        {
+            {
+                var p = CenterXYProperty = new PropertyOf<Node, int[]>(chef.PropertyZStore, Trait.NodeCenterXY_P);
+                p.GetValFunc = (item) => p.Cast(item).CenterXY;
+                p.SetValFunc = (item, value) => { p.Cast(item).CenterXY = value; return true; };
+                p.Value = new Int32ArrayValue(p);
+            }
+            {
+                var p = SizeWHProperty = new PropertyOf<Node, int[]>(chef.PropertyZStore, Trait.NodeSizeWH_P);
+                p.GetValFunc = (item) => p.Cast(item).SizeWH;
+                p.SetValFunc = (item, value) => { p.Cast(item).SizeWH = value; return true; };
+                p.Value = new Int32ArrayValue(p);
+            }
+            {
+                var p = OrientationProperty = new PropertyOf<Node, string>(chef.PropertyZStore, Trait.NodeOrientation_P, chef.OrientationEnum);
+                p.GetValFunc = (item) => chef.GetEnumZName(p.EnumZ, (int)p.Cast(item).Aspect);
+                p.SetValFunc = (item, value) => { p.Cast(item).Aspect = (Aspect)chef.GetEnumZKey(p.EnumZ, value); return true; };
+                p.Value = new StringValue(p);
+            }
+            {
+                var p = LabelingProperty = new PropertyOf<Node, string>(chef.PropertyZStore, Trait.NodeLabeling_P, chef.LabelingEnum);
+                p.GetValFunc = (item) => chef.GetEnumZName(p.EnumZ, (int)p.Cast(item).Labeling);
+                p.SetValFunc = (item, value) => { p.Cast(item).Labeling = (Labeling)chef.GetEnumZKey(p.EnumZ, value); return true; };
+                p.Value = new StringValue(p);
+            }
+            {
+                var p = ResizingProperty = new PropertyOf<Node, string>(chef.PropertyZStore, Trait.NodeResizing_P, chef.ResizingEnum);
+                p.GetValFunc = (item) => chef.GetEnumZName(p.EnumZ, (int)p.Cast(item).Sizing);
+                p.SetValFunc = (item, value) => { p.Cast(item).Sizing = (Sizing)chef.GetEnumZKey(p.EnumZ, value); return true; };
+                p.Value = new StringValue(p);
+            }
+            {
+                var p = BarWidthProperty = new PropertyOf<Node, string>(chef.PropertyZStore, Trait.NodeBarWidth_P, chef.BarWidthEnum);
+                p.GetValFunc = (item) => chef.GetEnumZName(p.EnumZ, (int)p.Cast(item).BarWidth);
+                p.SetValFunc = (item, value) => { p.Cast(item).BarWidth = (BarWidth)chef.GetEnumZKey(p.EnumZ, value); return true; };
+                p.Value = new StringValue(p);
+            }
+            {
+                var p = Facet1Property = new PropertyOf<Edge, string>(chef.PropertyZStore, Trait.EdgeFacet1_P, chef.FacetEnum);
+                p.GetValFunc = (item) => chef.GetEnumZName(p.EnumZ, (int)p.Cast(item).Facet1);
+                p.SetValFunc = (item, value) => { p.Cast(item).Facet1 = (Facet)chef.GetEnumZKey(p.EnumZ, value); return true; };
+                p.Value = new StringValue(p);
+            }
+            {
+                var p = Facet2Property = new PropertyOf<Edge, string>(chef.PropertyZStore, Trait.EdgeFacet2_P, chef.FacetEnum);
+                p.GetValFunc = (item) => chef.GetEnumZName(p.EnumZ, (int)p.Cast(item).Facet2);
+                p.SetValFunc = (item, value) => { p.Cast(item).Facet2 = (Facet)chef.GetEnumZKey(p.EnumZ, value); return true; };
+                p.Value = new StringValue(p);
+            }
+        }
+        #endregion
 
         #region HasData  ======================================================
         public bool HasData()
@@ -27,8 +94,8 @@ namespace ModelGraph.Core
             var gxList = _graphXStore.Items;
             foreach (var gx in gxList)
             {
-                if (gx.GraphParms is null) continue;
-                foreach (var e1 in gx.GraphParms)
+                if (gx.Root_QueryX_Parms is null) continue;
+                foreach (var e1 in gx.Root_QueryX_Parms)
                 {
                     if (e1.Key is null) continue;
                     if (e1.Key.IsDeleted) continue;
@@ -102,7 +169,7 @@ namespace ModelGraph.Core
                     var riCount = r.ReadUInt16();//******************************
 
                     var graphParms = new Dictionary<Item, Dictionary<QueryX, List<NodeEdge>>>(riCount);
-                    gx.GraphParms = graphParms;
+                    gx.Root_QueryX_Parms = graphParms;
 
                     for (int j = 0; j < riCount; j++)
                     {
@@ -114,7 +181,7 @@ namespace ModelGraph.Core
 
                         var qxCount = r.ReadUInt16();//***************************
                         var QueryX_NodeEdgeList = new Dictionary<QueryX, List<NodeEdge>>(qxCount);
-                        gx.GraphParms[root] = QueryX_NodeEdgeList;
+                        gx.Root_QueryX_Parms[root] = QueryX_NodeEdgeList;
 
                         for (int k = 0; k < qxCount; k++)
                         {
@@ -233,7 +300,7 @@ namespace ModelGraph.Core
                 rtqxList.Clear();
                 rtqxneList.Clear();
 
-                foreach (var e1 in gx.GraphParms)
+                foreach (var e1 in gx.Root_QueryX_Parms)
                 {
                     var ri = e1.Key;
                     if (itemIndex.ContainsKey(ri))
@@ -277,21 +344,21 @@ namespace ModelGraph.Core
                 // remove graphParams items which no longer exists
                 foreach (var ri in rtList)
                 {
-                    gx.GraphParms.Remove(ri);
+                    gx.Root_QueryX_Parms.Remove(ri);
                 }
                 foreach (var (ri, qx) in rtqxList)
                 {
-                    gx.GraphParms[ri].Remove(qx);
-                    if (gx.GraphParms[ri].Count == 0)
-                        gx.GraphParms.Remove(ri);
+                    gx.Root_QueryX_Parms[ri].Remove(qx);
+                    if (gx.Root_QueryX_Parms[ri].Count == 0)
+                        gx.Root_QueryX_Parms.Remove(ri);
                 }
                 foreach (var (ri, qx, ne) in rtqxneList)
                 {
-                    gx.GraphParms[ri][qx].Remove(ne);
-                    if (gx.GraphParms[ri][qx].Count == 0)
-                        gx.GraphParms[ri].Remove(qx);
-                    if (gx.GraphParms[ri].Count == 0)
-                        gx.GraphParms.Remove(ri);
+                    gx.Root_QueryX_Parms[ri][qx].Remove(ne);
+                    if (gx.Root_QueryX_Parms[ri][qx].Count == 0)
+                        gx.Root_QueryX_Parms[ri].Remove(qx);
+                    if (gx.Root_QueryX_Parms[ri].Count == 0)
+                        gx.Root_QueryX_Parms.Remove(ri);
                 }
             }
             #endregion
@@ -300,7 +367,7 @@ namespace ModelGraph.Core
             var gxCount = 0;
             foreach (var gx in _graphXStore.Items)//GraphX
             {
-                if (gx.GraphParms.Count > 0) gxCount++;
+                if (gx.Root_QueryX_Parms.Count > 0) gxCount++;
             }
             w.WriteUInt16((ushort)gxCount);//**********************************
             w.WriteByte(_formatVersion);//*************************************
@@ -308,12 +375,12 @@ namespace ModelGraph.Core
             // now write the remaining valid graph params to the storage file
             foreach (var gx in _graphXStore.Items)//GraphX
             {
-                if (gx.GraphParms.Count == 0) continue;
+                if (gx.Root_QueryX_Parms.Count == 0) continue;
 
                 w.WriteInt32(itemIndex[gx]);//*********************************
-                w.WriteUInt16((ushort)gx.GraphParms.Count);//******************
+                w.WriteUInt16((ushort)gx.Root_QueryX_Parms.Count);//******************
 
-                foreach (var e1 in gx.GraphParms)//RootItem
+                foreach (var e1 in gx.Root_QueryX_Parms)//RootItem
                 {
                     w.WriteInt32(itemIndex[e1.Key]);//************************* rootIndex
                     w.WriteUInt16((ushort)e1.Value.Count);//******************* qxCount

@@ -4,17 +4,77 @@ using Windows.Storage.Streams;
 
 namespace ModelGraph.Core
 {
-    public class GraphXStore : ExternalStoreOf<GraphX>, ISerializer
+    public class GraphXStore : ExternalStoreOf<GraphX>, ISerializer, IPropertyManager
     {
         static Guid _serializerGuid = new Guid("48C7FA8C-88F1-4203-8E54-3255C1F8C528");
         static byte _formatVersion = 1;
 
-        internal GraphXStore(Chef owner) : base(owner, Trait.GraphXStore)
-        {
-            owner.RegisterItemSerializer((_serializerGuid, this));
+        internal PropertyOf<GraphX, string> NameProperty;
+        internal PropertyOf<GraphX, string> SummaryProperty;
+        internal PropertyOf<GraphX, int> TerminalLengthProperty;
+        internal PropertyOf<GraphX, int> TerminalSpacingProperty;
+        internal PropertyOf<GraphX, int> TerminalStretchProperty;
+        internal PropertyOf<GraphX, int> SymbolSizeProperty;
 
-            new GraphXParams(owner, this);
+        internal GraphXStore(Chef chef) : base(chef, Trait.GraphXStore)
+        {
+            chef.RegisterItemSerializer((_serializerGuid, this));
+            CreateProperties(chef);
         }
+
+        #region CreateProperties  =============================================
+        private void CreateProperties(Chef chef)
+        {
+            {
+                var p = NameProperty = new PropertyOf<GraphX, string>(chef.PropertyStore, Trait.GraphName_P);
+                p.GetValFunc = (item) => p.Cast(item).Name;
+                p.SetValFunc = (item, value) => { p.Cast(item).Name = value; return true; };
+                p.Value = new StringValue(p);
+            }
+            {
+                var p = SummaryProperty = new PropertyOf<GraphX, string>(chef.PropertyStore, Trait.GraphSummary_P);
+                p.GetValFunc = (item) => p.Cast(item).Summary;
+                p.SetValFunc = (item, value) => { p.Cast(item).Summary = value; return true; };
+                p.Value = new StringValue(p);
+            }
+            {
+                var p = TerminalLengthProperty = new PropertyOf<GraphX, int>(chef.PropertyStore, Trait.GraphTerminalLength_P);
+                p.GetValFunc = (item) => p.Cast(item).TerminalLength;
+                p.SetValFunc = (item, value) => { p.Cast(item).TerminalLength = (byte)value; return true; };
+                p.Value = new Int32Value(p);
+            }
+            {
+                var p = TerminalSpacingProperty = new PropertyOf<GraphX, int>(chef.PropertyStore, Trait.GraphTerminalSpacing_P);
+                p.GetValFunc = (item) => p.Cast(item).TerminalSpacing;
+                p.SetValFunc = (item, value) => { p.Cast(item).TerminalSpacing = (byte)value; return true; };
+                p.Value = new Int32Value(p);
+            }
+            {
+                var p = TerminalStretchProperty = new PropertyOf<GraphX, int>(chef.PropertyStore, Trait.GraphTerminalStretch_P);
+                p.GetValFunc = (item) => p.Cast(item).TerminalSkew;
+                p.SetValFunc = (item, value) => { p.Cast(item).TerminalSkew = (byte)value; return true; };
+                p.Value = new Int32Value(p);
+            }
+            {
+                var p = SymbolSizeProperty = new PropertyOf<GraphX, int>(chef.PropertyStore, Trait.GraphSymbolSize_P);
+                p.GetValFunc = (item) => p.Cast(item).SymbolSize;
+                p.SetValFunc = (item, value) => { p.Cast(item).SymbolSize = (byte)value; return true; };
+                p.Value = new Int32Value(p);
+            }
+        }
+        #endregion
+
+        #region IPropertyManager  =============================================
+        public Property[] GetPropreties(ItemModel model = null) => new Property[]
+        {
+            NameProperty,
+            SummaryProperty,
+            TerminalLengthProperty,
+            TerminalSpacingProperty,
+            TerminalStretchProperty,
+            SymbolSizeProperty,
+        };
+        #endregion
 
         #region ISerializer  ==================================================
         public void ReadData(DataReader r, Item[] items)

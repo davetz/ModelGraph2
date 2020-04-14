@@ -5,15 +5,45 @@ using Windows.Storage.Streams;
 
 namespace ModelGraph.Core
 {
-    public class ViewXStore : ExternalStoreOf<ViewX>, ISerializer
+    public class ViewXStore : ExternalStoreOf<ViewX>, ISerializer, IPropertyManager
     {
         static Guid _serializerGuid = new Guid("396EC955-832E-4BEA-9E5C-C2A203ADAD23");
         static byte _formatVersion = 1;
 
-        internal ViewXStore(Chef owner) : base(owner, Trait.ViewXStore, 30)
+        internal PropertyOf<ViewX, string> NameProperty;
+        internal PropertyOf<ViewX, string> SummaryProperty;
+
+        internal ViewXStore(Chef chef) : base(chef, Trait.ViewXStore, 30)
         {
-            owner.RegisterItemSerializer((_serializerGuid, this));
+            chef.RegisterItemSerializer((_serializerGuid, this));
+            CreateProperties(chef);
         }
+
+        #region CreateProperties  =============================================
+        private void CreateProperties(Chef chef)
+        {
+            {
+                var p = NameProperty = new PropertyOf<ViewX, string>(chef.PropertyStore, Trait.ViewName_P);
+                p.GetValFunc = (item) => p.Cast(item).Name;
+                p.SetValFunc = (item, value) => { p.Cast(item).Name = value; return true; };
+                p.Value = new StringValue(p);
+            }
+            {
+                var p = SummaryProperty = new PropertyOf<ViewX, string>(chef.PropertyStore, Trait.ViewSummary_P);
+                p.GetValFunc = (item) => p.Cast(item).Summary;
+                p.SetValFunc = (item, value) => { p.Cast(item).Summary = value; return true; };
+                p.Value = new StringValue(p);
+            }
+        }
+        #endregion
+
+        #region IPropertyManager  =============================================
+        public Property[] GetPropreties(ItemModel model = null) => new Property[]
+        {
+            NameProperty,
+            SummaryProperty,
+        };
+        #endregion
 
         #region ISerializer  ==================================================
         public void ReadData(DataReader r, Item[] items)

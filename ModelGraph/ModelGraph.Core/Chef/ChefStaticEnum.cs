@@ -5,19 +5,19 @@
         internal EnumZ ValueTypeEnum;
         internal EnumZ PairingEnum;
 
-        EnumZ _orientationEnum;
-        EnumZ _labelingEnum;
-        EnumZ _resizingEnum;
-        EnumZ _barWidthEnum;
+        internal EnumZ OrientationEnum;
+        internal EnumZ LabelingEnum;
+        internal EnumZ ResizingEnum;
+        internal EnumZ BarWidthEnum;
 
-        EnumZ _sideEnum;
-        EnumZ _facetEnum;
-        EnumZ _connectEnum;
-        EnumZ _contactEnum;
-        EnumZ _computeTypeEnum;
-        EnumZ _attatchEnum;
-        EnumZ _lineStyleEnum;
-        EnumZ _dashStyleEnum;
+        internal EnumZ SideEnum;
+        internal EnumZ FacetEnum;
+        internal EnumZ ConnectEnum;
+        internal EnumZ ContactEnum;
+        internal EnumZ ComputeTypeEnum;
+        internal EnumZ AttatchEnum;
+        internal EnumZ LineStyleEnum;
+        internal EnumZ DashStyleEnum;
 
         private void InitializeEnums()
         {
@@ -57,104 +57,104 @@
             new PairZ(PairingEnum, Trait.Pairing_OneToMany);
             new PairZ(PairingEnum, Trait.Pairing_ManyToMany);
 
-            _orientationEnum = new EnumZ(EnumZStore, Trait.AspectEnum);
-            new PairZ(_orientationEnum, Trait.Aspect_Point);
-            new PairZ(_orientationEnum, Trait.Aspect_Square);
-            new PairZ(_orientationEnum, Trait.Aspect_Vertical);
-            new PairZ(_orientationEnum, Trait.Aspect_Horizontal);
+            OrientationEnum = new EnumZ(EnumZStore, Trait.AspectEnum);
+            new PairZ(OrientationEnum, Trait.Aspect_Point);
+            new PairZ(OrientationEnum, Trait.Aspect_Square);
+            new PairZ(OrientationEnum, Trait.Aspect_Vertical);
+            new PairZ(OrientationEnum, Trait.Aspect_Horizontal);
 
-            _labelingEnum = new EnumZ(EnumZStore, Trait.LabelingEnum);
-            new PairZ(_labelingEnum, Trait.Labeling_None);
-            new PairZ(_labelingEnum, Trait.Labeling_Top);
-            new PairZ(_labelingEnum, Trait.Labeling_Left);
-            new PairZ(_labelingEnum, Trait.Labeling_Right);
-            new PairZ(_labelingEnum, Trait.Labeling_Bottom);
-            new PairZ(_labelingEnum, Trait.Labeling_Center);
-            new PairZ(_labelingEnum, Trait.Labeling_TopLeft);
-            new PairZ(_labelingEnum, Trait.Labeling_TopRight);
-            new PairZ(_labelingEnum, Trait.Labeling_BottomLeft);
-            new PairZ(_labelingEnum, Trait.Labeling_BottomRight);
-            new PairZ(_labelingEnum, Trait.Labeling_TopLeftSide);
-            new PairZ(_labelingEnum, Trait.Labeling_TopRightSide);
-            new PairZ(_labelingEnum, Trait.Labeling_TopLeftCorner);
-            new PairZ(_labelingEnum, Trait.Labeling_TopRightCorner);
-            new PairZ(_labelingEnum, Trait.Labeling_BottomLeftSide);
-            new PairZ(_labelingEnum, Trait.Labeling_BottomRightSide);
-            new PairZ(_labelingEnum, Trait.Labeling_BottomLeftCorner);
-            new PairZ(_labelingEnum, Trait.Labeling_BottomRightCorner);
+            LabelingEnum = new EnumZ(EnumZStore, Trait.LabelingEnum);
+            new PairZ(LabelingEnum, Trait.Labeling_None);
+            new PairZ(LabelingEnum, Trait.Labeling_Top);
+            new PairZ(LabelingEnum, Trait.Labeling_Left);
+            new PairZ(LabelingEnum, Trait.Labeling_Right);
+            new PairZ(LabelingEnum, Trait.Labeling_Bottom);
+            new PairZ(LabelingEnum, Trait.Labeling_Center);
+            new PairZ(LabelingEnum, Trait.Labeling_TopLeft);
+            new PairZ(LabelingEnum, Trait.Labeling_TopRight);
+            new PairZ(LabelingEnum, Trait.Labeling_BottomLeft);
+            new PairZ(LabelingEnum, Trait.Labeling_BottomRight);
+            new PairZ(LabelingEnum, Trait.Labeling_TopLeftSide);
+            new PairZ(LabelingEnum, Trait.Labeling_TopRightSide);
+            new PairZ(LabelingEnum, Trait.Labeling_TopLeftCorner);
+            new PairZ(LabelingEnum, Trait.Labeling_TopRightCorner);
+            new PairZ(LabelingEnum, Trait.Labeling_BottomLeftSide);
+            new PairZ(LabelingEnum, Trait.Labeling_BottomRightSide);
+            new PairZ(LabelingEnum, Trait.Labeling_BottomLeftCorner);
+            new PairZ(LabelingEnum, Trait.Labeling_BottomRightCorner);
 
-            _resizingEnum = new EnumZ(EnumZStore, Trait.ResizingEnum);
-            new PairZ(_resizingEnum, Trait.Resizing_Auto);
-            new PairZ(_resizingEnum, Trait.Resizing_Fixed);
-            new PairZ(_resizingEnum, Trait.Resizing_Manual);
+            ResizingEnum = new EnumZ(EnumZStore, Trait.ResizingEnum);
+            new PairZ(ResizingEnum, Trait.Resizing_Auto);
+            new PairZ(ResizingEnum, Trait.Resizing_Fixed);
+            new PairZ(ResizingEnum, Trait.Resizing_Manual);
 
-            _barWidthEnum = new EnumZ(EnumZStore, Trait.BarWidthEnum);
-            new PairZ(_barWidthEnum, Trait.BarWidth_Thin);
-            new PairZ(_barWidthEnum, Trait.BarWidth_Wide);
-            new PairZ(_barWidthEnum, Trait.BarWidth_ExtraWide);
+            BarWidthEnum = new EnumZ(EnumZStore, Trait.BarWidthEnum);
+            new PairZ(BarWidthEnum, Trait.BarWidth_Thin);
+            new PairZ(BarWidthEnum, Trait.BarWidth_Wide);
+            new PairZ(BarWidthEnum, Trait.BarWidth_ExtraWide);
 
-            _sideEnum = new EnumZ(EnumZStore, Trait.SideEnum);
-            new PairZ(_sideEnum, Trait.Side_Any);
-            new PairZ(_sideEnum, Trait.Side_East);
-            new PairZ(_sideEnum, Trait.Side_West);
-            new PairZ(_sideEnum, Trait.Side_North);
-            new PairZ(_sideEnum, Trait.Side_South);
+            SideEnum = new EnumZ(EnumZStore, Trait.SideEnum);
+            new PairZ(SideEnum, Trait.Side_Any);
+            new PairZ(SideEnum, Trait.Side_East);
+            new PairZ(SideEnum, Trait.Side_West);
+            new PairZ(SideEnum, Trait.Side_North);
+            new PairZ(SideEnum, Trait.Side_South);
 
-            _facetEnum = new EnumZ(EnumZStore, Trait.Facet_None);
-            new PairZ(_facetEnum, Trait.Facet_None);
-            new PairZ(_facetEnum, Trait.Facet_Nubby);
-            new PairZ(_facetEnum, Trait.Facet_Diamond);
-            new PairZ(_facetEnum, Trait.Facet_InArrow);
-            new PairZ(_facetEnum, Trait.Facet_Force_None);
-            new PairZ(_facetEnum, Trait.Facet_Force_Nubby);
-            new PairZ(_facetEnum, Trait.Facet_Force_Diamond);
-            new PairZ(_facetEnum, Trait.Facet_Force_InArrow);
+            FacetEnum = new EnumZ(EnumZStore, Trait.Facet_None);
+            new PairZ(FacetEnum, Trait.Facet_None);
+            new PairZ(FacetEnum, Trait.Facet_Nubby);
+            new PairZ(FacetEnum, Trait.Facet_Diamond);
+            new PairZ(FacetEnum, Trait.Facet_InArrow);
+            new PairZ(FacetEnum, Trait.Facet_Force_None);
+            new PairZ(FacetEnum, Trait.Facet_Force_Nubby);
+            new PairZ(FacetEnum, Trait.Facet_Force_Diamond);
+            new PairZ(FacetEnum, Trait.Facet_Force_InArrow);
 
-            _contactEnum = new EnumZ(EnumZStore, Trait.ContactEnum);
-            new PairZ(_contactEnum, Trait.Contact_Any);
-            new PairZ(_contactEnum, Trait.Contact_One);
-            new PairZ(_contactEnum, Trait.Contact_None);
+            ContactEnum = new EnumZ(EnumZStore, Trait.ContactEnum);
+            new PairZ(ContactEnum, Trait.Contact_Any);
+            new PairZ(ContactEnum, Trait.Contact_One);
+            new PairZ(ContactEnum, Trait.Contact_None);
 
-            _connectEnum = new EnumZ(EnumZStore, Trait.ConnectEnum);
-            new PairZ(_connectEnum, Trait.Connect_Any);
-            new PairZ(_connectEnum, Trait.Connect_East);
-            new PairZ(_connectEnum, Trait.Connect_West);
-            new PairZ(_connectEnum, Trait.Connect_North);
-            new PairZ(_connectEnum, Trait.Connect_South);
-            new PairZ(_connectEnum, Trait.Connect_East_West);
-            new PairZ(_connectEnum, Trait.Connect_North_South);
-            new PairZ(_connectEnum, Trait.Connect_North_East);
-            new PairZ(_connectEnum, Trait.Connect_North_West);
-            new PairZ(_connectEnum, Trait.Connect_North_East_West);
-            new PairZ(_connectEnum, Trait.Connect_North_South_East);
-            new PairZ(_connectEnum, Trait.Connect_North_South_West);
-            new PairZ(_connectEnum, Trait.Connect_South_East);
-            new PairZ(_connectEnum, Trait.Connect_South_West);
-            new PairZ(_connectEnum, Trait.Connect_South_East_West);
+            ConnectEnum = new EnumZ(EnumZStore, Trait.ConnectEnum);
+            new PairZ(ConnectEnum, Trait.Connect_Any);
+            new PairZ(ConnectEnum, Trait.Connect_East);
+            new PairZ(ConnectEnum, Trait.Connect_West);
+            new PairZ(ConnectEnum, Trait.Connect_North);
+            new PairZ(ConnectEnum, Trait.Connect_South);
+            new PairZ(ConnectEnum, Trait.Connect_East_West);
+            new PairZ(ConnectEnum, Trait.Connect_North_South);
+            new PairZ(ConnectEnum, Trait.Connect_North_East);
+            new PairZ(ConnectEnum, Trait.Connect_North_West);
+            new PairZ(ConnectEnum, Trait.Connect_North_East_West);
+            new PairZ(ConnectEnum, Trait.Connect_North_South_East);
+            new PairZ(ConnectEnum, Trait.Connect_North_South_West);
+            new PairZ(ConnectEnum, Trait.Connect_South_East);
+            new PairZ(ConnectEnum, Trait.Connect_South_West);
+            new PairZ(ConnectEnum, Trait.Connect_South_East_West);
 
-            _attatchEnum = new EnumZ(EnumZStore, Trait.AttatchEnum);
-            new PairZ(_attatchEnum, Trait.Attatch_Normal);
-            new PairZ(_attatchEnum, Trait.Attatch_Radial);
-            new PairZ(_attatchEnum, Trait.Attatch_RightAngle);
-            new PairZ(_attatchEnum, Trait.Attatch_SkewedAngle);
+            AttatchEnum = new EnumZ(EnumZStore, Trait.AttatchEnum);
+            new PairZ(AttatchEnum, Trait.Attatch_Normal);
+            new PairZ(AttatchEnum, Trait.Attatch_Radial);
+            new PairZ(AttatchEnum, Trait.Attatch_RightAngle);
+            new PairZ(AttatchEnum, Trait.Attatch_SkewedAngle);
 
-            _lineStyleEnum = new EnumZ(EnumZStore, Trait.LineStyleEnum);
-            new PairZ(_lineStyleEnum, Trait.LineStyle_PointToPoint);
-            new PairZ(_lineStyleEnum, Trait.LineStyle_SimpleSpline);
-            new PairZ(_lineStyleEnum, Trait.LineStyle_DoubleSpline);
+            LineStyleEnum = new EnumZ(EnumZStore, Trait.LineStyleEnum);
+            new PairZ(LineStyleEnum, Trait.LineStyle_PointToPoint);
+            new PairZ(LineStyleEnum, Trait.LineStyle_SimpleSpline);
+            new PairZ(LineStyleEnum, Trait.LineStyle_DoubleSpline);
 
-            _dashStyleEnum = new EnumZ(EnumZStore, Trait.DashStyleEnum);
-            new PairZ(_dashStyleEnum, Trait.DashStyle_Solid);
-            new PairZ(_dashStyleEnum, Trait.DashStyle_Dashed);
-            new PairZ(_dashStyleEnum, Trait.DashStyle_Dotted);
-            new PairZ(_dashStyleEnum, Trait.DashStyle_DashDot);
-            new PairZ(_dashStyleEnum, Trait.DashStyle_DashDotDot);
+            DashStyleEnum = new EnumZ(EnumZStore, Trait.DashStyleEnum);
+            new PairZ(DashStyleEnum, Trait.DashStyle_Solid);
+            new PairZ(DashStyleEnum, Trait.DashStyle_Dashed);
+            new PairZ(DashStyleEnum, Trait.DashStyle_Dotted);
+            new PairZ(DashStyleEnum, Trait.DashStyle_DashDot);
+            new PairZ(DashStyleEnum, Trait.DashStyle_DashDotDot);
 
-            _computeTypeEnum = new EnumZ(EnumZStore, Trait.CompuTypeEnum);
-            new PairZ(_computeTypeEnum, Trait.CompuType_RowValue);
-            new PairZ(_computeTypeEnum, Trait.CompuType_RelatedValue);
-            new PairZ(_computeTypeEnum, Trait.CompuType_CompositeString);
-            new PairZ(_computeTypeEnum, Trait.CompuType_CompositeReversed);
+            ComputeTypeEnum = new EnumZ(EnumZStore, Trait.CompuTypeEnum);
+            new PairZ(ComputeTypeEnum, Trait.CompuType_RowValue);
+            new PairZ(ComputeTypeEnum, Trait.CompuType_RelatedValue);
+            new PairZ(ComputeTypeEnum, Trait.CompuType_CompositeString);
+            new PairZ(ComputeTypeEnum, Trait.CompuType_CompositeReversed);
         }
 
         private void ReleaseEnums()
@@ -162,19 +162,19 @@
             ValueTypeEnum = null;
             PairingEnum = null;
 
-            _orientationEnum = null;
-            _labelingEnum = null;
-            _resizingEnum = null;
-            _barWidthEnum = null;
+            OrientationEnum = null;
+            LabelingEnum = null;
+            ResizingEnum = null;
+            BarWidthEnum = null;
 
-            _sideEnum = null;
-            _facetEnum = null;
-            _connectEnum = null;
-            _contactEnum = null;
-            _computeTypeEnum = null;
-            _attatchEnum = null;
-            _lineStyleEnum = null;
-            _dashStyleEnum = null;
+            SideEnum = null;
+            FacetEnum = null;
+            ConnectEnum = null;
+            ContactEnum = null;
+            ComputeTypeEnum = null;
+            AttatchEnum = null;
+            LineStyleEnum = null;
+            DashStyleEnum = null;
         }
     }
 }

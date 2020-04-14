@@ -4,15 +4,45 @@ using Windows.Storage.Streams;
 
 namespace ModelGraph.Core
 {
-    public class SymbolXStore : ExternalStoreOf<SymbolX>, ISerializer
+    public class SymbolXStore : ExternalStoreOf<SymbolX>, ISerializer, IPropertyManager
     {
         static Guid _serializerGuid = new Guid("D3956312-BEC7-4988-8228-DCA95CF23781");
         static byte _formatVersion = 1;
 
-        internal SymbolXStore(Chef owner) : base(owner, Trait.SymbolXStore)
+        internal PropertyOf<SymbolX, string> NameProperty;
+        internal PropertyOf<SymbolX, string> AttachProperty;
+
+        internal SymbolXStore(Chef chef) : base(chef, Trait.SymbolXStore)
         {
-            owner.RegisterItemSerializer((_serializerGuid, this));
+            chef.RegisterItemSerializer((_serializerGuid, this));
+            CreateProperties(chef);
         }
+
+        #region CreateProperties  =============================================
+        private void CreateProperties(Chef chef)
+        {
+            {
+                var p = NameProperty = new PropertyOf<SymbolX, string>(chef.PropertyStore, Trait.SymbolXName_P);
+                p.GetValFunc = (item) => p.Cast(item).Name;
+                p.SetValFunc = (item, value) => { p.Cast(item).Name = value; return true; };
+                p.Value = new StringValue(p);
+            }
+            {
+                var p = AttachProperty = new PropertyOf<SymbolX, string>(chef.PropertyStore, Trait.SymbolXAttatch_P, chef.AttatchEnum);
+                p.GetValFunc = (item) => chef.GetEnumZName(p.EnumZ, (int)p.Cast(item).Attach);
+                p.SetValFunc = (item, value) => { p.Cast(item).Attach = (Attach)chef.GetEnumZKey(p.EnumZ, value); return true; };
+                p.Value = new StringValue(p);
+            }
+        }
+        #endregion
+
+        #region IPropertyManager  =============================================
+        public Property[] GetPropreties(ItemModel model = null) => new Property[]
+        {
+            NameProperty,
+            AttachProperty,
+        };
+        #endregion
 
         #region ISerializer  ==================================================
         public void ReadData(DataReader r, Item[] items)

@@ -31,7 +31,7 @@ namespace ModelGraph.Core
             }
             else if (SymbolX_QueryX.TryGetParent(qx, out SymbolX sx))
             {
-                ValidateWhere(qx, qx, _queryXWhereProperty, true);
+                ValidateWhere(qx, qx, QueryXStore.WhereProperty, true);
             }
         }
 
@@ -42,7 +42,7 @@ namespace ModelGraph.Core
             if (clearError)
             {
                 ClearError(cx);
-                ClearError(cx, _computeXSelectProperty);
+                ClearError(cx, ComputeXStore.SelectProperty);
             }
             cx.ModelDelta++;
             if (!ComputeX_QueryX.TryGetChild(cx, out QueryX qx))
@@ -56,12 +56,12 @@ namespace ModelGraph.Core
                 {
                     if (cx.CompuType == CompuType.RowValue)
                     {
-                        TryAddErrorNone(cx, _computeXSelectProperty, Trait.ComputeMissingSelectError);
+                        TryAddErrorNone(cx, ComputeXStore.SelectProperty, Trait.ComputeMissingSelectError);
                     }
                 }
                 else
                 {
-                    ValidateSelect(qx, cx, _computeXSelectProperty, clearError);
+                    ValidateSelect(qx, cx, ComputeXStore.SelectProperty, clearError);
                 }
             }
             if (QueryX_QueryX.TryGetChildren(qx, out IList<QueryX> children))
@@ -109,8 +109,8 @@ namespace ModelGraph.Core
                 qx.ModelDelta++;
                 if (clearError)
                 {
-                    ClearError(qx, _queryXWhereProperty);
-                    ClearError(qx, _queryXSelectProperty);
+                    ClearError(qx, QueryXStore.WhereProperty);
+                    ClearError(qx, QueryXStore.SelectProperty);
                 }
 
                 if (QueryX_QueryX.TryGetChildren(qx, out IList<QueryX> children))
@@ -134,13 +134,13 @@ namespace ModelGraph.Core
                         qx.Select.TryResolve();
                         if (qx.Select.AnyUnresolved)
                         {
-                            var error = TryAddErrorMany(qx, _queryXSelectProperty, Trait.QueryUnresolvedSelectError);
+                            var error = TryAddErrorMany(qx, QueryXStore.SelectProperty, Trait.QueryUnresolvedSelectError);
                             if (error != null) qx.Select.GetTree(error.List);
                         }
                     }
                     else
                     {
-                        var error = TryAddErrorMany(qx, _queryXSelectProperty, Trait.QueryInvalidSelectError);
+                        var error = TryAddErrorMany(qx, QueryXStore.SelectProperty, Trait.QueryInvalidSelectError);
                         if (error != null) qx.Select.GetTree(error.List);
                     }
                 }
@@ -151,13 +151,13 @@ namespace ModelGraph.Core
                         qx.Where.TryResolve();
                         if (qx.Where.AnyUnresolved)
                         {
-                            var error = TryAddErrorMany(qx, _queryXWhereProperty, Trait.QueryUnresolvedWhereError);
+                            var error = TryAddErrorMany(qx, QueryXStore.WhereProperty, Trait.QueryUnresolvedWhereError);
                             if (error != null) qx.Where.GetTree(error.List);
                         }
                     }
                     else
                     {
-                        var error = TryAddErrorMany(qx, _queryXWhereProperty, Trait.QueryInvalidWhereError);
+                        var error = TryAddErrorMany(qx, QueryXStore.WhereProperty, Trait.QueryInvalidWhereError);
                         if (error != null) qx.Where.GetTree(error.List);
                     }
                 }
@@ -259,12 +259,12 @@ namespace ModelGraph.Core
                 tail = head;
             }
         }
-        string GetSelectName(QueryX vx)
+        internal string GetSelectName(QueryX vx)
         {
             GetHeadTail(vx, out Store head, out Store tail);
             return GetIdentity(tail, IdentityStyle.Single);
         }
-        string GetWhereName(QueryX sx)
+        internal string GetWhereName(QueryX sx)
         {
             GetHeadTail(sx, out Store head, out Store tail);
             return GetIdentity(tail, IdentityStyle.Single);
@@ -370,7 +370,7 @@ namespace ModelGraph.Core
         #endregion
 
         #region GeTarget<String, Value>  ======================================
-        private string GetTargetString(Target targ)
+        internal string GetTargetString(Target targ)
         {
             if (targ == Target.Any) return "any";
             if (targ == Target.None) return string.Empty;
@@ -406,7 +406,7 @@ namespace ModelGraph.Core
                 sb.Append(v);
             }
         }
-        private Target GetTargetValue(string val)
+        internal Target GetTargetValue(string val)
         {
             var targ = Target.None;
             var v = " " + val.ToUpper().Replace(",", " ").Replace("-", " ").Replace("_", " ") + " ";
@@ -438,7 +438,7 @@ namespace ModelGraph.Core
         #endregion
 
         #region Legacy  =======================================================
-        bool TrySetWhereProperty(QueryX qx, string val)
+        internal bool TrySetWhereProperty(QueryX qx, string val)
         {
             qx.WhereString = val;
             ValidateQueryDependants(qx);
@@ -447,7 +447,7 @@ namespace ModelGraph.Core
 
         //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-        bool TrySetSelectProperty(QueryX qx, string val)
+        internal bool TrySetSelectProperty(QueryX qx, string val)
         {
             qx.SelectString = val;
             ValidateQueryDependants(qx);
@@ -456,7 +456,7 @@ namespace ModelGraph.Core
 
         //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-        private string GetQueryXRelationName(ItemModel m)
+        internal string GetQueryXRelationName(ItemModel m)
         {
             if (Relation_QueryX.TryGetParent(m.Item, out Relation parent))
             {
@@ -467,14 +467,14 @@ namespace ModelGraph.Core
 
         //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-        string QueryXLinkName(ItemModel model)
+        internal string QueryXLinkName(ItemModel model)
         {
             return QueryXFilterName(model.Item as QueryX);
         }
 
         //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-        string QueryXFilterName(QueryX sd)
+        internal string QueryXFilterName(QueryX sd)
         {
             GetHeadTail(sd, out Store head, out Store tail);
             if (head == null || tail == null) return InvalidItem;
@@ -491,7 +491,7 @@ namespace ModelGraph.Core
 
         //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-        string QueryXHeadName(ItemModel m)
+        internal string QueryXHeadName(ItemModel m)
         {
             var sd = m.Item as QueryX;
             GetHeadTail(sd, out Store head1, out Store tail1);

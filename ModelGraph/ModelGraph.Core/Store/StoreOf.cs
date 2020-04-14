@@ -26,8 +26,6 @@ namespace ModelGraph.Core
         internal override void RemoveAll() { _items.Clear(); UpdateDelta(); }
         internal override int GetDesdantCount()
         {
-            if (IsInternal) ;
-
             var count = 0;
             foreach (var item in Items)
             {

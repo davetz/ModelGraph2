@@ -20,7 +20,7 @@ namespace ModelGraph.Core
             CreateProperties(chef);
         }
 
-        #region CreateProperties  ===========================================
+        #region CreateProperties  =============================================
         private void CreateProperties(Chef chef)
         {
             var propertyStore = chef.PropertyStore;

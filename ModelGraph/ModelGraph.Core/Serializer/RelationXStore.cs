@@ -5,17 +5,65 @@ using Windows.Storage.Streams;
 
 namespace ModelGraph.Core
 {
-    public class RelationXStore : ExternalStoreOf<RelationX>, ISerializer, IRelationStore
+    public class RelationXStore : ExternalStoreOf<RelationX>, ISerializer, IRelationStore, IPropertyManager
     {
         static Guid _serializerGuid = new Guid("D950F508-B774-4838-B81A-757EFDC40518");
         static byte _formatVersion = 1;
 
-        internal RelationXStore(Chef owner) : base(owner, Trait.RelationXStore)
-        {
-            owner.RegisterItemSerializer((_serializerGuid, this));
+        internal PropertyOf<RelationX, string> NameProperty;
+        internal PropertyOf<RelationX, string> SummaryProperty;
+        internal PropertyOf<RelationX, string> PairingProperty;
+        internal PropertyOf<RelationX, bool> IsRequiredProperty;
 
-            new RelationXLink(owner, this);
+        internal RelationXStore(Chef chef) : base(chef, Trait.RelationXStore)
+        {
+            chef.RegisterItemSerializer((_serializerGuid, this));
+            CreateProperties(chef);
+
+            new RelationXLink(chef, this);
         }
+
+        #region CreateProperties  =============================================
+        private void CreateProperties(Chef chef)
+        {
+            {
+                var p = NameProperty = new PropertyOf<RelationX, string>(chef.PropertyStore, Trait.RelationName_P);
+                p.GetValFunc = (item) => p.Cast(item).Name;
+                p.SetValFunc = (item, value) => { p.Cast(item).Name = value; return true; };
+                p.Value = new StringValue(p);
+            }
+            {
+                var p = SummaryProperty = new PropertyOf<RelationX, string>(chef.PropertyStore, Trait.RelationSummary_P);
+                p.GetValFunc = (item) => p.Cast(item).Summary;
+                p.SetValFunc = (item, value) => { p.Cast(item).Summary = value; return true; };
+                p.Value = new StringValue(p);
+            }
+            {
+                var p = PairingProperty = new PropertyOf<RelationX, string>(chef.PropertyStore, Trait.RelationPairing_P, chef.PairingEnum);
+                p.GetValFunc = (item) => chef.GetEnumZName(p.EnumZ, (int)p.Cast(item).Pairing);
+                p.SetValFunc = (item, value) => p.Cast(item).TrySetPairing((Pairing)chef.GetEnumZKey(p.EnumZ, value));
+                p.Value = new StringValue(p);
+            }
+            {
+                var p = IsRequiredProperty = new PropertyOf<RelationX, bool>(chef.PropertyStore, Trait.RelationIsRequired_P);
+                p.GetValFunc = (item) => p.Cast(item).IsRequired;
+                p.SetValFunc = (item, value) => { p.Cast(item).IsRequired = value; return true; };
+                p.Value = new BoolValue(p);
+            }
+        }
+        #endregion
+
+        #region IPropertyManager  =============================================
+        public Property[] GetPropreties(ItemModel model = null) => new Property[]
+        {
+            NameProperty,
+            SummaryProperty,
+            PairingProperty,
+            IsRequiredProperty,
+        };
+        #endregion
+
+        #region IRelationStore  ===============================================
         public Relation[] GetRelationArray()
         {
             var relationArray = new Relation[Count];
@@ -25,6 +73,7 @@ namespace ModelGraph.Core
             }
             return relationArray;
         }
+        #endregion
 
         #region ISerializer  ==================================================
         public void WriteData(DataWriter w, Dictionary<Item, int> itemIndex)

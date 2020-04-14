@@ -15,27 +15,27 @@ namespace ModelGraph.Core
             // static enum properties
             Property_Enum = new Dictionary<Property, EnumZ>
             {
-                { _columnXTypeOfProperty, ValueTypeEnum },
+                { ColumnXStore.TypeOfProperty, ValueTypeEnum },
 
-                { _relationXPairingProperty, PairingEnum },
+                { RelationXStore.PairingProperty, PairingEnum },
 
-                { _nodeOrientationProperty, _orientationEnum },
-                { _nodeLabelingProperty, _labelingEnum },
-                { _nodeResizingProperty, _resizingEnum },
-                { _nodeBarWidthProperty, _barWidthEnum },
+                { GraphParams.OrientationProperty, OrientationEnum },
+                { GraphParams.LabelingProperty, LabelingEnum },
+                { GraphParams.ResizingProperty, ResizingEnum },
+                { GraphParams.BarWidthProperty, BarWidthEnum },
 
-                { _edgeFacet1Property, _facetEnum },
-                { _edgeFacet2Property, _facetEnum },
+                { GraphParams.Facet1Property, FacetEnum },
+                { GraphParams.Facet2Property, FacetEnum },
 
-                { _symbolXAttachProperty, _attatchEnum },
+                { SymbolXStore.AttachProperty, AttatchEnum },
 
-                { _queryXLineStyleProperty, _lineStyleEnum },
-                { _queryXDashStyleProperty, _dashStyleEnum },
+                { QueryXStore.LineStyleProperty, LineStyleEnum },
+                { QueryXStore.DashStyleProperty, DashStyleEnum },
 
-                { _queryXFacet1Property, _facetEnum },
-                { _queryXFacet2Property, _facetEnum },
+                { QueryXStore.Facet1Property, FacetEnum },
+                { QueryXStore.Facet2Property, FacetEnum },
 
-                { _computeXCompuTypeProperty, _computeTypeEnum },
+                { ComputeXStore.CompuTypeProperty, ComputeTypeEnum },
             };
         }
     }

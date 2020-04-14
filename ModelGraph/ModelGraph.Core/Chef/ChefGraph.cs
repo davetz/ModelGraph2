@@ -40,10 +40,10 @@ namespace ModelGraph.Core
 
             if (g.NodeItems.Count > 0)
             {
-                if (!gx.GraphParms.TryGetValue(rt, out Dictionary<QueryX, List<NodeEdge>> qxParams))
+                if (!gx.Root_QueryX_Parms.TryGetValue(rt, out Dictionary<QueryX, List<NodeEdge>> qxParams))
                 {
                     qxParams = new Dictionary<QueryX, List<NodeEdge>>();
-                    gx.GraphParms[rt] = qxParams;
+                    gx.Root_QueryX_Parms[rt] = qxParams;
                 }
 
                 #region Remove invalid QxParams  ==============================
@@ -265,7 +265,7 @@ namespace ModelGraph.Core
             }
             else
             {
-                gx.GraphParms.Remove(rt);
+                gx.Root_QueryX_Parms.Remove(rt);
             }
 
             #region OpenPathIndex  ============================================
@@ -370,7 +370,7 @@ namespace ModelGraph.Core
             }
         }
 
-        private bool RefreshGraphX(QueryX qx)
+        internal bool RefreshGraphX(QueryX qx)
         {
             var qr = qx;
             while (QueryX_QueryX.TryGetParent(qr, out qx)) { qr = qx; }

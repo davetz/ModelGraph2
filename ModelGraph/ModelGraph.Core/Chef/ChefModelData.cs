@@ -989,7 +989,7 @@ namespace ModelGraph.Core
 
                     m.InitChildModels(prev);
 
-                    AddProperyModel(prev, m, _showItemIndexProperty);
+                    AddProperyModel(prev, m, ShowItemIndexProperty);
 
                     return (true, true);
                 },
@@ -3040,8 +3040,8 @@ namespace ModelGraph.Core
 
                     if (m.IsExpandedRight)
                     {
-                        anyChange |= AddProperyModel(prev, m, _viewXNameProperty);
-                        anyChange |= AddProperyModel(prev, m, _viewXSummaryProperty);
+                        anyChange |= AddProperyModel(prev, m, ViewXStore.NameProperty);
+                        anyChange |= AddProperyModel(prev, m, ViewXStore.SummaryProperty);
                     }
 
                     if (m.IsExpandedLeft)
@@ -3177,9 +3177,9 @@ namespace ModelGraph.Core
 
                     if (m.IsExpandedRight)
                     {
-                        anyChange |= AddProperyModel(prev, m, _queryXRelationProperty);
-                        anyChange |= AddProperyModel(prev, m, _queryXIsReversedProperty);
-                        anyChange |= AddProperyModel(prev, m, _queryXRootWhereProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXStore.RelationProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXStore.IsReversedProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXStore.RootWhereProperty);
                     }
 
                     if (m.IsExpandedLeft)
@@ -3893,10 +3893,10 @@ namespace ModelGraph.Core
 
                     m.InitChildModels(prev);
 
-                    AddProperyModel(prev, m, _graphXTerminalLengthProperty);
-                    AddProperyModel(prev, m, _graphXTerminalSpacingProperty);
-                    AddProperyModel(prev, m, _graphXTerminalStretchProperty);
-                    AddProperyModel(prev, m, _graphXSymbolSizeProperty);
+                    AddProperyModel(prev, m, GraphXStore.TerminalLengthProperty);
+                    AddProperyModel(prev, m, GraphXStore.TerminalSpacingProperty);
+                    AddProperyModel(prev, m, GraphXStore.TerminalStretchProperty);
+                    AddProperyModel(prev, m, GraphXStore.SymbolSizeProperty);
 
                     return (true, true);
                 }
@@ -4055,8 +4055,8 @@ namespace ModelGraph.Core
 
                     m.InitChildModels(prev);
 
-                    AddProperyModel(prev, m, _pairXTextProperty);
-                    AddProperyModel(prev, m, _pairXValueProperty);
+                    AddProperyModel(prev, m, EnumXStore.TextProperty);
+                    AddProperyModel(prev, m, EnumXStore.ValueProperty);
 
                     return (true, true);
                 }
@@ -4119,8 +4119,8 @@ namespace ModelGraph.Core
                     var anyChange = false;
                     if (m.IsExpandedRight)
                     {
-                        anyChange |= AddProperyModel(prev, m, _enumXNameProperty);
-                        anyChange |= AddProperyModel(prev, m, _enumXSummaryProperty);
+                        anyChange |= AddProperyModel(prev, m, EnumXStore.NameProperty);
+                        anyChange |= AddProperyModel(prev, m, EnumXStore.SummaryProperty);
                     }
 
                     if (m.IsExpandedLeft)
@@ -4192,8 +4192,8 @@ namespace ModelGraph.Core
 
                     if (m.IsExpandedRight)
                     {
-                        AddProperyModel(prev, m, _tableXNameProperty);
-                        AddProperyModel(prev, m, _tableXSummaryProperty);
+                        AddProperyModel(prev, m, TableXStore.NameProperty);
+                        AddProperyModel(prev, m, TableXStore.SummaryProperty);
                     }
 
                     if (m.IsExpandedLeft)
@@ -4261,8 +4261,8 @@ namespace ModelGraph.Core
 
                     if (m.IsExpandedRight)
                     {
-                        AddProperyModel(prev, m, _graphXNameProperty);
-                        AddProperyModel(prev, m, _graphXSummaryProperty);
+                        AddProperyModel(prev, m, GraphXStore.NameProperty);
+                        AddProperyModel(prev, m, GraphXStore.SummaryProperty);
                     }
 
                     if (m.IsExpandedLeft)
@@ -4333,8 +4333,8 @@ namespace ModelGraph.Core
 
                     m.InitChildModels(prev);
 
-                    AddProperyModel(prev, m, _symbolXNameProperty);
-                    AddProperyModel(prev, m, _symbolXAttachProperty);
+                    AddProperyModel(prev, m, SymbolXStore.NameProperty);
+                    AddProperyModel(prev, m, SymbolXStore.AttachProperty);
 
                     return (true, true);
                 }
@@ -4391,10 +4391,10 @@ namespace ModelGraph.Core
 
                     m.InitChildModels(prev);
 
-                    AddProperyModel(prev, m, _columnXNameProperty);
-                    AddProperyModel(prev, m, _columnXSummaryProperty);
-                    AddProperyModel(prev, m, _columnXTypeOfProperty);
-                    AddProperyModel(prev, m, _columnXIsChoiceProperty);
+                    AddProperyModel(prev, m, ColumnXStore.NameProperty);
+                    AddProperyModel(prev, m, ColumnXStore.SummaryProperty);
+                    AddProperyModel(prev, m, ColumnXStore.TypeOfProperty);
+                    AddProperyModel(prev, m, ColumnXStore.IsChoiceProperty);
 
                     return (true, true);
                 }
@@ -4478,36 +4478,36 @@ namespace ModelGraph.Core
                             case CompuType.RowValue:
                                 if (qx.HasSelect)
                                 {
-                                    AddProperyModel(prev, m, _computeXNameProperty);
-                                    AddProperyModel(prev, m, _computeXSummaryProperty);
-                                    AddProperyModel(prev, m, _computeXCompuTypeProperty);
-                                    AddProperyModel(prev, m, _computeXSelectProperty);
-                                    AddProperyModel(prev, m, _computeXValueTypeProperty);
+                                    AddProperyModel(prev, m, ComputeXStore.NameProperty);
+                                    AddProperyModel(prev, m, ComputeXStore.SummaryProperty);
+                                    AddProperyModel(prev, m, ComputeXStore.CompuTypeProperty);
+                                    AddProperyModel(prev, m, ComputeXStore.SelectProperty);
+                                    AddProperyModel(prev, m, ComputeXStore.ValueTypeProperty);
                                 }
                                 else
                                 {
-                                    AddProperyModel(prev, m, _computeXNameProperty);
-                                    AddProperyModel(prev, m, _computeXSummaryProperty);
-                                    AddProperyModel(prev, m, _computeXCompuTypeProperty);
-                                    AddProperyModel(prev, m, _computeXSelectProperty);
+                                    AddProperyModel(prev, m, ComputeXStore.NameProperty);
+                                    AddProperyModel(prev, m, ComputeXStore.SummaryProperty);
+                                    AddProperyModel(prev, m, ComputeXStore.CompuTypeProperty);
+                                    AddProperyModel(prev, m, ComputeXStore.SelectProperty);
                                 }
                                 break;
 
                             case CompuType.RelatedValue:
-                                AddProperyModel(prev, m, _computeXNameProperty);
-                                AddProperyModel(prev, m, _computeXSummaryProperty);
-                                AddProperyModel(prev, m, _computeXCompuTypeProperty);
-                                AddProperyModel(prev, m, _computeXValueTypeProperty);
+                                AddProperyModel(prev, m, ComputeXStore.NameProperty);
+                                AddProperyModel(prev, m, ComputeXStore.SummaryProperty);
+                                AddProperyModel(prev, m, ComputeXStore.CompuTypeProperty);
+                                AddProperyModel(prev, m, ComputeXStore.ValueTypeProperty);
                                 break;
 
                             case CompuType.CompositeString:
                             case CompuType.CompositeReversed:
-                                AddProperyModel(prev, m, _computeXNameProperty);
-                                AddProperyModel(prev, m, _computeXSummaryProperty);
-                                AddProperyModel(prev, m, _computeXCompuTypeProperty);
-                                AddProperyModel(prev, m, _computeXSeparatorProperty);
-                                AddProperyModel(prev, m, _computeXSelectProperty);
-                                AddProperyModel(prev, m, _computeXValueTypeProperty);
+                                AddProperyModel(prev, m, ComputeXStore.NameProperty);
+                                AddProperyModel(prev, m, ComputeXStore.SummaryProperty);
+                                AddProperyModel(prev, m, ComputeXStore.CompuTypeProperty);
+                                AddProperyModel(prev, m, ComputeXStore.SeparatorProperty);
+                                AddProperyModel(prev, m, ComputeXStore.SelectProperty);
+                                AddProperyModel(prev, m, ComputeXStore.ValueTypeProperty);
                                 break;
                         }
                     }
@@ -4573,7 +4573,7 @@ namespace ModelGraph.Core
 
                     m.InitChildModels(prev);
 
-                    AddProperyModel(prev, m, _symbolXNameProperty);
+                    AddProperyModel(prev, m, SymbolXStore.NameProperty);
 
                     return (true, true);
                 }
@@ -5069,10 +5069,10 @@ namespace ModelGraph.Core
 
                     m.InitChildModels(prev);
 
-                    AddProperyModel(prev, m, _relationXNameProperty);
-                    AddProperyModel(prev, m, _relationXSummaryProperty);
-                    AddProperyModel(prev, m, _relationXPairingProperty);
-                    AddProperyModel(prev, m, _relationXIsRequiredProperty);
+                    AddProperyModel(prev, m, RelationXStore.NameProperty);
+                    AddProperyModel(prev, m, RelationXStore.SummaryProperty);
+                    AddProperyModel(prev, m, RelationXStore.PairingProperty);
+                    AddProperyModel(prev, m, RelationXStore.IsRequiredProperty);
 
                     return (true, true);
                 }
@@ -5138,10 +5138,10 @@ namespace ModelGraph.Core
 
                     m.InitChildModels(prev);
 
-                    AddProperyModel(prev, m, _relationXNameProperty);
-                    AddProperyModel(prev, m, _relationXSummaryProperty);
-                    AddProperyModel(prev, m, _relationXPairingProperty);
-                    AddProperyModel(prev, m, _relationXIsRequiredProperty);
+                    AddProperyModel(prev, m, RelationXStore.NameProperty);
+                    AddProperyModel(prev, m, RelationXStore.SummaryProperty);
+                    AddProperyModel(prev, m, RelationXStore.PairingProperty);
+                    AddProperyModel(prev, m, RelationXStore.IsRequiredProperty);
 
                     return (true, true);
                 }
@@ -5760,7 +5760,7 @@ namespace ModelGraph.Core
                     var anyChange = false;
                     if (m.IsExpandedRight)
                     {
-                        anyChange |= AddProperyModel(prev, m, _queryXRootWhereProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXStore.RootWhereProperty);
                     }
 
                     if (m.IsExpandedLeft)
@@ -5878,9 +5878,9 @@ namespace ModelGraph.Core
                     var anyChange = false;
                     if (m.IsExpandedRight)
                     {
-                        anyChange |= AddProperyModel(prev, m, _queryXRelationProperty);
-                        anyChange |= AddProperyModel(prev, m, _queryXIsReversedProperty);
-                        anyChange |= AddProperyModel(prev, m, _queryXRootWhereProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXStore.RelationProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXStore.IsReversedProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXStore.RootWhereProperty);
                     }
 
                     if (m.IsExpandedLeft)
@@ -5988,20 +5988,20 @@ namespace ModelGraph.Core
                     var anyChange = false;
                     if (m.IsExpandedRight)
                     {
-                        anyChange |= AddProperyModel(prev, m, _queryXRelationProperty);
-                        anyChange |= AddProperyModel(prev, m, _queryXIsReversedProperty);
-                        anyChange |= AddProperyModel(prev, m, _queryXIsBreakPointProperty);
-                        anyChange |= AddProperyModel(prev, m, _queryXExclusiveKeyProperty);
-                                                anyChange |= AddProperyModel(prev, m, _queryXRootWhereProperty);
-                        anyChange |= AddProperyModel(prev, m, _queryXLineColorProperty);
-                        anyChange |= AddProperyModel(prev, m, _queryXLineStyleProperty);
-                        anyChange |= AddProperyModel(prev, m, _queryXDashStyleProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXStore.RelationProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXStore.IsReversedProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXStore.IsBreakPointProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXStore.ExclusiveKeyProperty);
+                                                anyChange |= AddProperyModel(prev, m, QueryXStore.RootWhereProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXStore.LineColorProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXStore.LineStyleProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXStore.DashStyleProperty);
 
-                        anyChange |= AddProperyModel(prev, m, _queryXFacet1Property);
-                        anyChange |= AddProperyModel(prev, m, _queryXConnect1Property);
+                        anyChange |= AddProperyModel(prev, m, QueryXStore.Facet1Property);
+                        anyChange |= AddProperyModel(prev, m, QueryXStore.Connect1Property);
 
-                        anyChange |= AddProperyModel(prev, m, _queryXFacet2Property);
-                        anyChange |= AddProperyModel(prev, m, _queryXConnect2Property);
+                        anyChange |= AddProperyModel(prev, m, QueryXStore.Facet2Property);
+                        anyChange |= AddProperyModel(prev, m, QueryXStore.Connect2Property);
                     }
 
                     if (m.IsExpandedLeft)
@@ -6081,10 +6081,10 @@ namespace ModelGraph.Core
                     var anyChange = false;
                     if (m.IsExpandedRight)
                     {
-                        anyChange |= AddProperyModel(prev, m, _queryXRelationProperty);
-                        anyChange |= AddProperyModel(prev, m, _queryXIsReversedProperty);
-                        anyChange |= AddProperyModel(prev, m, _queryXIsBreakPointProperty);
-                        anyChange |= AddProperyModel(prev, m, _queryXRootWhereProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXStore.RelationProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXStore.IsReversedProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXStore.IsBreakPointProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXStore.RootWhereProperty);
                     }
 
                     if (m.IsExpandedLeft)
@@ -6160,9 +6160,9 @@ namespace ModelGraph.Core
                     var anyChange = false;
                     if (m.IsExpandedRight)
                     {
-                        anyChange |= AddProperyModel(prev, m, _queryXRelationProperty);
-                        anyChange |= AddProperyModel(prev, m, _queryXIsReversedProperty);
-                        anyChange |= AddProperyModel(prev, m, _queryXRootWhereProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXStore.RelationProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXStore.IsReversedProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXStore.RootWhereProperty);
                     }
 
                     if (m.IsExpandedLeft)
@@ -6242,9 +6242,9 @@ namespace ModelGraph.Core
                     var anyChange = false;
                     if (m.IsExpandedRight)
                     {
-                        anyChange |= AddProperyModel(prev, m, _queryXRelationProperty);
-                        anyChange |= AddProperyModel(prev, m, _queryXIsReversedProperty);
-                        anyChange |= AddProperyModel(prev, m, _queryXRootWhereProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXStore.RelationProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXStore.IsReversedProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXStore.RootWhereProperty);
                     }
 
                     if (m.IsExpandedLeft)
@@ -6324,9 +6324,9 @@ namespace ModelGraph.Core
                     var anyChange = false;
                     if (m.IsExpandedRight)
                     {
-                        anyChange |= AddProperyModel(prev, m, _queryXRelationProperty);
-                        anyChange |= AddProperyModel(prev, m, _queryXIsReversedProperty);
-                        anyChange |= AddProperyModel(prev, m, _queryXRootWhereProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXStore.RelationProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXStore.IsReversedProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXStore.RootWhereProperty);
                     }
 
                     if (m.IsExpandedLeft)
@@ -6406,9 +6406,9 @@ namespace ModelGraph.Core
                     var anyChange = false;
                     if (m.IsExpandedRight)
                     {
-                        anyChange |= AddProperyModel(prev, m, _queryXRelationProperty);
-                        anyChange |= AddProperyModel(prev, m, _queryXIsReversedProperty);
-                        anyChange |= AddProperyModel(prev, m, _queryXRootWhereProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXStore.RelationProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXStore.IsReversedProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXStore.RootWhereProperty);
                     }
 
                     if (m.IsExpandedLeft)
@@ -6471,7 +6471,7 @@ namespace ModelGraph.Core
 
                     m.InitChildModels(prev);
 
-                    AddProperyModel(prev, m, _queryXWhereProperty);
+                    AddProperyModel(prev, m, QueryXStore.WhereProperty);
 
                     return (true, true);
                 }
@@ -6546,19 +6546,19 @@ namespace ModelGraph.Core
                     {
                         if (qx.HasSelect)
                         {
-                            anyChange |= AddProperyModel(prev, m, _queryXRelationProperty);
-                            anyChange |= AddProperyModel(prev, m, _queryXIsReversedProperty);
-                            anyChange |= AddProperyModel(prev, m, _queryXRootWhereProperty);
-                            anyChange |= AddProperyModel(prev, m, _queryXSelectProperty);
-                            anyChange |= AddProperyModel(prev, m, _queryXValueTypeProperty);
+                            anyChange |= AddProperyModel(prev, m, QueryXStore.RelationProperty);
+                            anyChange |= AddProperyModel(prev, m, QueryXStore.IsReversedProperty);
+                            anyChange |= AddProperyModel(prev, m, QueryXStore.RootWhereProperty);
+                            anyChange |= AddProperyModel(prev, m, QueryXStore.SelectProperty);
+                            anyChange |= AddProperyModel(prev, m, QueryXStore.ValueTypeProperty);
 
                         }
                         else
                         {
-                            anyChange |= AddProperyModel(prev, m, _queryXRelationProperty);
-                            anyChange |= AddProperyModel(prev, m, _queryXIsReversedProperty);
-                            anyChange |= AddProperyModel(prev, m, _queryXRootWhereProperty);
-                            anyChange |= AddProperyModel(prev, m, _queryXSelectProperty);
+                            anyChange |= AddProperyModel(prev, m, QueryXStore.RelationProperty);
+                            anyChange |= AddProperyModel(prev, m, QueryXStore.IsReversedProperty);
+                            anyChange |= AddProperyModel(prev, m, QueryXStore.RootWhereProperty);
+                            anyChange |= AddProperyModel(prev, m, QueryXStore.SelectProperty);
                         }
                     }
 
@@ -6641,11 +6641,11 @@ namespace ModelGraph.Core
                     var anyChange = false;
                     if (m.IsExpandedRight)
                     {
-                        anyChange |= AddProperyModel(prev, m, _queryXRelationProperty);
-                        anyChange |= AddProperyModel(prev, m, _queryXIsReversedProperty);
-                        anyChange |= AddProperyModel(prev, m, _queryXRootWhereProperty);
-                        anyChange |= AddProperyModel(prev, m, _queryXSelectProperty);
-                        anyChange |= AddProperyModel(prev, m, _queryXValueTypeProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXStore.RelationProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXStore.IsReversedProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXStore.RootWhereProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXStore.SelectProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXStore.ValueTypeProperty);
                     }
 
                     if (m.IsExpandedLeft)
@@ -8579,12 +8579,12 @@ namespace ModelGraph.Core
                     var anyChange = false;
                     if (m.IsExpandedRight)
                     {
-                        anyChange |= AddProperyModel(prev, m, _nodeCenterXYProperty);
-                        anyChange |= AddProperyModel(prev, m, _nodeSizeWHProperty);
-                        anyChange |= AddProperyModel(prev, m, _nodeOrientationProperty);
-                        anyChange |= AddProperyModel(prev, m, _nodeLabelingProperty);
-                        anyChange |= AddProperyModel(prev, m, _nodeResizingProperty);
-                        anyChange |= AddProperyModel(prev, m, _nodeBarWidthProperty);
+                        anyChange |= AddProperyModel(prev, m, GraphParams.CenterXYProperty);
+                        anyChange |= AddProperyModel(prev, m, GraphParams.SizeWHProperty);
+                        anyChange |= AddProperyModel(prev, m, GraphParams.OrientationProperty);
+                        anyChange |= AddProperyModel(prev, m, GraphParams.LabelingProperty);
+                        anyChange |= AddProperyModel(prev, m, GraphParams.ResizingProperty);
+                        anyChange |= AddProperyModel(prev, m, GraphParams.BarWidthProperty);
                     }
                     
                     if (m.IsExpandedLeft)
@@ -8634,8 +8634,8 @@ namespace ModelGraph.Core
 
                     m.InitChildModels(prev);
 
-                    AddProperyModel(prev, m, _edgeFacet1Property);
-                    AddProperyModel(prev, m, _edgeFacet2Property);
+                    AddProperyModel(prev, m, GraphParams.Facet1Property);
+                    AddProperyModel(prev, m, GraphParams.Facet2Property);
 
                     return (true, true);
                 }

@@ -51,7 +51,7 @@ namespace ModelGraph.Core
         #endregion
 
         #region TrySet...Property  ============================================
-        private bool TrySetComputeTypeProperty(ComputeX cx, int val)
+        internal bool TrySetComputeTypeProperty(ComputeX cx, int val)
         {
             var type = (CompuType)val;
             if (cx.CompuType != type)
@@ -288,11 +288,11 @@ namespace ModelGraph.Core
         #endregion
 
         #region GetSelectorName  ==============================================
-        string GetSelectorName(ComputeX item)
+        internal string GetSelectorName(ComputeX item)
         {
             return Store_ComputeX.TryGetParent(item, out Store tbl) ? GetIdentity(tbl, IdentityStyle.Single) : "Select";
         }
-        int GetValueType(QueryX qx)
+        internal int GetValueType(QueryX qx)
         {
             if (qx.Select == null) return (int)ValType.IsUnknown;
             return (int)qx.Select.ValueType;
