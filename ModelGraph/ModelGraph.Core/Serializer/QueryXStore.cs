@@ -4,7 +4,7 @@ using Windows.Storage.Streams;
 
 namespace ModelGraph.Core
 {
-    public class QueryXStore : ExternalStoreOf<QueryX>, ISerializer, IPropertyManager
+    public class QueryXStore : ExternalStoreOf<QueryX>, ISerializer
     {
         static Guid _serializerGuid = new Guid("33B9B8A4-9332-4902-A3C1-37C5F971B6FF");
         static byte _formatVersion = 1;
@@ -37,77 +37,90 @@ namespace ModelGraph.Core
         #region CreateProperties  =============================================
         private void CreateProperties(Chef chef)
         {
+            var props = new List<Property>(15);
             {
                 var p = RootWhereProperty = new PropertyOf<QueryX, string>(chef.PropertyStore, Trait.QueryXSelect_P);
                 p.GetValFunc = (item) => p.Cast(item).WhereString;
                 p.SetValFunc = (item, value) => chef.TrySetWhereProperty(p.Cast(item), value);
                 p.Value = new StringValue(p);
                 p.GetItemNameFunc = (item) => { return chef.GetWhereName(p.Cast(item)); };
+                props.Add(p);
             }
             {
                 var p = Facet1Property = new PropertyOf<QueryX, string>(chef.PropertyStore, Trait.QueryXFacet1_P, chef.FacetEnum);
                 p.GetValFunc = (item) => chef.GetEnumZName(p.EnumZ, (int)p.Cast(item).PathParm.Facet1);
                 p.SetValFunc = (item, value) => { p.Cast(item).PathParm.Facet1 = (Facet)chef.GetEnumZKey(p.EnumZ, value); return chef.RefreshGraphX(p.Cast(item)); };
                 p.Value = new StringValue(p);
+                props.Add(p);
             }
             {
                 var p = Connect1Property = new PropertyOf<QueryX, string>(chef.PropertyStore, Trait.QueryXConnect1_P);
                 p.GetValFunc = (item) => chef.GetTargetString(p.Cast(item).PathParm.Target1);
                 p.SetValFunc = (item, value) => { p.Cast(item).PathParm.Target1 = chef.GetTargetValue(value); return chef.RefreshGraphX(p.Cast(item)); ; };
                 p.Value = new StringValue(p);
+                props.Add(p);
             }
             {
                 var p = Facet2Property = new PropertyOf<QueryX, string>(chef.PropertyStore, Trait.QueryXFacet2_P, chef.FacetEnum);
                 p.GetValFunc = (item) => chef.GetEnumZName(p.EnumZ, (int)p.Cast(item).PathParm.Facet2);
                 p.SetValFunc = (item, value) => { p.Cast(item).PathParm.Facet2 = (Facet)chef.GetEnumZKey(p.EnumZ, value); return chef.RefreshGraphX(p.Cast(item)); ; };
                 p.Value = new StringValue(p);
+                props.Add(p);
             }
             {
                 var p = Connect2Property = new PropertyOf<QueryX, string>(chef.PropertyStore, Trait.QueryXConnect2_P);
                 p.GetValFunc = (item) => chef.GetTargetString(p.Cast(item).PathParm.Target2);
                 p.SetValFunc = (item, value) => { p.Cast(item).PathParm.Target2 = chef.GetTargetValue(value); return chef.RefreshGraphX(p.Cast(item)); ; };
                 p.Value = new StringValue(p);
+                props.Add(p);
             }
             {
                 var p = LineStyleProperty = new PropertyOf<QueryX, string>(chef.PropertyStore, Trait.QueryXLineStyle_P, chef.LineStyleEnum);
                 p.GetValFunc = (item) => chef.GetEnumZName(p.EnumZ, (int)p.Cast(item).PathParm.LineStyle);
                 p.SetValFunc = (item, value) => { p.Cast(item).PathParm.LineStyle = (LineStyle)chef.GetEnumZKey(p.EnumZ, value); return chef.RefreshGraphX(p.Cast(item)); ; };
                 p.Value = new StringValue(p);
+                props.Add(p);
             }
             {
                 var p = DashStyleProperty = new PropertyOf<QueryX, string>(chef.PropertyStore, Trait.QueryXDashStyle_P, chef.DashStyleEnum);
                 p.GetValFunc = (item) => chef.GetEnumZName(p.EnumZ, (int)p.Cast(item).PathParm.DashStyle);
                 p.SetValFunc = (item, value) => { p.Cast(item).PathParm.DashStyle = (DashStyle)chef.GetEnumZKey(p.EnumZ, value); return chef.RefreshGraphX(p.Cast(item)); ; };
                 p.Value = new StringValue(p);
+                props.Add(p);
             }
             {
                 var p = LineColorProperty = new PropertyOf<QueryX, string>(chef.PropertyStore, Trait.QueryXLineColor_P);
                 p.GetValFunc = (item) => p.Cast(item).PathParm.LineColor;
                 p.SetValFunc = (item, value) => { p.Cast(item).PathParm.LineColor = value; return chef.RefreshGraphX(p.Cast(item)); ; };
                 p.Value = new StringValue(p);
+                props.Add(p);
             }
             {
                 var p = RelationProperty = new PropertyOf<QueryX, string>(chef.PropertyStore, Trait.QueryXRelation_P);
                 p.GetValFunc = (item) => chef.GetQueryXRelationName(p.Cast(item));
                 p.Value = new StringValue(p);
+                props.Add(p);
             }
             {
                 var p = IsReversedProperty = new PropertyOf<QueryX, bool>(chef.PropertyStore, Trait.QueryXIsReversed_P);
                 p.GetValFunc = (item) => p.Cast(item).IsReversed;
                 p.SetValFunc = (item, value) => { p.Cast(item).IsReversed = value; return true; };
                 p.Value = new BoolValue(p);
+                props.Add(p);
             }
             {
                 var p = IsBreakPointProperty = new PropertyOf<QueryX, bool>(chef.PropertyStore, Trait.QueryXIsBreakPoint_P);
                 p.GetValFunc = (item) => p.Cast(item).IsBreakPoint;
                 p.SetValFunc = (item, value) => { p.Cast(item).IsBreakPoint = value; return true; };
                 p.Value = new BoolValue(p);
+                props.Add(p);
             }
             {
                 var p = ExclusiveKeyProperty = new PropertyOf<QueryX, byte>(chef.PropertyStore, Trait.QueryXExclusiveKey_P);
                 p.GetValFunc = (item) => p.Cast(item).ExclusiveKey;
                 p.SetValFunc = (item, value) => { p.Cast(item).ExclusiveKey = (byte)value; return true; };
                 p.Value = new ByteValue(p);
+                props.Add(p);
             }
             {
                 var p = WhereProperty = new PropertyOf<QueryX, string>(chef.PropertyStore, Trait.QueryXWhere_P);
@@ -115,6 +128,7 @@ namespace ModelGraph.Core
                 p.SetValFunc = (item, value) => chef.TrySetWhereProperty(p.Cast(item), value);
                 p.Value = new StringValue(p);
                 p.GetItemNameFunc = (item) => { return chef.GetWhereName(p.Cast(item)); };
+                props.Add(p);
             }
             {
                 var p = SelectProperty = new PropertyOf<QueryX, string>(chef.PropertyStore, Trait.ValueXSelect_P);
@@ -122,35 +136,16 @@ namespace ModelGraph.Core
                 p.SetValFunc = (item, value) => chef.TrySetSelectProperty(p.Cast(item), value);
                 p.Value = new StringValue(p);
                 p.GetItemNameFunc = (item) => { return chef.GetSelectName(p.Cast(item)); };
+                props.Add(p);
             }
             {
                 var p = ValueTypeProperty = new PropertyOf<QueryX, string>(chef.PropertyStore, Trait.ValueXValueType_P, chef.ValueTypeEnum);
                 p.GetValFunc = (item) => chef.GetEnumZName(p.EnumZ, chef.GetValueType(p.Cast(item)));
                 p.Value = new StringValue(p);
+                props.Add(p);
             }
+            chef.RegisterStaticProperties(typeof(QueryX), props);
         }
-        #endregion
-
-        #region IPropertyManager  =============================================
-        public Property[] GetPropreties(ItemModel model = null) => new Property[]
-        {
-            RootWhereProperty,
-            RelationProperty,
-            IsReversedProperty,
-            IsBreakPointProperty,
-            ExclusiveKeyProperty,
-            WhereProperty,
-            SelectProperty,
-            ValueTypeProperty,
-            LineStyleProperty,
-            LineStyleProperty,
-            DashStyleProperty,
-            LineColorProperty,
-            Facet1Property,
-            Connect1Property,
-            Facet2Property,
-            Connect2Property,
-        };
         #endregion
 
         #region ISerializer  ==================================================

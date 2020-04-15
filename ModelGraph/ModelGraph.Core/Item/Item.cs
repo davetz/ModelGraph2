@@ -140,12 +140,6 @@ namespace ModelGraph.Core
             while (item != null) { if (item.IsDataChef) return item as Chef; item = item.Owner; }
             throw new Exception("GetChef: Corrupted item hierarchy"); // I seriously hope this never happens
         }
-        internal IPropertyManager GetPropertyManager()
-        {
-            var item = this;
-            while (item != null) { if (item is IPropertyManager pm) return pm; item = item.Owner; }
-            throw new Exception("GetPropertyManager: Corrupted item hierarchy");
-        }
         #endregion
     }
 }

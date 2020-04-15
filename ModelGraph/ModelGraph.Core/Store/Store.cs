@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Collections.Generic;
 
 namespace ModelGraph.Core
@@ -17,6 +18,7 @@ namespace ModelGraph.Core
         internal abstract int IndexOf(Item item);
         internal abstract List<Item> GetItems();
         internal abstract int Count { get; }
+        internal abstract Type GetChildType();
 
         internal bool TryLookUpProperty(string name, out Property property)
         {

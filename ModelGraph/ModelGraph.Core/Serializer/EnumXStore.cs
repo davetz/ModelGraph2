@@ -4,7 +4,7 @@ using Windows.Storage.Streams;
 
 namespace ModelGraph.Core
 {
-    public class EnumXStore : ExternalStoreOf<EnumX>, ISerializer, IPropertyManager
+    public class EnumXStore : ExternalStoreOf<EnumX>, ISerializer
     {
         static Guid _serializerGuid = new Guid("8D4CEAD8-E3C5-4342-88AC-1B4B625A9A4C");
         static byte _formatVersion = 1;
@@ -24,39 +24,40 @@ namespace ModelGraph.Core
         #region CreateProperties  =============================================
         private void CreateProperties(Chef chef)
         {
+            var props1 = new List<Property>(2);
             {
                 var p = NameProperty = new PropertyOf<EnumX, string>(chef.PropertyStore, Trait.EnumName_P);
                 p.GetValFunc = (item) => p.Cast(item).Name;
                 p.SetValFunc = (item, value) => { p.Cast(item).Name = value; return true; };
                 p.Value = new StringValue(p);
+                props1.Add(p);
             }
             {
                 var p = SummaryProperty = new PropertyOf<EnumX, string>(chef.PropertyStore, Trait.EnumSummary_P);
                 p.GetValFunc = (item) => p.Cast(item).Summary;
                 p.SetValFunc = (item, value) => { p.Cast(item).Summary = value; return true; };
                 p.Value = new StringValue(p);
+                props1.Add(p);
             }
+            chef.RegisterStaticProperties(typeof(EnumX), props1);
+
+            var props2 = new List<Property>(2);
             {
                 var p = TextProperty = new PropertyOf<PairX, string>(chef.PropertyZStore, Trait.EnumText_P);
                 p.GetValFunc = (item) => p.Cast(item).DisplayValue;
                 p.SetValFunc = (item, value) => { p.Cast(item).DisplayValue = value; p.Owner.ChildDelta++; return true; };
                 p.Value = new StringValue(p);
+                props2.Add(p);
             }
             {
                 var p = ValueProperty = new PropertyOf<PairX, string>(chef.PropertyZStore, Trait.EnumValue_P);
                 p.GetValFunc = (item) => p.Cast(item).ActualValue;
                 p.SetValFunc = (item, value) => { p.Cast(item).ActualValue = value; p.Owner.ChildDelta++; return true; };
                 p.Value = new StringValue(p);
+                props2.Add(p);
             }
+            chef.RegisterStaticProperties(typeof(PairX), props2);
         }
-        #endregion
-
-        #region IPropertyManager  =============================================
-        public Property[] GetPropreties(ItemModel model = null) => new Property[]
-        {
-            NameProperty,
-            SummaryProperty,
-        };
         #endregion
 
         #region ISerializer  ==================================================

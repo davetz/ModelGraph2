@@ -42,6 +42,7 @@ namespace ModelGraph.Core
                 if (item is Store sto) sto.PopululateChildItemIndex(itemIndex);
             }
         }
+        internal override Type GetChildType() => typeof(T);
         #endregion
 
         #region Methods  ======================================================

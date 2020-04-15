@@ -5,7 +5,7 @@ using Windows.Storage.Streams;
 
 namespace ModelGraph.Core
 {
-    public class TableXStore : ExternalStoreOf<TableX>, ISerializer, IPropertyManager
+    public class TableXStore : ExternalStoreOf<TableX>, ISerializer
     {
         static Guid _serializerGuid = new Guid("93EC136C-6C38-474D-844B-6B8326526CB5");
         static byte _formatVersion = 1;
@@ -22,27 +22,23 @@ namespace ModelGraph.Core
         #region CreateProperties  =============================================
         private void CreateProperties(Chef chef)
         {
+            var props = new List<Property>(2);
             {
                 var p = NameProperty = new PropertyOf<TableX, string>(chef.PropertyStore, Trait.TableName_P);
                 p.GetValFunc = (item) => p.Cast(item).Name;
                 p.SetValFunc = (item, value) => { p.Cast(item).Name = value; return true; };
                 p.Value = new StringValue(p);
+                props.Add(p);
             }
             {
                 var p = SummaryProperty = new PropertyOf<TableX, string>(chef.PropertyStore, Trait.TableSummary_P);
                 p.GetValFunc = (item) => p.Cast(item).Summary;
                 p.SetValFunc = (item, value) => { p.Cast(item).Summary = value; return true; };
                 p.Value = new StringValue(p);
+                props.Add(p);
             }
+            chef.RegisterStaticProperties(typeof(TableX), props);
         }
-        #endregion
-
-        #region IPropertyManager  =============================================
-        public Property[] GetPropreties(ItemModel model = null) => new Property[]
-        {
-            NameProperty,
-            SummaryProperty,
-        };
         #endregion
 
         #region ISerializer  ==================================================

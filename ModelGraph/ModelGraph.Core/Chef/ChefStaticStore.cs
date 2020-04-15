@@ -5,6 +5,7 @@ namespace ModelGraph.Core
 {
     public partial class Chef
     {
+
         internal StoreOf<Error> ErrorStore { get; private set; }
         internal StoreOf<EnumZ> EnumZStore { get; private set; }
         internal StoreOf<Property> PropertyZStore { get; private set; }
