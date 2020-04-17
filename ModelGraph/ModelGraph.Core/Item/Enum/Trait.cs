@@ -719,18 +719,18 @@ namespace ModelGraph.Core
         Connect_Any = 0xAC0, //0
         Connect_East = 0xAC1, //1
         Connect_West = 0xAC2, //2
-        Connect_North = 0xAC4, //4
-        Connect_South = 0xAC8, //8
         Connect_East_West = 0xAC3, //1+2
-        Connect_North_South = 0xACC, //4+8
+        Connect_North = 0xAC4, //4
         Connect_North_East = 0xAC5, //4+1
         Connect_North_West = 0xAC6, //4+2
         Connect_North_East_West = 0xAC7, //4+1+2
-        Connect_North_South_East = 0xACD, //4+8+1
-        Connect_North_South_West = 0xACE, //4+8+2
+        Connect_South = 0xAC8, //8
         Connect_South_East = 0xAC9, //8+1
         Connect_South_West = 0xACA, //8+2
         Connect_South_East_West = 0xACB, //8+1+2
+        Connect_North_South = 0xACC, //4+8
+        Connect_North_South_East = 0xACD, //4+8+1
+        Connect_North_South_West = 0xACE, //4+8+2
         ConnectEnum = 0xAFF,
 
         Facet_None = 0xB00,

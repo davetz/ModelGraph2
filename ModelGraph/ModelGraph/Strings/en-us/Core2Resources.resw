@@ -1,0 +1,726 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AspectEnum_S" xml:space="preserve">
+    <value>The node or symbol's orientation</value>
+  </data>
+  <data name="AspectEnum_Z" xml:space="preserve">
+    <value>Orientation</value>
+  </data>
+  <data name="Aspect_Horizontal" xml:space="preserve">
+    <value>Horizontal</value>
+  </data>
+  <data name="Aspect_Point" xml:space="preserve">
+    <value>Point</value>
+  </data>
+  <data name="Aspect_Square" xml:space="preserve">
+    <value>Square</value>
+  </data>
+  <data name="Aspect_Vertical" xml:space="preserve">
+    <value>Vertical</value>
+  </data>
+  <data name="AttatchEnum_S" xml:space="preserve">
+    <value>Style of connection</value>
+  </data>
+  <data name="AttatchEnum_Z" xml:space="preserve">
+    <value>Connection Style</value>
+  </data>
+  <data name="Attatch_Normal" xml:space="preserve">
+    <value>Normal</value>
+  </data>
+  <data name="Attatch_Radial" xml:space="preserve">
+    <value>Radial</value>
+  </data>
+  <data name="Attatch_RightAngle" xml:space="preserve">
+    <value>Right Angle</value>
+  </data>
+  <data name="Attatch_SkewedAngle" xml:space="preserve">
+    <value>Skewed Angle</value>
+  </data>
+  <data name="BarWidthEnum_S" xml:space="preserve">
+    <value>The style of a node bar</value>
+  </data>
+  <data name="BarWidthEnum_Z" xml:space="preserve">
+    <value>BarWidth</value>
+  </data>
+  <data name="BarWidth_ExtraWide" xml:space="preserve">
+    <value>Extra Wide</value>
+  </data>
+  <data name="BarWidth_Thin" xml:space="preserve">
+    <value>Thin</value>
+  </data>
+  <data name="BarWidth_Wide" xml:space="preserve">
+    <value>Wide</value>
+  </data>
+  <data name="BNumericTerm_Count" xml:space="preserve">
+    <value>Count</value>
+  </data>
+  <data name="Column" xml:space="preserve">
+    <value>Column</value>
+  </data>
+  <data name="Compute" xml:space="preserve">
+    <value>Compute</value>
+  </data>
+  <data name="CompuTypeEnum_S" xml:space="preserve">
+    <value>Type of computation</value>
+  </data>
+  <data name="CompuTypeEnum_Z" xml:space="preserve">
+    <value>Computing</value>
+  </data>
+  <data name="CompuType_CompositeReversed" xml:space="preserve">
+    <value>CompositeReversed</value>
+  </data>
+  <data name="CompuType_CompositeString" xml:space="preserve">
+    <value>CompositeString</value>
+  </data>
+  <data name="CompuType_NumericValueSet" xml:space="preserve">
+    <value>NumericValueSet</value>
+  </data>
+  <data name="CompuType_RelatedValue" xml:space="preserve">
+    <value>RelatedValue</value>
+  </data>
+  <data name="CompuType_RowValue" xml:space="preserve">
+    <value>RowValue</value>
+  </data>
+  <data name="ConnectEnum_S" xml:space="preserve">
+    <value>Where is the connection</value>
+  </data>
+  <data name="ConnectEnum_Z" xml:space="preserve">
+    <value>Connect</value>
+  </data>
+  <data name="Connect_Any" xml:space="preserve">
+    <value>Any</value>
+  </data>
+  <data name="Connect_East" xml:space="preserve">
+    <value>East</value>
+  </data>
+  <data name="Connect_East_West" xml:space="preserve">
+    <value>East_West</value>
+  </data>
+  <data name="Connect_North" xml:space="preserve">
+    <value>North</value>
+  </data>
+  <data name="Connect_North_East" xml:space="preserve">
+    <value>North_East</value>
+  </data>
+  <data name="Connect_North_East_West" xml:space="preserve">
+    <value>North_East_West</value>
+  </data>
+  <data name="Connect_North_South" xml:space="preserve">
+    <value>North_South</value>
+  </data>
+  <data name="Connect_North_South_East" xml:space="preserve">
+    <value>North_South_East</value>
+  </data>
+  <data name="Connect_North_South_West" xml:space="preserve">
+    <value>North_South_West</value>
+  </data>
+  <data name="Connect_North_West" xml:space="preserve">
+    <value>North_West</value>
+  </data>
+  <data name="Connect_South" xml:space="preserve">
+    <value>South</value>
+  </data>
+  <data name="Connect_South_East" xml:space="preserve">
+    <value>South_East</value>
+  </data>
+  <data name="Connect_South_East_West" xml:space="preserve">
+    <value>South_East_West</value>
+  </data>
+  <data name="Connect_South_West" xml:space="preserve">
+    <value>South_West</value>
+  </data>
+  <data name="Connect_West" xml:space="preserve">
+    <value>West</value>
+  </data>
+  <data name="ContactEnum_S" xml:space="preserve">
+    <value>Type of contact</value>
+  </data>
+  <data name="ContactEnum_Z" xml:space="preserve">
+    <value>Contact</value>
+  </data>
+  <data name="Contact_Any" xml:space="preserve">
+    <value>Any</value>
+  </data>
+  <data name="Contact_None" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="Contact_One" xml:space="preserve">
+    <value>One</value>
+  </data>
+  <data name="DashStyleEnum_Z" xml:space="preserve">
+    <value>Dash Style</value>
+  </data>
+  <data name="DashStyle_DashDot" xml:space="preserve">
+    <value>DashDot</value>
+  </data>
+  <data name="DashStyle_DashDotDot" xml:space="preserve">
+    <value>DashDotDot</value>
+  </data>
+  <data name="DashStyle_Dashed" xml:space="preserve">
+    <value>Dashed</value>
+  </data>
+  <data name="DashStyle_Dotted" xml:space="preserve">
+    <value>Dotted</value>
+  </data>
+  <data name="DashStyle_Solid" xml:space="preserve">
+    <value>Solid</value>
+  </data>
+  <data name="EndLineEnum_S" xml:space="preserve">
+    <value>Type of line-end cap</value>
+  </data>
+  <data name="EndLineEnum_Z" xml:space="preserve">
+    <value>EndLineCap</value>
+  </data>
+  <data name="EndLine_Flat" xml:space="preserve">
+    <value>End-Flat</value>
+  </data>
+  <data name="EndLine_Round" xml:space="preserve">
+    <value>End-Round</value>
+  </data>
+  <data name="EndLine_Square" xml:space="preserve">
+    <value>End-Square</value>
+  </data>
+  <data name="EndLine_Triangle" xml:space="preserve">
+    <value>End-Triangle</value>
+  </data>
+  <data name="FacetEnum_S" xml:space="preserve">
+    <value>Type of decoration on edge end</value>
+  </data>
+  <data name="FacetEnum_Z" xml:space="preserve">
+    <value>FacetOf</value>
+  </data>
+  <data name="Facet_Diamond" xml:space="preserve">
+    <value>Diamond</value>
+  </data>
+  <data name="Facet_Force_Diamond" xml:space="preserve">
+    <value>Force_Diamond</value>
+  </data>
+  <data name="Facet_Force_InArrow" xml:space="preserve">
+    <value>Force_InArrow</value>
+  </data>
+  <data name="Facet_Force_None" xml:space="preserve">
+    <value>Force_None</value>
+  </data>
+  <data name="Facet_Force_Nubby" xml:space="preserve">
+    <value>Force_Nubby</value>
+  </data>
+  <data name="Facet_InArrow" xml:space="preserve">
+    <value>InArrow</value>
+  </data>
+  <data name="Facet_None" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="Facet_Nubby" xml:space="preserve">
+    <value>Nubby</value>
+  </data>
+  <data name="FlipRotateEnum_S" xml:space="preserve">
+    <value>Type of flip/rotation</value>
+  </data>
+  <data name="FlipRotateEnum_Z" xml:space="preserve">
+    <value>FlipRotate</value>
+  </data>
+  <data name="FlipRotate_FlipBothWays" xml:space="preserve">
+    <value>FlipBothWays</value>
+  </data>
+  <data name="FlipRotate_FlipHorizontal" xml:space="preserve">
+    <value>FlipHorizontal</value>
+  </data>
+  <data name="FlipRotate_FlipVertical" xml:space="preserve">
+    <value>FlipVertical</value>
+  </data>
+  <data name="FlipRotate_None" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="FlipRotate_RotateClockwise" xml:space="preserve">
+    <value>RotateClockwise</value>
+  </data>
+  <data name="FlipRotate_RotateFlipBothWays" xml:space="preserve">
+    <value>RotateFlipBothWays</value>
+  </data>
+  <data name="FlipRotate_RotateFlipHorizontal" xml:space="preserve">
+    <value>RotateFlipHorizontal</value>
+  </data>
+  <data name="FlipRotate_RotateFlipVertical" xml:space="preserve">
+    <value>RotateFlipVertical</value>
+  </data>
+  <data name="Invalid" xml:space="preserve">
+    <value>####</value>
+  </data>
+  <data name="Item" xml:space="preserve">
+    <value>Item</value>
+  </data>
+  <data name="LabelingEnum_S" xml:space="preserve">
+    <value>The type of label placement</value>
+  </data>
+  <data name="LabelingEnum_Z" xml:space="preserve">
+    <value>Labeling</value>
+  </data>
+  <data name="Labeling_Bottom" xml:space="preserve">
+    <value>Bottom</value>
+  </data>
+  <data name="Labeling_BottomLeft" xml:space="preserve">
+    <value>BottomLeft</value>
+  </data>
+  <data name="Labeling_BottomLeftCorner" xml:space="preserve">
+    <value>BottomLeftCorner</value>
+  </data>
+  <data name="Labeling_BottomLeftSide" xml:space="preserve">
+    <value>BottomLeftSide</value>
+  </data>
+  <data name="Labeling_BottomRight" xml:space="preserve">
+    <value>BottomRight</value>
+  </data>
+  <data name="Labeling_BottomRightCorner" xml:space="preserve">
+    <value>BottomRightCorner</value>
+  </data>
+  <data name="Labeling_BottomRightSide" xml:space="preserve">
+    <value>BottomRightSide</value>
+  </data>
+  <data name="Labeling_Center" xml:space="preserve">
+    <value>Center</value>
+  </data>
+  <data name="Labeling_Left" xml:space="preserve">
+    <value>Left</value>
+  </data>
+  <data name="Labeling_None" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="Labeling_Right" xml:space="preserve">
+    <value>Right</value>
+  </data>
+  <data name="Labeling_Top" xml:space="preserve">
+    <value>Top</value>
+  </data>
+  <data name="Labeling_TopLeft" xml:space="preserve">
+    <value>TopLeft</value>
+  </data>
+  <data name="Labeling_TopLeftCorner" xml:space="preserve">
+    <value>TopLeftCorner</value>
+  </data>
+  <data name="Labeling_TopLeftSide" xml:space="preserve">
+    <value>TopLeftSide</value>
+  </data>
+  <data name="Labeling_TopRight" xml:space="preserve">
+    <value>TopRight</value>
+  </data>
+  <data name="Labeling_TopRightCorner" xml:space="preserve">
+    <value>TopRightCorner</value>
+  </data>
+  <data name="Labeling_TopRightSide" xml:space="preserve">
+    <value>TopRightSide</value>
+  </data>
+  <data name="LineStyleEnum_Z" xml:space="preserve">
+    <value>Line Style</value>
+  </data>
+  <data name="LineStyle_DoubleSpline" xml:space="preserve">
+    <value>DoubleSpline</value>
+  </data>
+  <data name="LineStyle_PointToPoint" xml:space="preserve">
+    <value>PointToPoint</value>
+  </data>
+  <data name="LineStyle_SimpleSpline" xml:space="preserve">
+    <value>SimpleSpline</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="NamingEnum_S" xml:space="preserve">
+    <value>Type of automatic name generation when copying nodes</value>
+  </data>
+  <data name="NamingEnum_Z" xml:space="preserve">
+    <value>Naming</value>
+  </data>
+  <data name="Naming_Alphabetic" xml:space="preserve">
+    <value>Alphabetic</value>
+  </data>
+  <data name="Naming_Default" xml:space="preserve">
+    <value>Default</value>
+  </data>
+  <data name="Naming_None" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="Naming_SubstituteParent" xml:space="preserve">
+    <value>SubstituteParent</value>
+  </data>
+  <data name="Naming_UniqueNumber" xml:space="preserve">
+    <value>UniqueNumber</value>
+  </data>
+  <data name="NumericSetEnum_Z" xml:space="preserve">
+    <value>NumericSet</value>
+  </data>
+  <data name="NumericSet_Count" xml:space="preserve">
+    <value>Count</value>
+  </data>
+  <data name="NumericSet_Count_Min_Max" xml:space="preserve">
+    <value>Count_Min_Max</value>
+  </data>
+  <data name="NumericSet_Count_Min_Max_Sum" xml:space="preserve">
+    <value>Count_Min_Max_Sum</value>
+  </data>
+  <data name="NumericSet_Count_Min_Max_Sum_Ave" xml:space="preserve">
+    <value>Count_Min_Max_Sum_Ave</value>
+  </data>
+  <data name="NumericSet_Count_Min_Max_Sum_Ave_Std" xml:space="preserve">
+    <value>Count_Min_Max_Sum_Ave_Std</value>
+  </data>
+  <data name="NumericTermEnum_Z" xml:space="preserve">
+    <value>NumericTerm</value>
+  </data>
+  <data name="NumericTerm_Ave" xml:space="preserve">
+    <value>Ave</value>
+  </data>
+  <data name="NumericTerm_Max" xml:space="preserve">
+    <value>Max</value>
+  </data>
+  <data name="NumericTerm_Min" xml:space="preserve">
+    <value>Min</value>
+  </data>
+  <data name="NumericTerm_Std" xml:space="preserve">
+    <value>Std</value>
+  </data>
+  <data name="NumericTerm_Sum" xml:space="preserve">
+    <value>Sum</value>
+  </data>
+  <data name="Pairing" xml:space="preserve">
+    <value>Pairing</value>
+  </data>
+  <data name="PairingEnum_S" xml:space="preserve">
+    <value>Relation pairing</value>
+  </data>
+  <data name="PairingEnum_Z" xml:space="preserve">
+    <value>PairingEnum</value>
+  </data>
+  <data name="Pairing_ManyToMany" xml:space="preserve">
+    <value>ManyToMany</value>
+  </data>
+  <data name="Pairing_OneToMany" xml:space="preserve">
+    <value>OneToMany</value>
+  </data>
+  <data name="Pairing_OneToOne_Z" xml:space="preserve">
+    <value>OneToOne</value>
+  </data>
+  <data name="Property" xml:space="preserve">
+    <value>Property</value>
+  </data>
+  <data name="Relation" xml:space="preserve">
+    <value>Relation</value>
+  </data>
+  <data name="ResizingEnum_S" xml:space="preserve">
+    <value>Type of node resizing</value>
+  </data>
+  <data name="ResizingEnum_Z" xml:space="preserve">
+    <value>Resizing</value>
+  </data>
+  <data name="Resizing_Auto" xml:space="preserve">
+    <value>Auto</value>
+  </data>
+  <data name="Resizing_Fixed" xml:space="preserve">
+    <value>Fixed</value>
+  </data>
+  <data name="Resizing_Manual" xml:space="preserve">
+    <value>Manual</value>
+  </data>
+  <data name="ResultsEnum_S" xml:space="preserve">
+    <value>Query results (scalar / array)? </value>
+  </data>
+  <data name="ResultsEnum_Z" xml:space="preserve">
+    <value>Results</value>
+  </data>
+  <data name="Results_AllValues" xml:space="preserve">
+    <value>AllValues</value>
+  </data>
+  <data name="Results_LimitedSet" xml:space="preserve">
+    <value>LimitedSet</value>
+  </data>
+  <data name="Results_OneValue" xml:space="preserve">
+    <value>OneValue</value>
+  </data>
+  <data name="SideEnum_S" xml:space="preserve">
+    <value>On wich side is the  connection</value>
+  </data>
+  <data name="SideEnum_Z" xml:space="preserve">
+    <value>Side</value>
+  </data>
+  <data name="Side_Any" xml:space="preserve">
+    <value>Any</value>
+  </data>
+  <data name="Side_East" xml:space="preserve">
+    <value>East</value>
+  </data>
+  <data name="Side_North" xml:space="preserve">
+    <value>North</value>
+  </data>
+  <data name="Side_South" xml:space="preserve">
+    <value>South</value>
+  </data>
+  <data name="Side_West" xml:space="preserve">
+    <value>West</value>
+  </data>
+  <data name="SortingEnum_S" xml:space="preserve">
+    <value>Sort the results</value>
+  </data>
+  <data name="SortingEnum_Z" xml:space="preserve">
+    <value>Sorting</value>
+  </data>
+  <data name="Sorting_Ascending" xml:space="preserve">
+    <value>Ascending</value>
+  </data>
+  <data name="Sorting_Descending" xml:space="preserve">
+    <value>Descending</value>
+  </data>
+  <data name="Sorting_Unsorted" xml:space="preserve">
+    <value>Unsorted</value>
+  </data>
+  <data name="StartLineEnum_S" xml:space="preserve">
+    <value>Type of line-start cap</value>
+  </data>
+  <data name="StartLineEnum_Z" xml:space="preserve">
+    <value>StartLineCap</value>
+  </data>
+  <data name="StartLine_Flat" xml:space="preserve">
+    <value>Start-Flat</value>
+  </data>
+  <data name="StartLine_Round" xml:space="preserve">
+    <value>Start-Round</value>
+  </data>
+  <data name="StartLine_Square" xml:space="preserve">
+    <value>Start-Square</value>
+  </data>
+  <data name="StartLine_Triangle" xml:space="preserve">
+    <value>Start-Triangle</value>
+  </data>
+  <data name="TakeSetEnum_S" xml:space="preserve">
+    <value>Take a limited number of result items </value>
+  </data>
+  <data name="TakeSetEnum_Z" xml:space="preserve">
+    <value>TakeSet</value>
+  </data>
+  <data name="TakeSet_Both" xml:space="preserve">
+    <value>Both</value>
+  </data>
+  <data name="TakeSet_First" xml:space="preserve">
+    <value>First</value>
+  </data>
+  <data name="TakeSet_Last" xml:space="preserve">
+    <value>Last</value>
+  </data>
+  <data name="Unassigned" xml:space="preserve">
+    <value>???</value>
+  </data>
+  <data name="ValueType" xml:space="preserve">
+    <value>Value Type</value>
+  </data>
+  <data name="ValueTypeEnum_S" xml:space="preserve">
+    <value>Value Type Enum</value>
+  </data>
+  <data name="ValueTypeEnum_Z" xml:space="preserve">
+    <value>ValueType</value>
+  </data>
+  <data name="ValueType_Bool" xml:space="preserve">
+    <value>Bool</value>
+  </data>
+  <data name="ValueType_BoolArray" xml:space="preserve">
+    <value>BoolArray</value>
+  </data>
+  <data name="ValueType_Byte" xml:space="preserve">
+    <value>UInt8</value>
+  </data>
+  <data name="ValueType_ByteArray" xml:space="preserve">
+    <value>UInt8Array</value>
+  </data>
+  <data name="ValueType_Char" xml:space="preserve">
+    <value>Char</value>
+  </data>
+  <data name="ValueType_CharArray" xml:space="preserve">
+    <value>CharArray</value>
+  </data>
+  <data name="ValueType_DateTime" xml:space="preserve">
+    <value>DateTime</value>
+  </data>
+  <data name="ValueType_DateTimeArray" xml:space="preserve">
+    <value>DateTimeArray</value>
+  </data>
+  <data name="ValueType_Decimal" xml:space="preserve">
+    <value>Decimal</value>
+  </data>
+  <data name="ValueType_DecimalArray" xml:space="preserve">
+    <value>DecimalArray</value>
+  </data>
+  <data name="ValueType_Double" xml:space="preserve">
+    <value>Double</value>
+  </data>
+  <data name="ValueType_DoubleArray" xml:space="preserve">
+    <value>DoubleArray</value>
+  </data>
+  <data name="ValueType_Int16" xml:space="preserve">
+    <value>Int16</value>
+  </data>
+  <data name="ValueType_Int16Array" xml:space="preserve">
+    <value>Int16Array</value>
+  </data>
+  <data name="ValueType_Int32" xml:space="preserve">
+    <value>Int32</value>
+  </data>
+  <data name="ValueType_Int32Array" xml:space="preserve">
+    <value>Int32Array</value>
+  </data>
+  <data name="ValueType_Int64" xml:space="preserve">
+    <value>Int64</value>
+  </data>
+  <data name="ValueType_Int64Array" xml:space="preserve">
+    <value>Int64Array</value>
+  </data>
+  <data name="ValueType_SByte" xml:space="preserve">
+    <value>Int8</value>
+  </data>
+  <data name="ValueType_SByteArray" xml:space="preserve">
+    <value>Int8Array</value>
+  </data>
+  <data name="ValueType_Single" xml:space="preserve">
+    <value>Single</value>
+  </data>
+  <data name="ValueType_SingleArray" xml:space="preserve">
+    <value>SingleArray</value>
+  </data>
+  <data name="ValueType_String" xml:space="preserve">
+    <value>String</value>
+  </data>
+  <data name="ValueType_StringArray" xml:space="preserve">
+    <value>StringArray</value>
+  </data>
+  <data name="ValueType_UInt16" xml:space="preserve">
+    <value>UInt16</value>
+  </data>
+  <data name="ValueType_UInt16Array" xml:space="preserve">
+    <value>UInt16Array</value>
+  </data>
+  <data name="ValueType_UInt32" xml:space="preserve">
+    <value>UInt32</value>
+  </data>
+  <data name="ValueType_UInt32Array" xml:space="preserve">
+    <value>UInt32Array</value>
+  </data>
+  <data name="ValueType_UInt64" xml:space="preserve">
+    <value>UInt64</value>
+  </data>
+  <data name="ValueType_UInt64Array" xml:space="preserve">
+    <value>UInt64Array</value>
+  </data>
+</root>
