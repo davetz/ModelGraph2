@@ -86,13 +86,13 @@ namespace ModelGraph.Core
 
         #region Trait  ========================================================
         public bool IsProperty => (IsTextProperty || IsComboProperty || IsCheckProperty);
-        public bool IsTextProperty => Trait == Trait.TextProperty_M;
-        public bool IsComboProperty => Trait == Trait.ComboProperty_M;
-        public bool IsCheckProperty => Trait == Trait.CheckProperty_M;
-        public bool IsForcedRefresh => Trait == Trait.ErrorRoot_M || Trait == Trait.ChangeRoot_M;
+        public bool IsTextProperty => Trait == Trait.TextPropertyModel;
+        public bool IsComboProperty => Trait == Trait.ComboPropertyModel;
+        public bool IsCheckProperty => Trait == Trait.CheckPropertyModel;
+        public bool IsForcedRefresh => Trait == Trait.ErrorRootModel || Trait == Trait.ChangeRootModel;
 
-        public bool IsRowChildRelationModel => Trait == Trait.RowChildRelation_M;
-        public bool IsRowParentRelationModel => Trait == Trait.RowParentRelation_M;
+        public bool IsRowChildRelationModel => Trait == Trait.RowChildRelationModel;
+        public bool IsRowParentRelationModel => Trait == Trait.RowParentRelationModel;
         public bool IsErrorAux => (Trait & Trait.IsErrorAux) != 0;
         public bool IsErrorAux1 => (Trait & Trait.IsErrorAux1) != 0;
         public bool IsErrorAux2 => (Trait & Trait.IsErrorAux2) != 0;

@@ -26,14 +26,14 @@ namespace ModelGraph.Core
         {
             var props1 = new List<Property>(2);
             {
-                var p = NameProperty = new PropertyOf<EnumX, string>(chef.PropertyStore, Trait.EnumName_P);
+                var p = NameProperty = new PropertyOf<EnumX, string>(chef.PropertyStore, Trait.EnumNameProperty);
                 p.GetValFunc = (item) => p.Cast(item).Name;
                 p.SetValFunc = (item, value) => { p.Cast(item).Name = value; return true; };
                 p.Value = new StringValue(p);
                 props1.Add(p);
             }
             {
-                var p = SummaryProperty = new PropertyOf<EnumX, string>(chef.PropertyStore, Trait.EnumSummary_P);
+                var p = SummaryProperty = new PropertyOf<EnumX, string>(chef.PropertyStore, Trait.EnumSummaryProperty);
                 p.GetValFunc = (item) => p.Cast(item).Summary;
                 p.SetValFunc = (item, value) => { p.Cast(item).Summary = value; return true; };
                 p.Value = new StringValue(p);
@@ -43,14 +43,14 @@ namespace ModelGraph.Core
 
             var props2 = new List<Property>(2);
             {
-                var p = TextProperty = new PropertyOf<PairX, string>(chef.PropertyZStore, Trait.EnumText_P);
+                var p = TextProperty = new PropertyOf<PairX, string>(chef.PropertyZStore, Trait.EnumTextProperty);
                 p.GetValFunc = (item) => p.Cast(item).DisplayValue;
                 p.SetValFunc = (item, value) => { p.Cast(item).DisplayValue = value; p.Owner.ChildDelta++; return true; };
                 p.Value = new StringValue(p);
                 props2.Add(p);
             }
             {
-                var p = ValueProperty = new PropertyOf<PairX, string>(chef.PropertyZStore, Trait.EnumValue_P);
+                var p = ValueProperty = new PropertyOf<PairX, string>(chef.PropertyZStore, Trait.EnumValueProperty);
                 p.GetValFunc = (item) => p.Cast(item).ActualValue;
                 p.SetValFunc = (item, value) => { p.Cast(item).ActualValue = value; p.Owner.ChildDelta++; return true; };
                 p.Value = new StringValue(p);

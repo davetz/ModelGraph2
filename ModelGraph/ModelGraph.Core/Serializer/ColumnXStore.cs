@@ -25,28 +25,28 @@ namespace ModelGraph.Core
         {
             var props = new List<Property>(4);
             {
-                var p = NameProperty = new PropertyOf<ColumnX, string>(chef.PropertyStore, Trait.ColumnName_P);
+                var p = NameProperty = new PropertyOf<ColumnX, string>(chef.PropertyStore, Trait.ColumnNameProperty);
                 p.GetValFunc = (item) => p.Cast(item).Name;
                 p.SetValFunc = (item, value) => { p.Cast(item).Name = value; return true; };
                 p.Value = new StringValue(p);
                 props.Add(p);
             }
             {
-                var p = SummaryProperty = new PropertyOf<ColumnX, string>(chef.PropertyStore, Trait.ColumnSummary_P);
+                var p = SummaryProperty = new PropertyOf<ColumnX, string>(chef.PropertyStore, Trait.ColumnSummaryProperty);
                 p.GetValFunc = (item) => p.Cast(item).Summary;
                 p.SetValFunc = (item, value) => { p.Cast(item).Summary = value; return true; };
                 p.Value = new StringValue(p);
                 props.Add(p);
             }
             {
-                var p = TypeOfProperty = new PropertyOf<ColumnX, string>(chef.PropertyStore, Trait.ColumnValueType_P, chef.ValueTypeEnum);
+                var p = TypeOfProperty = new PropertyOf<ColumnX, string>(chef.PropertyStore, Trait.ColumnValueTypeProperty, chef.ValueTypeEnum);
                 p.GetValFunc = (item) => chef.GetEnumZName(p.EnumZ, (int)p.Cast(item).Value.ValType);
                 p.SetValFunc = (item, value) => chef.SetColumnValueType(p.Cast(item), chef.GetEnumZKey(p.EnumZ, value));
                 p.Value = new StringValue(p);
                 props.Add(p);
             }
             {
-                var p = IsChoiceProperty = new PropertyOf<ColumnX, bool>(chef.PropertyStore, Trait.ColumnIsChoice_P);
+                var p = IsChoiceProperty = new PropertyOf<ColumnX, bool>(chef.PropertyStore, Trait.ColumnIsChoiceProperty);
                 p.GetValFunc = (item) => p.Cast(item).IsChoice;
                 p.SetValFunc = (item, value) => p.Cast(item).IsChoice = value;
                 p.Value = new BoolValue(p);

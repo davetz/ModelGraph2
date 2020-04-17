@@ -24,14 +24,14 @@ namespace ModelGraph.Core
         {
             var props = new List<Property>(2);
             {
-                var p = NameProperty = new PropertyOf<TableX, string>(chef.PropertyStore, Trait.TableName_P);
+                var p = NameProperty = new PropertyOf<TableX, string>(chef.PropertyStore, Trait.TableNameProperty);
                 p.GetValFunc = (item) => p.Cast(item).Name;
                 p.SetValFunc = (item, value) => { p.Cast(item).Name = value; return true; };
                 p.Value = new StringValue(p);
                 props.Add(p);
             }
             {
-                var p = SummaryProperty = new PropertyOf<TableX, string>(chef.PropertyStore, Trait.TableSummary_P);
+                var p = SummaryProperty = new PropertyOf<TableX, string>(chef.PropertyStore, Trait.TableSummaryProperty);
                 p.GetValFunc = (item) => p.Cast(item).Summary;
                 p.SetValFunc = (item, value) => { p.Cast(item).Summary = value; return true; };
                 p.Value = new StringValue(p);

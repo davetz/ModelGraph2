@@ -23,7 +23,7 @@ namespace ModelGraph.Core
         // Primary-RootModel: Created by ModelPageService
         public RootModel()
         {
-            Trait = Trait.DataChef_M;
+            Trait = Trait.DataChefModel;
             Item = Chef = new Chef();
             Get = Chef.DataChef_X;
 

@@ -171,11 +171,161 @@
   <data name="BNumericTerm_Count" xml:space="preserve">
     <value>Count</value>
   </data>
+  <data name="ChangeRootModel" xml:space="preserve">
+    <value>Changes</value>
+  </data>
+  <data name="ChangeRootModel_S" xml:space="preserve">
+    <value>List of changes</value>
+  </data>
+  <data name="ChangeSet" xml:space="preserve">
+    <value>Saved</value>
+  </data>
   <data name="Column" xml:space="preserve">
     <value>Column</value>
   </data>
+  <data name="ColumnIsChoiceProperty" xml:space="preserve">
+    <value>Is Select</value>
+  </data>
+  <data name="ColumnIsChoiceProperty_S" xml:space="preserve">
+    <value>Include this column in the row's  property list</value>
+  </data>
+  <data name="ColumnNameProperty" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="ColumnNameProperty_S" xml:space="preserve">
+    <value>Name of this column</value>
+  </data>
+  <data name="ColumnSummaryProperty" xml:space="preserve">
+    <value>Summary</value>
+  </data>
+  <data name="ColumnSummaryProperty_S" xml:space="preserve">
+    <value>Summary (used in hover over tool tip)</value>
+  </data>
+  <data name="ColumnValueTypeProperty" xml:space="preserve">
+    <value>Value Type</value>
+  </data>
+  <data name="ColumnValueTypeProperty_S" xml:space="preserve">
+    <value>Column's data value type</value>
+  </data>
+  <data name="ColumnXStore" xml:space="preserve">
+    <value>ColumnStore</value>
+  </data>
+  <data name="ColumnX_K" xml:space="preserve">
+    <value>Column</value>
+  </data>
+  <data name="CommandX_K" xml:space="preserve">
+    <value>Command</value>
+  </data>
   <data name="Compute" xml:space="preserve">
     <value>Compute</value>
+  </data>
+  <data name="ComputeCircularDependanceError" xml:space="preserve">
+    <value>Compute Circular Dependancy</value>
+  </data>
+  <data name="ComputeInvalidSelectError" xml:space="preserve">
+    <value>Compute Invalid Select Clause</value>
+  </data>
+  <data name="ComputeMissingRelatedSelectError" xml:space="preserve">
+    <value>Compute Missing Related Select Clause</value>
+  </data>
+  <data name="ComputeMissingRootQueryError" xml:space="preserve">
+    <value>Compute  Missing Root Query</value>
+  </data>
+  <data name="ComputeMissingSelectError" xml:space="preserve">
+    <value>Compute  Missing Select Clause</value>
+  </data>
+  <data name="ComputeProblemRelatedWhereSelectError" xml:space="preserve">
+    <value>Compute Problem With Related Where/Select Clause</value>
+  </data>
+  <data name="ComputeStoreModel" xml:space="preserve">
+    <value>Store</value>
+  </data>
+  <data name="ComputeUnresolvedSelectError" xml:space="preserve">
+    <value>Compute Unresolved Select Clause</value>
+  </data>
+  <data name="ComputeValueOverflowError" xml:space="preserve">
+    <value>Compute Value Overflow</value>
+  </data>
+  <data name="ComputeXCompuTypeProperty" xml:space="preserve">
+    <value>Computing</value>
+  </data>
+  <data name="ComputeXCompuTypeProperty_S" xml:space="preserve">
+    <value>Type of computation</value>
+  </data>
+  <data name="ComputeXNameProperty" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="ComputeXNameProperty_S" xml:space="preserve">
+    <value>Name of the Computed Value</value>
+  </data>
+  <data name="ComputeXNumericSetProperty" xml:space="preserve">
+    <value>NumericSet</value>
+  </data>
+  <data name="ComputeXNumericSetProperty_S" xml:space="preserve">
+    <value>Numeric set calculation types</value>
+  </data>
+  <data name="ComputeXResultsProperty" xml:space="preserve">
+    <value>Results</value>
+  </data>
+  <data name="ComputeXResultsProperty_S" xml:space="preserve">
+    <value>Query results (scalar / array)?</value>
+  </data>
+  <data name="ComputeXSelectProperty" xml:space="preserve">
+    <value>Row Value Select</value>
+  </data>
+  <data name="ComputeXSelectProperty_S" xml:space="preserve">
+    <value>Value select expression</value>
+  </data>
+  <data name="ComputeXSeparatorProperty" xml:space="preserve">
+    <value>Separator</value>
+  </data>
+  <data name="ComputeXSeparatorProperty_S" xml:space="preserve">
+    <value>Separate the composite value parts with this string</value>
+  </data>
+  <data name="ComputeXSortingProperty" xml:space="preserve">
+    <value>Sorting</value>
+  </data>
+  <data name="ComputeXSortingProperty_S" xml:space="preserve">
+    <value>Chose results sorting method</value>
+  </data>
+  <data name="ComputeXStore" xml:space="preserve">
+    <value>ComputeStore</value>
+  </data>
+  <data name="ComputeXSummaryProperty" xml:space="preserve">
+    <value>Summary</value>
+  </data>
+  <data name="ComputeXSummaryProperty_S" xml:space="preserve">
+    <value>Summary (used in hover over tool tip)</value>
+  </data>
+  <data name="ComputeXTakeLimitProperty" xml:space="preserve">
+    <value>TakeLimit</value>
+  </data>
+  <data name="ComputeXTakeLimitProperty_S" xml:space="preserve">
+    <value>Take a limited number of elements form the full results set</value>
+  </data>
+  <data name="ComputeXTakeSetProperty" xml:space="preserve">
+    <value>TakeSet</value>
+  </data>
+  <data name="ComputeXTakeSetProperty_S" xml:space="preserve">
+    <value>Which end of the results set to take from</value>
+  </data>
+  <data name="ComputeXValueTypeProperty" xml:space="preserve">
+    <value>Resulting Value Type</value>
+  </data>
+  <data name="ComputeXValueTypeProperty_S" xml:space="preserve">
+    <value>Resulting value type</value>
+  </data>
+  <data name="ComputeXWhereProperty" xml:space="preserve">
+    <value>Rows Where</value>
+  </data>
+  <data name="ComputeXWhereProperty_S" xml:space="preserve">
+    <value>Filter the rows for specific property values</value>
+  </data>
+  <data name="ComputeX_K" xml:space="preserve">
+    <value>Compute</value>
+  </data>
+  <data name="ComputeX_QueryX" xml:space="preserve">
+    <value>Compute_Query</value>
   </data>
   <data name="CompuTypeEnum_S" xml:space="preserve">
     <value>Type of computation</value>
@@ -264,6 +414,12 @@
   <data name="Contact_One" xml:space="preserve">
     <value>One</value>
   </data>
+  <data name="CreateCommand" xml:space="preserve">
+    <value>Create</value>
+  </data>
+  <data name="CreateCommand_S" xml:space="preserve">
+    <value>Create/Refresh this graph</value>
+  </data>
   <data name="DashStyleEnum_Z" xml:space="preserve">
     <value>Dash Style</value>
   </data>
@@ -282,6 +438,48 @@
   <data name="DashStyle_Solid" xml:space="preserve">
     <value>Solid</value>
   </data>
+  <data name="EdgeConnect1Property" xml:space="preserve">
+    <value>Connect1</value>
+  </data>
+  <data name="EdgeConnect1Property_S" xml:space="preserve">
+    <value>Connect1</value>
+  </data>
+  <data name="EdgeConnect2Property" xml:space="preserve">
+    <value>Connect2</value>
+  </data>
+  <data name="EdgeConnect2Property_S" xml:space="preserve">
+    <value>Connect2</value>
+  </data>
+  <data name="EdgeFace1Property" xml:space="preserve">
+    <value>Face1</value>
+  </data>
+  <data name="EdgeFace1Property_S" xml:space="preserve">
+    <value>Face1</value>
+  </data>
+  <data name="EdgeFace2Property" xml:space="preserve">
+    <value>Face2</value>
+  </data>
+  <data name="EdgeFace2Property_S" xml:space="preserve">
+    <value>Face2</value>
+  </data>
+  <data name="EdgeFacet1Property" xml:space="preserve">
+    <value>Facet1</value>
+  </data>
+  <data name="EdgeFacet1Property_S" xml:space="preserve">
+    <value>Facet1</value>
+  </data>
+  <data name="EdgeFacet2Property" xml:space="preserve">
+    <value>Facet2</value>
+  </data>
+  <data name="EdgeFacet2Property_S" xml:space="preserve">
+    <value>Facet2</value>
+  </data>
+  <data name="EditCommand" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="EditCommand_S" xml:space="preserve">
+    <value>Edit this item</value>
+  </data>
   <data name="EndLineEnum_S" xml:space="preserve">
     <value>Type of line-end cap</value>
   </data>
@@ -299,6 +497,60 @@
   </data>
   <data name="EndLine_Triangle" xml:space="preserve">
     <value>End-Triangle</value>
+  </data>
+  <data name="EnumNameProperty" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="EnumNameProperty_S" xml:space="preserve">
+    <value>Name of this enumeration</value>
+  </data>
+  <data name="EnumSummaryProperty" xml:space="preserve">
+    <value>Summary</value>
+  </data>
+  <data name="EnumSummaryProperty_S" xml:space="preserve">
+    <value>Summary (used in hover over tool tip)</value>
+  </data>
+  <data name="EnumTextProperty" xml:space="preserve">
+    <value>Text</value>
+  </data>
+  <data name="EnumTextProperty_S" xml:space="preserve">
+    <value>Displayed text</value>
+  </data>
+  <data name="EnumValueProperty" xml:space="preserve">
+    <value>Value</value>
+  </data>
+  <data name="EnumValueProperty_S" xml:space="preserve">
+    <value>Actual value</value>
+  </data>
+  <data name="EnumXStore" xml:space="preserve">
+    <value>EnumStore</value>
+  </data>
+  <data name="EnumX_ColumnX" xml:space="preserve">
+    <value>Enum_Column</value>
+  </data>
+  <data name="EnumX_K" xml:space="preserve">
+    <value>Enum</value>
+  </data>
+  <data name="EnumZStore" xml:space="preserve">
+    <value>EnumZStore</value>
+  </data>
+  <data name="ErrorRootModel" xml:space="preserve">
+    <value>Errors</value>
+  </data>
+  <data name="ErrorRootModel_S" xml:space="preserve">
+    <value>List of errors</value>
+  </data>
+  <data name="ErrorStore" xml:space="preserve">
+    <value>ErrorStore</value>
+  </data>
+  <data name="ExpandAllCommand" xml:space="preserve">
+    <value>Expand All</value>
+  </data>
+  <data name="ExpandAllCommand_S" xml:space="preserve">
+    <value>Expand all subtree items</value>
+  </data>
+  <data name="ExportError" xml:space="preserve">
+    <value>Repository Export Error</value>
   </data>
   <data name="FacetEnum_S" xml:space="preserve">
     <value>Type of decoration on edge end</value>
@@ -330,6 +582,9 @@
   <data name="Facet_Nubby" xml:space="preserve">
     <value>Nubby</value>
   </data>
+  <data name="FlaredPath" xml:space="preserve">
+    <value>FlaredPath</value>
+  </data>
   <data name="FlipRotateEnum_S" xml:space="preserve">
     <value>Type of flip/rotation</value>
   </data>
@@ -360,11 +615,173 @@
   <data name="FlipRotate_RotateFlipVertical" xml:space="preserve">
     <value>RotateFlipVertical</value>
   </data>
+  <data name="ForkedPath" xml:space="preserve">
+    <value>ForkedPath</value>
+  </data>
+  <data name="GraphEdgeListModel" xml:space="preserve">
+    <value>Edges</value>
+  </data>
+  <data name="GraphEdgeListModel_S" xml:space="preserve">
+    <value>List of all edges in the graph</value>
+  </data>
+  <data name="GraphLevelListModel" xml:space="preserve">
+    <value>Levels</value>
+  </data>
+  <data name="GraphLevelListModel_S" xml:space="preserve">
+    <value>Path reduction levels</value>
+  </data>
+  <data name="GraphLevelModel" xml:space="preserve">
+    <value>Level</value>
+  </data>
+  <data name="GraphListModel" xml:space="preserve">
+    <value>Graph</value>
+  </data>
+  <data name="GraphListModel_S" xml:space="preserve">
+    <value>List of graphs</value>
+  </data>
+  <data name="GraphModel_K" xml:space="preserve">
+    <value>Graph</value>
+  </data>
+  <data name="GraphNameProperty" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="GraphNameProperty_S" xml:space="preserve">
+    <value>Name of this graph</value>
+  </data>
+  <data name="GraphNodeListModel" xml:space="preserve">
+    <value>Nodes</value>
+  </data>
+  <data name="GraphNodeListModel_S" xml:space="preserve">
+    <value>List of all nodes in this graph</value>
+  </data>
+  <data name="GraphOpenListModel" xml:space="preserve">
+    <value>Opens</value>
+  </data>
+  <data name="GraphOpenListModel_S" xml:space="preserve">
+    <value>List of incomplete paths</value>
+  </data>
+  <data name="GraphRefModel_K" xml:space="preserve">
+    <value>Graph</value>
+  </data>
+  <data name="GraphRootListModel" xml:space="preserve">
+    <value>Forest</value>
+  </data>
+  <data name="GraphRootListModel_S" xml:space="preserve">
+    <value>List of all forest tree roots in this graph</value>
+  </data>
+  <data name="GraphRootModel_K" xml:space="preserve">
+    <value>Edge</value>
+  </data>
+  <data name="GraphSummaryProperty" xml:space="preserve">
+    <value>Summary</value>
+  </data>
+  <data name="GraphSummaryProperty_S" xml:space="preserve">
+    <value>Summary (used in hover over tool tip)</value>
+  </data>
+  <data name="GraphSymbolSizeProperty" xml:space="preserve">
+    <value>Symbol Size</value>
+  </data>
+  <data name="GraphSymbolSizeProperty_S" xml:space="preserve">
+    <value>Full size width/height of symbols (12 to 255)</value>
+  </data>
+  <data name="GraphTerminalLengthProperty" xml:space="preserve">
+    <value>Terminal Length</value>
+  </data>
+  <data name="GraphTerminalLengthProperty_S" xml:space="preserve">
+    <value>Length of terminal</value>
+  </data>
+  <data name="GraphTerminalSpacingProperty" xml:space="preserve">
+    <value>Terminal Spacing</value>
+  </data>
+  <data name="GraphTerminalSpacingProperty_S" xml:space="preserve">
+    <value>Space between terminals</value>
+  </data>
+  <data name="GraphTerminalStretchProperty" xml:space="preserve">
+    <value>Skewed Angle Offset</value>
+  </data>
+  <data name="GraphTerminalStretchProperty_S" xml:space="preserve">
+    <value>Amount of offset in skewed angle connctions (2 is tyical) </value>
+  </data>
+  <data name="GraphXStore" xml:space="preserve">
+    <value>GraphStore</value>
+  </data>
+  <data name="GraphX_ColorColumnX" xml:space="preserve">
+    <value>Graph_ColorColumn</value>
+  </data>
+  <data name="GraphX_K" xml:space="preserve">
+    <value>Graph</value>
+  </data>
+  <data name="GraphX_QueryX" xml:space="preserve">
+    <value>Graph_Query</value>
+  </data>
+  <data name="GraphX_SymbolQueryX" xml:space="preserve">
+    <value>Graph_SymbolQuery</value>
+  </data>
+  <data name="GraphX_SymbolX" xml:space="preserve">
+    <value>Graph_Symbol</value>
+  </data>
+  <data name="GroupStore" xml:space="preserve">
+    <value>GroupStore</value>
+  </data>
+  <data name="ImportError" xml:space="preserve">
+    <value>Repository Import Error</value>
+  </data>
+  <data name="IncludeItemIdentityIndexProperty" xml:space="preserve">
+    <value>Show Item Index</value>
+  </data>
+  <data name="IncludeItemIdentityIndexProperty_S" xml:space="preserve">
+    <value>Include the Item's index in the item's name string</value>
+  </data>
+  <data name="InsertCommand" xml:space="preserve">
+    <value>Insert</value>
+  </data>
+  <data name="InsertCommand_S" xml:space="preserve">
+    <value>Insert/Add an item</value>
+  </data>
+  <data name="InternalStoreListModel" xml:space="preserve">
+    <value>Internal</value>
+  </data>
+  <data name="InternalStoreListModel_S" xml:space="preserve">
+    <value>Internal stores (tables)</value>
+  </data>
+  <data name="InternalStoreListModel_V" xml:space="preserve">
+    <value>Internal Stores:</value>
+  </data>
+  <data name="InternalStoreModel_K" xml:space="preserve">
+    <value>PathCount</value>
+  </data>
   <data name="Invalid" xml:space="preserve">
     <value>####</value>
   </data>
   <data name="Item" xml:space="preserve">
     <value>Item</value>
+  </data>
+  <data name="ItemChildMoved_K" xml:space="preserve">
+    <value>Reordered Child Links</value>
+  </data>
+  <data name="ItemCreated_K" xml:space="preserve">
+    <value>Created</value>
+  </data>
+  <data name="ItemLinked_K" xml:space="preserve">
+    <value>Linked</value>
+  </data>
+  <data name="ItemMoved_K" xml:space="preserve">
+    <value>Reorder Items</value>
+  </data>
+  <data name="ItemParentMoved_K" xml:space="preserve">
+    <value>Reordered Parent Links</value>
+  </data>
+  <data name="ItemRemoved_K" xml:space="preserve">
+    <value>Removed</value>
+  </data>
+  <data name="ItemUnlinked_K" xml:space="preserve">
+    <value>Unlinked</value>
+  </data>
+  <data name="ItemUpdated_K" xml:space="preserve">
+    <value>Updated</value>
+  </data>
+  <data name="Item_Error" xml:space="preserve">
+    <value>Item_Error</value>
   </data>
   <data name="LabelingEnum_S" xml:space="preserve">
     <value>The type of label placement</value>
@@ -438,6 +855,210 @@
   <data name="LineStyle_SimpleSpline" xml:space="preserve">
     <value>SimpleSpline</value>
   </data>
+  <data name="LinkPath" xml:space="preserve">
+    <value>LinkPath</value>
+  </data>
+  <data name="LinkPath_K" xml:space="preserve">
+    <value>_Link</value>
+  </data>
+  <data name="MakeEgressHeadCommand" xml:space="preserve">
+    <value>Make Egress Sequence</value>
+  </data>
+  <data name="MakeEgressHeadCommand_S" xml:space="preserve">
+    <value>Make this an egress sequence</value>
+  </data>
+  <data name="MakeGroupHeadCommand" xml:space="preserve">
+    <value>Make Group Sequence</value>
+  </data>
+  <data name="MakeGroupHeadCommand_S" xml:space="preserve">
+    <value>Make this a group sequence</value>
+  </data>
+  <data name="MakePathHeadCommand" xml:space="preserve">
+    <value>Make Path Sequence</value>
+  </data>
+  <data name="MakePathHeadCommand_S" xml:space="preserve">
+    <value>Make this a path sequence</value>
+  </data>
+  <data name="MakeRootLinkCommand" xml:space="preserve">
+    <value>Make Link Sequence</value>
+  </data>
+  <data name="MakeRootLinkCommand_S" xml:space="preserve">
+    <value>Make this a link sequence</value>
+  </data>
+  <data name="MergeCommand" xml:space="preserve">
+    <value>Merge</value>
+  </data>
+  <data name="MergeCommand_S" xml:space="preserve">
+    <value>Merge the changes listed with the next change set.</value>
+  </data>
+  <data name="MetaChildRelationListModel" xml:space="preserve">
+    <value>Child Relation</value>
+  </data>
+  <data name="MetaChildRelationListModel_S" xml:space="preserve">
+    <value>List of user defined child relationships for this table</value>
+  </data>
+  <data name="MetaColumnListModel" xml:space="preserve">
+    <value>Column</value>
+  </data>
+  <data name="MetaColumnListModel_S" xml:space="preserve">
+    <value>List of user defined Columns for this table</value>
+  </data>
+  <data name="MetaComputeListModel" xml:space="preserve">
+    <value>Computed</value>
+  </data>
+  <data name="MetaComputeListModel_S" xml:space="preserve">
+    <value>List of user defined computed values for this table</value>
+  </data>
+  <data name="MetadataRootModel" xml:space="preserve">
+    <value>Metadata</value>
+  </data>
+  <data name="MetadataRootModel_S" xml:space="preserve">
+    <value>Model schema and metadata</value>
+  </data>
+  <data name="MetadataSubRootModel" xml:space="preserve">
+    <value>Metadata</value>
+  </data>
+  <data name="MetadataSubRootModel_S" xml:space="preserve">
+    <value>Model schema and metadata</value>
+  </data>
+  <data name="MetaEnumColumnListModel" xml:space="preserve">
+    <value>Columns</value>
+  </data>
+  <data name="MetaEnumColumnListModel_S" xml:space="preserve">
+    <value>Drag a Column and drop it here to assign this enum.</value>
+  </data>
+  <data name="MetaEnumListModel" xml:space="preserve">
+    <value>Enum</value>
+  </data>
+  <data name="MetaEnumPairListModel" xml:space="preserve">
+    <value>ValuePairs</value>
+  </data>
+  <data name="MetaEnumPairListModel_S" xml:space="preserve">
+    <value>Displayed text for column value</value>
+  </data>
+  <data name="MetaEnumRelatedColumnModel_K" xml:space="preserve">
+    <value>Column</value>
+  </data>
+  <data name="MetaGraphColorColumnModel_K" xml:space="preserve">
+    <value>Column</value>
+  </data>
+  <data name="MetaGraphColoringModel" xml:space="preserve">
+    <value>Coloring</value>
+  </data>
+  <data name="MetaGraphColoringModel_S" xml:space="preserve">
+    <value>Drag the Color-Column and drop it here.</value>
+  </data>
+  <data name="MetaGraphColoringModel_V" xml:space="preserve">
+    <value>Node Colors:</value>
+  </data>
+  <data name="MetaGraphEgressHeadModel_K" xml:space="preserve">
+    <value>EgressDefinition</value>
+  </data>
+  <data name="MetaGraphEgressLinkModel_K" xml:space="preserve">
+    <value>EgressLink</value>
+  </data>
+  <data name="MetaGraphGroupHeadModel_K" xml:space="preserve">
+    <value>GroupDefinition</value>
+  </data>
+  <data name="MetaGraphGroupLinkModel_K" xml:space="preserve">
+    <value>GroupLink</value>
+  </data>
+  <data name="MetaGraphLinkModel_K" xml:space="preserve">
+    <value>Link</value>
+  </data>
+  <data name="MetaGraphListModel" xml:space="preserve">
+    <value>Graph</value>
+  </data>
+  <data name="MetaGraphNodeListModel" xml:space="preserve">
+    <value>Nodes</value>
+  </data>
+  <data name="MetaGraphNodeModel_K" xml:space="preserve">
+    <value>Node Type</value>
+  </data>
+  <data name="MetaGraphNodeSymbolModel_K" xml:space="preserve">
+    <value>Symbol</value>
+  </data>
+  <data name="MetaGraphParmListModel" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="MetaGraphPathHeadModel_K" xml:space="preserve">
+    <value>PathDefinition</value>
+  </data>
+  <data name="MetaGraphPathLinkModel_K" xml:space="preserve">
+    <value>PathLink</value>
+  </data>
+  <data name="MetaGraphRootListModel" xml:space="preserve">
+    <value>Forest</value>
+  </data>
+  <data name="MetaGraphRootListModel_S" xml:space="preserve">
+    <value>Drag a Root-Table and drop it here.</value>
+  </data>
+  <data name="MetaGraphRootListModel_V" xml:space="preserve">
+    <value>Root Table:</value>
+  </data>
+  <data name="MetaGraphRootModel_K" xml:space="preserve">
+    <value>RootTable</value>
+  </data>
+  <data name="MetaGraphRootModel_V" xml:space="preserve">
+    <value>Root Table:</value>
+  </data>
+  <data name="MetaNameColumnRelationModel" xml:space="preserve">
+    <value>Item's Name Column</value>
+  </data>
+  <data name="MetaNameColumnRelationModel_S" xml:space="preserve">
+    <value>Drag the Column to be use for the item's name and drop it here.</value>
+  </data>
+  <data name="MetaParentRelatationListModel" xml:space="preserve">
+    <value>Parent Relation</value>
+  </data>
+  <data name="MetaParentRelatationListModel_S" xml:space="preserve">
+    <value>List of user defined parent relationships for this table</value>
+  </data>
+  <data name="MetaRelationListModel" xml:space="preserve">
+    <value>Metadata Relation</value>
+  </data>
+  <data name="MetaSummaryColumnRelationModel" xml:space="preserve">
+    <value>Item's Summary Column</value>
+  </data>
+  <data name="MetaSummaryColumnRelationModel_S" xml:space="preserve">
+    <value>Drag the Column to be use for the item's summary and drop it here.</value>
+  </data>
+  <data name="MetaSymbolListModel" xml:space="preserve">
+    <value>Symbols</value>
+  </data>
+  <data name="MetaTableListModel" xml:space="preserve">
+    <value>Table</value>
+  </data>
+  <data name="MetaTableListModel_S" xml:space="preserve">
+    <value>List of tables</value>
+  </data>
+  <data name="MetaValueHeadModel_K" xml:space="preserve">
+    <value>ValueHead</value>
+  </data>
+  <data name="MetaValueLinkModel_K" xml:space="preserve">
+    <value>ValueLink</value>
+  </data>
+  <data name="MetaViewViewListModel" xml:space="preserve">
+    <value>View</value>
+  </data>
+  <data name="MetaViewViewListModel_S" xml:space="preserve">
+    <value>List of user defined views</value>
+  </data>
+  <data name="MetaViewViewModel" xml:space="preserve">
+    <value>Group</value>
+  </data>
+  <data name="ModelingRootModel" xml:space="preserve">
+    <value>Modeling</value>
+  </data>
+  <data name="ModelingRootModel_S" xml:space="preserve">
+    <value>Modeling data</value>
+  </data>
+  <data name="ModelingSubRootModel" xml:space="preserve">
+    <value>Modeling</value>
+  </data>
+  <data name="ModelingSubRootModel_S" xml:space="preserve">
+    <value>Modeling data</value>
+  </data>
   <data name="Name" xml:space="preserve">
     <value>Name</value>
   </data>
@@ -461,6 +1082,48 @@
   </data>
   <data name="Naming_UniqueNumber" xml:space="preserve">
     <value>UniqueNumber</value>
+  </data>
+  <data name="NodeBarWidthProperty" xml:space="preserve">
+    <value>Bar Width</value>
+  </data>
+  <data name="NodeBarWidthPropertyS" xml:space="preserve">
+    <value>Width of node's  bus bar representation </value>
+  </data>
+  <data name="NodeCenterXYProperty" xml:space="preserve">
+    <value>Center (X, Y)</value>
+  </data>
+  <data name="NodeCenterXYProperty_S" xml:space="preserve">
+    <value>Node's center X, Y coordinates</value>
+  </data>
+  <data name="NodeFlipRotateProperty" xml:space="preserve">
+    <value>Flip Rotate</value>
+  </data>
+  <data name="NodeFlipRotateProperty_S" xml:space="preserve">
+    <value>Node symbol's flip/rotate state</value>
+  </data>
+  <data name="NodeLabelingProperty" xml:space="preserve">
+    <value>Labeling</value>
+  </data>
+  <data name="NodeLabelingProperty_S" xml:space="preserve">
+    <value>Placement of the node's identity lable</value>
+  </data>
+  <data name="NodeOrientationProperty" xml:space="preserve">
+    <value>Orientation</value>
+  </data>
+  <data name="NodeOrientationProperty_S" xml:space="preserve">
+    <value>Nodes orientation</value>
+  </data>
+  <data name="NodeResizingProperty" xml:space="preserve">
+    <value>Resizing</value>
+  </data>
+  <data name="NodeResizingProperty_S" xml:space="preserve">
+    <value>Allowed resizing</value>
+  </data>
+  <data name="NodeSizeWHProperty" xml:space="preserve">
+    <value>Size (W, H)</value>
+  </data>
+  <data name="NodeSizeWHProperty_S" xml:space="preserve">
+    <value>Node's (width, height) size</value>
   </data>
   <data name="NumericSetEnum_Z" xml:space="preserve">
     <value>NumericSet</value>
@@ -516,11 +1179,374 @@
   <data name="Pairing_OneToOne_Z" xml:space="preserve">
     <value>OneToOne</value>
   </data>
+  <data name="PairX_K" xml:space="preserve">
+    <value>Pair</value>
+  </data>
+  <data name="ParallelPath" xml:space="preserve">
+    <value>ParallelPath</value>
+  </data>
+  <data name="ParentRelationGroupRelation" xml:space="preserve">
+    <value>z</value>
+  </data>
+  <data name="ParmDebugListModel" xml:space="preserve">
+    <value>Diagnostic</value>
+  </data>
+  <data name="ParmDebugListModel_S" xml:space="preserve">
+    <value>List of diagnostic options</value>
+  </data>
+  <data name="ParmRootModel" xml:space="preserve">
+    <value>Parm</value>
+  </data>
+  <data name="ParmRootModel_S" xml:space="preserve">
+    <value>Model parameters</value>
+  </data>
+  <data name="PrimeComputeModel" xml:space="preserve">
+    <value>Compute</value>
+  </data>
+  <data name="PrimeComputeModel_S" xml:space="preserve">
+    <value>Top level computed values</value>
+  </data>
+  <data name="PrimeStore" xml:space="preserve">
+    <value>PrimeStore</value>
+  </data>
   <data name="Property" xml:space="preserve">
     <value>Property</value>
   </data>
+  <data name="PropertyStore" xml:space="preserve">
+    <value>Internal Properties</value>
+  </data>
+  <data name="Property_K" xml:space="preserve">
+    <value>Property</value>
+  </data>
+  <data name="Property_S" xml:space="preserve">
+    <value>Internal defined property</value>
+  </data>
+  <data name="Property_ViewX" xml:space="preserve">
+    <value>Column_View</value>
+  </data>
+  <data name="QueryEgressHeadModel_K" xml:space="preserve">
+    <value>(EgressHead)</value>
+  </data>
+  <data name="QueryEgressLinkModel_K" xml:space="preserve">
+    <value>(EgressLink)</value>
+  </data>
+  <data name="QueryEgressStepModel_K" xml:space="preserve">
+    <value>(EgressStep)</value>
+  </data>
+  <data name="QueryEgressTailModel_K" xml:space="preserve">
+    <value>(EgressTail)</value>
+  </data>
+  <data name="QueryGraphLink_K" xml:space="preserve">
+    <value>Query GraphLink</value>
+  </data>
+  <data name="QueryGraphRoot_K" xml:space="preserve">
+    <value>Query GraphRoot</value>
+  </data>
+  <data name="QueryGroupHeadModel_K" xml:space="preserve">
+    <value>(GroupHead)</value>
+  </data>
+  <data name="QueryGroupHead_K" xml:space="preserve">
+    <value>Query GroupHead</value>
+  </data>
+  <data name="QueryGroupLinkModel_K" xml:space="preserve">
+    <value>(GroupLink)</value>
+  </data>
+  <data name="QueryGroupLink_K" xml:space="preserve">
+    <value>Query GroupLink</value>
+  </data>
+  <data name="QueryGroupStepModel_K" xml:space="preserve">
+    <value>(GroupStep)</value>
+  </data>
+  <data name="QueryGroupTailModel_K" xml:space="preserve">
+    <value>(GroupTail)</value>
+  </data>
+  <data name="QueryInvalidSelectError" xml:space="preserve">
+    <value>Query Invalid Select Clause</value>
+  </data>
+  <data name="QueryInvalidWhereError" xml:space="preserve">
+    <value>Query Invalid Where Clause</value>
+  </data>
+  <data name="QueryIsCorrupt_K" xml:space="preserve">
+    <value>Query Corrupted</value>
+  </data>
+  <data name="QueryMissingSelectError" xml:space="preserve">
+    <value>Select claus is required</value>
+  </data>
+  <data name="QueryNodeSymbol_K" xml:space="preserve">
+    <value>Query NodeSymbol</value>
+  </data>
+  <data name="QueryPath" xml:space="preserve">
+    <value>QueryPath</value>
+  </data>
+  <data name="QueryPathHeadModel_K" xml:space="preserve">
+    <value>(PathHead)</value>
+  </data>
+  <data name="QueryPathHead_K" xml:space="preserve">
+    <value>Query PathHead</value>
+  </data>
+  <data name="QueryPathLinkModel_K" xml:space="preserve">
+    <value>(PathLink)</value>
+  </data>
+  <data name="QueryPathLink_K" xml:space="preserve">
+    <value>Query PathLink</value>
+  </data>
+  <data name="QueryPathStepModel_K" xml:space="preserve">
+    <value>(PathStep)</value>
+  </data>
+  <data name="QueryPathTailModel_K" xml:space="preserve">
+    <value>(PathTail)</value>
+  </data>
+  <data name="QueryRootLinkModel_K" xml:space="preserve">
+    <value>(Link) </value>
+  </data>
+  <data name="QuerySegueHead_K" xml:space="preserve">
+    <value>Query SegueHead</value>
+  </data>
+  <data name="QuerySegueLink_K" xml:space="preserve">
+    <value>Query SegueLink</value>
+  </data>
+  <data name="QuerySelect" xml:space="preserve">
+    <value>Select</value>
+  </data>
+  <data name="QueryUnresolvedSelectError" xml:space="preserve">
+    <value>Query Unresolved Select Clause</value>
+  </data>
+  <data name="QueryUnresolvedWhereError" xml:space="preserve">
+    <value>Query Unresulved Where Clause</value>
+  </data>
+  <data name="QueryValueHead_K" xml:space="preserve">
+    <value>Query ValueHead</value>
+  </data>
+  <data name="QueryValueLink_K" xml:space="preserve">
+    <value>Query ValueLink</value>
+  </data>
+  <data name="QueryValueOverflowdWhereError" xml:space="preserve">
+    <value>Query Value Overflow Where Clause</value>
+  </data>
+  <data name="QueryValueOverflowSelectError" xml:space="preserve">
+    <value>Query Value Overflow Select Clause</value>
+  </data>
+  <data name="QueryValueRoot_K" xml:space="preserve">
+    <value>Query ValueRoot</value>
+  </data>
+  <data name="QueryViewHead_K" xml:space="preserve">
+    <value>Query ViewHead</value>
+  </data>
+  <data name="QueryViewLink_K" xml:space="preserve">
+    <value>Query ViewLink</value>
+  </data>
+  <data name="QueryViewRoot_K" xml:space="preserve">
+    <value>Query ViewRoot</value>
+  </data>
+  <data name="QueryWhere" xml:space="preserve">
+    <value>Where</value>
+  </data>
+  <data name="QueryXAllowSelfLoopProperty" xml:space="preserve">
+    <value>Allow Self Loop</value>
+  </data>
+  <data name="QueryXAllowSelfLoopProperty_S" xml:space="preserve">
+    <value>Allow this path loop back upon itself</value>
+  </data>
+  <data name="QueryXConnect1Property" xml:space="preserve">
+    <value>Connect1</value>
+  </data>
+  <data name="QueryXConnect1Property_S" xml:space="preserve">
+    <value>Specify allowed connections on head end N – S – E – W – NE – NW- SE – SW – EN – ES – WN – WS – NEC – NWC – SEC - SWC</value>
+  </data>
+  <data name="QueryXConnect2Property" xml:space="preserve">
+    <value>Connect2</value>
+  </data>
+  <data name="QueryXConnect2Property_S" xml:space="preserve">
+    <value>Specify allowed connections on tail end N – S – E – W – NE – NW- SE – SW – EN – ES – WN – WS – NEC – NWC – SEC - SWC</value>
+  </data>
+  <data name="QueryXDashStyleProperty" xml:space="preserve">
+    <value>Dash Style</value>
+  </data>
+  <data name="QueryXDashStyleProperty_S" xml:space="preserve">
+    <value>Specify the line's dash style</value>
+  </data>
+  <data name="QueryXExclusiveKeyProperty" xml:space="preserve">
+    <value>Is Exclusive</value>
+  </data>
+  <data name="QueryXExclusiveKeyProperty_S" xml:space="preserve">
+    <value>Prevent duplicate occrances of this exact path</value>
+  </data>
+  <data name="QueryXFacet1Property" xml:space="preserve">
+    <value>Facet1</value>
+  </data>
+  <data name="QueryXFacet1Property_S" xml:space="preserve">
+    <value>Path head end facet</value>
+  </data>
+  <data name="QueryXFacet2Property" xml:space="preserve">
+    <value>Facet2</value>
+  </data>
+  <data name="QueryXFacet2Property_S" xml:space="preserve">
+    <value>Path tail end facet</value>
+  </data>
+  <data name="QueryXIsBreakPointProperty" xml:space="preserve">
+    <value>Is Break Point</value>
+  </data>
+  <data name="QueryXIsBreakPointProperty_S" xml:space="preserve">
+    <value>Allow this path to be opened/closed at this point</value>
+  </data>
+  <data name="QueryXIsFullTableReadProperty" xml:space="preserve">
+    <value>Full Table Scan</value>
+  </data>
+  <data name="QueryXIsFullTableReadProperty_S" xml:space="preserve">
+    <value>Make every row of this table a root item</value>
+  </data>
+  <data name="QueryXIsImmediateProperty" xml:space="preserve">
+    <value>Is Immediate</value>
+  </data>
+  <data name="QueryXIsImmediateProperty_S" xml:space="preserve">
+    <value>Allow the existance of an incompleted path</value>
+  </data>
+  <data name="QueryXIsPathReversedProperty" xml:space="preserve">
+    <value>Is Path Reversed</value>
+  </data>
+  <data name="QueryXIsPathReversedProperty_S" xml:space="preserve">
+    <value>Reverse the head/tail of the entire path</value>
+  </data>
+  <data name="QueryXIsPersistentProperty" xml:space="preserve">
+    <value>Is Persistent</value>
+  </data>
+  <data name="QueryXIsPersistentProperty_S" xml:space="preserve">
+    <value>Keep this path alive even though it may be incomplete</value>
+  </data>
+  <data name="QueryXIsReversedProperty" xml:space="preserve">
+    <value>Is Reversed</value>
+  </data>
+  <data name="QueryXIsReversedProperty_S" xml:space="preserve">
+    <value>Reverse the relation's head/tail traversal</value>
+  </data>
+  <data name="QueryXLineColorProperty" xml:space="preserve">
+    <value>Line Color</value>
+  </data>
+  <data name="QueryXLineColorProperty_S" xml:space="preserve">
+    <value>Forced line color (ARGB code, e.g.  #FF008000)</value>
+  </data>
+  <data name="QueryXLineStyleProperty" xml:space="preserve">
+    <value>Line Style</value>
+  </data>
+  <data name="QueryXLineStyleProperty_S" xml:space="preserve">
+    <value>Specify the line's style</value>
+  </data>
+  <data name="QueryXRelationProperty" xml:space="preserve">
+    <value>Relation</value>
+  </data>
+  <data name="QueryXRelationProperty_S" xml:space="preserve">
+    <value>Relation referenced by this query</value>
+  </data>
+  <data name="QueryXSelectProperty" xml:space="preserve">
+    <value>Rows Where</value>
+  </data>
+  <data name="QueryXSelectProperty_S" xml:space="preserve">
+    <value>Select expresion string</value>
+  </data>
+  <data name="QueryXStore" xml:space="preserve">
+    <value>QueryStore</value>
+  </data>
+  <data name="QueryXWhereProperty" xml:space="preserve">
+    <value>Rows Where</value>
+  </data>
+  <data name="QueryXWhereProperty_S" xml:space="preserve">
+    <value>Filter the rows for specific property values</value>
+  </data>
+  <data name="QueryX_K" xml:space="preserve">
+    <value>Query</value>
+  </data>
+  <data name="QueryX_Property" xml:space="preserve">
+    <value>Query_Property</value>
+  </data>
+  <data name="QueryX_QueryX" xml:space="preserve">
+    <value>Query_Query</value>
+  </data>
+  <data name="QueryX_ViewX" xml:space="preserve">
+    <value>Query_View</value>
+  </data>
+  <data name="RadialPath" xml:space="preserve">
+    <value>RadialPath</value>
+  </data>
+  <data name="RadialPath_K" xml:space="preserve">
+    <value>_Radial</value>
+  </data>
+  <data name="RedoCommand" xml:space="preserve">
+    <value>Redo</value>
+  </data>
+  <data name="RedoCommand_A" xml:space="preserve">
+    <value>R</value>
+  </data>
+  <data name="RedoCommand_S" xml:space="preserve">
+    <value>Redo the changes listed in this change set. </value>
+  </data>
+  <data name="RefreshCommand" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
+  <data name="RefreshCommand_S" xml:space="preserve">
+    <value>Refresh this view</value>
+  </data>
   <data name="Relation" xml:space="preserve">
     <value>Relation</value>
+  </data>
+  <data name="RelationIsReferenceProperty" xml:space="preserve">
+    <value>Is Restricted</value>
+  </data>
+  <data name="RelationIsReferenceProperty_S" xml:space="preserve">
+    <value>Expect a min/max number of occrances</value>
+  </data>
+  <data name="RelationIsRequiredProperty" xml:space="preserve">
+    <value>Is Required</value>
+  </data>
+  <data name="RelationIsRequiredProperty_S" xml:space="preserve">
+    <value>When the parent is deleted, delete its dependant children</value>
+  </data>
+  <data name="RelationNameProperty" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="RelationNameProperty_S" xml:space="preserve">
+    <value>Name of this relation</value>
+  </data>
+  <data name="RelationPairingProperty" xml:space="preserve">
+    <value>Pairing</value>
+  </data>
+  <data name="RelationPairingProperty_S" xml:space="preserve">
+    <value>Type of relationship</value>
+  </data>
+  <data name="RelationStore" xml:space="preserve">
+    <value>Internal Relations</value>
+  </data>
+  <data name="RelationSummaryProperty" xml:space="preserve">
+    <value>Summary</value>
+  </data>
+  <data name="RelationSummaryProperty_S" xml:space="preserve">
+    <value>Summary (used in hover over tool tip)</value>
+  </data>
+  <data name="RelationXStore" xml:space="preserve">
+    <value>RelationStore</value>
+  </data>
+  <data name="RelationX_K" xml:space="preserve">
+    <value>Relation</value>
+  </data>
+  <data name="RelationZStore" xml:space="preserve">
+    <value>Internal RelationZ</value>
+  </data>
+  <data name="Relation_K" xml:space="preserve">
+    <value>Relation</value>
+  </data>
+  <data name="Relation_QueryX" xml:space="preserve">
+    <value>Relation_Query</value>
+  </data>
+  <data name="Relation_S" xml:space="preserve">
+    <value>Internally defined relation</value>
+  </data>
+  <data name="Relation_ViewX" xml:space="preserve">
+    <value>Relation_View</value>
+  </data>
+  <data name="RemoveCommand" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="RemoveCommand_S" xml:space="preserve">
+    <value>Remove this item</value>
   </data>
   <data name="ResizingEnum_S" xml:space="preserve">
     <value>Type of node resizing</value>
@@ -551,6 +1577,42 @@
   </data>
   <data name="Results_OneValue" xml:space="preserve">
     <value>OneValue</value>
+  </data>
+  <data name="ReverseRelationGroupRelation" xml:space="preserve">
+    <value>z</value>
+  </data>
+  <data name="RowChildRelationListModel" xml:space="preserve">
+    <value>Child Relation</value>
+  </data>
+  <data name="RowChildRelationModel_K" xml:space="preserve">
+    <value>Relation</value>
+  </data>
+  <data name="RowComputeListModel" xml:space="preserve">
+    <value>Computed</value>
+  </data>
+  <data name="RowDefaultPropertyListModel" xml:space="preserve">
+    <value>Default Properties</value>
+  </data>
+  <data name="RowParentRelationListModel" xml:space="preserve">
+    <value>Parent Relation</value>
+  </data>
+  <data name="RowParentRelationModel_K" xml:space="preserve">
+    <value>Relation</value>
+  </data>
+  <data name="RowPropertyListModel" xml:space="preserve">
+    <value>Properties</value>
+  </data>
+  <data name="RowUnusedChildRelationListModel" xml:space="preserve">
+    <value>Unused Child Relations</value>
+  </data>
+  <data name="RowUnusedParentRelationListModel" xml:space="preserve">
+    <value>Unused Parent Relations</value>
+  </data>
+  <data name="RowX_K" xml:space="preserve">
+    <value>Row</value>
+  </data>
+  <data name="SeriesPath" xml:space="preserve">
+    <value>SeriesPath</value>
   </data>
   <data name="SideEnum_S" xml:space="preserve">
     <value>On wich side is the  connection</value>
@@ -606,6 +1668,135 @@
   <data name="StartLine_Triangle" xml:space="preserve">
     <value>Start-Triangle</value>
   </data>
+  <data name="StoreChildRelationListModel" xml:space="preserve">
+    <value>ChildRelations</value>
+  </data>
+  <data name="StoreChildRelationListModel_S" xml:space="preserve">
+    <value>Child relations of this store</value>
+  </data>
+  <data name="StoreChildRelationModel_K" xml:space="preserve">
+    <value>ChildRelation</value>
+  </data>
+  <data name="StoreItemItemListModel" xml:space="preserve">
+    <value>Items</value>
+  </data>
+  <data name="StoreItemItemListModel_S" xml:space="preserve">
+    <value>Store child items</value>
+  </data>
+  <data name="StoreItemItemModel_K" xml:space="preserve">
+    <value>Item</value>
+  </data>
+  <data name="StoreItemModel_K" xml:space="preserve">
+    <value>PathCheck</value>
+  </data>
+  <data name="StoreParentRelationListModel" xml:space="preserve">
+    <value>ParentRelations</value>
+  </data>
+  <data name="StoreParentRelationListModel_S" xml:space="preserve">
+    <value>Parent relations of this store</value>
+  </data>
+  <data name="StoreParentRelationModel_K" xml:space="preserve">
+    <value>ParentRelation</value>
+  </data>
+  <data name="StoreRelationLinkListModel" xml:space="preserve">
+    <value>Links</value>
+  </data>
+  <data name="StoreRelationLinkListModel_S" xml:space="preserve">
+    <value>Relation links</value>
+  </data>
+  <data name="StoreRelationLinkModel_K" xml:space="preserve">
+    <value>Link</value>
+  </data>
+  <data name="Store_ChildRelation" xml:space="preserve">
+    <value>Store_ChildRelation</value>
+  </data>
+  <data name="Store_ComputeX" xml:space="preserve">
+    <value>Store_Compute</value>
+  </data>
+  <data name="Store_ParentRelation" xml:space="preserve">
+    <value>Store_ParentRelation</value>
+  </data>
+  <data name="Store_Property" xml:space="preserve">
+    <value>Store_Property</value>
+  </data>
+  <data name="Store_QueryX" xml:space="preserve">
+    <value>Store_Query</value>
+  </data>
+  <data name="Symbol" xml:space="preserve">
+    <value>Symbol</value>
+  </data>
+  <data name="SymbolXAttatchProperty" xml:space="preserve">
+    <value>Attach</value>
+  </data>
+  <data name="SymbolXAttatchProperty_S" xml:space="preserve">
+    <value>Specify the way an edge attatches to the symbol / point node</value>
+  </data>
+  <data name="SymbolXNameProperty" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="SymbolXNameProperty_S" xml:space="preserve">
+    <value>Name of this symbol</value>
+  </data>
+  <data name="SymbolXStore" xml:space="preserve">
+    <value>SymbolStore</value>
+  </data>
+  <data name="SymbolX_K" xml:space="preserve">
+    <value>Symbol</value>
+  </data>
+  <data name="SymbolX_QueryX" xml:space="preserve">
+    <value>Symbol_Query</value>
+  </data>
+  <data name="TableChildRelationGroup" xml:space="preserve">
+    <value>z</value>
+  </data>
+  <data name="TableListModel" xml:space="preserve">
+    <value>Table</value>
+  </data>
+  <data name="TableListModel_S" xml:space="preserve">
+    <value>List of tables</value>
+  </data>
+  <data name="TableNameProperty" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="TableNameProperty_S" xml:space="preserve">
+    <value>Name of this table</value>
+  </data>
+  <data name="TableParentRelationGroup" xml:space="preserve">
+    <value>z</value>
+  </data>
+  <data name="TableRelationGroupRelation" xml:space="preserve">
+    <value>z</value>
+  </data>
+  <data name="TableReverseRelationGroup" xml:space="preserve">
+    <value>z</value>
+  </data>
+  <data name="TableSummaryProperty" xml:space="preserve">
+    <value>Summary</value>
+  </data>
+  <data name="TableSummaryProperty_S" xml:space="preserve">
+    <value>Summary (used in hover over tool tip)</value>
+  </data>
+  <data name="TableXStore" xml:space="preserve">
+    <value>TableStore</value>
+  </data>
+  <data name="TableX_ChildRelationX" xml:space="preserve">
+    <value>Table_ChildRelation</value>
+  </data>
+  <data name="TableX_ColumnX" xml:space="preserve">
+    <value>Table_Column</value>
+  </data>
+  <data name="TableX_K" xml:space="preserve">
+    <value>Table</value>
+  </data>
+  <data name="TableX_NameProperty" xml:space="preserve">
+    <value>Table_NameProperty</value>
+  </data>
+  <data name="TableX_ParentRelationX" xml:space="preserve">
+    <value>Table_ParentRelation</value>
+  </data>
+  <data name="TableX_SummaryProperty" xml:space="preserve">
+    <value>Table_SummaryProperty</value>
+  </data>
   <data name="TakeSetEnum_S" xml:space="preserve">
     <value>Take a limited number of result items </value>
   </data>
@@ -623,6 +1814,15 @@
   </data>
   <data name="Unassigned" xml:space="preserve">
     <value>???</value>
+  </data>
+  <data name="UndoCommand" xml:space="preserve">
+    <value>Undo</value>
+  </data>
+  <data name="UndoCommand_A" xml:space="preserve">
+    <value>U</value>
+  </data>
+  <data name="UndoCommand_S" xml:space="preserve">
+    <value>Undo the changes listed in this change set. </value>
   </data>
   <data name="ValueType" xml:space="preserve">
     <value>Value Type</value>
@@ -722,5 +1922,74 @@
   </data>
   <data name="ValueType_UInt64Array" xml:space="preserve">
     <value>UInt64Array</value>
+  </data>
+  <data name="ValueXIsReversedProperty" xml:space="preserve">
+    <value>Is Reversed</value>
+  </data>
+  <data name="ValueXIsReversedProperty_S" xml:space="preserve">
+    <value>Reverse the relation's head/tail traversal</value>
+  </data>
+  <data name="ValueXSelectProperty" xml:space="preserve">
+    <value>Row Select</value>
+  </data>
+  <data name="ValueXSelectProperty_S" xml:space="preserve">
+    <value>Select expresion string</value>
+  </data>
+  <data name="ValueXStore" xml:space="preserve">
+    <value>ValueStore</value>
+  </data>
+  <data name="ValueXValueTypeProperty" xml:space="preserve">
+    <value>Result Type</value>
+  </data>
+  <data name="ValueXValueTypeProperty_S" xml:space="preserve">
+    <value>Resulting value type</value>
+  </data>
+  <data name="ValueXWhereProperty" xml:space="preserve">
+    <value>Rows Where</value>
+  </data>
+  <data name="ValueXWhereProperty_S" xml:space="preserve">
+    <value>Filter the rows for specific property values</value>
+  </data>
+  <data name="ViewCommand" xml:space="preserve">
+    <value>View</value>
+  </data>
+  <data name="ViewCommand_S" xml:space="preserve">
+    <value>Open this item in secondary view</value>
+  </data>
+  <data name="ViewNameProperty" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="ViewQueryModel_K" xml:space="preserve">
+    <value>Query</value>
+  </data>
+  <data name="ViewSummaryProperty" xml:space="preserve">
+    <value>Summary</value>
+  </data>
+  <data name="ViewSummaryProperty_S" xml:space="preserve">
+    <value>Summary (used in hover over tool tip)</value>
+  </data>
+  <data name="ViewViewListModel" xml:space="preserve">
+    <value>View</value>
+  </data>
+  <data name="ViewViewListModel_S" xml:space="preserve">
+    <value>List of views</value>
+  </data>
+  <data name="ViewXStore" xml:space="preserve">
+    <value>ViewStore</value>
+  </data>
+  <data name="ViewX_K" xml:space="preserve">
+    <value>View</value>
+  </data>
+  <data name="ViewX_Property" xml:space="preserve">
+    <value>View_Property</value>
+  </data>
+  <data name="ViewX_QueryX" xml:space="preserve">
+    <value>View_Query</value>
+  </data>
+  <data name="ViewX_ViewX" xml:space="preserve">
+    <value>View_View</value>
+  </data>
+  <data name="VViewNameProperty_S" xml:space="preserve">
+    <value>Name of this view</value>
   </data>
 </root>

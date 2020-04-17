@@ -28,28 +28,28 @@ namespace ModelGraph.Core
         {
             var props = new List<Property>(4);
             {
-                var p = NameProperty = new PropertyOf<RelationX, string>(chef.PropertyStore, Trait.RelationName_P);
+                var p = NameProperty = new PropertyOf<RelationX, string>(chef.PropertyStore, Trait.RelationNameProperty);
                 p.GetValFunc = (item) => p.Cast(item).Name;
                 p.SetValFunc = (item, value) => { p.Cast(item).Name = value; return true; };
                 p.Value = new StringValue(p);
                 props.Add(p);
             }
             {
-                var p = SummaryProperty = new PropertyOf<RelationX, string>(chef.PropertyStore, Trait.RelationSummary_P);
+                var p = SummaryProperty = new PropertyOf<RelationX, string>(chef.PropertyStore, Trait.RelationSummaryProperty);
                 p.GetValFunc = (item) => p.Cast(item).Summary;
                 p.SetValFunc = (item, value) => { p.Cast(item).Summary = value; return true; };
                 p.Value = new StringValue(p);
                 props.Add(p);
             }
             {
-                var p = PairingProperty = new PropertyOf<RelationX, string>(chef.PropertyStore, Trait.RelationPairing_P, chef.PairingEnum);
+                var p = PairingProperty = new PropertyOf<RelationX, string>(chef.PropertyStore, Trait.RelationPairingProperty, chef.PairingEnum);
                 p.GetValFunc = (item) => chef.GetEnumZName(p.EnumZ, (int)p.Cast(item).Pairing);
                 p.SetValFunc = (item, value) => p.Cast(item).TrySetPairing((Pairing)chef.GetEnumZKey(p.EnumZ, value));
                 p.Value = new StringValue(p);
                 props.Add(p);
             }
             {
-                var p = IsRequiredProperty = new PropertyOf<RelationX, bool>(chef.PropertyStore, Trait.RelationIsRequired_P);
+                var p = IsRequiredProperty = new PropertyOf<RelationX, bool>(chef.PropertyStore, Trait.RelationIsRequiredProperty);
                 p.GetValFunc = (item) => p.Cast(item).IsRequired;
                 p.SetValFunc = (item, value) => { p.Cast(item).IsRequired = value; return true; };
                 p.Value = new BoolValue(p);

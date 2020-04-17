@@ -23,14 +23,14 @@ namespace ModelGraph.Core
         {
             var props = new List<Property>(2);
             {
-                var p = NameProperty = new PropertyOf<SymbolX, string>(chef.PropertyStore, Trait.SymbolXName_P);
+                var p = NameProperty = new PropertyOf<SymbolX, string>(chef.PropertyStore, Trait.SymbolXNameProperty);
                 p.GetValFunc = (item) => p.Cast(item).Name;
                 p.SetValFunc = (item, value) => { p.Cast(item).Name = value; return true; };
                 p.Value = new StringValue(p);
                 props.Add(p);
             }
             {
-                var p = AttachProperty = new PropertyOf<SymbolX, string>(chef.PropertyStore, Trait.SymbolXAttatch_P, chef.AttatchEnum);
+                var p = AttachProperty = new PropertyOf<SymbolX, string>(chef.PropertyStore, Trait.SymbolXAttatchProperty, chef.AttatchEnum);
                 p.GetValFunc = (item) => chef.GetEnumZName(p.EnumZ, (int)p.Cast(item).Attach);
                 p.SetValFunc = (item, value) => { p.Cast(item).Attach = (Attach)chef.GetEnumZKey(p.EnumZ, value); return true; };
                 p.Value = new StringValue(p);

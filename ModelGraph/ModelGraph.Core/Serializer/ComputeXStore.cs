@@ -29,28 +29,28 @@ namespace ModelGraph.Core
             var props = new List<Property>(7);
             var propertyStore = chef.PropertyStore;
             {
-                var p = NameProperty = new PropertyOf<ComputeX, string>(propertyStore, Trait.ComputeXName_P);
+                var p = NameProperty = new PropertyOf<ComputeX, string>(propertyStore, Trait.ComputeXNameProperty);
                 p.GetValFunc = (item) => p.Cast(item).Name;
                 p.SetValFunc = (item, value) => { p.Cast(item).Name = value; return true; };
                 p.Value = new StringValue(p);
                 props.Add(p);
             }
             {
-                var p = SummaryProperty = new PropertyOf<ComputeX, string>(propertyStore, Trait.ComputeXSummary_P);
+                var p = SummaryProperty = new PropertyOf<ComputeX, string>(propertyStore, Trait.ComputeXSummaryProperty);
                 p.GetValFunc = (item) => p.Cast(item).Summary;
                 p.SetValFunc = (item, value) => { p.Cast(item).Summary = value; return true; };
                 p.Value = new StringValue(p);
                 props.Add(p);
             }
             {
-                var p = CompuTypeProperty = new PropertyOf<ComputeX, string>(propertyStore, Trait.ComputeXCompuType_P, chef.ComputeTypeEnum);
+                var p = CompuTypeProperty = new PropertyOf<ComputeX, string>(propertyStore, Trait.ComputeXCompuTypeProperty, chef.ComputeTypeEnum);
                 p.GetValFunc = (item) => chef.GetEnumZName(p.EnumZ, (int)p.Cast(item).CompuType);
                 p.SetValFunc = (item, value) => chef.TrySetComputeTypeProperty(p.Cast(item), chef.GetEnumZKey(p.EnumZ, value));
                 p.Value = new StringValue(p);
                 props.Add(p);
             }
             {
-                var p = WhereProperty = new PropertyOf<ComputeX, string>(propertyStore, Trait.ComputeXWhere_P);
+                var p = WhereProperty = new PropertyOf<ComputeX, string>(propertyStore, Trait.ComputeXWhereProperty);
                 p.GetValFunc = (item) => chef.GetWhereProperty(p.Cast(item));
                 p.SetValFunc = (item, value) => chef.TrySetWhereProperty(p.Cast(item), value);
                 p.Value = new StringValue(p);
@@ -58,7 +58,7 @@ namespace ModelGraph.Core
                 props.Add(p);
             }
             {
-                var p = SelectProperty = new PropertyOf<ComputeX, string>(propertyStore, Trait.ComputeXSelect_P);
+                var p = SelectProperty = new PropertyOf<ComputeX, string>(propertyStore, Trait.ComputeXSelectProperty);
                 p.GetValFunc = (item) => chef.GetSelectProperty(p.Cast(item));
                 p.SetValFunc = (item, value) => chef.TrySetSelectProperty(p.Cast(item), value);
                 p.Value = new StringValue(p);
@@ -66,14 +66,14 @@ namespace ModelGraph.Core
                 props.Add(p);
             }
             {
-                var p = SeparatorProperty = new PropertyOf<ComputeX, string>(propertyStore, Trait.ComputeXSeparator_P);
+                var p = SeparatorProperty = new PropertyOf<ComputeX, string>(propertyStore, Trait.ComputeXSeparatorProperty);
                 p.GetValFunc = (item) => p.Cast(item).Separator;
                 p.SetValFunc = (item, value) => { p.Cast(item).Separator = value; return true; };
                 p.Value = new StringValue(p);
                 props.Add(p);
             }
             {
-                var p = ValueTypeProperty = new PropertyOf<ComputeX, string>(propertyStore, Trait.ComputeXValueType_P, chef.ValueTypeEnum);
+                var p = ValueTypeProperty = new PropertyOf<ComputeX, string>(propertyStore, Trait.ComputeXValueTypeProperty, chef.ValueTypeEnum);
                 p.GetValFunc = (item) => chef.GetEnumZName(p.EnumZ, (int)p.Cast(item).Value.ValType);
                 p.Value = new StringValue(p);
                 props.Add(p);
