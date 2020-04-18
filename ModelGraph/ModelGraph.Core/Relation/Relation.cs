@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 
 namespace ModelGraph.Core
-{/*
-    Relation is the abstract base class for RelationOf<T1, T2>   
- */
+{
     public abstract class Relation : Item // used by undo/redo changes and StoreOf<Relation> _relationStore
     {
+        internal override bool IsReference => true;
         internal Pairing Pairing;
 
         internal abstract bool HasChildLink(Item key);

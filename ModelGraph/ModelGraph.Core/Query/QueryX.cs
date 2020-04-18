@@ -4,6 +4,7 @@ namespace ModelGraph.Core
 {
     public class QueryX : Item
     {
+        internal override bool IsExternal => true;
         internal WhereSelect Where;
         internal WhereSelect Select;
         internal PathParm PathParm;
@@ -11,11 +12,7 @@ namespace ModelGraph.Core
         private PFlag _flags;
 
         #region Constructor  ==================================================
-        internal QueryX(Chef owner) //QueryXNode, referenced in GraphParms
-        {
-            Owner = owner;
-            Trait = Trait.NodeParm;
-        }
+        internal QueryX() { }
         internal QueryX(QueryXStore owner, QueryType kind, bool isRoot = false, bool isHead = false)
         {
             Owner = owner;

@@ -6,9 +6,8 @@ namespace ModelGraph.Core
 {
     public abstract class Store : Item
     {
-        internal virtual bool HasDesendantCount => false;
         internal virtual void RegisterInternal(Dictionary<int, Item> internalItem) { }
-        internal abstract int GetDesdantCount();
+        internal abstract int GetSerializerItemCount();
         internal abstract void PopululateChildItemIndex(Dictionary<Item, int> itemIndex);
         internal abstract void Add(Item item);
         internal abstract void Move(Item item, int index);

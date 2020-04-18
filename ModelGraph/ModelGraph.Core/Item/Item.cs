@@ -12,11 +12,18 @@ namespace ModelGraph.Core
         private byte _flags;        //IsNew, IsDeleted, AutoExpandLeft, AutoExpandRight,..
         internal byte ModelDelta;   //incremented when a property or relation is changed
         internal byte ChildDelta;   //incremented when list of child items is changed 
-        internal byte ErrorDelta;   //incremented when item's error state has changed 
+        internal byte ErrorDelta;   //incremented when item's error state has changed
+
+        #region IsReference/IsExternal  =======================================
+        // IsExternal: It's properties are serialized (to/from a repository)
+        // IsReference: May be referenced by external items
+        virtual internal bool IsExternal => false;
+        virtual internal bool IsReference => false;
+        #endregion
 
         #region Trait  ========================================================
-        internal bool IsExternal => (Trait & Trait.IsExternal) != 0;
-        internal bool IsInternal => (Trait & Trait.IsInternal) != 0;
+        //internal bool IsExternal => (Trait & Trait.IsExternal) != 0;
+        //internal bool IsInternal => (Trait & Trait.IsInternal) != 0;
 
         internal bool IsDataChef => (Trait == Trait.DataChef);
         internal bool IsViewX => (Trait == Trait.ViewX);

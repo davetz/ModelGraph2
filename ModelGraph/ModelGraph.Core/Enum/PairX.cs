@@ -1,10 +1,10 @@
 ﻿using System;
 
 namespace ModelGraph.Core
-{/*
- */
+{
     public class PairX : Item
     {
+        internal override bool IsExternal => true;
         internal string DisplayValue;
         internal string ActualValue;
 

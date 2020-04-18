@@ -4,7 +4,7 @@ namespace ModelGraph.Core
     //=========================================================================
     // _coreResources.resw // resource keys are strings of the form  Enum.GetNames(typeof(IdKey)); with an optional suffix
     //=========================================================================
-    // suffix : none : unique text string, (put all reusable text first so the nummeric enum value < 256) usage: {byte _kind; var enu = (IdKey)_kind; }  
+    // suffix : none : identity text string, (put all reusable text first so the nummeric enum value < 256) usage: {byte _kind; var enu = (IdKey)_kind; }  
     // suffix : "_A" : specify Excelerator Key char  (accelerator)
     // suffix : "_E" : specify event static text     (event)
     // suffix : "_F" : specify event formated text   (formated) üsed with string.Format(<localized_text>, arg0,  arg1,..);

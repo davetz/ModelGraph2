@@ -3,6 +3,7 @@ namespace ModelGraph.Core
 {
     public class RelationX : RelationOf<RowX, RowX>
     {
+        internal override bool IsExternal => true;
         internal string Name;
         internal string Summary;
         internal string Description;

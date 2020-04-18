@@ -1,10 +1,11 @@
 ﻿using System;
 
 namespace ModelGraph.Core
-{/*
- */
+{
     public class RowX : Item
     {
+        internal override bool IsExternal => true;
+
         #region Constructors  =================================================
         internal RowX(TableX owner, bool autoExpand = false)
         {

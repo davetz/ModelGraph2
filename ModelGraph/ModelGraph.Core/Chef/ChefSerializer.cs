@@ -80,10 +80,9 @@ namespace ModelGraph.Core
             var maxSize = 0;
             foreach (var sto in Items)
             {
-                if (sto.HasDesendantCount)
+                if (sto.IsReference || sto.IsExternal)
                 {
-                    if (sto.IsInternal || sto.IsExternal) maxSize++;
-                    maxSize += sto.GetDesdantCount();
+                    maxSize += (sto.GetSerializerItemCount() + 1);
                 }
             }
             return maxSize;
@@ -124,7 +123,7 @@ namespace ModelGraph.Core
             internalItem.Add(DummyQueryXRef.ItemKey, DummyQueryXRef);
             foreach (var sto in Items)
             {
-                if (sto.IsInternal || sto.IsExternal) 
+                if (sto.IsReference || sto.IsExternal) 
                     sto.RegisterInternal(internalItem);
             }
             return internalItem;

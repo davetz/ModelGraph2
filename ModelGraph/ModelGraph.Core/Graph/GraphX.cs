@@ -5,6 +5,7 @@ namespace ModelGraph.Core
 {
     public class GraphX : StoreOf<Graph>
     {
+        internal override bool IsExternal => true;
         internal Color Color = new Color();
         internal HashSet<Store> NodeOwners = new HashSet<Store>();
         internal Dictionary<Item, Dictionary<QueryX, List<NodeEdge>>> Root_QueryX_Parms = new Dictionary<Item, Dictionary<QueryX, List<NodeEdge>>>(10);

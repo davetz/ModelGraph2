@@ -5,6 +5,7 @@ namespace ModelGraph.Core
 {
     public class SymbolX : Item
     {
+        internal override bool IsExternal => true;
         public string Name;
         public string Summary;
         public string Description;

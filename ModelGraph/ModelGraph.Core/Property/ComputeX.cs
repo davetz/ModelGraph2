@@ -4,8 +4,8 @@ namespace ModelGraph.Core
 {
     public class ComputeX : Property
     {
+        internal override bool IsExternal => true;
         internal const string DefaultSeparator = " : ";
-
         internal string Name;
         internal string Summary;
         internal string Description;

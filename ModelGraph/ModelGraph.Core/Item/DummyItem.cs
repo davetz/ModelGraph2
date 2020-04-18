@@ -1,9 +1,10 @@
 ﻿
 namespace ModelGraph.Core
 {
-    public class Dummy : Item
+    public class DummyItem : Item
     {
-        internal Dummy(Chef owner)
+        internal override bool IsReference => true;
+        internal DummyItem(Chef owner)
         {
             Owner = owner;
             Trait = Trait.Dummy;

@@ -24,13 +24,13 @@ namespace ModelGraph.Core
         internal override int Count => (_items == null) ? 0 : _items.Count;
         internal override List<Item> GetItems() => new List<Item>(_items);
         internal override void RemoveAll() { _items.Clear(); UpdateDelta(); }
-        internal override int GetDesdantCount()
+        internal override int GetSerializerItemCount()
         {
             var count = 0;
             foreach (var item in Items)
             {
-                if (item.IsExternal || item.IsInternal) count++;
-                if (item is Store sto) count += sto.GetDesdantCount();
+                if (item.IsExternal || item.IsReference) count++;
+                if (item is Store sto) count += sto.GetSerializerItemCount();
             }
             return count;
         }

@@ -1,10 +1,10 @@
 ﻿using System;
 
 namespace ModelGraph.Core
-{/*
- */
+{
     public class TableX : StoreOf<RowX>
     {
+        internal override bool IsExternal => true;
         internal string Name;
         internal string Summary;
         internal string Description;

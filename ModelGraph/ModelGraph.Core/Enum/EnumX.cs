@@ -3,6 +3,7 @@ namespace ModelGraph.Core
 {
     public class EnumX : StoreOf<PairX>
     {
+        internal override bool IsExternal => true;
         internal string Name;
         internal string Summary;
         internal string Description;
