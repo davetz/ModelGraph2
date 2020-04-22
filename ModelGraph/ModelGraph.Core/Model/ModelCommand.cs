@@ -14,16 +14,16 @@ namespace ModelGraph.Core
         public Object Parameter1;
         public string Name;
         public string Summary;
-        internal IdKey Trait;
+        internal IdKey IdKey;
 
-        public ModelCommand(Chef chef, ItemModel model, IdKey trait, Action<ItemModel> action)
+        public ModelCommand(Chef chef, ItemModel model, IdKey idKe, Action<ItemModel> action)
         {
             Chef = chef;
             Model = model;
-            Trait = trait;
+            IdKey = idKe;
             Action = action;
-            Name = chef.GetName(trait);
-            Summary = chef.GetSummary(trait); ;
+            Name = chef.GetName(idKe);
+            Summary = chef.GetSummary(idKe); ;
         }
         public void Release()
         {
@@ -32,14 +32,14 @@ namespace ModelGraph.Core
             Action = null;
             Action1 = null;
         }
-        public ModelCommand(Chef chef, ItemModel model, IdKey trait, Action<ItemModel, Object> action)
+        public ModelCommand(Chef chef, ItemModel model, IdKey idKe, Action<ItemModel, Object> action)
         {
             Chef = chef;
             Model = model;
-            Trait = trait;
+            IdKey = idKe;
             Action1 = action;
-            Name = chef.GetName(trait);
-            Summary = chef.GetSummary(trait); ;
+            Name = chef.GetName(idKe);
+            Summary = chef.GetSummary(idKe); ;
         }
 
         public void Execute()
@@ -49,14 +49,14 @@ namespace ModelGraph.Core
             Chef.PostCommand(this);
         }
 
-        #region Trait  ========================================================
-        public string AcceleratorKey => Chef.GetAccelerator(Trait);
-        public bool IsStorageFileParameter1 => (Trait & IdKey.GetStorageFile) != 0;
-        public bool IsSaveAsCommand => (Trait & IdKey.KeyMask) == (IdKey.SaveAsCommand & IdKey.KeyMask);
-        public bool IsInsertCommand => (Trait == IdKey.InsertCommand);
-        public bool IsSaveCommand => (Trait == IdKey.SaveCommand);
-        public bool IsCloseCommand => (Trait == IdKey.CloseCommand);
-        public bool IsRemoveCommand => (Trait == IdKey.RemoveCommand);
+        #region IdKey  ========================================================
+        public string AcceleratorKey => Chef.GetAccelerator(IdKey);
+        public bool IsStorageFileParameter1 => (IdKey & IdKey.GetStorageFile) != 0;
+        public bool IsSaveAsCommand => (IdKey & IdKey.KeyMask) == (IdKey.SaveAsCommand & IdKey.KeyMask);
+        public bool IsInsertCommand => (IdKey == IdKey.InsertCommand);
+        public bool IsSaveCommand => (IdKey == IdKey.SaveCommand);
+        public bool IsCloseCommand => (IdKey == IdKey.CloseCommand);
+        public bool IsRemoveCommand => (IdKey == IdKey.RemoveCommand);
         #endregion
     }
 }

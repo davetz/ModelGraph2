@@ -184,7 +184,7 @@ namespace ModelGraph.Core
         #endregion
 
         #region AddChildModel  ================================================
-        internal bool AddChildModel(List<ItemModel> prev, ItemModel m, IdKey trait, Item item, Item aux1, Item aux2, ModelAction get)
+        internal bool AddChildModel(List<ItemModel> prev, ItemModel m, IdKey idKe, Item item, Item aux1, Item aux2, ModelAction get)
         {/*
             I am construction a new list of itemModels but if posible I want to reuse an existing model from the previous itemModel list.
             The existing models are compared with the parameters of the candidate model to see if it matches. A new model will be created if necessary.
@@ -210,7 +210,7 @@ namespace ModelGraph.Core
 
                 if (TryCopyPrevious(j)) return true; // I reused the existing model.
             }
-            m.ChildModels.Add(ItemModel.Create(m, trait, item, aux1, aux2, get));
+            m.ChildModels.Add(ItemModel.Create(m, idKe, item, aux1, aux2, get));
             return true; // I had to create a new model
 
             // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
@@ -231,7 +231,7 @@ namespace ModelGraph.Core
                 {
                     if (cm == null) return false;
                     if (cm.ParentModel != m) return false;
-                    if (cm.Trait != trait) return false;
+                    if (cm.IdKey != idKe) return false;
                     if (cm.Item != item) return false;
                     if (cm.Aux1 != aux1) return false;
                     if (cm.Aux2 != aux2) return false;
@@ -730,7 +730,7 @@ namespace ModelGraph.Core
                     return RepoName();
 
                 case ControlType.PartialTree:
-                    return $"{RepoName()} - {GetName(root.Trait)}";
+                    return $"{RepoName()} - {GetName(root.IdKey)}";
 
                 case ControlType.GraphDisplay:
                     var g = root.Graph;
@@ -7990,7 +7990,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (m.GraphX.Trait.ToString(), m.GraphX.Name);
+            (string, string) GetKindName(ItemModel m) => (m.GraphX.IdKey.ToString(), m.GraphX.Name);
         }
 
         void CreateGraph(ItemModel m)
@@ -9142,7 +9142,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) =>  (GetKind(m.Relation.Trait), GetIdentity(m.Relation, IdentityStyle.Single));
+            (string, string) GetKindName(ItemModel m) =>  (GetKind(m.Relation.IdKey), GetIdentity(m.Relation, IdentityStyle.Single));
 
         }
         #endregion
@@ -9192,7 +9192,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (GetKind(m.Relation.Trait), GetIdentity(m.Relation, IdentityStyle.Single));
+            (string, string) GetKindName(ItemModel m) => (GetKind(m.Relation.IdKey), GetIdentity(m.Relation, IdentityStyle.Single));
         }
         #endregion
 

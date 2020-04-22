@@ -11,7 +11,7 @@ namespace ModelGraph.Core
         internal ChangeSet(ChangeRoot owner, int seqno)
         {
             Owner = owner;
-            Trait = IdKey.ChangeSet;
+            IdKey = IdKey.ChangeSet;
             DateTime = DateTime.Now;
             Sequence = seqno;
             IsVirgin = true;

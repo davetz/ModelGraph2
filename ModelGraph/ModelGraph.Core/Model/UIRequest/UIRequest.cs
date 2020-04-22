@@ -12,7 +12,7 @@ namespace ModelGraph.Core
         internal Item Aux2 { get; private set; }
         public ControlType Type { get; private set; }
         internal ModelAction Get { get; private set; }
-        internal IdKey Trait { get; private set; }
+        internal IdKey IdKey { get; private set; }
         public RequestType RequestType { get; private set; }
 
         private UIRequest() { }
@@ -89,25 +89,25 @@ namespace ModelGraph.Core
                 RequestType = RequestType.Refresh
             };
         }
-        internal static UIRequest CreateView(RootModel root, ControlType type, IdKey trait, Item item, ModelAction modelAction)
+        internal static UIRequest CreateView(RootModel root, ControlType type, IdKey idKe, Item item, ModelAction modelAction)
         {
             return new UIRequest()
             {
                 Root = root,
                 Type = type,
-                Trait = trait,
+                IdKey = idKe,
                 Item = item,
                 Get = modelAction,
                 RequestType = RequestType.CreateView,
             };
         }
-        internal static UIRequest CreatePage(RootModel root, ControlType type, IdKey trait, Item item, Item aux1, Item aux2, ModelAction modelAction)
+        internal static UIRequest CreatePage(RootModel root, ControlType type, IdKey idKe, Item item, Item aux1, Item aux2, ModelAction modelAction)
         {
             return new UIRequest()
             {
                 Root = root,
                 Type = type,
-                Trait = trait,
+                IdKey = idKe,
                 Item = item,
                 Aux1 = aux1,
                 Aux2 = aux2,

@@ -28,7 +28,7 @@ namespace ModelGraph.Core
         internal GraphX(Store owner, bool autoExpand = false)
         {
             Owner = owner;
-            Trait = IdKey.GraphX;
+            IdKey = IdKey.GraphX;
             if (autoExpand) AutoExpandRight = true;
 
             owner.Add(this);

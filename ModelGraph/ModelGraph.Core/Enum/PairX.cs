@@ -11,7 +11,7 @@ namespace ModelGraph.Core
         internal PairX(EnumX owner, bool autoExpand = false)
         {
             Owner = owner;
-            Trait = IdKey.PairX;
+            IdKey = IdKey.PairX;
             if (autoExpand) AutoExpandRight = true;
 
             owner.Add(this);

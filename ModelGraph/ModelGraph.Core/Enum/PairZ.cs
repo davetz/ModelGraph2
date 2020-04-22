@@ -5,14 +5,14 @@ namespace ModelGraph.Core
  */
     public class PairZ : Item
     {
-        internal PairZ(EnumZ owner, IdKey trait)
+        internal PairZ(EnumZ owner, IdKey idKe)
         {
             Owner = owner;
-            Trait = trait;
+            IdKey = idKe;
 
             owner.Add(this);
         }
 
-        internal int EnumKey => (int)(Trait & IdKey.EnumMask);
+        internal int EnumKey => (int)(IdKey & IdKey.EnumMask);
     }
 }

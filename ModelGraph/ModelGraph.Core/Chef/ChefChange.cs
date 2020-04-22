@@ -53,7 +53,7 @@ namespace ModelGraph.Core
             {
                 var item = ChangeSet.Items[ChangeSet.Count - 1];
                 var changeText = $"{_localize(item.KindKey)}  {item.Name}";
-                if (_changeRootInfoItem != null && item.Trait == _changeRootInfoItem.Trait)
+                if (_changeRootInfoItem != null && item.IdKey == _changeRootInfoItem.IdKey)
                     _changeRootInfoCount += 1;
                 else
                 {
@@ -61,9 +61,9 @@ namespace ModelGraph.Core
                     _changeRootInfoCount = 1;
                 }
                 if (_changeRootInfoCount > 1)
-                    _changeRootInfoText = $"{GetName(item.Trait)} ({_changeRootInfoCount.ToString()})  {changeText}";
+                    _changeRootInfoText = $"{GetName(item.IdKey)} ({_changeRootInfoCount.ToString()})  {changeText}";
                 else
-                    _changeRootInfoText = $"{GetName(item.Trait)}  {changeText}";
+                    _changeRootInfoText = $"{GetName(item.IdKey)}  {changeText}";
 
                 ChangeRoot.Add(ChangeSet);
                 ChangeSequence += 1;

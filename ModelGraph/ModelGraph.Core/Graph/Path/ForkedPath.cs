@@ -14,7 +14,7 @@ namespace ModelGraph.Core
         internal ForkedPath(Graph owner, Path path1, Path[] paths)
         {
             Owner = owner;
-            Trait = IdKey.ForkedPath;
+            IdKey = IdKey.ForkedPath;
             IsRadial = true;
             Path1 = path1;
             _paths = paths;

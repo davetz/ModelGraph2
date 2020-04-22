@@ -6,7 +6,7 @@
         internal ChangeRoot(Chef owner)
         {
             Owner = owner;
-            Trait = IdKey.ChangeRoot;
+            IdKey = IdKey.ChangeRoot;
 
             owner.Add(this); // we want to be in the dataChef's item tree hierarchy
         }

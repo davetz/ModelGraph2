@@ -6,7 +6,7 @@ namespace ModelGraph.Core
         internal DummyItem(Chef owner)
         {
             Owner = owner;
-            Trait = IdKey.Dummy;
+            IdKey = IdKey.Dummy;
         }
     }
 }

@@ -12,7 +12,7 @@ namespace ModelGraph.Core
         internal ViewX(ViewXStore owner, bool autoExpandRight = false)
         {
             Owner = owner;
-            Trait = IdKey.ViewX;
+            IdKey = IdKey.ViewX;
 
             if (autoExpandRight) AutoExpandRight = true;
             owner.Add(this);

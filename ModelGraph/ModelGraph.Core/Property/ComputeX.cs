@@ -17,7 +17,7 @@ namespace ModelGraph.Core
         internal ComputeX(StoreOf<ComputeX> owner, bool autoExpand = false)
         {
             Owner = owner;
-            Trait = IdKey.ComputeX;
+            IdKey = IdKey.ComputeX;
 
             if (autoExpand) AutoExpandRight = true;
 

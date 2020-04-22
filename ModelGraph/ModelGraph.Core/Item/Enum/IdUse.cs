@@ -1,7 +1,7 @@
 ﻿
 namespace ModelGraph.Core
 {
-    public enum IdType
+    public enum IdUse
     {
         Kind,
         Single,

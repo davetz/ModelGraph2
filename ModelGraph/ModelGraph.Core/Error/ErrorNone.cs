@@ -5,11 +5,11 @@ namespace ModelGraph.Core
     internal class ErrorNone : Error
     {
         #region Constructor  ==================================================
-        internal ErrorNone(StoreOf<Error> owner, Item item, IdKey trait)
+        internal ErrorNone(StoreOf<Error> owner, Item item, IdKey idKe)
         {
             Owner = owner;
             Item = item;
-            Trait = trait;
+            IdKey = idKe;
             owner.Add(this);
         }
         #endregion

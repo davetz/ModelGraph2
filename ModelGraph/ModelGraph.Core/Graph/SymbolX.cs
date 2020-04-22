@@ -17,7 +17,7 @@ namespace ModelGraph.Core
         #region Constructors  =================================================
         public SymbolX(Store owner, bool autoExpand = false)
         {
-            Trait = IdKey.SymbolX;
+            IdKey = IdKey.SymbolX;
             Owner = owner;
             if (autoExpand) AutoExpandRight = true;
 

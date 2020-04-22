@@ -9,7 +9,7 @@ namespace ModelGraph.Core
         internal RowX(TableX owner, bool autoExpand = false)
         {
             Owner = owner;
-            Trait = IdKey.RowX;
+            IdKey = IdKey.RowX;
             if (autoExpand) AutoExpandRight = true;
 
             owner.Add(this);

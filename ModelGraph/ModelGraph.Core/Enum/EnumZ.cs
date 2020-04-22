@@ -6,10 +6,10 @@ namespace ModelGraph.Core
     public class EnumZ : StoreOf<PairZ>
     {
         #region Constructor  ==================================================
-        internal EnumZ(StoreOf<EnumZ> owner, IdKey trait)
+        internal EnumZ(StoreOf<EnumZ> owner, IdKey idKe)
         {
             Owner = owner;
-            Trait = trait;
+            IdKey = idKe;
         }
         #endregion
     }

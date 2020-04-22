@@ -11,7 +11,7 @@ namespace ModelGraph.Core
         internal RelationX(RelationXStore owner, bool autoExpandRight = false)
         {
             Owner = owner;
-            Trait = IdKey.RelationX;
+            IdKey = IdKey.RelationX;
             Pairing = Pairing.OneToMany;
 
             if (autoExpandRight) AutoExpandRight = true;

@@ -8,11 +8,11 @@ namespace ModelGraph.Core
         internal List<string> List => _list;
 
         #region Constructor  ==================================================
-        internal ErrorMany(StoreOf<Error> owner, Item item, IdKey trait, string text = null)
+        internal ErrorMany(StoreOf<Error> owner, Item item, IdKey idKe, string text = null)
         {
             Owner = owner;
             Item = item;
-            Trait = trait;
+            IdKey = idKe;
 
             if (text != null) _list.Add(text);
 

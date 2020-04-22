@@ -38,7 +38,7 @@
         internal Edge(QueryX queryX)
         {
             Owner = null;
-            Trait = IdKey.Edge;
+            IdKey = IdKey.Edge;
             _queryX = queryX;
         }
         #endregion

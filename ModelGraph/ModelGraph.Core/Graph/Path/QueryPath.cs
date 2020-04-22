@@ -14,7 +14,7 @@ namespace ModelGraph.Core
         internal QueryPath(Graph owner, Query head, Query tail, int taiIndex = 0, bool isRadial = false, bool isReversed = false)
         {
             Owner = owner;
-            Trait = IdKey.QueryPath;
+            IdKey = IdKey.QueryPath;
             HeadQuery = head;
             TailQuery = tail;
             TailIndex = taiIndex;

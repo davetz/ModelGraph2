@@ -14,7 +14,7 @@ namespace ModelGraph.Core
         internal Query(QueryX qx, Query parent, Item item, Item[] items)
         {
             Owner = qx;
-            Trait = IdKey.Query;
+            IdKey = IdKey.Query;
 
             Item = item;
             Items = items;

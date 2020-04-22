@@ -18,10 +18,10 @@ namespace ModelGraph.Core
         #region Constructors  =================================================
         internal RelationOf() { } // dummy parameterless constructor
 
-        internal RelationOf(StoreOf<Relation> owner, IdKey trait, Pairing pairing = Pairing.OneToMany, int parentCount = 0, int childCount = 0, bool isRequired = false)
+        internal RelationOf(StoreOf<Relation> owner, IdKey idKe, Pairing pairing = Pairing.OneToMany, int parentCount = 0, int childCount = 0, bool isRequired = false)
         {
             Owner = owner;
-            Trait = trait;
+            IdKey = idKe;
             Pairing = pairing;
             IsRequired = isRequired;
             Initialize(parentCount, childCount);

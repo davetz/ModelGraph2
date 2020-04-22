@@ -13,7 +13,7 @@ namespace ModelGraph.Core
         #region GetIdentity  ==================================================
         public string GetIdentity(Item item, IdentityStyle style)
         {
-            if (item != null && _itemIdentity.TryGetValue(item.Trait, out Func<Item, IdentityStyle, string> id))
+            if (item != null && _itemIdentity.TryGetValue(item.IdKey, out Func<Item, IdentityStyle, string> id))
                 return id(item, style);
             else if (item is Relation)
                 return Relation_Identity(item, style);
@@ -39,7 +39,7 @@ namespace ModelGraph.Core
                 { IdKey.SymbolX, SymbolX_Identity },
                 { IdKey.ColumnX, ColumnX_Identity },
                 { IdKey.ComputeX, ComputeX_Identity },
-                //_itemIdentity.Add(Trait.CommandX, CommandX_Identity);
+                //_itemIdentity.Add(IdKey.CommandX, CommandX_Identity);
                 { IdKey.RelationX, RelationX_Identity }
             };
         }
@@ -49,8 +49,8 @@ namespace ModelGraph.Core
         private string Undefined_Identity(Item item, IdentityStyle style)
         {
             if (item is null) return BlankName;
-            //if (item.TraitKey == 0x1AD) item.SetTrait(Trait.QueryXNodeSymbol);
-            return $"Internal {item.Trait.ToString()}";
+            //if (item.TraitKey == 0x1AD) item.SetTrait(IdKey.QueryXNodeSymbol);
+            return $"Internal {item.IdKey.ToString()}";
         }
         private string Index_Identity(Item item)
         {
@@ -100,7 +100,7 @@ namespace ModelGraph.Core
                         return null;
                 }
             }
-            return $"{BlankName} {item.Trait}";
+            return $"{BlankName} {item.IdKey}";
         }
         #endregion
 
@@ -139,7 +139,7 @@ namespace ModelGraph.Core
                         return null;
                 }
             }
-            return $"{BlankName} {item.Trait.ToString()}";
+            return $"{BlankName} {item.IdKey.ToString()}";
         }
         #endregion
 
@@ -171,7 +171,7 @@ namespace ModelGraph.Core
                         return itm.Description;
                 }
             }
-            return $"{BlankName} {item.Trait.ToString()}";
+            return $"{BlankName} {item.IdKey.ToString()}";
         }
         #endregion
 
@@ -204,7 +204,7 @@ namespace ModelGraph.Core
                         return ex.Description;
                 }
             }
-            return $"{BlankName} {item.Trait.ToString()}";
+            return $"{BlankName} {item.IdKey.ToString()}";
         }
         #endregion
 
@@ -239,7 +239,7 @@ namespace ModelGraph.Core
                         return tx.Description;
                 }
             }
-            return $"{BlankName} {item.Trait.ToString()}";
+            return $"{BlankName} {item.IdKey.ToString()}";
         }
         #endregion
 
@@ -271,7 +271,7 @@ namespace ModelGraph.Core
                         return itm.Description;
                 }
             }
-            return $"{BlankName} {item.Trait.ToString()}";
+            return $"{BlankName} {item.IdKey.ToString()}";
         }
         #endregion
 
@@ -280,54 +280,54 @@ namespace ModelGraph.Core
         {
             if (item is QueryX qx)
             {
-                IdKey trait = IdKey.QueryIsCorrupt;
+                IdKey idKe = IdKey.QueryIsCorrupt;
                 switch (qx.QueryKind)
                 {
                     case QueryType.View:
                         if (qx.IsHead)
-                            trait = IdKey.QueryViewHead;
+                            idKe = IdKey.QueryViewHead;
                         else if (qx.IsRoot)
-                            trait = IdKey.QueryViewRoot;
+                            idKe = IdKey.QueryViewRoot;
                         else
-                            trait = IdKey.QueryViewLink;
+                            idKe = IdKey.QueryViewLink;
                         break;
                     case QueryType.Path:
                         if (qx.IsHead)
-                            trait = IdKey.QueryPathHead;
+                            idKe = IdKey.QueryPathHead;
                         else
-                            trait = IdKey.QueryPathLink;
+                            idKe = IdKey.QueryPathLink;
                         break;
                     case QueryType.Group:
                         if (qx.IsHead)
-                            trait = IdKey.QueryGroupHead;
+                            idKe = IdKey.QueryGroupHead;
                         else
-                            trait = IdKey.QueryGroupLink;
+                            idKe = IdKey.QueryGroupLink;
                         break;
                     case QueryType.Egress:
                         if (qx.IsHead)
-                            trait = IdKey.QuerySegueHead;
+                            idKe = IdKey.QuerySegueHead;
                         else
-                            trait = IdKey.QuerySegueLink;
+                            idKe = IdKey.QuerySegueLink;
                         break;
                     case QueryType.Graph:
                         if (qx.IsRoot)
-                            trait = IdKey.QueryGraphRoot;
+                            idKe = IdKey.QueryGraphRoot;
                         else
-                            trait = IdKey.QueryGraphLink;
+                            idKe = IdKey.QueryGraphLink;
                         break;
                     case QueryType.Value:
                         if (qx.IsHead)
-                            trait = IdKey.QueryValueHead;
+                            idKe = IdKey.QueryValueHead;
                         else if (qx.IsRoot)
-                            trait = IdKey.QueryValueRoot;
+                            idKe = IdKey.QueryValueRoot;
                         else
-                            trait = IdKey.QueryValueLink;
+                            idKe = IdKey.QueryValueLink;
                         break;
                     case QueryType.Symbol:
-                        trait = IdKey.QueryNodeSymbol;
+                        idKe = IdKey.QueryNodeSymbol;
                         break;
                 }
-                var kind = _localize(GetKindKey(trait));
+                var kind = _localize(GetKindKey(idKe));
                 var name = string.Empty;
                 if (qx.IsRoot)
                 {
@@ -378,13 +378,13 @@ namespace ModelGraph.Core
                         return kind;
 
                     case IdentityStyle.Summary:
-                        return _localize(GetSummaryKey(trait));
+                        return _localize(GetSummaryKey(idKe));
 
                     case IdentityStyle.Description:
-                        return _localize(GetDescriptionKey(trait));
+                        return _localize(GetDescriptionKey(idKe));
                 }
             }
-            return $"{BlankName} {item.Trait.ToString()}";
+            return $"{BlankName} {item.IdKey.ToString()}";
         }
         #endregion
 
@@ -422,7 +422,7 @@ namespace ModelGraph.Core
                         return null;
                 }
             }
-            return $"{BlankName} {item.Trait.ToString()}";
+            return $"{BlankName} {item.IdKey.ToString()}";
         }
         #endregion
 
@@ -461,7 +461,7 @@ namespace ModelGraph.Core
                         return null;
                 }
             }
-            return $"{BlankName} {item.Trait.ToString()}";
+            return $"{BlankName} {item.IdKey.ToString()}";
         }
         #endregion
 
@@ -500,7 +500,7 @@ namespace ModelGraph.Core
                         return null;
                 }
             }
-            return $"{BlankName} {item.Trait.ToString()}";
+            return $"{BlankName} {item.IdKey.ToString()}";
         }
         #endregion
 
@@ -535,7 +535,7 @@ namespace ModelGraph.Core
                         return null;
                 }
             }
-            return $"{BlankName} {item.Trait.ToString()}";
+            return $"{BlankName} {item.IdKey.ToString()}";
         }
         #endregion
 
@@ -571,7 +571,7 @@ namespace ModelGraph.Core
                         return _localize(itm.DescriptionKey);
                 }
             }
-            return $"{BlankName} {item.Trait.ToString()}";
+            return $"{BlankName} {item.IdKey.ToString()}";
         }
         #endregion
 
@@ -609,7 +609,7 @@ namespace ModelGraph.Core
                         return _localize(itm.DescriptionKey);
                 }
             }
-            return $"{BlankName} {item.Trait.ToString()}";
+            return $"{BlankName} {item.IdKey.ToString()}";
         }
         #endregion
 
@@ -639,7 +639,7 @@ namespace ModelGraph.Core
                         return _localize(itm.DescriptionKey);
                 }
             }
-            return $"{BlankName} {item.Trait.ToString()}";
+            return $"{BlankName} {item.IdKey.ToString()}";
         }
         #endregion
 
@@ -667,25 +667,25 @@ namespace ModelGraph.Core
         #endregion
 
         #region GetName  ======================================================
-        internal string GetKind(IdKey trait)
+        internal string GetKind(IdKey idKe)
         {
-            return _localize(GetKindKey(trait));
+            return _localize(GetKindKey(idKe));
         }
-        internal string GetName(IdKey trait)
+        internal string GetName(IdKey idKe)
         {
-            return _localize(GetNameKey(trait));
+            return _localize(GetNameKey(idKe));
         }
-        internal string GetSummary(IdKey trait)
+        internal string GetSummary(IdKey idKe)
         {
-            return _localize(GetSummaryKey(trait));
+            return _localize(GetSummaryKey(idKe));
         }
-        internal string GetDescription(IdKey trait)
+        internal string GetDescription(IdKey idKe)
         {
-            return _localize(GetDescriptionKey(trait));
+            return _localize(GetDescriptionKey(idKe));
         }
-        internal string GetAccelerator(IdKey trait)
+        internal string GetAccelerator(IdKey idKe)
         {
-            return _localize(GetAcceleratorKey(trait));
+            return _localize(GetAcceleratorKey(idKe));
         }
         #endregion
     }

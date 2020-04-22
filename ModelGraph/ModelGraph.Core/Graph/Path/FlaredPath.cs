@@ -11,7 +11,7 @@ namespace ModelGraph.Core
         internal FlaredPath(Graph owner, Path[] paths) 
         {
             Owner = owner;
-            Trait = IdKey.FlaredPath;
+            IdKey = IdKey.FlaredPath;
             IsRadial = true;
             _paths = paths;
 

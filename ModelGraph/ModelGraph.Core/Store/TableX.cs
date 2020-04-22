@@ -12,7 +12,7 @@ namespace ModelGraph.Core
         internal TableX(StoreOf<TableX> owner, bool autoExpand = false)
         {
             Owner = owner;
-            Trait = IdKey.TableX;
+            IdKey = IdKey.TableX;
             if (autoExpand) AutoExpandRight = true;
 
             owner.Add(this);

@@ -23,7 +23,7 @@ namespace ModelGraph.Core
         // Primary-RootModel: Created by ModelPageService
         public RootModel()
         {
-            Trait = IdKey.DataChefModel;
+            IdKey = IdKey.DataChefModel;
             Item = Chef = new Chef();
             Get = Chef.DataChef_X;
 
@@ -33,7 +33,7 @@ namespace ModelGraph.Core
         // Secondary-RootModel: Created by Primary-RootModel
         public RootModel(UIRequest rq)
         {
-            Trait = rq.Trait;
+            IdKey = rq.IdKey;
             Item = rq.Item;
             Aux1 = rq.Aux1;
             Aux2 = rq.Aux2;
@@ -74,16 +74,16 @@ namespace ModelGraph.Core
         internal void UIRequestSaveAsModel() => _requestQueue?.Enqueue(UIRequest.SaveAsModel(this));
         internal void UIRequestRefreshModel() => _requestQueue?.Enqueue(UIRequest.RefreshModel(this));
 
-        internal void UIRequestCreateView(ControlType type, IdKey trait, Item item, ModelAction get) =>
-            _requestQueue?.Enqueue(UIRequest.CreateView(this, type, trait, item, get));
+        internal void UIRequestCreateView(ControlType type, IdKey idKe, Item item, ModelAction get) =>
+            _requestQueue?.Enqueue(UIRequest.CreateView(this, type, idKe, item, get));
 
         internal void UIRequestCreatePage(ControlType type, ItemModel m) =>
-            _requestQueue?.Enqueue(UIRequest.CreatePage(this, type, m.Trait, m.Item, m.Aux1, m.Aux2, m.Get));
+            _requestQueue?.Enqueue(UIRequest.CreatePage(this, type, m.IdKey, m.Item, m.Aux1, m.Aux2, m.Get));
 
-        internal void UIRequestCreatePage(ControlType type, IdKey trait, ModelAction get, ItemModel m) =>
-            _requestQueue?.Enqueue(UIRequest.CreatePage(this, type, trait, m.Item, m.Aux1, m.Aux2, get));
-        internal void UIRequestCreatePage(ControlType type, IdKey trait, Item item, ModelAction get) =>
-            _requestQueue?.Enqueue(UIRequest.CreatePage(this, type, trait, item, null, null, get));
+        internal void UIRequestCreatePage(ControlType type, IdKey idKe, ModelAction get, ItemModel m) =>
+            _requestQueue?.Enqueue(UIRequest.CreatePage(this, type, idKe, m.Item, m.Aux1, m.Aux2, get));
+        internal void UIRequestCreatePage(ControlType type, IdKey idKe, Item item, ModelAction get) =>
+            _requestQueue?.Enqueue(UIRequest.CreatePage(this, type, idKe, item, null, null, get));
 
 
         internal void UIRequestSaveSymbol() => _requestQueue?.Enqueue(UIRequest.SaveModel(this));

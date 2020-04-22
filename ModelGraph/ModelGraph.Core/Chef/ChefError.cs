@@ -11,11 +11,11 @@ namespace ModelGraph.Core
         #region RepositoryError  ==============================================
         public void AddRepositorReadError(string text)
         {
-            //_itemError[ImportBinaryReader] = new ErrorOne(ErrorStore, this, Trait.ImportError, text);
+            //_itemError[ImportBinaryReader] = new ErrorOne(ErrorStore, this, IdKey.ImportError, text);
         }
         public void AddRepositorWriteError(string text)
         {
-            //_itemError[ExportBinaryWriter] = new ErrorOne(ErrorStore, this, Trait.ExportError, text);
+            //_itemError[ExportBinaryWriter] = new ErrorOne(ErrorStore, this, IdKey.ExportError, text);
         }
         #endregion
 
@@ -102,19 +102,19 @@ namespace ModelGraph.Core
                 ClearError(item, aux1, aux2, error);
         }
 
-        internal void ClearError(Item item, IdKey trait)
+        internal void ClearError(Item item, IdKey idKe)
         {
-            if (_itemError.TryGetValue(item, out Error error) && error.Trait == trait)
+            if (_itemError.TryGetValue(item, out Error error) && error.IdKey == idKe)
                 ClearError(item, error);
         }
-        internal void ClearError(Item item, Item aux1, IdKey trait)
+        internal void ClearError(Item item, Item aux1, IdKey idKe)
         {
-            if (_itemErrorAux1.TryGetValue((item, aux1), out Error error) && error.Trait == trait)
+            if (_itemErrorAux1.TryGetValue((item, aux1), out Error error) && error.IdKey == idKe)
                 ClearError(item, aux1, error);
         }
-        internal void ClearError(Item item, Item aux1, Item aux2, IdKey trait)
+        internal void ClearError(Item item, Item aux1, Item aux2, IdKey idKe)
         {
-            if (_itemErrorAux2.TryGetValue((item, aux1, aux2), out Error error) && error.Trait == trait)
+            if (_itemErrorAux2.TryGetValue((item, aux1, aux2), out Error error) && error.IdKey == idKe)
                 ClearError(item, aux1, aux2, error);
         }
 
@@ -148,15 +148,15 @@ namespace ModelGraph.Core
 
             foreach (var e in _itemError)
             {
-                if (traits.Contains(e.Value.Trait)) removeError.Add(e.Key, e.Value);
+                if (traits.Contains(e.Value.IdKey)) removeError.Add(e.Key, e.Value);
             }
             foreach (var e in _itemErrorAux1)
             {
-                if (traits.Contains(e.Value.Trait)) removeErrorAux1.Add(e.Key, e.Value);
+                if (traits.Contains(e.Value.IdKey)) removeErrorAux1.Add(e.Key, e.Value);
             }
             foreach (var e in _itemErrorAux2)
             {
-                if (traits.Contains(e.Value.Trait)) removeErrorAux2.Add(e.Key, e.Value);
+                if (traits.Contains(e.Value.IdKey)) removeErrorAux2.Add(e.Key, e.Value);
             }
             foreach (var e in removeError)
             {
@@ -180,142 +180,142 @@ namespace ModelGraph.Core
         #endregion
 
         #region TryAddError  ==================================================
-        internal ErrorNone TryAddErrorNone(Item item, IdKey trait)
+        internal ErrorNone TryAddErrorNone(Item item, IdKey idKe)
         {
             var prevError = TryGetError(item);
             if (prevError != null)
             {
-                if (prevError is ErrorNone error && error.Trait == trait)
+                if (prevError is ErrorNone error && error.IdKey == idKe)
                     return error; // this error already exists
 
-                if (prevError.TraitIndex > TraitIndexOf(trait))
+                if (prevError.TraitIndex > TraitIndexOf(idKe))
                     return null; // prevError has hight traitIndex and will not be replace
 
                 ClearError(item, prevError);
             }
-            return AddError(item, new ErrorNone(ErrorStore, item, trait));
+            return AddError(item, new ErrorNone(ErrorStore, item, idKe));
         }
-        internal ErrorNoneAux TryAddErrorNone(Item item, Item aux1, IdKey trait)
+        internal ErrorNoneAux TryAddErrorNone(Item item, Item aux1, IdKey idKe)
         {
             var prevError = TryGetError(item, aux1);
             if (prevError != null)
             {
-                if (prevError is ErrorNoneAux error && error.Trait == trait)
+                if (prevError is ErrorNoneAux error && error.IdKey == idKe)
                     return error; // this error already exists
 
-                if (prevError.TraitIndex > TraitIndexOf(trait))
+                if (prevError.TraitIndex > TraitIndexOf(idKe))
                     return null; // prevError has hight traitIndex and will not be replace
 
                 ClearError(item, aux1, prevError);
             }
-            return AddError(item, aux1, new ErrorNoneAux(ErrorStore, item, aux1, trait));
+            return AddError(item, aux1, new ErrorNoneAux(ErrorStore, item, aux1, idKe));
         }
-        internal ErrorNoneAux2 TryAddErrorNone(Item item, Item aux1, Item aux2, IdKey trait)
+        internal ErrorNoneAux2 TryAddErrorNone(Item item, Item aux1, Item aux2, IdKey idKe)
         {
             var prevError = TryGetError(item, aux1, aux2);
             if (prevError != null)
             {
-                if (prevError is ErrorNoneAux2 error && error.Trait == trait)
+                if (prevError is ErrorNoneAux2 error && error.IdKey == idKe)
                     return error; // this error already exists
 
-                if (prevError.TraitIndex > TraitIndexOf(trait))
+                if (prevError.TraitIndex > TraitIndexOf(idKe))
                     return null; // prevError has hight traitIndex and will not be replace
 
                 ClearError(item, aux1, aux2, prevError);
             }
-            return AddError(item, aux1, aux2, new ErrorNoneAux2(ErrorStore, item, aux1, aux2, trait));
+            return AddError(item, aux1, aux2, new ErrorNoneAux2(ErrorStore, item, aux1, aux2, idKe));
         }
 
-        internal ErrorOne TryAddErrorOne(Item item, IdKey trait, string text = null)
+        internal ErrorOne TryAddErrorOne(Item item, IdKey idKe, string text = null)
         {
             var prevError = TryGetError(item);
             if (prevError != null)
             {
-                if (prevError is ErrorOne error && error.Trait == trait)
+                if (prevError is ErrorOne error && error.IdKey == idKe)
                     return error; // this error already exists
 
-                if (prevError.TraitIndex > TraitIndexOf(trait))
+                if (prevError.TraitIndex > TraitIndexOf(idKe))
                     return null; // prevError has hight traitIndex and will not be replace
 
                 ClearError(item, prevError);
             }
-            return AddError(item, new ErrorOne(ErrorStore, item, trait, text));
+            return AddError(item, new ErrorOne(ErrorStore, item, idKe, text));
         }
-        internal ErrorOneAux TryAddErrorOne(Item item, Item aux1, IdKey trait, string text = null)
+        internal ErrorOneAux TryAddErrorOne(Item item, Item aux1, IdKey idKe, string text = null)
         {
             var prevError = TryGetError(item, aux1);
             if (prevError != null)
             {
-                if (prevError is ErrorOneAux error && error.Trait == trait)
+                if (prevError is ErrorOneAux error && error.IdKey == idKe)
                     return error; // this error already exists
 
-                if (prevError.TraitIndex > TraitIndexOf(trait))
+                if (prevError.TraitIndex > TraitIndexOf(idKe))
                     return null; // prevError has hight traitIndex and will not be replace
 
                 ClearError(item, aux1, prevError);
             }
-            return AddError(item, aux1, new ErrorOneAux(ErrorStore, item, aux1, trait, text));
+            return AddError(item, aux1, new ErrorOneAux(ErrorStore, item, aux1, idKe, text));
         }
-        internal ErrorOneAux2 TryAddErrorOne(Item item, Item aux1, Item aux2, IdKey trait, string text = null)
+        internal ErrorOneAux2 TryAddErrorOne(Item item, Item aux1, Item aux2, IdKey idKe, string text = null)
         {
             var prevError = TryGetError(item, aux1, aux2);
             if (prevError != null)
             {
-                if (prevError is ErrorOneAux2 error && error.Trait == trait)
+                if (prevError is ErrorOneAux2 error && error.IdKey == idKe)
                     return error; // this error already exists
 
-                if (prevError.TraitIndex > TraitIndexOf(trait))
+                if (prevError.TraitIndex > TraitIndexOf(idKe))
                     return null; // prevError has hight traitIndex and will not be replace
 
                 ClearError(item, aux1, aux2, prevError);
             }
-            return AddError(item, aux1, aux2, new ErrorOneAux2(ErrorStore, item, aux1, aux2, trait, text));
+            return AddError(item, aux1, aux2, new ErrorOneAux2(ErrorStore, item, aux1, aux2, idKe, text));
         }
 
-        internal ErrorMany TryAddErrorMany(Item item, IdKey trait, string text = null)
+        internal ErrorMany TryAddErrorMany(Item item, IdKey idKe, string text = null)
         {
             var prevError = TryGetError(item);
             if (prevError != null)
             {
-                if (prevError is ErrorMany error && error.Trait == trait)
+                if (prevError is ErrorMany error && error.IdKey == idKe)
                     return error; // this error already exists
 
-                if (prevError.TraitIndex > TraitIndexOf(trait))
+                if (prevError.TraitIndex > TraitIndexOf(idKe))
                     return null; // prevError has hight traitIndex and will not be replace
 
                 ClearError(item, prevError);
             }
-            return AddError(item, new ErrorMany(ErrorStore, item, trait, text));
+            return AddError(item, new ErrorMany(ErrorStore, item, idKe, text));
         }
-        internal ErrorManyAux TryAddErrorMany(Item item, Item aux1, IdKey trait, string text = null)
+        internal ErrorManyAux TryAddErrorMany(Item item, Item aux1, IdKey idKe, string text = null)
         {
             var prevError = TryGetError(item, aux1);
             if (prevError != null)
             {
-                if (prevError is ErrorManyAux error && error.Trait == trait)
+                if (prevError is ErrorManyAux error && error.IdKey == idKe)
                     return error; // this error already exists
 
-                if (prevError.TraitIndex > TraitIndexOf(trait))
+                if (prevError.TraitIndex > TraitIndexOf(idKe))
                     return null; // prevError has hight traitIndex and will not be replace
 
                 ClearError(item, aux1, prevError);
             }
-            return AddError(item, aux1, new ErrorManyAux(ErrorStore, item, aux1, trait, text));
+            return AddError(item, aux1, new ErrorManyAux(ErrorStore, item, aux1, idKe, text));
         }
-        internal ErrorManyAux2 TryAddErrorMany(Item item, Item aux1, Item aux2, IdKey trait, string text = null)
+        internal ErrorManyAux2 TryAddErrorMany(Item item, Item aux1, Item aux2, IdKey idKe, string text = null)
         {
             var prevError = TryGetError(item, aux1, aux2);
             if (prevError != null)
             {
-                if (prevError is ErrorManyAux2 error && error.Trait == trait)
+                if (prevError is ErrorManyAux2 error && error.IdKey == idKe)
                     return error; // this error already exists
 
-                if (prevError.TraitIndex > TraitIndexOf(trait))
+                if (prevError.TraitIndex > TraitIndexOf(idKe))
                     return null; // prevError has hight traitIndex and will not be replace
 
                 ClearError(item, aux1, aux2, prevError);
             }
-            return AddError(item, aux1, aux2, new ErrorManyAux2(ErrorStore, item, aux1, aux2, trait, text));
+            return AddError(item, aux1, aux2, new ErrorManyAux2(ErrorStore, item, aux1, aux2, idKe, text));
         }
         #endregion
 

@@ -7,11 +7,11 @@ namespace ModelGraph.Core
         private string _text;
 
         #region Constructor  ==================================================
-        internal ErrorOne(StoreOf<Error> owner, Item item, IdKey trait, string text = null)
+        internal ErrorOne(StoreOf<Error> owner, Item item, IdKey idKe, string text = null)
         {
             Owner = owner;
             Item = item;
-            Trait = trait;
+            IdKey = idKe;
             _text = text;
             owner.Add(this);
 

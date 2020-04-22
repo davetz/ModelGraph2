@@ -9,10 +9,10 @@ namespace ModelGraph.Core
 
         #region Constructor  ==================================================
         public StoreOf() { }
-        public StoreOf(Store owner, IdKey trait, int capacity = 0)
+        public StoreOf(Store owner, IdKey idKe, int capacity = 0)
         {
             Owner = owner;
-            Trait = trait;
+            IdKey = idKe;
             SetCapacity(capacity);
             owner?.Add(this);
         }

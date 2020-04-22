@@ -11,7 +11,7 @@ namespace ModelGraph.Core
         internal EnumX(EnumXStore owner, bool autoExpandRight = false)
         {
             Owner = owner;
-            Trait = IdKey.EnumX;
+            IdKey = IdKey.EnumX;
 
             if (autoExpandRight) AutoExpandRight = true;
             owner.Add(this);

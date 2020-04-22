@@ -85,12 +85,12 @@ namespace ModelGraph.Core
             AddIntegrityCheck(Store_ComputeX, PropertyStore, ComputeXStore);
             AddIntegrityCheck(Store_ComputeX, RelationStore, ComputeXStore);
 
-            //Table_ChildRelationGroup = new Relation(_relationStore, Trait.TableChildRelationGroup, Pairing.OneToMany, 25, 25, true);
-            //Table_ParentRelationGroup = new Relation(_relationStore, Trait.TableParentRelationGroup, Pairing.OneToMany, 25, 25, true);
-            //Table_ReverseRelationGroup = new Relation(_relationStore, Trait.TableReverseRelationGroup, Pairing.OneToMany, 25, 25, true);
-            //ChildRelationGroup_Relation = new Relation(_relationStore, Trait.TableRelationGroupRelation, Pairing.OneToMany, 25, 25);
-            //ParentRelationGroup_Relation = new Relation(_relationStore, Trait.ParentRelationGroupRelation, Pairing.OneToMany, 25, 25);
-            //ReverseRelationGroup_Relation = new Relation(_relationStore, Trait.ReverseRelationGroupRelation, Pairing.OneToMany, 25, 25);
+            //Table_ChildRelationGroup = new Relation(_relationStore, IdKey.TableChildRelationGroup, Pairing.OneToMany, 25, 25, true);
+            //Table_ParentRelationGroup = new Relation(_relationStore, IdKey.TableParentRelationGroup, Pairing.OneToMany, 25, 25, true);
+            //Table_ReverseRelationGroup = new Relation(_relationStore, IdKey.TableReverseRelationGroup, Pairing.OneToMany, 25, 25, true);
+            //ChildRelationGroup_Relation = new Relation(_relationStore, IdKey.TableRelationGroupRelation, Pairing.OneToMany, 25, 25);
+            //ParentRelationGroup_Relation = new Relation(_relationStore, IdKey.ParentRelationGroupRelation, Pairing.OneToMany, 25, 25);
+            //ReverseRelationGroup_Relation = new Relation(_relationStore, IdKey.ReverseRelationGroupRelation, Pairing.OneToMany, 25, 25);
 
             ViewX_ViewX = new RelationOf<ViewX, ViewX>(RelationStore, IdKey.ViewX_ViewX, Pairing.OneToMany, 25, 25, true);
             AddIntegrityCheck(ViewX_ViewX, ViewXStore, ViewXStore);

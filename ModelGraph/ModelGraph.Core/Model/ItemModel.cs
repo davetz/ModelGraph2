@@ -16,7 +16,7 @@ namespace ModelGraph.Core
         public string ViewFilter;            // UI imposed Kind/Name filter
         internal ModelAction Get;            // custom actions for this itemModel
        
-        internal IdKey Trait;
+        internal IdKey IdKey;
         private State _state;
 
         internal byte ChildDelta;  // version of child model list
@@ -26,9 +26,9 @@ namespace ModelGraph.Core
 
         #region Constructor  ==================================================
         internal ItemModel() { } // supports RootModel constructor
-        private ItemModel(ItemModel parent, IdKey trait, Item item, Item aux1, Item aux2, ModelAction action)
+        private ItemModel(ItemModel parent, IdKey idKe, Item item, Item aux1, Item aux2, ModelAction action)
         {
-            Trait = trait;
+            IdKey = idKe;
             Item = item;
             Aux1 = aux1;
             Aux2 = aux2;
@@ -38,9 +38,9 @@ namespace ModelGraph.Core
             if (parent == null) return;
             Depth = (byte)(parent.Depth + 1);
         }
-        internal static ItemModel Create(ItemModel parent, IdKey trait, Item item, Item aux1, Item aux2, ModelAction action)
+        internal static ItemModel Create(ItemModel parent, IdKey idKe, Item item, Item aux1, Item aux2, ModelAction action)
         {
-            return new ItemModel(parent, trait, item, aux1, aux2, action);
+            return new ItemModel(parent, idKe, item, aux1, aux2, action);
         }
         internal static void Release(ItemModel m)
         {
@@ -67,35 +67,35 @@ namespace ModelGraph.Core
         #endregion
 
         #region StringKeys  ===================================================
-        internal string GetKindKey(IdKey trait) => $"{(int)(trait & IdKey.KeyMask):X3}K";
-        internal string GetNameKey(IdKey trait) => $"{(int)(trait & IdKey.KeyMask):X3}N";
-        internal string GetSummaryKey(IdKey trait) => $"{(int)(trait & IdKey.KeyMask):X3}S";
-        internal string GetDescriptionKey(IdKey trait) => $"{(int)(trait & IdKey.KeyMask):X3}V";
+        internal string GetKindKey(IdKey idKe) => $"{(int)(idKe & IdKey.KeyMask):X3}K";
+        internal string GetNameKey(IdKey idKe) => $"{(int)(idKe & IdKey.KeyMask):X3}N";
+        internal string GetSummaryKey(IdKey idKe) => $"{(int)(idKe & IdKey.KeyMask):X3}S";
+        internal string GetDescriptionKey(IdKey idKe) => $"{(int)(idKe & IdKey.KeyMask):X3}V";
 
-        internal string KindKey => GetKindKey(IsProperty ? Item.Trait : Trait);
-        internal string NameKey => GetNameKey(IsProperty ? Item.Trait : Trait);
-        internal string SummaryKey => GetSummaryKey(IsProperty ? Item.Trait : Trait);
-        internal string DescriptionKey => GetDescriptionKey(IsProperty ? Item.Trait : Trait);
+        internal string KindKey => GetKindKey(IsProperty ? Item.IdKey : IdKey);
+        internal string NameKey => GetNameKey(IsProperty ? Item.IdKey : IdKey);
+        internal string SummaryKey => GetSummaryKey(IsProperty ? Item.IdKey : IdKey);
+        internal string DescriptionKey => GetDescriptionKey(IsProperty ? Item.IdKey : IdKey);
 
         public override string ToString()
         {
             var (kind, name, count, type) = ModelParms;
-            return $"{NameKey} {Trait} {kind} {name} {count}";
+            return $"{NameKey} {IdKey} {kind} {name} {count}";
         }
         #endregion
 
-        #region Trait  ========================================================
+        #region IdKey  ========================================================
         public bool IsProperty => (IsTextProperty || IsComboProperty || IsCheckProperty);
-        public bool IsTextProperty => Trait == IdKey.TextPropertyModel;
-        public bool IsComboProperty => Trait == IdKey.ComboPropertyModel;
-        public bool IsCheckProperty => Trait == IdKey.CheckPropertyModel;
-        public bool IsForcedRefresh => Trait == IdKey.ErrorRootModel || Trait == IdKey.ChangeRootModel;
+        public bool IsTextProperty => IdKey == IdKey.TextPropertyModel;
+        public bool IsComboProperty => IdKey == IdKey.ComboPropertyModel;
+        public bool IsCheckProperty => IdKey == IdKey.CheckPropertyModel;
+        public bool IsForcedRefresh => IdKey == IdKey.ErrorRootModel || IdKey == IdKey.ChangeRootModel;
 
-        public bool IsRowChildRelationModel => Trait == IdKey.RowChildRelationModel;
-        public bool IsRowParentRelationModel => Trait == IdKey.RowParentRelationModel;
-        public bool IsErrorAux => (Trait & IdKey.IsErrorAux) != 0;
-        public bool IsErrorAux1 => (Trait & IdKey.IsErrorAux1) != 0;
-        public bool IsErrorAux2 => (Trait & IdKey.IsErrorAux2) != 0;
+        public bool IsRowChildRelationModel => IdKey == IdKey.RowChildRelationModel;
+        public bool IsRowParentRelationModel => IdKey == IdKey.RowParentRelationModel;
+        public bool IsErrorAux => (IdKey & IdKey.IsErrorAux) != 0;
+        public bool IsErrorAux1 => (IdKey & IdKey.IsErrorAux1) != 0;
+        public bool IsErrorAux2 => (IdKey & IdKey.IsErrorAux2) != 0;
         #endregion
 
         #region State  ========================================================
@@ -419,14 +419,14 @@ namespace ModelGraph.Core
         {
             if (Aux1 != null && Aux1 is Property)
             {
-                var code1 = (int)(Trait & IdKey.KeyMask);
-                var code2 = (int)(Aux1.Trait & IdKey.KeyMask);
-                return $"{Trait.ToString()}  ({code1.ToString("X3")}){Environment.NewLine}{Aux1.Trait.ToString()}  ({code2.ToString("X3")})";
+                var code1 = (int)(IdKey & IdKey.KeyMask);
+                var code2 = (int)(Aux1.IdKey & IdKey.KeyMask);
+                return $"{IdKey.ToString()}  ({code1.ToString("X3")}){Environment.NewLine}{Aux1.IdKey.ToString()}  ({code2.ToString("X3")})";
             }
             else
             {
-                var code = (int)(Trait & IdKey.KeyMask);
-                return $"{Trait.ToString()}  ({code.ToString("X3")})";
+                var code = (int)(IdKey & IdKey.KeyMask);
+                return $"{IdKey.ToString()}  ({code.ToString("X3")})";
             }
         }
         public int ViewModelCount => (ViewModels is null) ? 0 : ViewModels.Count;
