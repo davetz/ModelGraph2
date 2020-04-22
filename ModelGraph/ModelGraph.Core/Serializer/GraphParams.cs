@@ -20,9 +20,9 @@ namespace ModelGraph.Core
         internal PropertyOf<Edge, string> Facet2Property;
 
 
-        GraphXStore _graphXStore;
+        GraphXDomain _graphXStore;
 
-        internal GraphParams(Chef chef, GraphXStore graphXStore)
+        internal GraphParams(Chef chef, GraphXDomain graphXStore)
         {
             _graphXStore = graphXStore;
             CreateProperties(chef);

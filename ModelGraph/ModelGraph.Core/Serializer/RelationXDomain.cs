@@ -5,7 +5,7 @@ using Windows.Storage.Streams;
 
 namespace ModelGraph.Core
 {
-    public class RelationXStore : ExternalStoreOf<RelationX>, ISerializer, IRelationStore
+    public class RelationXDomain : ExternalDomainOf<RelationX>, ISerializer, IRelationStore
     {
         static Guid _serializerGuid = new Guid("D950F508-B774-4838-B81A-757EFDC40518");
         static byte _formatVersion = 1;
@@ -15,7 +15,7 @@ namespace ModelGraph.Core
         internal PropertyOf<RelationX, string> PairingProperty;
         internal PropertyOf<RelationX, bool> IsRequiredProperty;
 
-        internal RelationXStore(Chef chef) : base(chef, IdKey.RelationXStore)
+        internal RelationXDomain(Chef chef) : base(chef, IdKey.RelationXStore)
         {
             chef.RegisterItemSerializer((_serializerGuid, this));
             CreateProperties(chef);

@@ -4,7 +4,7 @@ using Windows.Storage.Streams;
 
 namespace ModelGraph.Core
 {
-    public class EnumXStore : ExternalStoreOf<EnumX>, ISerializer
+    public class EnumXDomain : ExternalDomainOf<EnumX>, ISerializer
     {
         static Guid _serializerGuid = new Guid("8D4CEAD8-E3C5-4342-88AC-1B4B625A9A4C");
         static byte _formatVersion = 1;
@@ -15,7 +15,7 @@ namespace ModelGraph.Core
         internal PropertyOf<PairX, string> TextProperty;
         internal PropertyOf<PairX, string> ValueProperty;
 
-        internal EnumXStore(Chef chef) : base(chef, IdKey.EnumXStore, 10)
+        internal EnumXDomain(Chef chef) : base(chef, IdKey.EnumXStore, 10)
         {
             chef.RegisterItemSerializer((_serializerGuid, this));
             CreateProperties(chef);

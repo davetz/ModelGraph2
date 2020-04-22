@@ -5,9 +5,9 @@ using Windows.Storage.Streams;
 
 namespace ModelGraph.Core
 {
-    public class RelationStore : InternalStoreOf<Relation>, IRelationStore
+    public class RelationDomain : InternalDomainOf<Relation>, IRelationStore
     {
-        internal RelationStore(Chef owner) : base(owner, IdKey.RelationStore, 30)
+        internal RelationDomain(Chef owner) : base(owner, IdKey.RelationStore, 30)
         {
             new RelationLink(owner, this);
         }

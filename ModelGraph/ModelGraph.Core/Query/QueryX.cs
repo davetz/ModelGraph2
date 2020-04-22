@@ -12,7 +12,7 @@ namespace ModelGraph.Core
 
         #region Constructor  ==================================================
         internal QueryX() { }
-        internal QueryX(QueryXStore owner, QueryType kind, bool isRoot = false, bool isHead = false)
+        internal QueryX(QueryXDomain owner, QueryType kind, bool isRoot = false, bool isHead = false)
         {
             Owner = owner;
             IdKey = IdKey.QueryX;
@@ -26,7 +26,7 @@ namespace ModelGraph.Core
 
             owner.Add(this);
         }
-        internal QueryX(QueryXStore owner) 
+        internal QueryX(QueryXDomain owner) 
         {
             Owner = owner;
             IdKey = IdKey.QueryX;

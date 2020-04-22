@@ -5,7 +5,7 @@ using Windows.Storage.Streams;
 
 namespace ModelGraph.Core
 {
-    public class TableXStore : ExternalStoreOf<TableX>, ISerializer
+    public class TableXDomain : ExternalDomainOf<TableX>, ISerializer
     {
         static Guid _serializerGuid = new Guid("93EC136C-6C38-474D-844B-6B8326526CB5");
         static byte _formatVersion = 1;
@@ -13,7 +13,7 @@ namespace ModelGraph.Core
         internal PropertyOf<TableX, string> NameProperty;
         internal PropertyOf<TableX, string> SummaryProperty;
 
-        internal TableXStore(Chef chef) : base(chef, IdKey.TableXStore, 30)
+        internal TableXDomain(Chef chef) : base(chef, IdKey.TableXStore, 30)
         {
             chef.RegisterItemSerializer((_serializerGuid, this));
             CreateProperties(chef);

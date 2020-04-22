@@ -4,7 +4,7 @@ using Windows.Storage.Streams;
 
 namespace ModelGraph.Core
 {
-    public class ColumnXStore : ExternalStoreOf<ColumnX>, ISerializer
+    public class ColumnXDomain : ExternalDomainOf<ColumnX>, ISerializer
     {
         static Guid _serializerGuid = new Guid("3E7097FE-22D5-43B2-964A-9DB843F6D55B");
         static byte _formatVersion = 1;
@@ -14,7 +14,7 @@ namespace ModelGraph.Core
         internal PropertyOf<ColumnX, string> TypeOfProperty { get; private set; }
         internal PropertyOf<ColumnX, bool> IsChoiceProperty { get; private set; }
 
-        internal ColumnXStore(Chef chef) : base(chef, IdKey.ColumnXStore)
+        internal ColumnXDomain(Chef chef) : base(chef, IdKey.ColumnXStore)
         {
             chef.RegisterItemSerializer((_serializerGuid, this));
             CreateProperties(chef);

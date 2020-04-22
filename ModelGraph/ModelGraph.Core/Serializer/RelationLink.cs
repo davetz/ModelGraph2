@@ -9,7 +9,7 @@ namespace ModelGraph.Core
     {
         static Guid _serializerGuid => new Guid("6E4E6626-98BC-483E-AC9B-C7799511ECF2");
 
-        internal RelationLink(Chef chef, RelationStore relationStore) : base(relationStore)
+        internal RelationLink(Chef chef, RelationDomain relationStore) : base(relationStore)
         {
             chef.RegisterLinkSerializer((_serializerGuid, this));
         }

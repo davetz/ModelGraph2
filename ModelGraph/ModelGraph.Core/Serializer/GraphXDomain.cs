@@ -4,7 +4,7 @@ using Windows.Storage.Streams;
 
 namespace ModelGraph.Core
 {
-    public class GraphXStore : ExternalStoreOf<GraphX>, ISerializer
+    public class GraphXDomain : ExternalDomainOf<GraphX>, ISerializer
     {
         static Guid _serializerGuid = new Guid("48C7FA8C-88F1-4203-8E54-3255C1F8C528");
         static byte _formatVersion = 1;
@@ -16,7 +16,7 @@ namespace ModelGraph.Core
         internal PropertyOf<GraphX, int> TerminalStretchProperty;
         internal PropertyOf<GraphX, int> SymbolSizeProperty;
 
-        internal GraphXStore(Chef chef) : base(chef, IdKey.GraphXStore)
+        internal GraphXDomain(Chef chef) : base(chef, IdKey.GraphXStore)
         {
             chef.RegisterItemSerializer((_serializerGuid, this));
             CreateProperties(chef);

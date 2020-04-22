@@ -4,7 +4,7 @@ using Windows.Storage.Streams;
 
 namespace ModelGraph.Core
 {
-    public class QueryXStore : ExternalStoreOf<QueryX>, ISerializer
+    public class QueryXDomain : ExternalDomainOf<QueryX>, ISerializer
     {
         static Guid _serializerGuid = new Guid("33B9B8A4-9332-4902-A3C1-37C5F971B6FF");
         static byte _formatVersion = 1;
@@ -28,7 +28,7 @@ namespace ModelGraph.Core
         internal PropertyOf<QueryX, string> Facet2Property;
         internal PropertyOf<QueryX, string> Connect2Property;
 
-        internal QueryXStore(Chef chef) : base(chef, IdKey.QueryXStore)
+        internal QueryXDomain(Chef chef) : base(chef, IdKey.QueryXStore)
         {
             chef.RegisterItemSerializer((_serializerGuid, this));
             CreateProperties(chef);

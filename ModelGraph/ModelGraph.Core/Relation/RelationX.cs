@@ -8,7 +8,7 @@ namespace ModelGraph.Core
         internal string Description;
 
         #region Constructors  =================================================
-        internal RelationX(RelationXStore owner, bool autoExpandRight = false)
+        internal RelationX(RelationXDomain owner, bool autoExpandRight = false)
         {
             Owner = owner;
             IdKey = IdKey.RelationX;

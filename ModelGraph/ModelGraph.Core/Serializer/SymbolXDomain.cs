@@ -4,7 +4,7 @@ using Windows.Storage.Streams;
 
 namespace ModelGraph.Core
 {
-    public class SymbolXStore : ExternalStoreOf<SymbolX>, ISerializer
+    public class SymbolXDomain : ExternalDomainOf<SymbolX>, ISerializer
     {
         static Guid _serializerGuid = new Guid("D3956312-BEC7-4988-8228-DCA95CF23781");
         static byte _formatVersion = 1;
@@ -12,7 +12,7 @@ namespace ModelGraph.Core
         internal PropertyOf<SymbolX, string> NameProperty;
         internal PropertyOf<SymbolX, string> AttachProperty;
 
-        internal SymbolXStore(Chef chef) : base(chef, IdKey.SymbolXStore)
+        internal SymbolXDomain(Chef chef) : base(chef, IdKey.SymbolXStore)
         {
             chef.RegisterItemSerializer((_serializerGuid, this));
             CreateProperties(chef);

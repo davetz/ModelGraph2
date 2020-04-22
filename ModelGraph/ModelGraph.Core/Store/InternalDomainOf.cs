@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace ModelGraph.Core
 {
-    public class InternalStoreOf<T> : StoreOf<T> where T : Item
+    public class InternalDomainOf<T> : StoreOf<T> where T : Item
     {
-        public InternalStoreOf(Chef owner, IdKey idKe, int capacity = 0) : base(owner, idKe, capacity) { }
+        public InternalDomainOf(Chef owner, IdKey idKe, int capacity = 0) : base(owner, idKe, capacity) { }
 
         internal override void RegisterInternal(Dictionary<int, Item> internalItems)
         {

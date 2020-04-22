@@ -4,7 +4,7 @@ using Windows.Storage.Streams;
 
 namespace ModelGraph.Core
 {
-    public class ComputeXStore : ExternalStoreOf<ComputeX>, ISerializer
+    public class ComputeXDomain : ExternalDomainOf<ComputeX>, ISerializer
     {
         static Guid _serializerGuid = new Guid("35522B27-A925-4CE0-8D65-EDEF451097F2");
         static byte _formatVersion = 1;
@@ -17,7 +17,7 @@ namespace ModelGraph.Core
         internal PropertyOf<ComputeX, string> CompuTypeProperty;
         internal PropertyOf<ComputeX, string> ValueTypeProperty;
 
-        internal ComputeXStore(Chef chef) : base(chef, IdKey.ComputeXStore)
+        internal ComputeXDomain(Chef chef) : base(chef, IdKey.ComputeXStore)
         {
             chef.RegisterItemSerializer((_serializerGuid, this));
             CreateProperties(chef);
