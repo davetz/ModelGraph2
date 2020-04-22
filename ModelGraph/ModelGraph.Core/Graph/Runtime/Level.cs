@@ -12,7 +12,7 @@ namespace ModelGraph.Core
         internal Level(Graph owner)
         {
             Owner = owner;
-            Trait = Trait.Level;
+            Trait = IdKey.Level;
 
             owner.Add(this);
         }

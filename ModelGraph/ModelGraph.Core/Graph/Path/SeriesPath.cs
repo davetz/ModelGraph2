@@ -12,7 +12,7 @@ namespace ModelGraph.Core
         internal SeriesPath(Graph owner, Path[] paths, bool isRadial = false)
         {
             Owner = owner;
-            Trait = Trait.SeriesPath;
+            Trait = IdKey.SeriesPath;
             IsRadial = isRadial;
             _paths = paths;
 

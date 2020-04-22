@@ -13,7 +13,7 @@ namespace ModelGraph.Core
         internal PropertyOf<ViewX, string> NameProperty;
         internal PropertyOf<ViewX, string> SummaryProperty;
 
-        internal ViewXStore(Chef chef) : base(chef, Trait.ViewXStore, 30)
+        internal ViewXStore(Chef chef) : base(chef, IdKey.ViewXStore, 30)
         {
             chef.RegisterItemSerializer((_serializerGuid, this));
             CreateProperties(chef);
@@ -24,14 +24,14 @@ namespace ModelGraph.Core
         {
             var props = new List<Property>(4);
             {
-                var p = NameProperty = new PropertyOf<ViewX, string>(chef.PropertyStore, Trait.ViewNameProperty);
+                var p = NameProperty = new PropertyOf<ViewX, string>(chef.PropertyStore, IdKey.ViewNameProperty);
                 p.GetValFunc = (item) => p.Cast(item).Name;
                 p.SetValFunc = (item, value) => { p.Cast(item).Name = value; return true; };
                 p.Value = new StringValue(p);
                 props.Add(p);
             }
             {
-                var p = SummaryProperty = new PropertyOf<ViewX, string>(chef.PropertyStore, Trait.ViewSummaryProperty);
+                var p = SummaryProperty = new PropertyOf<ViewX, string>(chef.PropertyStore, IdKey.ViewSummaryProperty);
                 p.GetValFunc = (item) => p.Cast(item).Summary;
                 p.SetValFunc = (item, value) => { p.Cast(item).Summary = value; return true; };
                 p.Value = new StringValue(p);

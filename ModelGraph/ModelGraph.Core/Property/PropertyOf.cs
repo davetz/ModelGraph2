@@ -11,7 +11,7 @@ namespace ModelGraph.Core
 
 
         #region Constructor  ==================================================
-        internal PropertyOf(Store owner, Trait trait, EnumZ enumZ = null)
+        internal PropertyOf(Store owner, IdKey trait, EnumZ enumZ = null)
         {
             Owner = owner;
             Trait = trait;

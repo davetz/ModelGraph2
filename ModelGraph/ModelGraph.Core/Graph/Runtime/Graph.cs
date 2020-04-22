@@ -32,7 +32,7 @@ namespace ModelGraph.Core
         {
             Owner = owner;
             SeedItem = seedItem;
-            Trait = Trait.Graph;
+            Trait = IdKey.Graph;
 
             owner.Add(this);
         }

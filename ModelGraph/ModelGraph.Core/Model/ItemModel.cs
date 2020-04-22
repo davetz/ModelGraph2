@@ -16,7 +16,7 @@ namespace ModelGraph.Core
         public string ViewFilter;            // UI imposed Kind/Name filter
         internal ModelAction Get;            // custom actions for this itemModel
        
-        internal Trait Trait;
+        internal IdKey Trait;
         private State _state;
 
         internal byte ChildDelta;  // version of child model list
@@ -26,7 +26,7 @@ namespace ModelGraph.Core
 
         #region Constructor  ==================================================
         internal ItemModel() { } // supports RootModel constructor
-        private ItemModel(ItemModel parent, Trait trait, Item item, Item aux1, Item aux2, ModelAction action)
+        private ItemModel(ItemModel parent, IdKey trait, Item item, Item aux1, Item aux2, ModelAction action)
         {
             Trait = trait;
             Item = item;
@@ -38,7 +38,7 @@ namespace ModelGraph.Core
             if (parent == null) return;
             Depth = (byte)(parent.Depth + 1);
         }
-        internal static ItemModel Create(ItemModel parent, Trait trait, Item item, Item aux1, Item aux2, ModelAction action)
+        internal static ItemModel Create(ItemModel parent, IdKey trait, Item item, Item aux1, Item aux2, ModelAction action)
         {
             return new ItemModel(parent, trait, item, aux1, aux2, action);
         }
@@ -67,10 +67,10 @@ namespace ModelGraph.Core
         #endregion
 
         #region StringKeys  ===================================================
-        internal string GetKindKey(Trait trait) => $"{(int)(trait & Trait.KeyMask):X3}K";
-        internal string GetNameKey(Trait trait) => $"{(int)(trait & Trait.KeyMask):X3}N";
-        internal string GetSummaryKey(Trait trait) => $"{(int)(trait & Trait.KeyMask):X3}S";
-        internal string GetDescriptionKey(Trait trait) => $"{(int)(trait & Trait.KeyMask):X3}V";
+        internal string GetKindKey(IdKey trait) => $"{(int)(trait & IdKey.KeyMask):X3}K";
+        internal string GetNameKey(IdKey trait) => $"{(int)(trait & IdKey.KeyMask):X3}N";
+        internal string GetSummaryKey(IdKey trait) => $"{(int)(trait & IdKey.KeyMask):X3}S";
+        internal string GetDescriptionKey(IdKey trait) => $"{(int)(trait & IdKey.KeyMask):X3}V";
 
         internal string KindKey => GetKindKey(IsProperty ? Item.Trait : Trait);
         internal string NameKey => GetNameKey(IsProperty ? Item.Trait : Trait);
@@ -86,16 +86,16 @@ namespace ModelGraph.Core
 
         #region Trait  ========================================================
         public bool IsProperty => (IsTextProperty || IsComboProperty || IsCheckProperty);
-        public bool IsTextProperty => Trait == Trait.TextPropertyModel;
-        public bool IsComboProperty => Trait == Trait.ComboPropertyModel;
-        public bool IsCheckProperty => Trait == Trait.CheckPropertyModel;
-        public bool IsForcedRefresh => Trait == Trait.ErrorRootModel || Trait == Trait.ChangeRootModel;
+        public bool IsTextProperty => Trait == IdKey.TextPropertyModel;
+        public bool IsComboProperty => Trait == IdKey.ComboPropertyModel;
+        public bool IsCheckProperty => Trait == IdKey.CheckPropertyModel;
+        public bool IsForcedRefresh => Trait == IdKey.ErrorRootModel || Trait == IdKey.ChangeRootModel;
 
-        public bool IsRowChildRelationModel => Trait == Trait.RowChildRelationModel;
-        public bool IsRowParentRelationModel => Trait == Trait.RowParentRelationModel;
-        public bool IsErrorAux => (Trait & Trait.IsErrorAux) != 0;
-        public bool IsErrorAux1 => (Trait & Trait.IsErrorAux1) != 0;
-        public bool IsErrorAux2 => (Trait & Trait.IsErrorAux2) != 0;
+        public bool IsRowChildRelationModel => Trait == IdKey.RowChildRelationModel;
+        public bool IsRowParentRelationModel => Trait == IdKey.RowParentRelationModel;
+        public bool IsErrorAux => (Trait & IdKey.IsErrorAux) != 0;
+        public bool IsErrorAux1 => (Trait & IdKey.IsErrorAux1) != 0;
+        public bool IsErrorAux2 => (Trait & IdKey.IsErrorAux2) != 0;
         #endregion
 
         #region State  ========================================================
@@ -419,13 +419,13 @@ namespace ModelGraph.Core
         {
             if (Aux1 != null && Aux1 is Property)
             {
-                var code1 = (int)(Trait & Trait.KeyMask);
-                var code2 = (int)(Aux1.Trait & Trait.KeyMask);
+                var code1 = (int)(Trait & IdKey.KeyMask);
+                var code2 = (int)(Aux1.Trait & IdKey.KeyMask);
                 return $"{Trait.ToString()}  ({code1.ToString("X3")}){Environment.NewLine}{Aux1.Trait.ToString()}  ({code2.ToString("X3")})";
             }
             else
             {
-                var code = (int)(Trait & Trait.KeyMask);
+                var code = (int)(Trait & IdKey.KeyMask);
                 return $"{Trait.ToString()}  ({code.ToString("X3")})";
             }
         }

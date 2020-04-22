@@ -15,7 +15,7 @@ namespace ModelGraph.Core
         internal PropertyOf<RelationX, string> PairingProperty;
         internal PropertyOf<RelationX, bool> IsRequiredProperty;
 
-        internal RelationXStore(Chef chef) : base(chef, Trait.RelationXStore)
+        internal RelationXStore(Chef chef) : base(chef, IdKey.RelationXStore)
         {
             chef.RegisterItemSerializer((_serializerGuid, this));
             CreateProperties(chef);
@@ -28,28 +28,28 @@ namespace ModelGraph.Core
         {
             var props = new List<Property>(4);
             {
-                var p = NameProperty = new PropertyOf<RelationX, string>(chef.PropertyStore, Trait.RelationNameProperty);
+                var p = NameProperty = new PropertyOf<RelationX, string>(chef.PropertyStore, IdKey.RelationNameProperty);
                 p.GetValFunc = (item) => p.Cast(item).Name;
                 p.SetValFunc = (item, value) => { p.Cast(item).Name = value; return true; };
                 p.Value = new StringValue(p);
                 props.Add(p);
             }
             {
-                var p = SummaryProperty = new PropertyOf<RelationX, string>(chef.PropertyStore, Trait.RelationSummaryProperty);
+                var p = SummaryProperty = new PropertyOf<RelationX, string>(chef.PropertyStore, IdKey.RelationSummaryProperty);
                 p.GetValFunc = (item) => p.Cast(item).Summary;
                 p.SetValFunc = (item, value) => { p.Cast(item).Summary = value; return true; };
                 p.Value = new StringValue(p);
                 props.Add(p);
             }
             {
-                var p = PairingProperty = new PropertyOf<RelationX, string>(chef.PropertyStore, Trait.RelationPairingProperty, chef.PairingEnum);
+                var p = PairingProperty = new PropertyOf<RelationX, string>(chef.PropertyStore, IdKey.RelationPairingProperty, chef.PairingEnum);
                 p.GetValFunc = (item) => chef.GetEnumZName(p.EnumZ, (int)p.Cast(item).Pairing);
                 p.SetValFunc = (item, value) => p.Cast(item).TrySetPairing((Pairing)chef.GetEnumZKey(p.EnumZ, value));
                 p.Value = new StringValue(p);
                 props.Add(p);
             }
             {
-                var p = IsRequiredProperty = new PropertyOf<RelationX, bool>(chef.PropertyStore, Trait.RelationIsRequiredProperty);
+                var p = IsRequiredProperty = new PropertyOf<RelationX, bool>(chef.PropertyStore, IdKey.RelationIsRequiredProperty);
                 p.GetValFunc = (item) => p.Cast(item).IsRequired;
                 p.SetValFunc = (item, value) => { p.Cast(item).IsRequired = value; return true; };
                 p.Value = new BoolValue(p);

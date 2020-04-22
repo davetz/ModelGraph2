@@ -13,7 +13,7 @@ namespace ModelGraph.Core
         internal PropertyOf<TableX, string> NameProperty;
         internal PropertyOf<TableX, string> SummaryProperty;
 
-        internal TableXStore(Chef chef) : base(chef, Trait.TableXStore, 30)
+        internal TableXStore(Chef chef) : base(chef, IdKey.TableXStore, 30)
         {
             chef.RegisterItemSerializer((_serializerGuid, this));
             CreateProperties(chef);
@@ -24,14 +24,14 @@ namespace ModelGraph.Core
         {
             var props = new List<Property>(2);
             {
-                var p = NameProperty = new PropertyOf<TableX, string>(chef.PropertyStore, Trait.TableNameProperty);
+                var p = NameProperty = new PropertyOf<TableX, string>(chef.PropertyStore, IdKey.TableNameProperty);
                 p.GetValFunc = (item) => p.Cast(item).Name;
                 p.SetValFunc = (item, value) => { p.Cast(item).Name = value; return true; };
                 p.Value = new StringValue(p);
                 props.Add(p);
             }
             {
-                var p = SummaryProperty = new PropertyOf<TableX, string>(chef.PropertyStore, Trait.TableSummaryProperty);
+                var p = SummaryProperty = new PropertyOf<TableX, string>(chef.PropertyStore, IdKey.TableSummaryProperty);
                 p.GetValFunc = (item) => p.Cast(item).Summary;
                 p.SetValFunc = (item, value) => { p.Cast(item).Summary = value; return true; };
                 p.Value = new StringValue(p);

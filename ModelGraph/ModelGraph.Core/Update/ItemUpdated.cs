@@ -13,7 +13,7 @@
         internal ItemUpdated(ChangeSet owner, Item item, Property property, string oldValue, string newValue, string name)
         {
             Owner = owner;
-            Trait = Trait.ItemUpdated;
+            Trait = IdKey.ItemUpdated;
             Name = name;
 
             Item = item;

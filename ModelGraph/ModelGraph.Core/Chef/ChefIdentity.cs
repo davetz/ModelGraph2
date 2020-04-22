@@ -8,7 +8,7 @@ namespace ModelGraph.Core
         private Func<string, string> _localize = (s) => s; //dummy default localizer
         public void SetLocalizer(Func<string, string> localizer) => _localize = localizer;
 
-        private Dictionary<Trait, Func<Item, IdentityStyle, string>> _itemIdentity;
+        private Dictionary<IdKey, Func<Item, IdentityStyle, string>> _itemIdentity;
 
         #region GetIdentity  ==================================================
         public string GetIdentity(Item item, IdentityStyle style)
@@ -27,20 +27,20 @@ namespace ModelGraph.Core
         #region InitializeItemIdentity  =======================================
         private void InitializeItemIdentity()
         {
-            _itemIdentity = new Dictionary<Trait, Func<Item, IdentityStyle, string>>(73)
+            _itemIdentity = new Dictionary<IdKey, Func<Item, IdentityStyle, string>>(73)
             {
-                { Trait.RowX, RowX_Identity },
-                { Trait.ViewX, ViewX_Identity },
-                { Trait.PairX, PairX_Identity },
-                { Trait.EnumX, EnumX_Identity },
-                { Trait.TableX, TableX_Identity },
-                { Trait.GraphX, GraphX_Identity },
-                { Trait.QueryX, QueryX_Identity },
-                { Trait.SymbolX, SymbolX_Identity },
-                { Trait.ColumnX, ColumnX_Identity },
-                { Trait.ComputeX, ComputeX_Identity },
+                { IdKey.RowX, RowX_Identity },
+                { IdKey.ViewX, ViewX_Identity },
+                { IdKey.PairX, PairX_Identity },
+                { IdKey.EnumX, EnumX_Identity },
+                { IdKey.TableX, TableX_Identity },
+                { IdKey.GraphX, GraphX_Identity },
+                { IdKey.QueryX, QueryX_Identity },
+                { IdKey.SymbolX, SymbolX_Identity },
+                { IdKey.ColumnX, ColumnX_Identity },
+                { IdKey.ComputeX, ComputeX_Identity },
                 //_itemIdentity.Add(Trait.CommandX, CommandX_Identity);
-                { Trait.RelationX, RelationX_Identity }
+                { IdKey.RelationX, RelationX_Identity }
             };
         }
         #endregion
@@ -280,51 +280,51 @@ namespace ModelGraph.Core
         {
             if (item is QueryX qx)
             {
-                Trait trait = Trait.QueryIsCorrupt;
+                IdKey trait = IdKey.QueryIsCorrupt;
                 switch (qx.QueryKind)
                 {
                     case QueryType.View:
                         if (qx.IsHead)
-                            trait = Trait.QueryViewHead;
+                            trait = IdKey.QueryViewHead;
                         else if (qx.IsRoot)
-                            trait = Trait.QueryViewRoot;
+                            trait = IdKey.QueryViewRoot;
                         else
-                            trait = Trait.QueryViewLink;
+                            trait = IdKey.QueryViewLink;
                         break;
                     case QueryType.Path:
                         if (qx.IsHead)
-                            trait = Trait.QueryPathHead;
+                            trait = IdKey.QueryPathHead;
                         else
-                            trait = Trait.QueryPathLink;
+                            trait = IdKey.QueryPathLink;
                         break;
                     case QueryType.Group:
                         if (qx.IsHead)
-                            trait = Trait.QueryGroupHead;
+                            trait = IdKey.QueryGroupHead;
                         else
-                            trait = Trait.QueryGroupLink;
+                            trait = IdKey.QueryGroupLink;
                         break;
                     case QueryType.Egress:
                         if (qx.IsHead)
-                            trait = Trait.QuerySegueHead;
+                            trait = IdKey.QuerySegueHead;
                         else
-                            trait = Trait.QuerySegueLink;
+                            trait = IdKey.QuerySegueLink;
                         break;
                     case QueryType.Graph:
                         if (qx.IsRoot)
-                            trait = Trait.QueryGraphRoot;
+                            trait = IdKey.QueryGraphRoot;
                         else
-                            trait = Trait.QueryGraphLink;
+                            trait = IdKey.QueryGraphLink;
                         break;
                     case QueryType.Value:
                         if (qx.IsHead)
-                            trait = Trait.QueryValueHead;
+                            trait = IdKey.QueryValueHead;
                         else if (qx.IsRoot)
-                            trait = Trait.QueryValueRoot;
+                            trait = IdKey.QueryValueRoot;
                         else
-                            trait = Trait.QueryValueLink;
+                            trait = IdKey.QueryValueLink;
                         break;
                     case QueryType.Symbol:
-                        trait = Trait.QueryNodeSymbol;
+                        trait = IdKey.QueryNodeSymbol;
                         break;
                 }
                 var kind = _localize(GetKindKey(trait));
@@ -350,8 +350,8 @@ namespace ModelGraph.Core
                 if (qx.HasSelect || qx.HasWhere || qx.IsRoot || qx.IsHead || qx.IsTail)
                 {
                     name = $"{name}      [";
-                    if (qx.HasWhere) name = $"{name}{GetName(Trait.QueryWhere)}( {qx.WhereString} )";
-                    if (qx.HasSelect) name = $"{name} {GetName(Trait.QuerySelect)}( {qx.SelectString} )";
+                    if (qx.HasWhere) name = $"{name}{GetName(IdKey.QueryWhere)}( {qx.WhereString} )";
+                    if (qx.HasSelect) name = $"{name} {GetName(IdKey.QuerySelect)}( {qx.SelectString} )";
 
                     if (qx.IsRoot || qx.IsHead || qx.IsTail)
                     {
@@ -437,7 +437,7 @@ namespace ModelGraph.Core
 
                 var name2 = TableX_ColumnX.TryGetParent(cx, out TableX tx) ? tx.Name : null;
                 var noName2 = string.IsNullOrWhiteSpace(name2);
-                if (noName2) name2 = $"{_localize(GetKindKey(Trait.TableX))} {BlankName}";
+                if (noName2) name2 = $"{_localize(GetKindKey(IdKey.TableX))} {BlankName}";
 
                 switch (style)
                 {
@@ -476,7 +476,7 @@ namespace ModelGraph.Core
 
                 var name2 = (Store_ComputeX.TryGetParent(cx, out Store pa)) ? GetIdentity(pa, IdentityStyle.Single) : null;
                 var noName2 = string.IsNullOrWhiteSpace(name2);
-                if (noName2) name2 = $"{_localize(GetKindKey(Trait.TableX))} {BlankName}";
+                if (noName2) name2 = $"{_localize(GetKindKey(IdKey.TableX))} {BlankName}";
 
                 switch (style)
                 {
@@ -544,7 +544,7 @@ namespace ModelGraph.Core
         {
             if (item is Relation itm)
             {
-                var kind = _localize(GetKindKey(Trait.Relation));
+                var kind = _localize(GetKindKey(IdKey.Relation));
                 var name = _localize(itm.NameKey);
 
                 var parts = name.Split("_".ToCharArray());
@@ -580,7 +580,7 @@ namespace ModelGraph.Core
         {
             if (item is Property itm)
             {
-                var kind = _localize(GetKindKey(Trait.Property));
+                var kind = _localize(GetKindKey(IdKey.Property));
                 var name = _localize(itm.NameKey);
 
                 if (!Store_Property.TryGetParent(itm, out Store pa))
@@ -667,23 +667,23 @@ namespace ModelGraph.Core
         #endregion
 
         #region GetName  ======================================================
-        internal string GetKind(Trait trait)
+        internal string GetKind(IdKey trait)
         {
             return _localize(GetKindKey(trait));
         }
-        internal string GetName(Trait trait)
+        internal string GetName(IdKey trait)
         {
             return _localize(GetNameKey(trait));
         }
-        internal string GetSummary(Trait trait)
+        internal string GetSummary(IdKey trait)
         {
             return _localize(GetSummaryKey(trait));
         }
-        internal string GetDescription(Trait trait)
+        internal string GetDescription(IdKey trait)
         {
             return _localize(GetDescriptionKey(trait));
         }
-        internal string GetAccelerator(Trait trait)
+        internal string GetAccelerator(IdKey trait)
         {
             return _localize(GetAcceleratorKey(trait));
         }

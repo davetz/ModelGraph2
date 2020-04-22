@@ -15,7 +15,7 @@ namespace ModelGraph.Core
         internal PropertyOf<PairX, string> TextProperty;
         internal PropertyOf<PairX, string> ValueProperty;
 
-        internal EnumXStore(Chef chef) : base(chef, Trait.EnumXStore, 10)
+        internal EnumXStore(Chef chef) : base(chef, IdKey.EnumXStore, 10)
         {
             chef.RegisterItemSerializer((_serializerGuid, this));
             CreateProperties(chef);
@@ -26,14 +26,14 @@ namespace ModelGraph.Core
         {
             var props1 = new List<Property>(2);
             {
-                var p = NameProperty = new PropertyOf<EnumX, string>(chef.PropertyStore, Trait.EnumNameProperty);
+                var p = NameProperty = new PropertyOf<EnumX, string>(chef.PropertyStore, IdKey.EnumNameProperty);
                 p.GetValFunc = (item) => p.Cast(item).Name;
                 p.SetValFunc = (item, value) => { p.Cast(item).Name = value; return true; };
                 p.Value = new StringValue(p);
                 props1.Add(p);
             }
             {
-                var p = SummaryProperty = new PropertyOf<EnumX, string>(chef.PropertyStore, Trait.EnumSummaryProperty);
+                var p = SummaryProperty = new PropertyOf<EnumX, string>(chef.PropertyStore, IdKey.EnumSummaryProperty);
                 p.GetValFunc = (item) => p.Cast(item).Summary;
                 p.SetValFunc = (item, value) => { p.Cast(item).Summary = value; return true; };
                 p.Value = new StringValue(p);
@@ -43,14 +43,14 @@ namespace ModelGraph.Core
 
             var props2 = new List<Property>(2);
             {
-                var p = TextProperty = new PropertyOf<PairX, string>(chef.PropertyZStore, Trait.EnumTextProperty);
+                var p = TextProperty = new PropertyOf<PairX, string>(chef.PropertyZStore, IdKey.EnumTextProperty);
                 p.GetValFunc = (item) => p.Cast(item).DisplayValue;
                 p.SetValFunc = (item, value) => { p.Cast(item).DisplayValue = value; p.Owner.ChildDelta++; return true; };
                 p.Value = new StringValue(p);
                 props2.Add(p);
             }
             {
-                var p = ValueProperty = new PropertyOf<PairX, string>(chef.PropertyZStore, Trait.EnumValueProperty);
+                var p = ValueProperty = new PropertyOf<PairX, string>(chef.PropertyZStore, IdKey.EnumValueProperty);
                 p.GetValFunc = (item) => p.Cast(item).ActualValue;
                 p.SetValFunc = (item, value) => { p.Cast(item).ActualValue = value; p.Owner.ChildDelta++; return true; };
                 p.Value = new StringValue(p);

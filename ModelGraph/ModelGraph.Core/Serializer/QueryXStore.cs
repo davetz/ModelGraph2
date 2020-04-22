@@ -28,7 +28,7 @@ namespace ModelGraph.Core
         internal PropertyOf<QueryX, string> Facet2Property;
         internal PropertyOf<QueryX, string> Connect2Property;
 
-        internal QueryXStore(Chef chef) : base(chef, Trait.QueryXStore)
+        internal QueryXStore(Chef chef) : base(chef, IdKey.QueryXStore)
         {
             chef.RegisterItemSerializer((_serializerGuid, this));
             CreateProperties(chef);
@@ -39,7 +39,7 @@ namespace ModelGraph.Core
         {
             var props = new List<Property>(15);
             {
-                var p = RootWhereProperty = new PropertyOf<QueryX, string>(chef.PropertyStore, Trait.QueryXSelectProperty);
+                var p = RootWhereProperty = new PropertyOf<QueryX, string>(chef.PropertyStore, IdKey.QueryXSelectProperty);
                 p.GetValFunc = (item) => p.Cast(item).WhereString;
                 p.SetValFunc = (item, value) => chef.TrySetWhereProperty(p.Cast(item), value);
                 p.Value = new StringValue(p);
@@ -47,83 +47,83 @@ namespace ModelGraph.Core
                 props.Add(p);
             }
             {
-                var p = Facet1Property = new PropertyOf<QueryX, string>(chef.PropertyStore, Trait.QueryXFacet1Property, chef.FacetEnum);
+                var p = Facet1Property = new PropertyOf<QueryX, string>(chef.PropertyStore, IdKey.QueryXFacet1Property, chef.FacetEnum);
                 p.GetValFunc = (item) => chef.GetEnumZName(p.EnumZ, (int)p.Cast(item).PathParm.Facet1);
                 p.SetValFunc = (item, value) => { p.Cast(item).PathParm.Facet1 = (Facet)chef.GetEnumZKey(p.EnumZ, value); return chef.RefreshGraphX(p.Cast(item)); };
                 p.Value = new StringValue(p);
                 props.Add(p);
             }
             {
-                var p = Connect1Property = new PropertyOf<QueryX, string>(chef.PropertyStore, Trait.QueryXConnect1Property);
+                var p = Connect1Property = new PropertyOf<QueryX, string>(chef.PropertyStore, IdKey.QueryXConnect1Property);
                 p.GetValFunc = (item) => chef.GetTargetString(p.Cast(item).PathParm.Target1);
                 p.SetValFunc = (item, value) => { p.Cast(item).PathParm.Target1 = chef.GetTargetValue(value); return chef.RefreshGraphX(p.Cast(item)); ; };
                 p.Value = new StringValue(p);
                 props.Add(p);
             }
             {
-                var p = Facet2Property = new PropertyOf<QueryX, string>(chef.PropertyStore, Trait.QueryXFacet2Property, chef.FacetEnum);
+                var p = Facet2Property = new PropertyOf<QueryX, string>(chef.PropertyStore, IdKey.QueryXFacet2Property, chef.FacetEnum);
                 p.GetValFunc = (item) => chef.GetEnumZName(p.EnumZ, (int)p.Cast(item).PathParm.Facet2);
                 p.SetValFunc = (item, value) => { p.Cast(item).PathParm.Facet2 = (Facet)chef.GetEnumZKey(p.EnumZ, value); return chef.RefreshGraphX(p.Cast(item)); ; };
                 p.Value = new StringValue(p);
                 props.Add(p);
             }
             {
-                var p = Connect2Property = new PropertyOf<QueryX, string>(chef.PropertyStore, Trait.QueryXConnect2Property);
+                var p = Connect2Property = new PropertyOf<QueryX, string>(chef.PropertyStore, IdKey.QueryXConnect2Property);
                 p.GetValFunc = (item) => chef.GetTargetString(p.Cast(item).PathParm.Target2);
                 p.SetValFunc = (item, value) => { p.Cast(item).PathParm.Target2 = chef.GetTargetValue(value); return chef.RefreshGraphX(p.Cast(item)); ; };
                 p.Value = new StringValue(p);
                 props.Add(p);
             }
             {
-                var p = LineStyleProperty = new PropertyOf<QueryX, string>(chef.PropertyStore, Trait.QueryXLineStyleProperty, chef.LineStyleEnum);
+                var p = LineStyleProperty = new PropertyOf<QueryX, string>(chef.PropertyStore, IdKey.QueryXLineStyleProperty, chef.LineStyleEnum);
                 p.GetValFunc = (item) => chef.GetEnumZName(p.EnumZ, (int)p.Cast(item).PathParm.LineStyle);
                 p.SetValFunc = (item, value) => { p.Cast(item).PathParm.LineStyle = (LineStyle)chef.GetEnumZKey(p.EnumZ, value); return chef.RefreshGraphX(p.Cast(item)); ; };
                 p.Value = new StringValue(p);
                 props.Add(p);
             }
             {
-                var p = DashStyleProperty = new PropertyOf<QueryX, string>(chef.PropertyStore, Trait.QueryXDashStyleProperty, chef.DashStyleEnum);
+                var p = DashStyleProperty = new PropertyOf<QueryX, string>(chef.PropertyStore, IdKey.QueryXDashStyleProperty, chef.DashStyleEnum);
                 p.GetValFunc = (item) => chef.GetEnumZName(p.EnumZ, (int)p.Cast(item).PathParm.DashStyle);
                 p.SetValFunc = (item, value) => { p.Cast(item).PathParm.DashStyle = (DashStyle)chef.GetEnumZKey(p.EnumZ, value); return chef.RefreshGraphX(p.Cast(item)); ; };
                 p.Value = new StringValue(p);
                 props.Add(p);
             }
             {
-                var p = LineColorProperty = new PropertyOf<QueryX, string>(chef.PropertyStore, Trait.QueryXLineColorProperty);
+                var p = LineColorProperty = new PropertyOf<QueryX, string>(chef.PropertyStore, IdKey.QueryXLineColorProperty);
                 p.GetValFunc = (item) => p.Cast(item).PathParm.LineColor;
                 p.SetValFunc = (item, value) => { p.Cast(item).PathParm.LineColor = value; return chef.RefreshGraphX(p.Cast(item)); ; };
                 p.Value = new StringValue(p);
                 props.Add(p);
             }
             {
-                var p = RelationProperty = new PropertyOf<QueryX, string>(chef.PropertyStore, Trait.QueryXRelationProperty);
+                var p = RelationProperty = new PropertyOf<QueryX, string>(chef.PropertyStore, IdKey.QueryXRelationProperty);
                 p.GetValFunc = (item) => chef.GetQueryXRelationName(p.Cast(item));
                 p.Value = new StringValue(p);
                 props.Add(p);
             }
             {
-                var p = IsReversedProperty = new PropertyOf<QueryX, bool>(chef.PropertyStore, Trait.QueryXIsReversedProperty);
+                var p = IsReversedProperty = new PropertyOf<QueryX, bool>(chef.PropertyStore, IdKey.QueryXIsReversedProperty);
                 p.GetValFunc = (item) => p.Cast(item).IsReversed;
                 p.SetValFunc = (item, value) => { p.Cast(item).IsReversed = value; return true; };
                 p.Value = new BoolValue(p);
                 props.Add(p);
             }
             {
-                var p = IsBreakPointProperty = new PropertyOf<QueryX, bool>(chef.PropertyStore, Trait.QueryXIsBreakPointProperty);
+                var p = IsBreakPointProperty = new PropertyOf<QueryX, bool>(chef.PropertyStore, IdKey.QueryXIsBreakPointProperty);
                 p.GetValFunc = (item) => p.Cast(item).IsBreakPoint;
                 p.SetValFunc = (item, value) => { p.Cast(item).IsBreakPoint = value; return true; };
                 p.Value = new BoolValue(p);
                 props.Add(p);
             }
             {
-                var p = ExclusiveKeyProperty = new PropertyOf<QueryX, byte>(chef.PropertyStore, Trait.QueryXExclusiveKeyProperty);
+                var p = ExclusiveKeyProperty = new PropertyOf<QueryX, byte>(chef.PropertyStore, IdKey.QueryXExclusiveKeyProperty);
                 p.GetValFunc = (item) => p.Cast(item).ExclusiveKey;
                 p.SetValFunc = (item, value) => { p.Cast(item).ExclusiveKey = (byte)value; return true; };
                 p.Value = new ByteValue(p);
                 props.Add(p);
             }
             {
-                var p = WhereProperty = new PropertyOf<QueryX, string>(chef.PropertyStore, Trait.QueryXWhereProperty);
+                var p = WhereProperty = new PropertyOf<QueryX, string>(chef.PropertyStore, IdKey.QueryXWhereProperty);
                 p.GetValFunc = (item) => p.Cast(item).WhereString;
                 p.SetValFunc = (item, value) => chef.TrySetWhereProperty(p.Cast(item), value);
                 p.Value = new StringValue(p);
@@ -131,7 +131,7 @@ namespace ModelGraph.Core
                 props.Add(p);
             }
             {
-                var p = SelectProperty = new PropertyOf<QueryX, string>(chef.PropertyStore, Trait.ValueXSelectProperty);
+                var p = SelectProperty = new PropertyOf<QueryX, string>(chef.PropertyStore, IdKey.ValueXSelectProperty);
                 p.GetValFunc = (item) => p.Cast(item).SelectString;
                 p.SetValFunc = (item, value) => chef.TrySetSelectProperty(p.Cast(item), value);
                 p.Value = new StringValue(p);
@@ -139,7 +139,7 @@ namespace ModelGraph.Core
                 props.Add(p);
             }
             {
-                var p = ValueTypeProperty = new PropertyOf<QueryX, string>(chef.PropertyStore, Trait.ValueXValueTypeProperty, chef.ValueTypeEnum);
+                var p = ValueTypeProperty = new PropertyOf<QueryX, string>(chef.PropertyStore, IdKey.ValueXValueTypeProperty, chef.ValueTypeEnum);
                 p.GetValFunc = (item) => chef.GetEnumZName(p.EnumZ, chef.GetValueType(p.Cast(item)));
                 p.Value = new StringValue(p);
                 props.Add(p);

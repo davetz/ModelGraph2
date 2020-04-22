@@ -48,7 +48,7 @@ namespace ModelGraph.Core
             if (!ComputeX_QueryX.TryGetChild(cx, out QueryX qx))
             {
                 cx.Value = ValuesInvalid;
-                TryAddErrorNone(cx, Trait.ComputeMissingRootQueryError);
+                TryAddErrorNone(cx, IdKey.ComputeMissingRootQueryError);
             }
             else
             {
@@ -56,7 +56,7 @@ namespace ModelGraph.Core
                 {
                     if (cx.CompuType == CompuType.RowValue)
                     {
-                        TryAddErrorNone(cx, ComputeXStore.SelectProperty, Trait.ComputeMissingSelectError);
+                        TryAddErrorNone(cx, ComputeXStore.SelectProperty, IdKey.ComputeMissingSelectError);
                     }
                 }
                 else
@@ -134,13 +134,13 @@ namespace ModelGraph.Core
                         qx.Select.TryResolve();
                         if (qx.Select.AnyUnresolved)
                         {
-                            var error = TryAddErrorMany(qx, QueryXStore.SelectProperty, Trait.QueryUnresolvedSelectError);
+                            var error = TryAddErrorMany(qx, QueryXStore.SelectProperty, IdKey.QueryUnresolvedSelectError);
                             if (error != null) qx.Select.GetTree(error.List);
                         }
                     }
                     else
                     {
-                        var error = TryAddErrorMany(qx, QueryXStore.SelectProperty, Trait.QueryInvalidSelectError);
+                        var error = TryAddErrorMany(qx, QueryXStore.SelectProperty, IdKey.QueryInvalidSelectError);
                         if (error != null) qx.Select.GetTree(error.List);
                     }
                 }
@@ -151,13 +151,13 @@ namespace ModelGraph.Core
                         qx.Where.TryResolve();
                         if (qx.Where.AnyUnresolved)
                         {
-                            var error = TryAddErrorMany(qx, QueryXStore.WhereProperty, Trait.QueryUnresolvedWhereError);
+                            var error = TryAddErrorMany(qx, QueryXStore.WhereProperty, IdKey.QueryUnresolvedWhereError);
                             if (error != null) qx.Where.GetTree(error.List);
                         }
                     }
                     else
                     {
-                        var error = TryAddErrorMany(qx, QueryXStore.WhereProperty, Trait.QueryInvalidWhereError);
+                        var error = TryAddErrorMany(qx, QueryXStore.WhereProperty, IdKey.QueryInvalidWhereError);
                         if (error != null) qx.Where.GetTree(error.List);
                     }
                 }
@@ -176,14 +176,14 @@ namespace ModelGraph.Core
                     qx.Where.TryResolve();
                     if (qx.Where.AnyUnresolved)
                     {
-                        var error = TryAddErrorMany(item, prop, Trait.QueryUnresolvedWhereError);
+                        var error = TryAddErrorMany(item, prop, IdKey.QueryUnresolvedWhereError);
                         if (error != null) qx.Where.GetTree(error.List);
                         return false;
                     }
                 }
                 else
                 {
-                    var error = TryAddErrorMany(item, prop, Trait.QueryInvalidWhereError);
+                    var error = TryAddErrorMany(item, prop, IdKey.QueryInvalidWhereError);
                     if (error != null) qx.Where.GetTree(error.List);
                     return false;
                 }
@@ -203,14 +203,14 @@ namespace ModelGraph.Core
                     qx.Select.TryResolve();
                     if (qx.Select.AnyUnresolved)
                     {
-                        var error = TryAddErrorMany(item, prop, Trait.QueryUnresolvedSelectError);
+                        var error = TryAddErrorMany(item, prop, IdKey.QueryUnresolvedSelectError);
                         if (error != null) qx.Select.GetTree(error.List);
                         return false;
                     }
                 }
                 else
                 {
-                    var error = TryAddErrorMany(item, prop, Trait.QueryInvalidSelectError);
+                    var error = TryAddErrorMany(item, prop, IdKey.QueryInvalidSelectError);
                     if (error != null) qx.Select.GetTree(error.List);
                     return false;
                 }

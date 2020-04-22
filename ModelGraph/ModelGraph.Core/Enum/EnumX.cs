@@ -3,7 +3,6 @@ namespace ModelGraph.Core
 {
     public class EnumX : StoreOf<PairX>
     {
-        internal override bool IsExternal => true;
         internal string Name;
         internal string Summary;
         internal string Description;
@@ -12,7 +11,7 @@ namespace ModelGraph.Core
         internal EnumX(EnumXStore owner, bool autoExpandRight = false)
         {
             Owner = owner;
-            Trait = Trait.EnumX;
+            Trait = IdKey.EnumX;
 
             if (autoExpandRight) AutoExpandRight = true;
             owner.Add(this);

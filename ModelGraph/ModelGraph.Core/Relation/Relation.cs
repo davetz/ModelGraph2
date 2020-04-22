@@ -5,7 +5,6 @@ namespace ModelGraph.Core
 {
     public abstract class Relation : Item // used by undo/redo changes and StoreOf<Relation> _relationStore
     {
-        internal override bool IsReference => true;
         internal Pairing Pairing;
 
         internal abstract bool HasChildLink(Item key);

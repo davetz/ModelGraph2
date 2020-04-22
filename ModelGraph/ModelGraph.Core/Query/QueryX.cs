@@ -4,7 +4,6 @@ namespace ModelGraph.Core
 {
     public class QueryX : Item
     {
-        internal override bool IsExternal => true;
         internal WhereSelect Where;
         internal WhereSelect Select;
         internal PathParm PathParm;
@@ -16,7 +15,7 @@ namespace ModelGraph.Core
         internal QueryX(QueryXStore owner, QueryType kind, bool isRoot = false, bool isHead = false)
         {
             Owner = owner;
-            Trait = Trait.QueryX;
+            Trait = IdKey.QueryX;
             QueryKind = kind;
             IsRoot = isRoot;
             IsHead = isHead;
@@ -30,7 +29,7 @@ namespace ModelGraph.Core
         internal QueryX(QueryXStore owner) 
         {
             Owner = owner;
-            Trait = Trait.QueryX;
+            Trait = IdKey.QueryX;
 
             owner.Add(this);
         }

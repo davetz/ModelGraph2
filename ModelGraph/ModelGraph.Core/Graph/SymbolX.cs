@@ -5,7 +5,6 @@ namespace ModelGraph.Core
 {
     public class SymbolX : Item
     {
-        internal override bool IsExternal => true;
         public string Name;
         public string Summary;
         public string Description;
@@ -18,7 +17,7 @@ namespace ModelGraph.Core
         #region Constructors  =================================================
         public SymbolX(Store owner, bool autoExpand = false)
         {
-            Trait = Trait.SymbolX;
+            Trait = IdKey.SymbolX;
             Owner = owner;
             if (autoExpand) AutoExpandRight = true;
 

@@ -16,7 +16,7 @@ namespace ModelGraph.Core
         internal ItemLinked(ChangeSet owner, Relation relation, Item parent, Item child, int parentIndex, int childIndex, string name)
         {
             Owner = owner;
-            Trait = Trait.ItemLinked;
+            Trait = IdKey.ItemLinked;
             Name = name;
 
             Child = child;

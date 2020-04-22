@@ -11,7 +11,7 @@ namespace ModelGraph.Core
         private bool ShowItemIndex;
 
         #region Constructor  ==================================================
-        internal Chef(bool createTestModel = false) : base(null, Trait.DataChef, 0)
+        internal Chef(bool createTestModel = false) : base(null, IdKey.DataChef, 0)
         {
             Initialize();
 

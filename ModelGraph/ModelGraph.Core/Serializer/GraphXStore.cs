@@ -16,7 +16,7 @@ namespace ModelGraph.Core
         internal PropertyOf<GraphX, int> TerminalStretchProperty;
         internal PropertyOf<GraphX, int> SymbolSizeProperty;
 
-        internal GraphXStore(Chef chef) : base(chef, Trait.GraphXStore)
+        internal GraphXStore(Chef chef) : base(chef, IdKey.GraphXStore)
         {
             chef.RegisterItemSerializer((_serializerGuid, this));
             CreateProperties(chef);
@@ -27,42 +27,42 @@ namespace ModelGraph.Core
         {
             var props = new List<Property>(6);
             {
-                var p = NameProperty = new PropertyOf<GraphX, string>(chef.PropertyStore, Trait.GraphNameProperty);
+                var p = NameProperty = new PropertyOf<GraphX, string>(chef.PropertyStore, IdKey.GraphNameProperty);
                 p.GetValFunc = (item) => p.Cast(item).Name;
                 p.SetValFunc = (item, value) => { p.Cast(item).Name = value; return true; };
                 p.Value = new StringValue(p);
                 props.Add(p);
             }
             {
-                var p = SummaryProperty = new PropertyOf<GraphX, string>(chef.PropertyStore, Trait.GraphSummaryProperty);
+                var p = SummaryProperty = new PropertyOf<GraphX, string>(chef.PropertyStore, IdKey.GraphSummaryProperty);
                 p.GetValFunc = (item) => p.Cast(item).Summary;
                 p.SetValFunc = (item, value) => { p.Cast(item).Summary = value; return true; };
                 p.Value = new StringValue(p);
                 props.Add(p);
             }
             {
-                var p = TerminalLengthProperty = new PropertyOf<GraphX, int>(chef.PropertyStore, Trait.GraphTerminalLengthProperty);
+                var p = TerminalLengthProperty = new PropertyOf<GraphX, int>(chef.PropertyStore, IdKey.GraphTerminalLengthProperty);
                 p.GetValFunc = (item) => p.Cast(item).TerminalLength;
                 p.SetValFunc = (item, value) => { p.Cast(item).TerminalLength = (byte)value; return true; };
                 p.Value = new Int32Value(p);
                 props.Add(p);
             }
             {
-                var p = TerminalSpacingProperty = new PropertyOf<GraphX, int>(chef.PropertyStore, Trait.GraphTerminalSpacingProperty);
+                var p = TerminalSpacingProperty = new PropertyOf<GraphX, int>(chef.PropertyStore, IdKey.GraphTerminalSpacingProperty);
                 p.GetValFunc = (item) => p.Cast(item).TerminalSpacing;
                 p.SetValFunc = (item, value) => { p.Cast(item).TerminalSpacing = (byte)value; return true; };
                 p.Value = new Int32Value(p);
                 props.Add(p);
             }
             {
-                var p = TerminalStretchProperty = new PropertyOf<GraphX, int>(chef.PropertyStore, Trait.GraphTerminalStretchProperty);
+                var p = TerminalStretchProperty = new PropertyOf<GraphX, int>(chef.PropertyStore, IdKey.GraphTerminalStretchProperty);
                 p.GetValFunc = (item) => p.Cast(item).TerminalSkew;
                 p.SetValFunc = (item, value) => { p.Cast(item).TerminalSkew = (byte)value; return true; };
                 p.Value = new Int32Value(p);
                 props.Add(p);
             }
             {
-                var p = SymbolSizeProperty = new PropertyOf<GraphX, int>(chef.PropertyStore, Trait.GraphSymbolSizeProperty);
+                var p = SymbolSizeProperty = new PropertyOf<GraphX, int>(chef.PropertyStore, IdKey.GraphSymbolSizeProperty);
                 p.GetValFunc = (item) => p.Cast(item).SymbolSize;
                 p.SetValFunc = (item, value) => { p.Cast(item).SymbolSize = (byte)value; return true; };
                 p.Value = new Int32Value(p);

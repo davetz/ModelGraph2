@@ -5,7 +5,6 @@ namespace ModelGraph.Core
 {
     public class GraphX : StoreOf<Graph>
     {
-        internal override bool IsExternal => true;
         internal Color Color = new Color();
         internal HashSet<Store> NodeOwners = new HashSet<Store>();
         internal Dictionary<Item, Dictionary<QueryX, List<NodeEdge>>> Root_QueryX_Parms = new Dictionary<Item, Dictionary<QueryX, List<NodeEdge>>>(10);
@@ -29,7 +28,7 @@ namespace ModelGraph.Core
         internal GraphX(Store owner, bool autoExpand = false)
         {
             Owner = owner;
-            Trait = Trait.GraphX;
+            Trait = IdKey.GraphX;
             if (autoExpand) AutoExpandRight = true;
 
             owner.Add(this);

@@ -35,42 +35,42 @@ namespace ModelGraph.Core
         {
             var props1 = new List<Property>(6);
             {
-                var p = CenterXYProperty = new PropertyOf<Node, int[]>(chef.PropertyZStore, Trait.NodeCenterXYProperty);
+                var p = CenterXYProperty = new PropertyOf<Node, int[]>(chef.PropertyZStore, IdKey.NodeCenterXYProperty);
                 p.GetValFunc = (item) => p.Cast(item).CenterXY;
                 p.SetValFunc = (item, value) => { p.Cast(item).CenterXY = value; return true; };
                 p.Value = new Int32ArrayValue(p);
                 props1.Add(p);
             }
             {
-                var p = SizeWHProperty = new PropertyOf<Node, int[]>(chef.PropertyZStore, Trait.NodeSizeWHProperty);
+                var p = SizeWHProperty = new PropertyOf<Node, int[]>(chef.PropertyZStore, IdKey.NodeSizeWHProperty);
                 p.GetValFunc = (item) => p.Cast(item).SizeWH;
                 p.SetValFunc = (item, value) => { p.Cast(item).SizeWH = value; return true; };
                 p.Value = new Int32ArrayValue(p);
                 props1.Add(p);
             }
             {
-                var p = OrientationProperty = new PropertyOf<Node, string>(chef.PropertyZStore, Trait.NodeOrientationProperty, chef.OrientationEnum);
+                var p = OrientationProperty = new PropertyOf<Node, string>(chef.PropertyZStore, IdKey.NodeOrientationProperty, chef.OrientationEnum);
                 p.GetValFunc = (item) => chef.GetEnumZName(p.EnumZ, (int)p.Cast(item).Aspect);
                 p.SetValFunc = (item, value) => { p.Cast(item).Aspect = (Aspect)chef.GetEnumZKey(p.EnumZ, value); return true; };
                 p.Value = new StringValue(p);
                 props1.Add(p);
             }
             {
-                var p = LabelingProperty = new PropertyOf<Node, string>(chef.PropertyZStore, Trait.NodeLabelingProperty, chef.LabelingEnum);
+                var p = LabelingProperty = new PropertyOf<Node, string>(chef.PropertyZStore, IdKey.NodeLabelingProperty, chef.LabelingEnum);
                 p.GetValFunc = (item) => chef.GetEnumZName(p.EnumZ, (int)p.Cast(item).Labeling);
                 p.SetValFunc = (item, value) => { p.Cast(item).Labeling = (Labeling)chef.GetEnumZKey(p.EnumZ, value); return true; };
                 p.Value = new StringValue(p);
                 props1.Add(p);
             }
             {
-                var p = ResizingProperty = new PropertyOf<Node, string>(chef.PropertyZStore, Trait.NodeResizingProperty, chef.ResizingEnum);
+                var p = ResizingProperty = new PropertyOf<Node, string>(chef.PropertyZStore, IdKey.NodeResizingProperty, chef.ResizingEnum);
                 p.GetValFunc = (item) => chef.GetEnumZName(p.EnumZ, (int)p.Cast(item).Sizing);
                 p.SetValFunc = (item, value) => { p.Cast(item).Sizing = (Sizing)chef.GetEnumZKey(p.EnumZ, value); return true; };
                 p.Value = new StringValue(p);
                 props1.Add(p);
             }
             {
-                var p = BarWidthProperty = new PropertyOf<Node, string>(chef.PropertyZStore, Trait.NodeBarWidthProperty, chef.BarWidthEnum);
+                var p = BarWidthProperty = new PropertyOf<Node, string>(chef.PropertyZStore, IdKey.NodeBarWidthProperty, chef.BarWidthEnum);
                 p.GetValFunc = (item) => chef.GetEnumZName(p.EnumZ, (int)p.Cast(item).BarWidth);
                 p.SetValFunc = (item, value) => { p.Cast(item).BarWidth = (BarWidth)chef.GetEnumZKey(p.EnumZ, value); return true; };
                 p.Value = new StringValue(p);
@@ -80,14 +80,14 @@ namespace ModelGraph.Core
 
             var props2 = new List<Property>(2);
             {
-                var p = Facet1Property = new PropertyOf<Edge, string>(chef.PropertyZStore, Trait.EdgeFacet1Property, chef.FacetEnum);
+                var p = Facet1Property = new PropertyOf<Edge, string>(chef.PropertyZStore, IdKey.EdgeFacet1Property, chef.FacetEnum);
                 p.GetValFunc = (item) => chef.GetEnumZName(p.EnumZ, (int)p.Cast(item).Facet1);
                 p.SetValFunc = (item, value) => { p.Cast(item).Facet1 = (Facet)chef.GetEnumZKey(p.EnumZ, value); return true; };
                 p.Value = new StringValue(p);
                 props2.Add(p);
             }
             {
-                var p = Facet2Property = new PropertyOf<Edge, string>(chef.PropertyZStore, Trait.EdgeFacet2Property, chef.FacetEnum);
+                var p = Facet2Property = new PropertyOf<Edge, string>(chef.PropertyZStore, IdKey.EdgeFacet2Property, chef.FacetEnum);
                 p.GetValFunc = (item) => chef.GetEnumZName(p.EnumZ, (int)p.Cast(item).Facet2);
                 p.SetValFunc = (item, value) => { p.Cast(item).Facet2 = (Facet)chef.GetEnumZKey(p.EnumZ, value); return true; };
                 p.Value = new StringValue(p);

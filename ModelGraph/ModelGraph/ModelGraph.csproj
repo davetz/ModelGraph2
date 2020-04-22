@@ -294,7 +294,6 @@
   <ItemGroup>
     <None Include=".editorconfig" />
     <None Include="ModelGraph_TemporaryKey.pfx" />
-    <PRIResource Include="Strings\en-us\Core2Resources.resw" />
     <PRIResource Include="Strings\en-us\CoreResources.resw" />
   </ItemGroup>
   <ItemGroup>

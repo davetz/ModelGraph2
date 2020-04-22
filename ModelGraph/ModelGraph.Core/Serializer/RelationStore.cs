@@ -7,7 +7,7 @@ namespace ModelGraph.Core
 {
     public class RelationStore : InternalStoreOf<Relation>, IRelationStore
     {
-        internal RelationStore(Chef owner) : base(owner, Trait.RelationStore, 30)
+        internal RelationStore(Chef owner) : base(owner, IdKey.RelationStore, 30)
         {
             new RelationLink(owner, this);
         }

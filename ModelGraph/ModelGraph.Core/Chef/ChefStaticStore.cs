@@ -44,12 +44,12 @@ namespace ModelGraph.Core
             ChangeSequence = 1;
             ChangeSet = new ChangeSet(ChangeRoot, ChangeSequence);
 
-            ErrorStore = new StoreOf<Error>(this, Trait.ErrorStore, 20);
-            EnumZStore = new StoreOf<EnumZ>(this, Trait.EnumZStore, 20);
-            PropertyZStore = new StoreOf<Property>(this, Trait.PropertyZStore, 10);
-            RelationZStore = new StoreOf<Relation>(this, Trait.RelationZStore, 10);
+            ErrorStore = new StoreOf<Error>(this, IdKey.ErrorStore, 20);
+            EnumZStore = new StoreOf<EnumZ>(this, IdKey.EnumZStore, 20);
+            PropertyZStore = new StoreOf<Property>(this, IdKey.PropertyZStore, 10);
+            RelationZStore = new StoreOf<Relation>(this, IdKey.RelationZStore, 10);
 
-            PropertyStore = new InternalStoreOf<Property>(this, Trait.PropertyStore, 100);
+            PropertyStore = new InternalStoreOf<Property>(this, IdKey.PropertyStore, 100);
             RelationStore = new RelationStore(this);
 
             EnumXStore = new EnumXStore(this);

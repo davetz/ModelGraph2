@@ -4,7 +4,6 @@ namespace ModelGraph.Core
 {
     public class PairX : Item
     {
-        internal override bool IsExternal => true;
         internal string DisplayValue;
         internal string ActualValue;
 
@@ -12,7 +11,7 @@ namespace ModelGraph.Core
         internal PairX(EnumX owner, bool autoExpand = false)
         {
             Owner = owner;
-            Trait = Trait.PairX;
+            Trait = IdKey.PairX;
             if (autoExpand) AutoExpandRight = true;
 
             owner.Add(this);

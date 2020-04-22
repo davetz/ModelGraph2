@@ -102,17 +102,17 @@ namespace ModelGraph.Core
                 ClearError(item, aux1, aux2, error);
         }
 
-        internal void ClearError(Item item, Trait trait)
+        internal void ClearError(Item item, IdKey trait)
         {
             if (_itemError.TryGetValue(item, out Error error) && error.Trait == trait)
                 ClearError(item, error);
         }
-        internal void ClearError(Item item, Item aux1, Trait trait)
+        internal void ClearError(Item item, Item aux1, IdKey trait)
         {
             if (_itemErrorAux1.TryGetValue((item, aux1), out Error error) && error.Trait == trait)
                 ClearError(item, aux1, error);
         }
-        internal void ClearError(Item item, Item aux1, Item aux2, Trait trait)
+        internal void ClearError(Item item, Item aux1, Item aux2, IdKey trait)
         {
             if (_itemErrorAux2.TryGetValue((item, aux1, aux2), out Error error) && error.Trait == trait)
                 ClearError(item, aux1, aux2, error);
@@ -140,7 +140,7 @@ namespace ModelGraph.Core
             item.ErrorDelta++;
         }
 
-        internal void ClearErrors(HashSet<Trait> traits)
+        internal void ClearErrors(HashSet<IdKey> traits)
         {
             var removeError = new Dictionary<Item, Error>();
             var removeErrorAux1 = new Dictionary<(Item, Item), Error>();
@@ -180,7 +180,7 @@ namespace ModelGraph.Core
         #endregion
 
         #region TryAddError  ==================================================
-        internal ErrorNone TryAddErrorNone(Item item, Trait trait)
+        internal ErrorNone TryAddErrorNone(Item item, IdKey trait)
         {
             var prevError = TryGetError(item);
             if (prevError != null)
@@ -195,7 +195,7 @@ namespace ModelGraph.Core
             }
             return AddError(item, new ErrorNone(ErrorStore, item, trait));
         }
-        internal ErrorNoneAux TryAddErrorNone(Item item, Item aux1, Trait trait)
+        internal ErrorNoneAux TryAddErrorNone(Item item, Item aux1, IdKey trait)
         {
             var prevError = TryGetError(item, aux1);
             if (prevError != null)
@@ -210,7 +210,7 @@ namespace ModelGraph.Core
             }
             return AddError(item, aux1, new ErrorNoneAux(ErrorStore, item, aux1, trait));
         }
-        internal ErrorNoneAux2 TryAddErrorNone(Item item, Item aux1, Item aux2, Trait trait)
+        internal ErrorNoneAux2 TryAddErrorNone(Item item, Item aux1, Item aux2, IdKey trait)
         {
             var prevError = TryGetError(item, aux1, aux2);
             if (prevError != null)
@@ -226,7 +226,7 @@ namespace ModelGraph.Core
             return AddError(item, aux1, aux2, new ErrorNoneAux2(ErrorStore, item, aux1, aux2, trait));
         }
 
-        internal ErrorOne TryAddErrorOne(Item item, Trait trait, string text = null)
+        internal ErrorOne TryAddErrorOne(Item item, IdKey trait, string text = null)
         {
             var prevError = TryGetError(item);
             if (prevError != null)
@@ -241,7 +241,7 @@ namespace ModelGraph.Core
             }
             return AddError(item, new ErrorOne(ErrorStore, item, trait, text));
         }
-        internal ErrorOneAux TryAddErrorOne(Item item, Item aux1, Trait trait, string text = null)
+        internal ErrorOneAux TryAddErrorOne(Item item, Item aux1, IdKey trait, string text = null)
         {
             var prevError = TryGetError(item, aux1);
             if (prevError != null)
@@ -256,7 +256,7 @@ namespace ModelGraph.Core
             }
             return AddError(item, aux1, new ErrorOneAux(ErrorStore, item, aux1, trait, text));
         }
-        internal ErrorOneAux2 TryAddErrorOne(Item item, Item aux1, Item aux2, Trait trait, string text = null)
+        internal ErrorOneAux2 TryAddErrorOne(Item item, Item aux1, Item aux2, IdKey trait, string text = null)
         {
             var prevError = TryGetError(item, aux1, aux2);
             if (prevError != null)
@@ -272,7 +272,7 @@ namespace ModelGraph.Core
             return AddError(item, aux1, aux2, new ErrorOneAux2(ErrorStore, item, aux1, aux2, trait, text));
         }
 
-        internal ErrorMany TryAddErrorMany(Item item, Trait trait, string text = null)
+        internal ErrorMany TryAddErrorMany(Item item, IdKey trait, string text = null)
         {
             var prevError = TryGetError(item);
             if (prevError != null)
@@ -287,7 +287,7 @@ namespace ModelGraph.Core
             }
             return AddError(item, new ErrorMany(ErrorStore, item, trait, text));
         }
-        internal ErrorManyAux TryAddErrorMany(Item item, Item aux1, Trait trait, string text = null)
+        internal ErrorManyAux TryAddErrorMany(Item item, Item aux1, IdKey trait, string text = null)
         {
             var prevError = TryGetError(item, aux1);
             if (prevError != null)
@@ -302,7 +302,7 @@ namespace ModelGraph.Core
             }
             return AddError(item, aux1, new ErrorManyAux(ErrorStore, item, aux1, trait, text));
         }
-        internal ErrorManyAux2 TryAddErrorMany(Item item, Item aux1, Item aux2, Trait trait, string text = null)
+        internal ErrorManyAux2 TryAddErrorMany(Item item, Item aux1, Item aux2, IdKey trait, string text = null)
         {
             var prevError = TryGetError(item, aux1, aux2);
             if (prevError != null)

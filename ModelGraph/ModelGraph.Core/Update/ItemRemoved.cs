@@ -16,7 +16,7 @@ namespace ModelGraph.Core
         internal ItemRemoved(ChangeSet owner, Item item, int index, string name, IList<ColumnX> columns = null, List<String> values = null)
         {
             Owner = owner;
-            Trait = Trait.ItemRemoved;
+            Trait = IdKey.ItemRemoved;
             Name = name;
 
             Item = item;

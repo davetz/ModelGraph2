@@ -12,7 +12,7 @@ namespace ModelGraph.Core
         internal PropertyOf<SymbolX, string> NameProperty;
         internal PropertyOf<SymbolX, string> AttachProperty;
 
-        internal SymbolXStore(Chef chef) : base(chef, Trait.SymbolXStore)
+        internal SymbolXStore(Chef chef) : base(chef, IdKey.SymbolXStore)
         {
             chef.RegisterItemSerializer((_serializerGuid, this));
             CreateProperties(chef);
@@ -23,14 +23,14 @@ namespace ModelGraph.Core
         {
             var props = new List<Property>(2);
             {
-                var p = NameProperty = new PropertyOf<SymbolX, string>(chef.PropertyStore, Trait.SymbolXNameProperty);
+                var p = NameProperty = new PropertyOf<SymbolX, string>(chef.PropertyStore, IdKey.SymbolXNameProperty);
                 p.GetValFunc = (item) => p.Cast(item).Name;
                 p.SetValFunc = (item, value) => { p.Cast(item).Name = value; return true; };
                 p.Value = new StringValue(p);
                 props.Add(p);
             }
             {
-                var p = AttachProperty = new PropertyOf<SymbolX, string>(chef.PropertyStore, Trait.SymbolXAttatchProperty, chef.AttatchEnum);
+                var p = AttachProperty = new PropertyOf<SymbolX, string>(chef.PropertyStore, IdKey.SymbolXAttatchProperty, chef.AttatchEnum);
                 p.GetValFunc = (item) => chef.GetEnumZName(p.EnumZ, (int)p.Cast(item).Attach);
                 p.SetValFunc = (item, value) => { p.Cast(item).Attach = (Attach)chef.GetEnumZKey(p.EnumZ, value); return true; };
                 p.Value = new StringValue(p);

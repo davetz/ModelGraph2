@@ -11,7 +11,7 @@ namespace ModelGraph.Core
         internal ParallelPath(Graph owner, Path[] paths, bool isRadial = false)
         {
             Owner = owner;
-            Trait = Trait.ParallelPath;
+            Trait = IdKey.ParallelPath;
             IsRadial = isRadial;
             _paths = paths;
 

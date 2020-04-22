@@ -4,13 +4,12 @@ namespace ModelGraph.Core
 {
     public class RowX : Item
     {
-        internal override bool IsExternal => true;
 
         #region Constructors  =================================================
         internal RowX(TableX owner, bool autoExpand = false)
         {
             Owner = owner;
-            Trait = Trait.RowX;
+            Trait = IdKey.RowX;
             if (autoExpand) AutoExpandRight = true;
 
             owner.Add(this);

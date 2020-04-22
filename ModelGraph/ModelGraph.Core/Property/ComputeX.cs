@@ -4,7 +4,6 @@ namespace ModelGraph.Core
 {
     public class ComputeX : Property
     {
-        internal override bool IsExternal => true;
         internal const string DefaultSeparator = " : ";
         internal string Name;
         internal string Summary;
@@ -18,7 +17,7 @@ namespace ModelGraph.Core
         internal ComputeX(StoreOf<ComputeX> owner, bool autoExpand = false)
         {
             Owner = owner;
-            Trait = Trait.ComputeX;
+            Trait = IdKey.ComputeX;
 
             if (autoExpand) AutoExpandRight = true;
 

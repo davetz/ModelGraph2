@@ -23,7 +23,7 @@ namespace ModelGraph.Core
         // Primary-RootModel: Created by ModelPageService
         public RootModel()
         {
-            Trait = Trait.DataChefModel;
+            Trait = IdKey.DataChefModel;
             Item = Chef = new Chef();
             Get = Chef.DataChef_X;
 
@@ -74,15 +74,15 @@ namespace ModelGraph.Core
         internal void UIRequestSaveAsModel() => _requestQueue?.Enqueue(UIRequest.SaveAsModel(this));
         internal void UIRequestRefreshModel() => _requestQueue?.Enqueue(UIRequest.RefreshModel(this));
 
-        internal void UIRequestCreateView(ControlType type, Trait trait, Item item, ModelAction get) =>
+        internal void UIRequestCreateView(ControlType type, IdKey trait, Item item, ModelAction get) =>
             _requestQueue?.Enqueue(UIRequest.CreateView(this, type, trait, item, get));
 
         internal void UIRequestCreatePage(ControlType type, ItemModel m) =>
             _requestQueue?.Enqueue(UIRequest.CreatePage(this, type, m.Trait, m.Item, m.Aux1, m.Aux2, m.Get));
 
-        internal void UIRequestCreatePage(ControlType type, Trait trait, ModelAction get, ItemModel m) =>
+        internal void UIRequestCreatePage(ControlType type, IdKey trait, ModelAction get, ItemModel m) =>
             _requestQueue?.Enqueue(UIRequest.CreatePage(this, type, trait, m.Item, m.Aux1, m.Aux2, get));
-        internal void UIRequestCreatePage(ControlType type, Trait trait, Item item, ModelAction get) =>
+        internal void UIRequestCreatePage(ControlType type, IdKey trait, Item item, ModelAction get) =>
             _requestQueue?.Enqueue(UIRequest.CreatePage(this, type, trait, item, null, null, get));
 
 

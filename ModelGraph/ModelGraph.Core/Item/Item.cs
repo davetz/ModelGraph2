@@ -6,7 +6,7 @@ namespace ModelGraph.Core
     {
         internal Item Owner;        //each item has an owner, this-> owner-> ... -> dataChef
 
-        internal Trait Trait;       //identity, static flags, and resource string key
+        internal IdKey Trait;       //identity, static flags, and resource string key
         private State _state;       //bit flags specific to each item type
 
         private byte _flags;        //IsNew, IsDeleted, AutoExpandLeft, AutoExpandRight,..
@@ -14,54 +14,49 @@ namespace ModelGraph.Core
         internal byte ChildDelta;   //incremented when list of child items is changed 
         internal byte ErrorDelta;   //incremented when item's error state has changed
 
-        #region IsReference/IsExternal  =======================================
-        // IsExternal: It's properties are serialized (to/from a repository)
-        // IsReference: May be referenced by external items
-        virtual internal bool IsExternal => false;
-        virtual internal bool IsReference => false;
-        #endregion
-
         #region Trait  ========================================================
         //internal bool IsExternal => (Trait & Trait.IsExternal) != 0;
         //internal bool IsInternal => (Trait & Trait.IsInternal) != 0;
 
-        internal bool IsDataChef => (Trait == Trait.DataChef);
-        internal bool IsViewX => (Trait == Trait.ViewX);
-        internal bool IsPairX => (Trait == Trait.PairX);
-        internal bool IsRowX => (Trait == Trait.RowX);
-        internal bool IsEnumX => (Trait == Trait.EnumX);
-        internal bool IsTableX => (Trait == Trait.TableX);
-        internal bool IsGraphX => (Trait == Trait.GraphX);
-        internal bool IsQueryX => (Trait == Trait.QueryX);
-        internal bool IsSymbolX => (Trait == Trait.SymbolX);
-        internal bool IsColumnX => (Trait == Trait.ColumnX);
-        internal bool IsComputeX => (Trait == Trait.ComputeX);
+        internal bool IsDataChef => (Trait == IdKey.DataChef);
+        internal bool IsViewX => (Trait == IdKey.ViewX);
+        internal bool IsPairX => (Trait == IdKey.PairX);
+        internal bool IsRowX => (Trait == IdKey.RowX);
+        internal bool IsEnumX => (Trait == IdKey.EnumX);
+        internal bool IsTableX => (Trait == IdKey.TableX);
+        internal bool IsGraphX => (Trait == IdKey.GraphX);
+        internal bool IsQueryX => (Trait == IdKey.QueryX);
+        internal bool IsSymbolX => (Trait == IdKey.SymbolX);
+        internal bool IsColumnX => (Trait == IdKey.ColumnX);
+        internal bool IsComputeX => (Trait == IdKey.ComputeX);
         //internal bool IsCommandX => (Trait == Trait.CommandX);
-        internal bool IsRelationX => (Trait == Trait.RelationX);
-        internal bool IsGraph => (Trait == Trait.Graph);
-        internal bool IsNode => (Trait == Trait.Node);
-        internal bool IsEdge => (Trait == Trait.Edge);
+        internal bool IsRelationX => (Trait == IdKey.RelationX);
+        internal bool IsGraph => (Trait == IdKey.Graph);
+        internal bool IsNode => (Trait == IdKey.Node);
+        internal bool IsEdge => (Trait == IdKey.Edge);
 
-        internal bool IsItemMoved => Trait == Trait.ItemMoved;
-        internal bool IsItemCreated => Trait == Trait.ItemCreated;
-        internal bool IsItemUpdated => Trait == Trait.ItemUpdated;
-        internal bool IsItemRemoved => Trait == Trait.ItemRemoved;
-        internal bool IsItemLinked => Trait == Trait.ItemLinked;
-        internal bool IsItemUnlinked => Trait == Trait.ItemUnlinked;
-        internal bool IsItemLinkMoved => Trait == Trait.ItemChildMoved;
+        internal bool IsItemMoved => Trait == IdKey.ItemMoved;
+        internal bool IsItemCreated => Trait == IdKey.ItemCreated;
+        internal bool IsItemUpdated => Trait == IdKey.ItemUpdated;
+        internal bool IsItemRemoved => Trait == IdKey.ItemRemoved;
+        internal bool IsItemLinked => Trait == IdKey.ItemLinked;
+        internal bool IsItemUnlinked => Trait == IdKey.ItemUnlinked;
+        internal bool IsItemLinkMoved => Trait == IdKey.ItemChildMoved;
 
 
-        internal bool IsCovert => (Trait & Trait.SubMask) == Trait.IsCovert;
-        internal bool IsReadOnly => (Trait & Trait.SubMask) == Trait.IsReadOnly;
-        internal bool CanMultiline => (Trait & Trait.SubMask) == Trait.CanMultiline;
+        internal bool IsExternal => (Trait & IdKey.IsExternal) != 0;
+        internal bool IsReference => (Trait & IdKey.IsReference) != 0;
+        internal bool IsCovert => (Trait & IdKey.SubMask) == IdKey.IsCovert;
+        internal bool IsReadOnly => (Trait & IdKey.SubMask) == IdKey.IsReadOnly;
+        internal bool CanMultiline => (Trait & IdKey.SubMask) == IdKey.CanMultiline;
 
-        internal int ItemKey => (int)(Trait & Trait.KeyMask);
+        internal int ItemKey => (int)(Trait & IdKey.KeyMask);
 
-        internal byte TraitIndex => (byte)(Trait & Trait.IndexMask);
-        internal byte TraitIndexOf(Trait trait) => (byte)(trait & Trait.IndexMask);
-        internal bool IsErrorAux => (Trait & Trait.IsErrorAux) != 0;
-        internal bool IsErrorAux1 => (Trait & Trait.IsErrorAux1) != 0;
-        internal bool IsErrorAux2 => (Trait & Trait.IsErrorAux2) != 0;
+        internal byte TraitIndex => (byte)(Trait & IdKey.IndexMask);
+        internal byte TraitIndexOf(IdKey trait) => (byte)(trait & IdKey.IndexMask);
+        internal bool IsErrorAux => (Trait & IdKey.IsErrorAux) != 0;
+        internal bool IsErrorAux1 => (Trait & IdKey.IsErrorAux1) != 0;
+        internal bool IsErrorAux2 => (Trait & IdKey.IsErrorAux2) != 0;
         #endregion
 
         #region State  ========================================================
@@ -125,11 +120,11 @@ namespace ModelGraph.Core
         internal string SummaryKey => GetSummaryKey(Trait);
         internal string DescriptionKey => GetDescriptionKey(Trait);
 
-        internal string GetKindKey(Trait trait) => $"{(int)(trait & Trait.KeyMask):X3}K";
-        internal string GetNameKey(Trait trait) => $"{(int)(trait & Trait.KeyMask):X3}N";
-        internal string GetSummaryKey(Trait trait) => $"{(int)(trait & Trait.KeyMask):X3}S";
-        internal string GetDescriptionKey(Trait trait) => $"{(int)(trait & Trait.KeyMask):X3}V";
-        internal string GetAcceleratorKey(Trait trait) => $"{(int)(trait & Trait.KeyMask):X3}A".ToUpper();
+        internal string GetKindKey(IdKey trait) => $"{(int)(trait & IdKey.KeyMask):X3}K";
+        internal string GetNameKey(IdKey trait) => $"{(int)(trait & IdKey.KeyMask):X3}N";
+        internal string GetSummaryKey(IdKey trait) => $"{(int)(trait & IdKey.KeyMask):X3}S";
+        internal string GetDescriptionKey(IdKey trait) => $"{(int)(trait & IdKey.KeyMask):X3}V";
+        internal string GetAcceleratorKey(IdKey trait) => $"{(int)(trait & IdKey.KeyMask):X3}A".ToUpper();
         #endregion
 
         #region Property/Methods ==============================================

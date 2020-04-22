@@ -4,7 +4,6 @@ namespace ModelGraph.Core
 {
     public class ColumnX : Property
     {
-        internal override bool IsExternal => true;
         internal string Name;
         internal string Summary;
         internal string Description;
@@ -13,7 +12,7 @@ namespace ModelGraph.Core
         internal ColumnX(StoreOf<ColumnX> owner, bool autoExpand = false)
         {
             Owner = owner;
-            Trait = Trait.ColumnX;
+            Trait = IdKey.ColumnX;
             if (autoExpand) AutoExpandRight = true;
 
             Value = Value.Create(ValType.String);

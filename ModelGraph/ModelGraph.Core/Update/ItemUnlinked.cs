@@ -14,7 +14,7 @@
         internal ItemUnLinked(ChangeSet owner, Relation relation, Item parent, Item child, int parentIndex, int childIndex, string name)
         {
             Owner = owner;
-            Trait = Trait.ItemUnlinked;
+            Trait = IdKey.ItemUnlinked;
             Name = name;
 
             Child = child;
