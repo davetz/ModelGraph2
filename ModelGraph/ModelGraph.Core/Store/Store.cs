@@ -6,6 +6,9 @@ namespace ModelGraph.Core
 {
     public abstract class Store : Item
     {
+        internal abstract string Name { get; set; }
+        internal abstract string Summary { get; set; }
+        internal abstract string Description { get; set; }
         internal virtual void RegisterInternal(Dictionary<int, Item> internalItem) { }
         internal abstract int GetSerializerItemCount();
         internal abstract void PopululateChildItemIndex(Dictionary<Item, int> itemIndex);

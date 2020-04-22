@@ -18,8 +18,8 @@ namespace ModelGraph.Core
             }
             else if (rel.IsRelationX)
             {
-                TableX_ChildRelationX.TryGetParent(rel, out TableX ch); head = ch; 
-                TableX_ParentRelationX.TryGetParent(rel, out TableX pa); tail = pa;
+                Store_ChildRelation.TryGetParent(rel, out Store ch); head = ch; 
+                Store_ParentRelation.TryGetParent(rel, out Store pa); tail = pa;
             }
             else
             {
@@ -40,8 +40,8 @@ namespace ModelGraph.Core
             var identity = $"({id})  ";
             var childName = BlankName;
             var parentName = BlankName;
-            if (TableX_ParentRelationX.TryGetParent(rel, out TableX childTable)) childName = childTable.Name;
-            if (TableX_ChildRelationX.TryGetParent(rel, out TableX parentTable)) parentName = parentTable.Name;
+            if (Store_ParentRelation.TryGetParent(rel, out Store childTable)) childName = childTable.Name;
+            if (Store_ChildRelation.TryGetParent(rel, out Store parentTable)) parentName = parentTable.Name;
             StringBuilder sb = new StringBuilder(132);
             sb.Append(identity);
             sb.Append(parentName);
@@ -53,8 +53,8 @@ namespace ModelGraph.Core
         {
             var childName = BlankName;
             var parentName = BlankName;
-            if (TableX_ParentRelationX.TryGetParent(rel, out TableX childTable)) childName = childTable.Name;
-            if (TableX_ChildRelationX.TryGetParent(rel, out TableX parentTable)) parentName = parentTable.Name;
+            if (Store_ParentRelation.TryGetParent(rel, out Store childTable)) childName = childTable.Name;
+            if (Store_ChildRelation.TryGetParent(rel, out Store parentTable)) parentName = parentTable.Name;
             StringBuilder sb = new StringBuilder(value);
             sb.Replace(parentName + parentNameSuffix, "");
             sb.Replace(childName + childNameSuffix, "");

@@ -4496,7 +4496,7 @@ namespace ModelGraph.Core
                 ModelParms = (m) =>
                 {
                     var (kind, name) = GetKindName(m);
-                    var count = TableX_ChildRelationX.ChildCount(m.Item);
+                    var count = Store_ChildRelation.ChildCount(m.Item);
 
                     m.CanExpandLeft = (count > 0);
                     m.CanFilter = (count > 2);
@@ -4529,14 +4529,14 @@ namespace ModelGraph.Core
                 Validate = (m,prev) =>
                 {
                     var tx = m.TableX;
-                    if (!TableX_ChildRelationX.TryGetChildren(tx, out IList<RelationXO> list)) return (false, false);
+                    if (!Store_ChildRelation.TryGetChildren(tx, out IList<Relation> list)) return (false, false);
 
                     m.InitChildModels(prev);
 
                     var anyChange = prev.Count != list.Count;
                     foreach (var rel in list)
                     {
-                        anyChange |= AddChildModel(prev, m, IdKey.MetaChildRelationModel, rel, TableX_ChildRelationX, tx, MetaChildRelation_X);
+                        anyChange |= AddChildModel(prev, m, IdKey.MetaChildRelationModel, rel, Store_ChildRelation, tx, MetaChildRelation_X);
                     }
                     return (true, anyChange);
                 }
@@ -4551,7 +4551,7 @@ namespace ModelGraph.Core
             void Insert(ItemModel model)
             {
                 var rel = new RelationXO(RelationXStore);
-                ItemCreated(rel); AppendLink(TableX_ChildRelationX, model.Item, rel);
+                ItemCreated(rel); AppendLink(Store_ChildRelation, model.Item, rel);
             }
         }
         #endregion
@@ -4565,7 +4565,7 @@ namespace ModelGraph.Core
                 ModelParms = (m) =>
                 {
                     var (kind, name) = GetKindName(m);
-                    var count = TableX_ParentRelationX.ChildCount(m.Item);
+                    var count = Store_ParentRelation.ChildCount(m.Item);
 
                     m.CanExpandLeft = (count > 0);
                     m.CanFilter = (count > 2);
@@ -4598,13 +4598,13 @@ namespace ModelGraph.Core
                 Validate = (m,prev) =>
                 {
                     var tx = m.TableX;
-                    if (!TableX_ParentRelationX.TryGetChildren(tx, out IList<RelationXO> list)) return (false, false);
+                    if (!Store_ParentRelation.TryGetChildren(tx, out IList<Relation> list)) return (false, false);
 
                     m.InitChildModels(prev);
                     var anyChange = prev.Count != list.Count;
                     foreach (var rel in list)
                     {
-                        anyChange |= AddChildModel(prev, m, IdKey.MetaParentRelationModel, rel, TableX_ParentRelationX, tx, MetaParentRelation_X);
+                        anyChange |= AddChildModel(prev, m, IdKey.MetaParentRelationModel, rel, Store_ParentRelation, tx, MetaParentRelation_X);
                     }
                     return (true, anyChange);
                 }
@@ -4619,7 +4619,7 @@ namespace ModelGraph.Core
             void Insert(ItemModel model)
             {
                 var rel = new RelationXO(RelationXStore, true); ItemCreated(rel);
-                AppendLink(TableX_ParentRelationX, model.Item, rel);
+                AppendLink(Store_ParentRelation, model.Item, rel);
             }
         }
         #endregion
@@ -4878,7 +4878,7 @@ namespace ModelGraph.Core
 
                     if (doDrop)
                     {
-                        AppendLink(TableX_ParentRelationX, d.Item, m.Item);
+                        AppendLink(Store_ParentRelation, d.Item, m.Item);
                     }
                     return DropAction.Link;
                 },
@@ -4947,7 +4947,7 @@ namespace ModelGraph.Core
 
                     if (doDrop)
                     {
-                        AppendLink(TableX_ChildRelationX, d.Item, m.Item);
+                        AppendLink(Store_ChildRelation, d.Item, m.Item);
                     }
                     return DropAction.Link;
                 },
@@ -6582,8 +6582,8 @@ namespace ModelGraph.Core
             {
                 anyChange |= AddChildModel(prev, m, IdKey.RowPropertyListModel, rx, TableX_ColumnX, null, RowPropertyList_X);
                 anyChange |= AddChildModel(prev, m, IdKey.RowComputeListModel, rx, Store_ComputeX, null, RowComputeList_X);
-                anyChange |= AddChildModel(prev, m, IdKey.RowChildRelationListModel, rx, TableX_ChildRelationX, null, RowChildRelationList_X);
-                anyChange |= AddChildModel(prev, m, IdKey.RowParentRelationListModel, rx, TableX_ParentRelationX, null, RowParentRelationList_X);
+                anyChange |= AddChildModel(prev, m, IdKey.RowChildRelationListModel, rx, Store_ChildRelation, null, RowChildRelationList_X);
+                anyChange |= AddChildModel(prev, m, IdKey.RowParentRelationListModel, rx, Store_ParentRelation, null, RowParentRelationList_X);
             }
             if (prev.Count != m.ChildModelCount) anyChange = true;
             return (true, anyChange);
@@ -6833,7 +6833,7 @@ namespace ModelGraph.Core
                     if (!d.Item.IsRowX) return DropAction.None;
                     if (!m.Item.IsRowX) return DropAction.None;
                     if (!m.Aux1.IsRelationX) return DropAction.None;
-                    if (!TableX_ParentRelationX.TryGetParent(m.Aux1, out TableX expectedOwner)) return DropAction.None;
+                    if (!Store_ParentRelation.TryGetParent(m.Aux1, out Store expectedOwner)) return DropAction.None;
                     if (d.Item.Owner != expectedOwner) return DropAction.None;
 
                     if (doDrop)
@@ -6905,7 +6905,7 @@ namespace ModelGraph.Core
                     if (!d.Item.IsRowX) return DropAction.None;
                     if (!m.Item.IsRowX) return DropAction.None;
                     if (!m.Aux1.IsRelationX) return DropAction.None;
-                    if (!TableX_ChildRelationX.TryGetParent(m.Aux1, out TableX expectedOwner)) return DropAction.None;
+                    if (!Store_ChildRelation.TryGetParent(m.Aux1, out Store expectedOwner)) return DropAction.None;
                     if (d.Item.Owner != expectedOwner) return DropAction.None;
 
                     if (doDrop)
@@ -7191,7 +7191,7 @@ namespace ModelGraph.Core
                 ModelParms = (m) =>
                 {
                     var (kind, name) = GetKindName(m);
-                    var count = TableX_ChildRelationX.ChildCount(m.RowX.TableX);
+                    var count = Store_ChildRelation.ChildCount(m.RowX.TableX);
 
                     m.CanFilterUsage = count > 0;
                     m.CanExpandLeft = count > 0;
@@ -7214,7 +7214,7 @@ namespace ModelGraph.Core
                 Validate = (m,prev) =>
                 {
                     var rx = m.RowX;
-                    if (!TableX_ChildRelationX.TryGetChildren(rx.TableX, out IList<RelationXO> list)) return (false, false);
+                    if (!Store_ChildRelation.TryGetChildren(rx.TableX, out IList<Relation> list)) return (false, false);
 
                     m.InitChildModels(prev);
 
@@ -7242,7 +7242,7 @@ namespace ModelGraph.Core
                 ModelParms = (m) =>
                 {
                     var (kind, name) = GetKindName(m);
-                    var count = TableX_ParentRelationX.ChildCount(m.RowX.TableX);
+                    var count = Store_ParentRelation.ChildCount(m.RowX.TableX);
 
                     m.CanFilterUsage = count > 0;
                     m.CanExpandLeft = count > 0;
@@ -7265,7 +7265,7 @@ namespace ModelGraph.Core
                 Validate = (m,prev) =>
                 {
                     var rx = m.RowX;
-                    if (!TableX_ParentRelationX.TryGetChildren(rx.TableX, out IList<RelationXO> list)) return (false, false);
+                    if (!Store_ParentRelation.TryGetChildren(rx.TableX, out IList<Relation> list)) return (false, false);
 
                     m.InitChildModels(prev);
 

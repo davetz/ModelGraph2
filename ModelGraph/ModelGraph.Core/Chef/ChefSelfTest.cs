@@ -131,8 +131,8 @@ namespace ModelGraph.Core
             var tx1 = TableXStore.Items[tx1Index];
             var tx2 = TableXStore.Items[tx2Index];
 
-            TableX_ChildRelationX.SetLink(tx1, rx);
-            TableX_ParentRelationX.SetLink(tx2, rx);
+            Store_ChildRelation.SetLink(tx1, rx);
+            Store_ParentRelation.SetLink(tx2, rx);
 
             for (int i = 0; i < NR; i++)
             {
@@ -151,10 +151,11 @@ namespace ModelGraph.Core
             var tx1 = TableXStore.Items[tx1Index];
             var tx2 = TableXStore.Items[tx2Index];
 
-            if (!TableX_ChildRelationX.TryGetChildren(tx1, out IList<RelationXO> relations)) return false;
-            foreach (var rx in relations)
+            if (!Store_ChildRelation.TryGetChildren(tx1, out IList<Relation> relations)) return false;
+            foreach (var re in relations)
             {
-                if (!TableX_ParentRelationX.TryGetParent(rx, out TableX tx)) return false;
+                var rx = re as RelationOf<RowX, RowX>;
+                if (!Store_ParentRelation.TryGetParent(rx, out Store tx)) return false;
                 if (tx == tx2)
                 {
                     for (int i = 0; i < NR; i++)

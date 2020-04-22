@@ -45,6 +45,14 @@ namespace ModelGraph.Core
         internal override Type GetChildType() => typeof(T);
         #endregion
 
+
+        #region Identity  =====================================================
+        internal override string Name { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        internal override string Summary { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        internal override string Description { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        #endregion
+
+
         #region Methods  ======================================================
         private T Cast(Item item) => (item is T child) ? child : throw new InvalidCastException("StoreOf");
         private void UpdateDelta() { ModelDelta++; ChildDelta++; }

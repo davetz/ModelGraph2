@@ -512,8 +512,8 @@ namespace ModelGraph.Core
                 var name = string.IsNullOrWhiteSpace(itm.Name) ? string.Empty : $"({itm.Name})";
                 if (string.IsNullOrWhiteSpace(name)) name = $"{_localize(itm.KindKey)} {Index_Identity(itm)}";
 
-                var child = (TableX_ParentRelationX.TryGetParent(itm, out TableX ch)) ? GetIdentity(ch, IdentityStyle.Single) : BlankName;
-                var parent = (TableX_ChildRelationX.TryGetParent(itm, out TableX pa)) ? GetIdentity(pa, IdentityStyle.Single) : BlankName;
+                var child = (Store_ParentRelation.TryGetParent(itm, out Store ch)) ? GetIdentity(ch, IdentityStyle.Single) : BlankName;
+                var parent = (Store_ChildRelation.TryGetParent(itm, out Store pa)) ? GetIdentity(pa, IdentityStyle.Single) : BlankName;
 
                 switch (style)
                 {

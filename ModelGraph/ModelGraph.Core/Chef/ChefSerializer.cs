@@ -109,7 +109,7 @@ namespace ModelGraph.Core
                     if (internalItem.TryGetValue(key, out Item item))
                         items[i] = item;
                     else
-                    {
+                    {//==================================Refactor Patch
                         if (key == (ushort)(IdKey.TableX_ChildRelationX & IdKey.KeyMask))
                             items[i] = Store_ChildRelation;
                         else if (key == (ushort)(IdKey.TableX_ParentRelationX & IdKey.KeyMask))
