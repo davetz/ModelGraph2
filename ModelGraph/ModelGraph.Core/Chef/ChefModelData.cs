@@ -4529,7 +4529,7 @@ namespace ModelGraph.Core
                 Validate = (m,prev) =>
                 {
                     var tx = m.TableX;
-                    if (!TableX_ChildRelationX.TryGetChildren(tx, out IList<RelationX> list)) return (false, false);
+                    if (!TableX_ChildRelationX.TryGetChildren(tx, out IList<RelationXO> list)) return (false, false);
 
                     m.InitChildModels(prev);
 
@@ -4550,7 +4550,7 @@ namespace ModelGraph.Core
 
             void Insert(ItemModel model)
             {
-                var rel = new RelationX(RelationXStore);
+                var rel = new RelationXO(RelationXStore);
                 ItemCreated(rel); AppendLink(TableX_ChildRelationX, model.Item, rel);
             }
         }
@@ -4598,7 +4598,7 @@ namespace ModelGraph.Core
                 Validate = (m,prev) =>
                 {
                     var tx = m.TableX;
-                    if (!TableX_ParentRelationX.TryGetChildren(tx, out IList<RelationX> list)) return (false, false);
+                    if (!TableX_ParentRelationX.TryGetChildren(tx, out IList<RelationXO> list)) return (false, false);
 
                     m.InitChildModels(prev);
                     var anyChange = prev.Count != list.Count;
@@ -4618,7 +4618,7 @@ namespace ModelGraph.Core
 
             void Insert(ItemModel model)
             {
-                var rel = new RelationX(RelationXStore, true); ItemCreated(rel);
+                var rel = new RelationXO(RelationXStore, true); ItemCreated(rel);
                 AppendLink(TableX_ParentRelationX, model.Item, rel);
             }
         }
@@ -5790,7 +5790,7 @@ namespace ModelGraph.Core
                 {
                     if (!(m.Item is QueryX qx)) return DropAction.None;
                     if (!(d.Item is Relation re)) return DropAction.None;
-                    if (!CanDropQueryXRelation(qx, d.Item as RelationX)) return DropAction.None;
+                    if (!CanDropQueryXRelation(qx, d.Item as RelationXO)) return DropAction.None;
 
                     if (doDrop)
                     {
@@ -5883,7 +5883,7 @@ namespace ModelGraph.Core
                 {
                     if (!(m.Item is QueryX qx)) return DropAction.None;
                     if (!(d.Item is Relation re)) return DropAction.None;
-                    if (!CanDropQueryXRelation(qx, d.Item as RelationX)) return DropAction.None;
+                    if (!CanDropQueryXRelation(qx, d.Item as RelationXO)) return DropAction.None;
 
                     if (doDrop)
                     {
@@ -5962,7 +5962,7 @@ namespace ModelGraph.Core
                 {
                     if (!(m.Item is QueryX qx)) return DropAction.None;
                     if (!(d.Item is Relation re)) return DropAction.None;
-                    if (!CanDropQueryXRelation(qx, d.Item as RelationX)) return DropAction.None;
+                    if (!CanDropQueryXRelation(qx, d.Item as RelationXO)) return DropAction.None;
 
                     if (doDrop)
                     {
@@ -6044,7 +6044,7 @@ namespace ModelGraph.Core
                 {
                     if (!(m.Item is QueryX qx)) return DropAction.None;
                     if (!(d.Item is Relation re)) return DropAction.None;
-                    if (!CanDropQueryXRelation(qx, d.Item as RelationX)) return DropAction.None;
+                    if (!CanDropQueryXRelation(qx, d.Item as RelationXO)) return DropAction.None;
 
                     if (doDrop)
                     {
@@ -6126,7 +6126,7 @@ namespace ModelGraph.Core
                 {
                     if (!(m.Item is QueryX qx)) return DropAction.None;
                     if (!(d.Item is Relation re)) return DropAction.None;
-                    if (!CanDropQueryXRelation(qx, d.Item as RelationX)) return DropAction.None;
+                    if (!CanDropQueryXRelation(qx, d.Item as RelationXO)) return DropAction.None;
 
                     if (doDrop)
                     {
@@ -6208,7 +6208,7 @@ namespace ModelGraph.Core
                 {
                     if (!(m.Item is QueryX qx)) return DropAction.None;
                     if (!(d.Item is Relation re)) return DropAction.None;
-                    if (!CanDropQueryXRelation(qx, d.Item as RelationX)) return DropAction.None;
+                    if (!CanDropQueryXRelation(qx, d.Item as RelationXO)) return DropAction.None;
 
                     if (doDrop)
                     {
@@ -6838,7 +6838,7 @@ namespace ModelGraph.Core
 
                     if (doDrop)
                     {
-                        var rel = m.Aux1 as RelationX;
+                        var rel = m.Aux1 as RelationXO;
                         if (m.IsChildModel(d))
                             RemoveLink(rel, m.Item, d.Item);
                         else
@@ -6910,7 +6910,7 @@ namespace ModelGraph.Core
 
                     if (doDrop)
                     {
-                        var rel = m.Aux1 as RelationX;
+                        var rel = m.Aux1 as RelationXO;
                         if (m.IsChildModel(d))
                             RemoveLink(rel, d.Item, m.Item);
                         else
@@ -7214,7 +7214,7 @@ namespace ModelGraph.Core
                 Validate = (m,prev) =>
                 {
                     var rx = m.RowX;
-                    if (!TableX_ChildRelationX.TryGetChildren(rx.TableX, out IList<RelationX> list)) return (false, false);
+                    if (!TableX_ChildRelationX.TryGetChildren(rx.TableX, out IList<RelationXO> list)) return (false, false);
 
                     m.InitChildModels(prev);
 
@@ -7265,7 +7265,7 @@ namespace ModelGraph.Core
                 Validate = (m,prev) =>
                 {
                     var rx = m.RowX;
-                    if (!TableX_ParentRelationX.TryGetChildren(rx.TableX, out IList<RelationX> list)) return (false, false);
+                    if (!TableX_ParentRelationX.TryGetChildren(rx.TableX, out IList<RelationXO> list)) return (false, false);
 
                     m.InitChildModels(prev);
 

@@ -105,13 +105,9 @@ namespace ModelGraph.Core
         // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
 
         internal bool IsNew { get { return (_flags & B1) != 0; } set { _flags = value ? (byte)(_flags | B1) : (byte)(_flags & ~B1); } }
-        const byte B1 = 0x1;
         internal bool IsDeleted { get { return (_flags & B2) != 0; } set { _flags = value ? (byte)(_flags | B2) : (byte)(_flags & ~B2); } }
-        const byte B2 = 0x2;
         internal bool AutoExpandLeft { get { return (_flags & B3) != 0; } set { _flags = value ? (byte)(_flags | B3) : (byte)(_flags & ~B3); } }
-        const byte B3 = 0x4;
         internal bool AutoExpandRight { get { return (_flags & B4) != 0; } set { _flags = value ? (byte)(_flags | B4) : (byte)(_flags & ~B4); } }
-        const byte B4 = 0x8;
         #endregion
 
         #region StringKeys  ===================================================
@@ -142,6 +138,39 @@ namespace ModelGraph.Core
             while (item != null) { if (item.IsDataChef) return item as Chef; item = item.Owner; }
             throw new Exception("GetChef: Corrupted item hierarchy"); // I seriously hope this never happens
         }
+        #endregion
+
+
+        #region Flags  ========================================================
+        // don't read/write missing or default-value propties
+        // these flags indicate which properties were non-default
+        public const byte BZ = 0;
+        public const byte B1 = 0x1;
+        public const byte B2 = 0x2;
+        public const byte B3 = 0x4;
+        public const byte B4 = 0x8;
+        public const byte B5 = 0x10;
+        public const byte B6 = 0x20;
+        public const byte B7 = 0x40;
+        public const byte B8 = 0x80;
+
+        public const ushort SZ = 0;
+        public const ushort S1 = 0x1;
+        public const ushort S2 = 0x2;
+        public const ushort S3 = 0x4;
+        public const ushort S4 = 0x8;
+        public const ushort S5 = 0x10;
+        public const ushort S6 = 0x20;
+        public const ushort S7 = 0x40;
+        public const ushort S8 = 0x80;
+        public const ushort S9 = 0x100;
+        public const ushort S10 = 0x200;
+        public const ushort S11 = 0x400;
+        public const ushort S12 = 0x800;
+        public const ushort S13 = 0x1000;
+        public const ushort S14 = 0x2000;
+        public const ushort S15 = 0x4000;
+        public const ushort S16 = 0x8000;
         #endregion
     }
 }

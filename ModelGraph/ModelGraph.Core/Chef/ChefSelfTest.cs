@@ -124,7 +124,7 @@ namespace ModelGraph.Core
             if (IsInvalidTableIndex(tx1Index)) return false;
             if (IsInvalidTableIndex(tx2Index)) return false;
 
-            var rx = new RelationX(RelationXStore);
+            var rx = new RelationXO(RelationXStore);
             rx.Pairing = pairing;
             rx.Initialize(NR, NR);
 
@@ -151,7 +151,7 @@ namespace ModelGraph.Core
             var tx1 = TableXStore.Items[tx1Index];
             var tx2 = TableXStore.Items[tx2Index];
 
-            if (!TableX_ChildRelationX.TryGetChildren(tx1, out IList<RelationX> relations)) return false;
+            if (!TableX_ChildRelationX.TryGetChildren(tx1, out IList<RelationXO> relations)) return false;
             foreach (var rx in relations)
             {
                 if (!TableX_ParentRelationX.TryGetParent(rx, out TableX tx)) return false;

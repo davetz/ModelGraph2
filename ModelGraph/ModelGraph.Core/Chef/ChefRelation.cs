@@ -35,7 +35,7 @@ namespace ModelGraph.Core
         private const string identitySuffix = ")";
         internal string GetRelationName(Relation rel)
         {
-            var name = (rel is RelationX rx) ? rx.Name : "Internal";
+            var name = (rel is RelationXO rx) ? rx.Name : "Internal";
             var id = string.IsNullOrWhiteSpace(name) ? string.Empty : name;
             var identity = $"({id})  ";
             var childName = BlankName;
@@ -49,7 +49,7 @@ namespace ModelGraph.Core
             sb.Append(childName);
             return sb.ToString();
         }
-        internal void SetRelationName(RelationX rel, string value)
+        internal void SetRelationName(RelationXO rel, string value)
         {
             var childName = BlankName;
             var parentName = BlankName;

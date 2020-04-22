@@ -242,7 +242,7 @@ namespace ModelGraph.Core
         public Relation Relation => (Aux1 is Relation aux1) ? aux1 : (Item is Relation item) ? item : Aux2 as Relation;
         public ChangeSet ChangeSet => (Item is ChangeSet item) ? item : (Aux1 is ChangeSet aux1) ? aux1 : Aux2 as ChangeSet;
         public ItemChange ItemChange => (Item is ItemChange item) ? item : (Aux1 is ItemChange aux1) ? aux1 : Aux2 as ItemChange;
-        public RelationX RelationX => (Item is RelationX item) ? item : (Aux1 is RelationX aux1) ? aux1 : Aux2 as RelationX;
+        public RelationXO RelationX => (Item is RelationXO item) ? item : (Aux1 is RelationXO aux1) ? aux1 : Aux2 as RelationXO;
         #endregion
 
         #region ModelAction  ==================================================

@@ -106,10 +106,17 @@ namespace ModelGraph.Core
                 for (int i = 0; i < count; i++)
                 {
                     var key = r.ReadUInt16();
-                    if (!internalItem.TryGetValue(key, out Item item))
-                        throw new Exception("Unkown key reference");
-
-                    items[i] = item;
+                    if (internalItem.TryGetValue(key, out Item item))
+                        items[i] = item;
+                    else
+                    {
+                        if (key == (ushort)(IdKey.TableX_ChildRelationX & IdKey.KeyMask))
+                            items[i] = Store_ChildRelation;
+                        else if (key == (ushort)(IdKey.TableX_ParentRelationX & IdKey.KeyMask))
+                            items[i] = Store_ParentRelation;
+                        else
+                            throw new Exception("Unkown key reference");
+                    }
                 }
             }
             else

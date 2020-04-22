@@ -11,15 +11,8 @@ namespace ModelGraph.Core
         internal RelationOf<TableX, ColumnX> TableX_ColumnX { get; private set; }
         internal RelationOf<TableX, Property> TableX_NameProperty { get; private set; } // can be a ColumnX or a ComputeX
         internal RelationOf<TableX, Property> TableX_SummaryProperty { get; private set; } // can be a ColumnX or a ComputeX
-        internal RelationOf<TableX, RelationX> TableX_ChildRelationX { get; private set; }
-        internal RelationOf<TableX, RelationX> TableX_ParentRelationX { get; private set; }
-
-        //private Relation Table_ChildRelationGroup;
-        //private Relation Table_ParentRelationGroup;
-        //private Relation Table_ReverseRelationGroup;
-        //private Relation ChildRelationGroup_Relation;
-        //private Relation ParentRelationGroup_Relation;
-        //private Relation ReverseRelationGroup_Relation;
+        internal RelationOf<TableX, RelationXO> TableX_ChildRelationX { get; private set; }
+        internal RelationOf<TableX, RelationXO> TableX_ParentRelationX { get; private set; }
 
         internal RelationOf<Item, Error> Item_Error { get; private set; }
         internal RelationOf<ViewX, ViewX> ViewX_ViewX { get; private set; }
@@ -68,10 +61,10 @@ namespace ModelGraph.Core
             AddIntegrityCheck(TableX_SummaryProperty, TableXStore, ColumnXStore);
             AddIntegrityCheck(TableX_SummaryProperty, TableXStore, ComputeXStore);
 
-            TableX_ChildRelationX = new RelationOf<TableX, RelationX>(RelationStore, IdKey.TableX_ChildRelationX, Pairing.OneToMany, 25, 25, true);
+            TableX_ChildRelationX = new RelationOf<TableX, RelationXO>(RelationStore, IdKey.TableX_ChildRelationX, Pairing.OneToMany, 25, 25, true);
             AddIntegrityCheck(TableX_ChildRelationX, TableXStore, RelationXStore);
 
-            TableX_ParentRelationX = new RelationOf<TableX, RelationX>(RelationStore, IdKey.TableX_ParentRelationX, Pairing.OneToMany, 25, 25, true);
+            TableX_ParentRelationX = new RelationOf<TableX, RelationXO>(RelationStore, IdKey.TableX_ParentRelationX, Pairing.OneToMany, 25, 25, true);
             AddIntegrityCheck(TableX_ParentRelationX, TableXStore, RelationXStore);
 
             Store_ComputeX = new RelationOf<Store, ComputeX>(RelationStore, IdKey.Store_ComputeX, Pairing.OneToMany, 25, 25, true);

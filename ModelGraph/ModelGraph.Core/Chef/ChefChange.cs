@@ -463,7 +463,7 @@ namespace ModelGraph.Core
             {
                 if (item.Owner is TableX tx)
                 {
-                    if (TableX_ChildRelationX.TryGetChildren(tx, out IList<RelationX> txRelations))
+                    if (TableX_ChildRelationX.TryGetChildren(tx, out IList<RelationXO> txRelations))
                     {
                         relations = new List<Relation>(txRelations);
                         return true;
@@ -478,7 +478,7 @@ namespace ModelGraph.Core
             {
                 if (item.Owner is TableX tx)
                 {
-                    if (TableX_ParentRelationX.TryGetChildren(tx, out IList<RelationX> txRelations))
+                    if (TableX_ParentRelationX.TryGetChildren(tx, out IList<RelationXO> txRelations))
                     {
                         relations = new List<Relation>(txRelations);
                         return true;

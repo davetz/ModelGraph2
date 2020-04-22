@@ -224,6 +224,8 @@ namespace ModelGraph.Core
         #region Relation  ============================================(300-3FF)
 
         Relation = 0x300,
+        //=========================================
+        RowX_RowX = 0x301 | IsExternal,
 
         //=========================================
         EnumX_ColumnX = 0x311 | IsReference,
@@ -232,14 +234,6 @@ namespace ModelGraph.Core
         TableX_SummaryProperty = 0x314 | IsReference,
         TableX_ChildRelationX = 0x315 | IsReference,
         TableX_ParentRelationX = 0x316 | IsReference,
-
-        //=========================================
-        TableChildRelationGroup = 0x321 | IsReference,
-        TableParentRelationGroup = 0x322 | IsReference,
-        TableReverseRelationGroup = 0x323 | IsReference,
-        TableRelationGroupRelation = 0x324 | IsReference,
-        ParentRelationGroupRelation = 0x325 | IsReference,
-        ReverseRelationGroupRelation = 0x326 | IsReference,
 
         //=========================================
         Item_Error = 0x331,

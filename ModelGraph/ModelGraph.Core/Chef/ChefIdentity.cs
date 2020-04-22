@@ -507,7 +507,7 @@ namespace ModelGraph.Core
         #region RelationX_Identity  ===========================================
         private string RelationX_Identity(Item item, IdentityStyle style)
         {
-            if (item is RelationX itm)
+            if (item is RelationXO itm)
             {
                 var name = string.IsNullOrWhiteSpace(itm.Name) ? string.Empty : $"({itm.Name})";
                 if (string.IsNullOrWhiteSpace(name)) name = $"{_localize(itm.KindKey)} {Index_Identity(itm)}";
