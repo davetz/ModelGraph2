@@ -229,9 +229,9 @@ namespace ModelGraph.Core
 
         //=========================================
         EnumX_ColumnX = 0x311 | IsReference,
-        TableX_ColumnX = 0x312 | IsReference,
-        TableX_NameProperty = 0x313 | IsReference,
-        TableX_SummaryProperty = 0x314 | IsReference,
+        Store_ColumnX = 0x312 | IsReference,
+        Store_NameProperty = 0x313 | IsReference,
+        Store_SummaryProperty = 0x314 | IsReference,
         TableX_ChildRelationX = 0x315 | IsReference,
         TableX_ParentRelationX = 0x316 | IsReference,
 

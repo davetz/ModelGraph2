@@ -10,7 +10,7 @@ namespace ModelGraph.Core
         #region ChoiceColumns  ================================================
         private bool HasChoiceColumns(TableX tx)
         {
-            if (TableX_ColumnX.TryGetChildren(tx, out IList<ColumnX> lst))
+            if (Store_ColumnX.TryGetChildren(tx, out IList<ColumnX> lst))
             { 
                 foreach (var col in lst)
                 {
@@ -21,7 +21,7 @@ namespace ModelGraph.Core
         }
         private bool TryGetChoiceColumns(TableX tx, out IList<ColumnX> columns)
         {
-            if (!TableX_ColumnX.TryGetChildren(tx, out columns)) return false;
+            if (!Store_ColumnX.TryGetChildren(tx, out columns)) return false;
 
             var allColumns = columns;
             columns = new List<ColumnX>(allColumns.Count);
@@ -45,7 +45,7 @@ namespace ModelGraph.Core
             var newGroup = Value.GetValGroup(type);
             var preGroup = Value.GetValGroup(col.Value.ValType);
 
-            if (!TableX_ColumnX.TryGetParent(col, out TableX tbl)) return false;
+            if (!Store_ColumnX.TryGetParent(col, out Store tbl)) return false;
 
             var N = tbl.Count;
 
@@ -57,7 +57,7 @@ namespace ModelGraph.Core
 
             if ((newGroup & ValGroup.ScalarGroup) != 0 && (preGroup & ValGroup.ScalarGroup) != 0)
             {
-                var rows = tbl.Items;
+                var rows = tbl.GetItems();
                 var value = Value.Create(type, N);
 
                 switch (newGroup)

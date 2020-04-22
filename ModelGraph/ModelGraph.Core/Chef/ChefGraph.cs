@@ -387,9 +387,10 @@ namespace ModelGraph.Core
             gx.Color.Reset();
             gx.NodeOwners.Clear();
 
-            if (GraphX_ColorColumnX.TryGetChild(gx, out ColumnX cx) && TableX_ColumnX.TryGetParent(cx, out TableX tx) && tx.Count > 0)
+            if (GraphX_ColorColumnX.TryGetChild(gx, out ColumnX cx) && Store_ColumnX.TryGetParent(cx, out Store tx) && tx.Count > 0)
             {
-                foreach (var item in tx.Items)
+                var items = tx.GetItems();
+                foreach (var item in items)
                 {
                     gx.Color.BuildARGBList(cx.Value.GetString(item));
                 }
@@ -464,9 +465,10 @@ namespace ModelGraph.Core
             var group_Color = new Dictionary<Item, byte>();
             var item_group = new Dictionary<Item, Item>();
 
-            if (GraphX_ColorColumnX.TryGetChild(g.GraphX, out ColumnX cx) && TableX_ColumnX.TryGetParent(cx, out TableX tx) && tx.Count > 0)
+            if (GraphX_ColorColumnX.TryGetChild(g.GraphX, out ColumnX cx) && Store_ColumnX.TryGetParent(cx, out Store tx) && tx.Count > 0)
             {
-                foreach (var gp in tx.Items)
+                var items = tx.GetItems();
+                foreach (var gp in items)
                 {
                     group_Color[gp] = g.GraphX.Color.ColorIndex(cx.Value.GetString(gp));
                 }

@@ -35,7 +35,7 @@ namespace ModelGraph.Core
 
             if (string.IsNullOrWhiteSpace(name)) return false;
 
-            if (TableX_ColumnX.TryGetChildren(store, out IList<ColumnX> ls1))
+            if (Store_ColumnX.TryGetChildren(store, out IList<ColumnX> ls1))
             {
                 foreach (var col in ls1)
                 {

@@ -2227,8 +2227,8 @@ namespace ModelGraph.Core
 
                     m.InitChildModels(prev);
 
-                    AddChildModel(prev, m, IdKey.MetaNameColumnRelationModel, m.Item, TableX_NameProperty, null, MetaNameColumnRelation_X);
-                    AddChildModel(prev, m, IdKey.MetaSummaryColumnRelationModel, m.Item, TableX_SummaryProperty, null, MetaSummaryColumnRelation_X);
+                    AddChildModel(prev, m, IdKey.MetaNameColumnRelationModel, m.Item, Store_NameProperty, null, MetaNameColumnRelation_X);
+                    AddChildModel(prev, m, IdKey.MetaSummaryColumnRelationModel, m.Item, Store_SummaryProperty, null, MetaSummaryColumnRelation_X);
 
                     return (true, true);
                 }
@@ -4427,7 +4427,7 @@ namespace ModelGraph.Core
                 ModelParms = (m) =>
                 {
                     var (kind, name) = GetKindName(m);
-                    var count = TableX_ColumnX.ChildCount(m.Item);
+                    var count = Store_ColumnX.ChildCount(m.Item);
 
                     m.CanExpandLeft = (count > 0);
                     m.CanFilter = (count > 2);
@@ -4460,14 +4460,14 @@ namespace ModelGraph.Core
                 Validate = (m,prev) =>
                 {
                     var tx = m.TableX;
-                    if (!TableX_ColumnX.TryGetChildren(tx, out IList<ColumnX> list)) return (false, false);
+                    if (!Store_ColumnX.TryGetChildren(tx, out IList<ColumnX> list)) return (false, false);
 
                     m.InitChildModels(prev);
 
                     var anyChange = prev.Count != list.Count;
                     foreach (var itm in list)
                     {
-                        anyChange |= AddChildModel(prev, m, IdKey.MetaColumnModel, itm, TableX_ColumnX, tx, MetaColumn_X);
+                        anyChange |= AddChildModel(prev, m, IdKey.MetaColumnModel, itm, Store_ColumnX, tx, MetaColumn_X);
                     }
                     return (true, anyChange);
                 }
@@ -4482,7 +4482,7 @@ namespace ModelGraph.Core
             void Insert(ItemModel model)
             {
                 var col = new ColumnX(ColumnXStore, true);
-                ItemCreated(col); AppendLink(TableX_ColumnX, model.Item, col);
+                ItemCreated(col); AppendLink(Store_ColumnX, model.Item, col);
             }
         }
         #endregion
@@ -4749,7 +4749,7 @@ namespace ModelGraph.Core
                     var anyChange = prev.Count != list.Count;
                     foreach (var cx in list)
                     {
-                        if (TableX_ColumnX.TryGetParent(cx, out TableX tx))
+                        if (Store_ColumnX.TryGetParent(cx, out Store tx))
                         {
                             anyChange |= AddChildModel(prev, m, IdKey.MetaEnumRelatedColumnModel, cx, tx, ex, EnumRelatedColumn_X);
                         }
@@ -4985,7 +4985,7 @@ namespace ModelGraph.Core
                 ModelParms = (m) =>
                 {
                     var (kind, name) = GetKindName(m);
-                    var count = TableX_NameProperty.ChildCount(m.Item);
+                    var count = Store_NameProperty.ChildCount(m.Item);
 
                     m.CanExpandLeft = (count > 0);
 
@@ -5013,10 +5013,10 @@ namespace ModelGraph.Core
                     if (doDrop)
                     {
                         if (m.IsChildModel(d))
-                            RemoveLink(TableX_NameProperty, m.Item, d.Item);
+                            RemoveLink(Store_NameProperty, m.Item, d.Item);
                         else
                         {
-                            AppendLink(TableX_NameProperty, m.Item, d.Item);
+                            AppendLink(Store_NameProperty, m.Item, d.Item);
                             m.IsExpandedLeft = true;
                         }
                     }
@@ -5028,12 +5028,12 @@ namespace ModelGraph.Core
                 Validate = (m,prev) =>
                 {
                     var tx = m.TableX;
-                    if (!TableX_NameProperty.TryGetChild(tx, out Property pr)) return (false, false);
+                    if (!Store_NameProperty.TryGetChild(tx, out Property pr)) return (false, false);
                     if (m.ChildModelCount == 1) return (true, false);
 
                     m.InitChildModels(prev);
 
-                    AddChildModel(prev, m, IdKey.MetaNameColumnModel, pr, TableX_NameProperty, tx, MetaNameColumn_X);
+                    AddChildModel(prev, m, IdKey.MetaNameColumnModel, pr, Store_NameProperty, tx, MetaNameColumn_X);
 
                     return (true, true);
                 }
@@ -5054,7 +5054,7 @@ namespace ModelGraph.Core
                 ModelParms = (m) =>
                 {
                     var (kind, name) = GetKindName(m);
-                    var count = TableX_SummaryProperty.ChildCount(m.Item);
+                    var count = Store_SummaryProperty.ChildCount(m.Item);
 
                     m.CanExpandLeft = (count > 0);
 
@@ -5082,10 +5082,10 @@ namespace ModelGraph.Core
                     if (doDrop)
                     {
                         if (m.IsChildModel(d))
-                            RemoveLink(TableX_SummaryProperty, m.Item, d.Item);
+                            RemoveLink(Store_SummaryProperty, m.Item, d.Item);
                         else
                         {
-                            AppendLink(TableX_SummaryProperty, m.Item, d.Item);
+                            AppendLink(Store_SummaryProperty, m.Item, d.Item);
                             m.IsExpandedLeft = true;
                         }
                     }
@@ -5097,12 +5097,12 @@ namespace ModelGraph.Core
                 Validate = (m,prev) =>
                 {
                     var tx = m.TableX;
-                    if (!TableX_SummaryProperty.TryGetChild(tx, out Property pr)) return (false, false);
+                    if (!Store_SummaryProperty.TryGetChild(tx, out Property pr)) return (false, false);
                     if (m.ChildModelCount == 1) return (true, false);
 
                     m.InitChildModels(prev);
 
-                    AddChildModel(prev, m, IdKey.MetaSummaryColumnModel, pr, TableX_SummaryProperty, tx, MetaSummaryColumn_X);
+                    AddChildModel(prev, m, IdKey.MetaSummaryColumnModel, pr, Store_SummaryProperty, tx, MetaSummaryColumn_X);
 
                     return (true, true);
                 }
@@ -5254,7 +5254,7 @@ namespace ModelGraph.Core
 
                 Validate = (m,prev) =>
                 {
-                    if (!(GraphX_ColorColumnX.TryGetChild(m.Item, out ColumnX cx) && TableX_ColumnX.TryGetParent(cx, out TableX tx))) return (false, false);
+                    if (!(GraphX_ColorColumnX.TryGetChild(m.Item, out ColumnX cx) && Store_ColumnX.TryGetParent(cx, out Store tx))) return (false, false);
 
                     m.InitChildModels(prev);
 
@@ -6580,7 +6580,7 @@ namespace ModelGraph.Core
 
             if (m.IsExpandedLeft)
             {
-                anyChange |= AddChildModel(prev, m, IdKey.RowPropertyListModel, rx, TableX_ColumnX, null, RowPropertyList_X);
+                anyChange |= AddChildModel(prev, m, IdKey.RowPropertyListModel, rx, Store_ColumnX, null, RowPropertyList_X);
                 anyChange |= AddChildModel(prev, m, IdKey.RowComputeListModel, rx, Store_ComputeX, null, RowComputeList_X);
                 anyChange |= AddChildModel(prev, m, IdKey.RowChildRelationListModel, rx, Store_ChildRelation, null, RowChildRelationList_X);
                 anyChange |= AddChildModel(prev, m, IdKey.RowParentRelationListModel, rx, Store_ParentRelation, null, RowParentRelationList_X);
@@ -6686,7 +6686,7 @@ namespace ModelGraph.Core
 
                     var items = tx.Items;
                     var anyChange = (items.Count != prev.Count);
-                    if (TableX_NameProperty.TryGetChild(tx, out Property cx))
+                    if (Store_NameProperty.TryGetChild(tx, out Property cx))
                     {
                         foreach (var rx in items)
                         {
@@ -7143,7 +7143,7 @@ namespace ModelGraph.Core
                 ModelParms = (m) =>
                 {
                     var (kind, name) = GetKindName(m);
-                    var count = TableX_ColumnX.ChildCount(m.RowX.TableX);
+                    var count = Store_ColumnX.ChildCount(m.RowX.TableX);
 
                     m.CanFilterUsage = count > 0;
                     m.CanExpandLeft = count > 0;
@@ -7166,7 +7166,7 @@ namespace ModelGraph.Core
                 Validate = (m,prev) =>
                 {
                     var rx = m.RowX;
-                    if (!TableX_ColumnX.TryGetChildren(rx.TableX, out IList<ColumnX> list)) return (false, false);
+                    if (!Store_ColumnX.TryGetChildren(rx.TableX, out IList<ColumnX> list)) return (false, false);
 
                     m.InitChildModels(prev);
 

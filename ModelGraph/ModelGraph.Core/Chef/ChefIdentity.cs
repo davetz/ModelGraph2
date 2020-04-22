@@ -68,7 +68,7 @@ namespace ModelGraph.Core
         {
             if (item is RowX rx)
             {
-                var name1 = TableX_NameProperty.TryGetChild(rx.TableX, out Property pr) ? pr.Value.GetString(rx) : null;
+                var name1 = Store_NameProperty.TryGetChild(rx.TableX, out Property pr) ? pr.Value.GetString(rx) : null;
                 var noName1 = string.IsNullOrWhiteSpace(name1);
                 if (noName1) name1 = $"#{rx.Index}";
 
@@ -94,7 +94,7 @@ namespace ModelGraph.Core
                         return _localize(rx.KindKey);
 
                     case IdentityStyle.Summary:
-                        return TableX_SummaryProperty.TryGetChild(rx.TableX, out Property ns) ? ns.Value.GetString(rx) : name1;
+                        return Store_SummaryProperty.TryGetChild(rx.TableX, out Property ns) ? ns.Value.GetString(rx) : name1;
 
                     case IdentityStyle.Description:
                         return null;
@@ -435,7 +435,7 @@ namespace ModelGraph.Core
                 var noName1 = string.IsNullOrWhiteSpace(name1);
                 if (noName1) name1 = $"#{cx.Index}";
 
-                var name2 = TableX_ColumnX.TryGetParent(cx, out TableX tx) ? tx.Name : null;
+                var name2 = Store_ColumnX.TryGetParent(cx, out Store tx) ? tx.Name : null;
                 var noName2 = string.IsNullOrWhiteSpace(name2);
                 if (noName2) name2 = $"{_localize(GetKindKey(IdKey.TableX))} {BlankName}";
 
@@ -647,7 +647,7 @@ namespace ModelGraph.Core
         #region Legacy  =======================================================
         internal string GetRowName(RowX row)
         {
-            if (TableX_NameProperty.TryGetChild(row.Owner, out Property prop))
+            if (Store_NameProperty.TryGetChild(row.Owner, out Property prop))
             {
                 return prop.Value.GetString(row);
             }
@@ -657,7 +657,7 @@ namespace ModelGraph.Core
         }
         internal string RowSummary(RowX row)
         {
-            if (TableX_SummaryProperty.TryGetChild(row.Owner, out Property prop))
+            if (Store_SummaryProperty.TryGetChild(row.Owner, out Property prop))
             {
                 return prop.Value.GetString(row);
             }

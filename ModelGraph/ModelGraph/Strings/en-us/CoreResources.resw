@@ -595,13 +595,13 @@
     <value>Enum_Column</value>
   </data>
   <data name="312N" xml:space="preserve">
-    <value>Table_Column</value>
+    <value>Store_Column</value>
   </data>
   <data name="313N" xml:space="preserve">
-    <value>Table_NameProperty</value>
+    <value>Store_NameProperty</value>
   </data>
   <data name="314N" xml:space="preserve">
-    <value>Table_SummaryProperty</value>
+    <value>Store_SummaryProperty</value>
   </data>
   <data name="315N" xml:space="preserve">
     <value>Table_ChildRelation</value>

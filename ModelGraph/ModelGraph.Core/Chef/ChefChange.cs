@@ -159,7 +159,7 @@ namespace ModelGraph.Core
                 var row = item as RowX;
                 var tbl = item.Owner as TableX;
 
-                if (TableX_ColumnX.TryGetChildren(tbl, out IList<ColumnX> cols))
+                if (Store_ColumnX.TryGetChildren(tbl, out IList<ColumnX> cols))
                 {
                     var vals = new List<string>(cols.Count);
                     foreach (var col in cols)
@@ -182,7 +182,7 @@ namespace ModelGraph.Core
                 var tx = rx.TableX;
 
                 tx.Remove(rx);
-                if (TableX_ColumnX.TryGetChildren(tx, out IList<ColumnX> lst)) { foreach (var cx in lst) { cx.Value.Remove(rx); } }
+                if (Store_ColumnX.TryGetChildren(tx, out IList<ColumnX> lst)) { foreach (var cx in lst) { cx.Value.Remove(rx); } }
             }
             else
             {
@@ -267,7 +267,7 @@ namespace ModelGraph.Core
             var inx = (sto == null) ? -1 : sto.IndexOf(item);
             var name = GetIdentity(item, IdentityStyle.ChangeLog);
 
-            if (item.IsRowX && TableX_ColumnX.TryGetChildren(sto, out IList<ColumnX> cols))
+            if (item.IsRowX && Store_ColumnX.TryGetChildren(sto, out IList<ColumnX> cols))
             {
                 var vals = new List<string>(cols.Count);
                 foreach (var col in cols)

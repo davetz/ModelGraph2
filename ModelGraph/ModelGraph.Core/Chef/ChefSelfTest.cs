@@ -64,7 +64,7 @@ namespace ModelGraph.Core
             {
                 if (tx.Items.Count != NR) return false;
 
-                if (!TableX_ColumnX.TryGetChildren(tx, out IList<ColumnX> columns)) return false;
+                if (!Store_ColumnX.TryGetChildren(tx, out IList<ColumnX> columns)) return false;
                 if (columns.Count != NC) return false;
 
                 foreach (var rx in tx.Items)
@@ -177,7 +177,7 @@ namespace ModelGraph.Core
             for (int i = 0; i < (int)ValType.MaximumType; i++)
             {
                 var cx = new ColumnX(ColumnXStore);
-                TableX_ColumnX.SetLink(tx, cx);
+                Store_ColumnX.SetLink(tx, cx);
                 SetColumnValueType(cx, i);
             }
         }
@@ -187,7 +187,7 @@ namespace ModelGraph.Core
         internal void CreateRowAssigTestValues(TableX tx)
         {
             var rx = new RowX(tx);
-            if (TableX_ColumnX.TryGetChildren(tx, out IList<ColumnX> colums))
+            if (Store_ColumnX.TryGetChildren(tx, out IList<ColumnX> colums))
             {
                 foreach (var col in colums)
                 {
