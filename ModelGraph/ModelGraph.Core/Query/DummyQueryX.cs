@@ -9,7 +9,7 @@ namespace ModelGraph.Core
         internal DummyQueryX(Chef owner) //QueryXNode, referenced in GraphParms
         {
             Owner = owner;
-            IdKey = IdKey.NodeParm;
+            IdKey = IdKey.DummyQueryX;
         }
     }
 }

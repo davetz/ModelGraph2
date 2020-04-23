@@ -9,7 +9,7 @@ namespace ModelGraph.Core
         Guid _formatGuid = new Guid("3DB85BFF-F448-465C-996D-367E6284E913");
         Guid _serilizerGuid = new Guid("DE976A9D-0C50-4B4E-9B46-74404A64A703");
         static byte _formatVersion = 1;
-
+        private IDomain item;
         readonly List<(Guid, ISerializer)> _itemSerializers = new List<(Guid, ISerializer)>();
         readonly List<(Guid, ISerializer)> _linkSerializers = new List<(Guid, ISerializer)>(10);
 
@@ -36,8 +36,7 @@ namespace ModelGraph.Core
             var serializers = new List<(Guid, ISerializer)>(_itemSerializers);
             serializers.AddRange(_linkSerializers);
 
-            var itemIndex = new Dictionary<Item, int>(GetItemIndexMaxSize());
-            foreach (var (_, s) in serializers) { s.PopulateItemIndex(itemIndex); }
+            var itemIndex = GetItemIndexDictionary();
 
             w.WriteGuid(_formatGuid);
             w.WriteInt32(itemIndex.Count);
@@ -75,17 +74,23 @@ namespace ModelGraph.Core
                 if (!found) throw new Exception("Unknown serializer guid reference");
             }
         }
-        int GetItemIndexMaxSize()
+        Dictionary<Item, int> GetItemIndexDictionary()
         {
-            var maxSize = 0;
-            foreach (var sto in Items)
+            var maxSize = 4;
+            foreach (var itm in Items)
             {
-                if (sto.IsReference || sto.IsExternal)
-                {
-                    maxSize += (sto.GetSerializerItemCount() + 1);
-                }
+                if (itm is IDomain d) maxSize += d.GetSerializerItemCount();
             }
-            return maxSize;
+            var itemIndex = new Dictionary<Item, int>(maxSize);
+
+            itemIndex.Add(DummyItemRef, DummyItemRef.ItemKey);
+            itemIndex.Add(DummyQueryXRef, DummyQueryXRef.ItemKey);
+
+            foreach (var itm in Items)
+            {
+                if (itm is IDomain d) d.PopulateItemIndex(itemIndex);
+            }
+            return itemIndex;
         }
         #endregion
 
@@ -126,12 +131,13 @@ namespace ModelGraph.Core
         Dictionary<int, Item> GetInternalItems()
         {
             var internalItem = new Dictionary<int, Item>(100);
+
             internalItem.Add(DummyItemRef.ItemKey, DummyItemRef);
             internalItem.Add(DummyQueryXRef.ItemKey, DummyQueryXRef);
-            foreach (var sto in Items)
+
+            foreach (var itm in Items)
             {
-                if (sto.IsReference || sto.IsExternal) 
-                    sto.RegisterInternal(internalItem);
+                if (itm is IDomain d) d.RegisterInternal(internalItem);
             }
             return internalItem;
         }

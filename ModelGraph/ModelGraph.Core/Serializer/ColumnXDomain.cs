@@ -57,6 +57,7 @@ namespace ModelGraph.Core
         #endregion
 
         #region ISerializer  ==================================================
+        #region ReadData  =====================================================
         public void ReadData(DataReader r, Item[] items)
         {
             var N = r.ReadInt32();
@@ -86,7 +87,9 @@ namespace ModelGraph.Core
             else
                 throw new Exception($"ColumnXStore ReadData, unknown format version: {fv}");
         }
+        #endregion
 
+        #region WriteData  ====================================================
         public void WriteData(DataWriter w, Dictionary<Item, int> itemIndex)
         {
             if (Count > 0)
@@ -114,6 +117,7 @@ namespace ModelGraph.Core
                 }
             }
         }
+        #endregion
         #endregion
     }
 }

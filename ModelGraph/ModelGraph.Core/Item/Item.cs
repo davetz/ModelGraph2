@@ -14,6 +14,16 @@ namespace ModelGraph.Core
         internal byte ChildDelta;   //incremented when list of child items is changed 
         internal byte ErrorDelta;   //incremented when item's error state has changed
 
+        #region Identity  =====================================================
+        internal virtual string Name { get => "???"; set => _ = value; }
+        internal virtual string Summary { get => ""; set => _ = value; }
+        internal virtual string Description { get => ""; set => _ = value; }
+        internal virtual string KindId { get => ""; }
+        internal virtual string SingleNameId { get => ""; }
+        internal virtual string DoubleNameId { get => ""; }
+        internal virtual string ChangeLogId { get => ""; }
+        #endregion
+
         #region IdKey  ========================================================
         //internal bool IsExternal => (IdKey & IdKey.IsExternal) != 0;
         //internal bool IsInternal => (IdKey & IdKey.IsInternal) != 0;

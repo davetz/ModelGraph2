@@ -24,34 +24,8 @@ namespace ModelGraph.Core
         internal override int Count => (_items == null) ? 0 : _items.Count;
         internal override List<Item> GetItems() => new List<Item>(_items);
         internal override void RemoveAll() { _items.Clear(); UpdateDelta(); }
-        internal override int GetSerializerItemCount()
-        {
-            var count = 0;
-            foreach (var item in Items)
-            {
-                if (item.IsExternal || item.IsReference) count++;
-                if (item is Store sto) count += sto.GetSerializerItemCount();
-            }
-            return count;
-        }
-        internal override void PopululateChildItemIndex(Dictionary<Item, int> itemIndex)
-        {
-            foreach (var item in Items)
-            {
-                if (item.IsExternal) itemIndex[item] = 0;
-                if (item is Store sto) sto.PopululateChildItemIndex(itemIndex);
-            }
-        }
         internal override Type GetChildType() => typeof(T);
         #endregion
-
-
-        #region Identity  =====================================================
-        internal override string Name { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        internal override string Summary { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        internal override string Description { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        #endregion
-
 
         #region Methods  ======================================================
         private T Cast(Item item) => (item is T child) ? child : throw new InvalidCastException("StoreOf");

@@ -123,12 +123,6 @@ namespace ModelGraph.Core
         }
         #endregion
 
-        #region Identity  =====================================================
-        internal override string Name { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        internal override string Summary { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        internal override string Description { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        #endregion
-
         #region <Get,TryGet><Child,Parent,Children,Parents>  ==================
         internal bool TryGetChild(Item key, out T2 child)
         {

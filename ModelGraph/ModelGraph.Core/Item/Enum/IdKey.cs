@@ -113,8 +113,8 @@ namespace ModelGraph.Core
         #region Item  ================================================(100-1FF)
 
         //=========================================
-        Dummy = 0x100 | IsReference,
-        NodeParm = 0x101,
+        DummyItem = 0x100 | IsReference,
+        DummyQueryX = 0x101 | IsReference,
 
         DataChef = 0x112,
 

@@ -31,10 +31,6 @@ namespace ModelGraph.Core
         #endregion
 
         #region RequiredMethods  ==============================================
-        internal abstract string Name { get; set; }
-        internal abstract string Summary { get; set; }
-        internal abstract string Description { get; set; }
-
         internal abstract bool TrySetPairing(Pairing pairing);
         internal abstract bool IsValidParentChild(Item parentItem, Item childItem);
         internal abstract int ChildCount(Item key);
