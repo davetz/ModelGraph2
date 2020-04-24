@@ -26,7 +26,7 @@ namespace ModelGraph.Core
 
         #region Identity  =====================================================
         internal override IdKey VKey => IdKey.ColumnX;
-        internal override string GetSingleNameId(Chef chef) => Name;
+        internal override string GetSingleNameId(Chef chef) => string.IsNullOrWhiteSpace(Name) ? BlankName : Name;
         internal override string GetParentNameId(Chef chef) => chef.Store_ColumnX.TryGetParent(this, out Store p) ? p.GetSingleNameId(chef) : GetKindId(chef);
         internal override string GetSummaryId(Chef chef) => Summary;
         internal override string GetDescriptionId(Chef chef) => Description;

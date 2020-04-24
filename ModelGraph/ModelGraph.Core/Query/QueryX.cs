@@ -26,13 +26,110 @@ namespace ModelGraph.Core
 
             owner.Add(this);
         }
-        internal QueryX(QueryXDomain owner) 
+        internal QueryX(QueryXDomain owner)
         {
             Owner = owner;
             OldIdKey = IdKey.QueryX;
 
             owner.Add(this);
         }
+        #endregion
+
+        #region Identity  =====================================================
+        internal override IdKey VKey => GetIdKey();
+
+        internal override string GetSingleNameId(Chef chef)
+        {
+            string name;
+            if (IsRoot)
+            {
+                if (chef.Store_QueryX.TryGetParent(this, out Store st))
+                    name = st.GetDoubleNameId(chef);
+                else
+                    name = InvalidItem;
+            }
+            else
+            {
+                if (chef.Relation_QueryX.TryGetParent(this, out Relation re))
+                {
+                    chef.GetHeadTail(this, out Store head, out Store tail);
+                    name = $"{head.GetSingleNameId(chef)} --> {tail.GetSingleNameId(chef)}";
+                }
+                else
+                    name = InvalidItem;
+            }
+
+            if (HasSelect || HasWhere || IsRoot || IsHead || IsTail)
+            {
+                name = $"{name}      [";
+                if (HasWhere) name = $"{name}{chef.GetName(IdKey.QueryWhere)}( {WhereString} )";
+                if (HasSelect) name = $"{name} {chef.GetName(IdKey.QuerySelect)}( {SelectString} )";
+
+                if (IsRoot || IsHead || IsTail)
+                {
+                    name = $"{name} ";
+                    if (IsRoot) name = $"{name}R";
+                    if (IsHead) name = $"{name}H";
+                    if (IsTail) name = $"{name}T";
+                }
+                name = $"{name}]";
+            }
+            return name;
+        }
+
+        #region GetIdKey  =====================================================
+        private IdKey GetIdKey()
+        {
+            var idKe = IdKey.QueryIsCorrupt;
+            switch (QueryKind)
+            {
+                case QueryType.View:
+                    if (IsHead)
+                        idKe = IdKey.QueryViewHead;
+                    else if (IsRoot)
+                        idKe = IdKey.QueryViewRoot;
+                    else
+                        idKe = IdKey.QueryViewLink;
+                    break;
+                case QueryType.Path:
+                    if (IsHead)
+                        idKe = IdKey.QueryPathHead;
+                    else
+                        idKe = IdKey.QueryPathLink;
+                    break;
+                case QueryType.Group:
+                    if (IsHead)
+                        idKe = IdKey.QueryGroupHead;
+                    else
+                        idKe = IdKey.QueryGroupLink;
+                    break;
+                case QueryType.Egress:
+                    if (IsHead)
+                        idKe = IdKey.QuerySegueHead;
+                    else
+                        idKe = IdKey.QuerySegueLink;
+                    break;
+                case QueryType.Graph:
+                    if (IsRoot)
+                        idKe = IdKey.QueryGraphRoot;
+                    else
+                        idKe = IdKey.QueryGraphLink;
+                    break;
+                case QueryType.Value:
+                    if (IsHead)
+                        idKe = IdKey.QueryValueHead;
+                    else if (IsRoot)
+                        idKe = IdKey.QueryValueRoot;
+                    else
+                        idKe = IdKey.QueryValueLink;
+                    break;
+                case QueryType.Symbol:
+                    idKe = IdKey.QueryNodeSymbol;
+                    break;
+            }
+            return idKe;
+        }
+        #endregion
         #endregion
 
         #region Validation  ===================================================

@@ -7,9 +7,6 @@ namespace ModelGraph.Core
  */
     public partial class Chef
     {
-        static internal string BlankName = "???"; // indicates blank or missing name
-        static internal string InvalidItem = "######"; // indicates invalid reference 
-
         static internal ValueUnknown ValuesUnknown = new ValueUnknown();
         static internal ValueInvalid ValuesInvalid = new ValueInvalid();
         static internal ValueCircular ValuesCircular = new ValueCircular();

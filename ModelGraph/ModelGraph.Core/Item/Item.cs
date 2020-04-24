@@ -14,6 +14,9 @@ namespace ModelGraph.Core
         internal byte ChildDelta;   //incremented when list of child items is changed 
         internal byte ErrorDelta;   //incremented when item's error state has changed
 
+        public const string BlankName = "???";
+        public const string InvalidItem = "#######";
+
         #region Identity  =====================================================
         internal virtual IdKey VKey => OldIdKey;
         internal virtual string Name { get => "??"; set => _ = value; }
@@ -28,6 +31,12 @@ namespace ModelGraph.Core
         internal virtual (string, string) GetKindNameId(Chef chef) => (GetKindId(chef), GetSingleNameId(chef));
         internal virtual string GetSummaryId(Chef chef) => chef.GetSummaryId(VKey);
         internal virtual string GetDescriptionId(Chef chef) => chef.GetDescriptionId(VKey);
+
+        internal string GetIndexId()
+        {
+            var inx = Index;
+            return (inx < 0) ? InvalidItem : $"#{inx}";
+        }
         #endregion
 
         #region IdKey  ========================================================
