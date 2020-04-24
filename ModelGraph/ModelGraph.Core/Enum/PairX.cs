@@ -21,7 +21,7 @@ namespace ModelGraph.Core
 
         #region Identity  =====================================================
         internal override IdKey VKey => IdKey.PairX;
-        internal override string SingleNameId => DisplayValue;
+        internal override string GetSingleNameId(Chef chef) => DisplayValue;
         #endregion
     }
 }

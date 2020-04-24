@@ -31,10 +31,10 @@ namespace ModelGraph.Core
 
         #region Identity  =====================================================
         internal override IdKey VKey => IdKey.SymbolX;
-        internal override string SingleNameId => Name;
-        internal override string ParentNameId => GetChef().GraphX_SymbolX.TryGetParent(this, out GraphX p) ? p.SingleNameId : KindId;
-        internal override string SummaryId => Summary;
-        internal override string DescriptionId => Description;
+        internal override string GetSingleNameId(Chef chef) => Name;
+        internal override string GetParentNameId(Chef chef) => chef.GraphX_SymbolX.TryGetParent(this, out GraphX p) ? p.GetSingleNameId(chef) : GetKindId(chef);
+        internal override string GetSummaryId(Chef chef) => Summary;
+        internal override string GetDescriptionId(Chef chef) => Description;
         #endregion
 
         #region Properties/Methods  ===========================================

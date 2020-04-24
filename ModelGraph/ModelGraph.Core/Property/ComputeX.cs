@@ -30,10 +30,10 @@ namespace ModelGraph.Core
 
         #region Identity  =====================================================
         internal override IdKey VKey => IdKey.ComputeX;
-        internal override string SingleNameId => Name;
-        internal override string ParentNameId => GetChef().Store_ComputeX.TryGetParent(this, out Store p) ? p.SingleNameId : KindId;
-        internal override string SummaryId => Summary;
-        internal override string DescriptionId => Description;
+        internal override string GetSingleNameId(Chef chef) => Name;
+        internal override string GetParentNameId(Chef chef) => chef.Store_ComputeX.TryGetParent(this, out Store p) ? p.GetSingleNameId(chef) : GetKindId(chef);
+        internal override string GetSummaryId(Chef chef) => Summary;
+        internal override string GetDescriptionId(Chef chef) => Description;
         #endregion
 
         #region Property/Methods  =============================================

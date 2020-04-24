@@ -24,9 +24,9 @@ namespace ModelGraph.Core
 
         #region Identity  =====================================================
         internal override IdKey VKey => IdKey.ViewX;
-        internal override string SingleNameId => Name;
-        internal override string SummaryId => Summary;
-        internal override string DescriptionId => Description;
+        internal override string GetSingleNameId(Chef chef) => Name;
+        internal override string GetSummaryId(Chef chef) => Summary;
+        internal override string GetDescriptionId(Chef chef) => Description;
         #endregion
     }
 }

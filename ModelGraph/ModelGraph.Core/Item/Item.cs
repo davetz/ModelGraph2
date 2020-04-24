@@ -20,14 +20,14 @@ namespace ModelGraph.Core
         internal virtual string Summary { get => ""; set => _ = value; }
         internal virtual string Description { get => ""; set => _ = value; }
 
-        internal virtual string KindId => GetChef().GetKindId(VKey);
-        internal virtual string SingleNameId => GetChef().GetSingleNameId(VKey);
-        internal virtual string ParentNameId => Owner.SingleNameId;
-        internal virtual string DoubleNameId => $"{ParentNameId} : {SingleNameId}";
-        internal virtual string ChangeLogId => DoubleNameId;
-        internal virtual (string, string) KindNameId => (KindId, SingleNameId);
-        internal virtual string SummaryId => GetChef().GetSummaryId(VKey);
-        internal virtual string DescriptionId => GetChef().GetDescriptionId(VKey);
+        internal virtual string GetKindId(Chef chef) => chef.GetKindId(VKey);
+        internal virtual string GetSingleNameId(Chef chef) => GetChef().GetSingleNameId(VKey);
+        internal virtual string GetParentNameId(Chef chef) => Owner.GetSingleNameId(chef);
+        internal virtual string GetDoubleNameId(Chef chef) => $"{GetParentNameId(chef)} : {GetSingleNameId(chef)}";
+        internal virtual string GetChangeLogId(Chef chef) => GetDoubleNameId(chef);
+        internal virtual (string, string) GetKindNameId(Chef chef) => (GetKindId(chef), GetSingleNameId(chef));
+        internal virtual string GetSummaryId(Chef chef) => chef.GetSummaryId(VKey);
+        internal virtual string GetDescriptionId(Chef chef) => chef.GetDescriptionId(VKey);
         #endregion
 
         #region IdKey  ========================================================
