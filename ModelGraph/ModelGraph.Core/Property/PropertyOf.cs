@@ -14,7 +14,7 @@ namespace ModelGraph.Core
         internal PropertyOf(Store owner, IdKey idKe, EnumZ enumZ = null)
         {
             Owner = owner;
-            IdKey = idKe;
+            OldIdKey = idKe;
             EnumZ = enumZ;
 
             owner.Add(this);

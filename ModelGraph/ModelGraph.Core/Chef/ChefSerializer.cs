@@ -9,7 +9,7 @@ namespace ModelGraph.Core
         Guid _formatGuid = new Guid("3DB85BFF-F448-465C-996D-367E6284E913");
         Guid _serilizerGuid = new Guid("DE976A9D-0C50-4B4E-9B46-74404A64A703");
         static byte _formatVersion = 1;
-        private IDomain item;
+
         readonly List<(Guid, ISerializer)> _itemSerializers = new List<(Guid, ISerializer)>();
         readonly List<(Guid, ISerializer)> _linkSerializers = new List<(Guid, ISerializer)>(10);
 
@@ -24,9 +24,6 @@ namespace ModelGraph.Core
         public void RegisterLinkSerializer((Guid, ISerializer) serializer)
         {
             _linkSerializers.Add(serializer); //link serializers will be called last
-        }
-        public void PopulateItemIndex(Dictionary<Item, int> itemIndex)
-        {
         }
         #endregion
 
@@ -81,10 +78,11 @@ namespace ModelGraph.Core
             {
                 if (itm is IDomain d) maxSize += d.GetSerializerItemCount();
             }
-            var itemIndex = new Dictionary<Item, int>(maxSize);
-
-            itemIndex.Add(DummyItemRef, DummyItemRef.ItemKey);
-            itemIndex.Add(DummyQueryXRef, DummyQueryXRef.ItemKey);
+            var itemIndex = new Dictionary<Item, int>(maxSize)
+            {
+                [DummyItemRef] = 0,
+                [DummyQueryXRef] = 0
+            };
 
             foreach (var itm in Items)
             {

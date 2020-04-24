@@ -5,15 +5,6 @@ namespace ModelGraph.Core
 {
     public partial class Chef
     {
-
-        internal StoreOf<Error> ErrorStore { get; private set; }
-        internal StoreOf<EnumZ> EnumZStore { get; private set; }
-        internal StoreOf<Property> PropertyZStore { get; private set; }
-        internal StoreOf<Relation> RelationZStore { get; private set; }
-
-        internal InternalDomainOf<Property> PropertyStore { get; private set; }
-        internal InternalDomainOf<Relation> RelationStore { get; private set; }
-
         internal DummyItem DummyItemRef { get; private set; }
         internal QueryX DummyQueryXRef { get; private set; }
 
@@ -21,18 +12,26 @@ namespace ModelGraph.Core
         internal ChangeRoot ChangeRoot { get; private set; }
         internal int ChangeSequence { get; private set; }
 
+        internal ErrorStore ErrorStore { get; private set; }
+        internal EnumZStore EnumZStore { get; private set; }
+        internal PropertyZStore PropertyZStore { get; private set; }
+        internal RelationZStore RelationZStore { get; private set; }
+
+        internal PropertyDomain PropertyDomain { get; private set; }
+        internal RelationDomain RelationDomain { get; private set; }
+
         internal Store[] PrimeStores { get; private set; }
 
-        internal EnumXDomain EnumXStore { get; private set; }
-        internal ViewXDomain ViewXStore { get; private set; }
-        internal TableXDomain TableXStore { get; private set; }
-        internal GraphXDomain GraphXStore { get; private set; }
+        internal EnumXDomain EnumXDomain { get; private set; }
+        internal ViewXDomain ViewXDomain { get; private set; }
+        internal TableXDomain TableXDomain { get; private set; }
+        internal GraphXDomain GraphXDomain { get; private set; }
         internal GraphParams GraphParams { get; private set; }
-        internal QueryXDomain QueryXStore { get; private set; }
-        internal ColumnXDomain ColumnXStore { get; private set; }
-        internal SymbolXDomain SymbolXStore { get; private set; }
-        internal ComputeXDomain ComputeXStore { get; private set; }
-        internal RelationXDomain RelationXStore { get; private set; }
+        internal QueryXDomain QueryXDomain { get; private set; }
+        internal ColumnXDomain ColumnXDomain { get; private set; }
+        internal SymbolXDomain SymbolXDomain { get; private set; }
+        internal ComputeXDomain ComputeXDomain { get; private set; }
+        internal RelationXDomain RelationXDomain { get; private set; }
 
         #region InitializeStores  =============================================
         private void InitializeStores()
@@ -44,39 +43,41 @@ namespace ModelGraph.Core
             ChangeSequence = 1;
             ChangeSet = new ChangeSet(ChangeRoot, ChangeSequence);
 
-            ErrorStore = new StoreOf<Error>(this, IdKey.ErrorStore, 20);
-            EnumZStore = new StoreOf<EnumZ>(this, IdKey.EnumZStore, 20);
-            PropertyZStore = new StoreOf<Property>(this, IdKey.PropertyZStore, 10);
-            RelationZStore = new StoreOf<Relation>(this, IdKey.RelationZStore, 10);
+            ErrorStore = new ErrorStore(this);
+            EnumZStore = new EnumZStore(this);
+            InitializeEnums();
 
-            PropertyStore = new InternalDomainOf<Property>(this, IdKey.PropertyStore, 100);
-            RelationStore = new RelationDomain(this);
+            PropertyZStore = new PropertyZStore(this);
+            RelationZStore = new RelationZStore(this);
 
-            EnumXStore = new EnumXDomain(this);
-            ViewXStore = new ViewXDomain(this);
-            TableXStore = new TableXDomain(this);
-            GraphXStore = new GraphXDomain(this);
-            GraphParams = new GraphParams(this, GraphXStore);
+            PropertyDomain = new PropertyDomain(this);
+            RelationDomain = new RelationDomain(this);
 
-            QueryXStore = new QueryXDomain(this);
-            ColumnXStore = new ColumnXDomain(this);
-            SymbolXStore = new SymbolXDomain(this);
-            ComputeXStore = new ComputeXDomain(this);
-            RelationXStore = new RelationXDomain(this);
+            EnumXDomain = new EnumXDomain(this);
+            ViewXDomain = new ViewXDomain(this);
+            TableXDomain = new TableXDomain(this);
+            GraphXDomain = new GraphXDomain(this);
+            GraphParams = new GraphParams(this, GraphXDomain);
+
+            QueryXDomain = new QueryXDomain(this);
+            ColumnXDomain = new ColumnXDomain(this);
+            SymbolXDomain = new SymbolXDomain(this);
+            ComputeXDomain = new ComputeXDomain(this);
+            RelationXDomain = new RelationXDomain(this);
 
             PrimeStores = new Store[]
             {
-                EnumXStore,
-                ViewXStore,
-                TableXStore,
-                GraphXStore,
-                QueryXStore,
-                ColumnXStore,
-                SymbolXStore,
-                ComputeXStore,
-                RelationXStore,
-                RelationStore,
-                PropertyStore,
+                EnumXDomain,
+                ViewXDomain,
+                TableXDomain,
+                GraphXDomain,
+                QueryXDomain,
+                ColumnXDomain,
+                SymbolXDomain,
+                ComputeXDomain,
+                RelationXDomain,
+                RelationDomain,
+                PropertyDomain,
             };
         }
         #endregion

@@ -8,11 +8,11 @@ namespace ModelGraph.Core
         internal PairZ(EnumZ owner, IdKey idKe)
         {
             Owner = owner;
-            IdKey = idKe;
+            OldIdKey = idKe;
 
             owner.Add(this);
         }
 
-        internal int EnumKey => (int)(IdKey & IdKey.EnumMask);
+        internal int EnumKey => (int)(OldIdKey & IdKey.EnumMask);
     }
 }

@@ -59,8 +59,8 @@ namespace ModelGraph.Core
         {
             var NC = (int)ValType.MaximumType; // expected number of columns
 
-            if (TableXStore.Count != NT) return false;
-            foreach (var tx in TableXStore.Items)
+            if (TableXDomain.Count != NT) return false;
+            foreach (var tx in TableXDomain.Items)
             {
                 if (tx.Items.Count != NR) return false;
 
@@ -106,7 +106,7 @@ namespace ModelGraph.Core
         {
             for (int i = 0; i < NR; i++)
             {
-                var tx = new TableX(TableXStore);
+                var tx = new TableX(TableXDomain);
                 tx.SetCapacity(NR);
 
                 CreateAllValTypeColumns(tx);
@@ -124,12 +124,12 @@ namespace ModelGraph.Core
             if (IsInvalidTableIndex(tx1Index)) return false;
             if (IsInvalidTableIndex(tx2Index)) return false;
 
-            var rx = new RelationXO(RelationXStore);
+            var rx = new RelationXO(RelationXDomain);
             rx.Pairing = pairing;
             rx.Initialize(NR, NR);
 
-            var tx1 = TableXStore.Items[tx1Index];
-            var tx2 = TableXStore.Items[tx2Index];
+            var tx1 = TableXDomain.Items[tx1Index];
+            var tx2 = TableXDomain.Items[tx2Index];
 
             Store_ChildRelation.SetLink(tx1, rx);
             Store_ParentRelation.SetLink(tx2, rx);
@@ -140,7 +140,7 @@ namespace ModelGraph.Core
             }
             return true;
 
-            bool IsInvalidTableIndex(int txI) => (txI < 0) ? true : (txI < TableXStore.Count) ? false : true;
+            bool IsInvalidTableIndex(int txI) => (txI < 0) ? true : (txI < TableXDomain.Count) ? false : true;
         }
         #endregion
 
@@ -148,8 +148,8 @@ namespace ModelGraph.Core
         #region CheckTableTestRelation  =======================================
         internal bool CheckTestRelation(int tx1Index, int tx2Index, Pairing pairing)
         {
-            var tx1 = TableXStore.Items[tx1Index];
-            var tx2 = TableXStore.Items[tx2Index];
+            var tx1 = TableXDomain.Items[tx1Index];
+            var tx2 = TableXDomain.Items[tx2Index];
 
             if (!Store_ChildRelation.TryGetChildren(tx1, out IList<Relation> relations)) return false;
             foreach (var re in relations)
@@ -176,7 +176,7 @@ namespace ModelGraph.Core
         {
             for (int i = 0; i < (int)ValType.MaximumType; i++)
             {
-                var cx = new ColumnX(ColumnXStore);
+                var cx = new ColumnX(ColumnXDomain);
                 Store_ColumnX.SetLink(tx, cx);
                 SetColumnValueType(cx, i);
             }

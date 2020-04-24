@@ -15,7 +15,7 @@ namespace ModelGraph.Core
         internal QueryX(QueryXDomain owner, QueryType kind, bool isRoot = false, bool isHead = false)
         {
             Owner = owner;
-            IdKey = IdKey.QueryX;
+            OldIdKey = IdKey.QueryX;
             QueryKind = kind;
             IsRoot = isRoot;
             IsHead = isHead;
@@ -29,7 +29,7 @@ namespace ModelGraph.Core
         internal QueryX(QueryXDomain owner) 
         {
             Owner = owner;
-            IdKey = IdKey.QueryX;
+            OldIdKey = IdKey.QueryX;
 
             owner.Add(this);
         }

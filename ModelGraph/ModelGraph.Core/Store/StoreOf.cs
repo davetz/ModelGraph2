@@ -12,11 +12,10 @@ namespace ModelGraph.Core
         public StoreOf(Store owner, IdKey idKe, int capacity = 0)
         {
             Owner = owner;
-            IdKey = idKe;
+            OldIdKey = idKe;
             SetCapacity(capacity);
             owner?.Add(this);
         }
-
         #endregion
 
         #region Count/Items/GetItems  =========================================

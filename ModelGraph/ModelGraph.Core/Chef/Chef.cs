@@ -67,7 +67,6 @@ namespace ModelGraph.Core
             InitializeStores();
             InitializeRelations();
 
-            InitializeEnums();
             CreateProperties();
 
             InitializeReferences();

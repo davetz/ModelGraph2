@@ -19,7 +19,7 @@ namespace ModelGraph.Core
         #region ResetCacheValues  =============================================
         private void ResetCacheValues()
         {
-            foreach (var cx in ComputeXStore.Items) { cx.Value.Clear(); }
+            foreach (var cx in ComputeXDomain.Items) { cx.Value.Clear(); }
         }
         #endregion 
 

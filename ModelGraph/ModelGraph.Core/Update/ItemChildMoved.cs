@@ -16,7 +16,7 @@ namespace ModelGraph.Core
         internal ItemChildMoved(ChangeSet owner, Relation relation, Item key, Item item, int index1, int index2, string name)
         {
             Owner = owner;
-            IdKey = IdKey.ItemChildMoved;
+            OldIdKey = IdKey.ItemChildMoved;
             Name = name;
 
             Key = key;

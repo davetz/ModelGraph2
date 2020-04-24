@@ -15,9 +15,9 @@ namespace ModelGraph.Core
             // static enum properties
             Property_Enum = new Dictionary<Property, EnumZ>
             {
-                { ColumnXStore.TypeOfProperty, ValueTypeEnum },
+                { ColumnXDomain.TypeOfProperty, ValueTypeEnum },
 
-                { RelationXStore.PairingProperty, PairingEnum },
+                { RelationXDomain.PairingProperty, PairingEnum },
 
                 { GraphParams.OrientationProperty, OrientationEnum },
                 { GraphParams.LabelingProperty, LabelingEnum },
@@ -27,15 +27,15 @@ namespace ModelGraph.Core
                 { GraphParams.Facet1Property, FacetEnum },
                 { GraphParams.Facet2Property, FacetEnum },
 
-                { SymbolXStore.AttachProperty, AttatchEnum },
+                { SymbolXDomain.AttachProperty, AttatchEnum },
 
-                { QueryXStore.LineStyleProperty, LineStyleEnum },
-                { QueryXStore.DashStyleProperty, DashStyleEnum },
+                { QueryXDomain.LineStyleProperty, LineStyleEnum },
+                { QueryXDomain.DashStyleProperty, DashStyleEnum },
 
-                { QueryXStore.Facet1Property, FacetEnum },
-                { QueryXStore.Facet2Property, FacetEnum },
+                { QueryXDomain.Facet1Property, FacetEnum },
+                { QueryXDomain.Facet2Property, FacetEnum },
 
-                { ComputeXStore.CompuTypeProperty, ComputeTypeEnum },
+                { ComputeXDomain.CompuTypeProperty, ComputeTypeEnum },
             };
         }
     }

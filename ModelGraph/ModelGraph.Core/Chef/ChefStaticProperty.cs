@@ -13,7 +13,7 @@ namespace ModelGraph.Core
         private void CreateProperties()
         {
             {
-                var p = ShowItemIndexProperty = new PropertyOf<Chef, bool>(PropertyStore, IdKey.IncludeItemIdentityIndexProperty);
+                var p = ShowItemIndexProperty = new PropertyOf<Chef, bool>(PropertyDomain, IdKey.IncludeItemIdentityIndexProperty);
                 p.GetValFunc = (item) => p.Cast(item).ShowItemIndex;
                 p.SetValFunc = (item, value) => p.Cast(item).ShowItemIndex = value;
                 p.Value = new BoolValue(p);

@@ -88,14 +88,14 @@ namespace ModelGraph.Core
         // root level containers for the hierarchal item trees
 
         EnumXStore = 0x0E1 | IsReference,
-        ViewXStore = 0x0E2 | IsReference,
+        ViewXDomain = 0x0E2 | IsReference,
         TableXStore = 0x0E3 | IsReference,
         GraphXStore = 0x0E4 | IsReference,
         QueryXStore = 0x0E5 | IsReference,
         ValueXStore = 0x0E6 | IsReference,
-        SymbolXStore = 0x0E7 | IsReference,
-        ColumnXStore = 0x0E8 | IsReference,
-        ComputeXStore = 0x0E9 | IsReference,
+        SymbolXDomain = 0x0E7 | IsReference,
+        ColumnXDomain = 0x0E8 | IsReference,
+        ComputeXDomain = 0x0E9 | IsReference,
         RelationXStore = 0x0EA | IsReference,
 
         PrimeStore = 0x0F0, // exposes internal tables (metadata / configuration)

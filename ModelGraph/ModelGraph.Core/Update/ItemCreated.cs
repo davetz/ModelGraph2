@@ -16,7 +16,7 @@ namespace ModelGraph.Core
         internal ItemCreated(ChangeSet owner, Item item, int index, string name, IList<ColumnX> columns = null, List<String> values = null)
         {
             Owner = owner;
-            IdKey = IdKey.ItemCreated;
+            OldIdKey = IdKey.ItemCreated;
             Name = name;
             Item = item;
             AtIndex = index;

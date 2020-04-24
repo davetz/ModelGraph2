@@ -104,17 +104,17 @@ namespace ModelGraph.Core
 
         internal void ClearError(Item item, IdKey idKe)
         {
-            if (_itemError.TryGetValue(item, out Error error) && error.IdKey == idKe)
+            if (_itemError.TryGetValue(item, out Error error) && error.OldIdKey == idKe)
                 ClearError(item, error);
         }
         internal void ClearError(Item item, Item aux1, IdKey idKe)
         {
-            if (_itemErrorAux1.TryGetValue((item, aux1), out Error error) && error.IdKey == idKe)
+            if (_itemErrorAux1.TryGetValue((item, aux1), out Error error) && error.OldIdKey == idKe)
                 ClearError(item, aux1, error);
         }
         internal void ClearError(Item item, Item aux1, Item aux2, IdKey idKe)
         {
-            if (_itemErrorAux2.TryGetValue((item, aux1, aux2), out Error error) && error.IdKey == idKe)
+            if (_itemErrorAux2.TryGetValue((item, aux1, aux2), out Error error) && error.OldIdKey == idKe)
                 ClearError(item, aux1, aux2, error);
         }
 
@@ -148,15 +148,15 @@ namespace ModelGraph.Core
 
             foreach (var e in _itemError)
             {
-                if (traits.Contains(e.Value.IdKey)) removeError.Add(e.Key, e.Value);
+                if (traits.Contains(e.Value.OldIdKey)) removeError.Add(e.Key, e.Value);
             }
             foreach (var e in _itemErrorAux1)
             {
-                if (traits.Contains(e.Value.IdKey)) removeErrorAux1.Add(e.Key, e.Value);
+                if (traits.Contains(e.Value.OldIdKey)) removeErrorAux1.Add(e.Key, e.Value);
             }
             foreach (var e in _itemErrorAux2)
             {
-                if (traits.Contains(e.Value.IdKey)) removeErrorAux2.Add(e.Key, e.Value);
+                if (traits.Contains(e.Value.OldIdKey)) removeErrorAux2.Add(e.Key, e.Value);
             }
             foreach (var e in removeError)
             {
@@ -185,7 +185,7 @@ namespace ModelGraph.Core
             var prevError = TryGetError(item);
             if (prevError != null)
             {
-                if (prevError is ErrorNone error && error.IdKey == idKe)
+                if (prevError is ErrorNone error && error.OldIdKey == idKe)
                     return error; // this error already exists
 
                 if (prevError.TraitIndex > TraitIndexOf(idKe))
@@ -200,7 +200,7 @@ namespace ModelGraph.Core
             var prevError = TryGetError(item, aux1);
             if (prevError != null)
             {
-                if (prevError is ErrorNoneAux error && error.IdKey == idKe)
+                if (prevError is ErrorNoneAux error && error.OldIdKey == idKe)
                     return error; // this error already exists
 
                 if (prevError.TraitIndex > TraitIndexOf(idKe))
@@ -215,7 +215,7 @@ namespace ModelGraph.Core
             var prevError = TryGetError(item, aux1, aux2);
             if (prevError != null)
             {
-                if (prevError is ErrorNoneAux2 error && error.IdKey == idKe)
+                if (prevError is ErrorNoneAux2 error && error.OldIdKey == idKe)
                     return error; // this error already exists
 
                 if (prevError.TraitIndex > TraitIndexOf(idKe))
@@ -231,7 +231,7 @@ namespace ModelGraph.Core
             var prevError = TryGetError(item);
             if (prevError != null)
             {
-                if (prevError is ErrorOne error && error.IdKey == idKe)
+                if (prevError is ErrorOne error && error.OldIdKey == idKe)
                     return error; // this error already exists
 
                 if (prevError.TraitIndex > TraitIndexOf(idKe))
@@ -246,7 +246,7 @@ namespace ModelGraph.Core
             var prevError = TryGetError(item, aux1);
             if (prevError != null)
             {
-                if (prevError is ErrorOneAux error && error.IdKey == idKe)
+                if (prevError is ErrorOneAux error && error.OldIdKey == idKe)
                     return error; // this error already exists
 
                 if (prevError.TraitIndex > TraitIndexOf(idKe))
@@ -261,7 +261,7 @@ namespace ModelGraph.Core
             var prevError = TryGetError(item, aux1, aux2);
             if (prevError != null)
             {
-                if (prevError is ErrorOneAux2 error && error.IdKey == idKe)
+                if (prevError is ErrorOneAux2 error && error.OldIdKey == idKe)
                     return error; // this error already exists
 
                 if (prevError.TraitIndex > TraitIndexOf(idKe))
@@ -277,7 +277,7 @@ namespace ModelGraph.Core
             var prevError = TryGetError(item);
             if (prevError != null)
             {
-                if (prevError is ErrorMany error && error.IdKey == idKe)
+                if (prevError is ErrorMany error && error.OldIdKey == idKe)
                     return error; // this error already exists
 
                 if (prevError.TraitIndex > TraitIndexOf(idKe))
@@ -292,7 +292,7 @@ namespace ModelGraph.Core
             var prevError = TryGetError(item, aux1);
             if (prevError != null)
             {
-                if (prevError is ErrorManyAux error && error.IdKey == idKe)
+                if (prevError is ErrorManyAux error && error.OldIdKey == idKe)
                     return error; // this error already exists
 
                 if (prevError.TraitIndex > TraitIndexOf(idKe))
@@ -307,7 +307,7 @@ namespace ModelGraph.Core
             var prevError = TryGetError(item, aux1, aux2);
             if (prevError != null)
             {
-                if (prevError is ErrorManyAux2 error && error.IdKey == idKe)
+                if (prevError is ErrorManyAux2 error && error.OldIdKey == idKe)
                     return error; // this error already exists
 
                 if (prevError.TraitIndex > TraitIndexOf(idKe))

@@ -6,7 +6,7 @@ namespace ModelGraph.Core
     {
         internal Item Owner;        //each item has an owner, this-> owner-> ... -> dataChef
 
-        internal IdKey IdKey;       //identity, static flags, and resource string key
+        internal IdKey OldIdKey;       //identity, static flags, and resource string key
         private State _state;       //bit flags specific to each item type
 
         private byte _flags;        //IsNew, IsDeleted, AutoExpandLeft, AutoExpandRight,..
@@ -15,58 +15,64 @@ namespace ModelGraph.Core
         internal byte ErrorDelta;   //incremented when item's error state has changed
 
         #region Identity  =====================================================
-        internal virtual string Name { get => "???"; set => _ = value; }
+        internal virtual IdKey VKey => OldIdKey;
+        internal virtual string Name { get => "??"; set => _ = value; }
         internal virtual string Summary { get => ""; set => _ = value; }
         internal virtual string Description { get => ""; set => _ = value; }
-        internal virtual string KindId { get => ""; }
-        internal virtual string SingleNameId { get => ""; }
-        internal virtual string DoubleNameId { get => ""; }
-        internal virtual string ChangeLogId { get => ""; }
+
+        internal virtual string KindId => GetChef().GetKindId(VKey);
+        internal virtual string SingleNameId => GetChef().GetSingleNameId(VKey);
+        internal virtual string ParentNameId => Owner.SingleNameId;
+        internal virtual string DoubleNameId => $"{ParentNameId} : {SingleNameId}";
+        internal virtual string ChangeLogId => DoubleNameId;
+        internal virtual (string, string) KindNameId => (KindId, SingleNameId);
+        internal virtual string SummaryId => GetChef().GetSummaryId(VKey);
+        internal virtual string DescriptionId => GetChef().GetDescriptionId(VKey);
         #endregion
 
         #region IdKey  ========================================================
         //internal bool IsExternal => (IdKey & IdKey.IsExternal) != 0;
         //internal bool IsInternal => (IdKey & IdKey.IsInternal) != 0;
 
-        internal bool IsDataChef => (IdKey == IdKey.DataChef);
-        internal bool IsViewX => (IdKey == IdKey.ViewX);
-        internal bool IsPairX => (IdKey == IdKey.PairX);
-        internal bool IsRowX => (IdKey == IdKey.RowX);
-        internal bool IsEnumX => (IdKey == IdKey.EnumX);
-        internal bool IsTableX => (IdKey == IdKey.TableX);
-        internal bool IsGraphX => (IdKey == IdKey.GraphX);
-        internal bool IsQueryX => (IdKey == IdKey.QueryX);
-        internal bool IsSymbolX => (IdKey == IdKey.SymbolX);
-        internal bool IsColumnX => (IdKey == IdKey.ColumnX);
-        internal bool IsComputeX => (IdKey == IdKey.ComputeX);
+        internal bool IsDataChef => (OldIdKey == IdKey.DataChef);
+        internal bool IsViewX => (OldIdKey == IdKey.ViewX);
+        internal bool IsPairX => (OldIdKey == IdKey.PairX);
+        internal bool IsRowX => (OldIdKey == IdKey.RowX);
+        internal bool IsEnumX => (OldIdKey == IdKey.EnumX);
+        internal bool IsTableX => (OldIdKey == IdKey.TableX);
+        internal bool IsGraphX => (OldIdKey == IdKey.GraphX);
+        internal bool IsQueryX => (OldIdKey == IdKey.QueryX);
+        internal bool IsSymbolX => (OldIdKey == IdKey.SymbolX);
+        internal bool IsColumnX => (OldIdKey == IdKey.ColumnX);
+        internal bool IsComputeX => (OldIdKey == IdKey.ComputeX);
         //internal bool IsCommandX => (IdKey == IdKey.CommandX);
-        internal bool IsRelationX => (IdKey == IdKey.RelationX);
-        internal bool IsGraph => (IdKey == IdKey.Graph);
-        internal bool IsNode => (IdKey == IdKey.Node);
-        internal bool IsEdge => (IdKey == IdKey.Edge);
+        internal bool IsRelationX => (OldIdKey == IdKey.RelationX);
+        internal bool IsGraph => (OldIdKey == IdKey.Graph);
+        internal bool IsNode => (OldIdKey == IdKey.Node);
+        internal bool IsEdge => (OldIdKey == IdKey.Edge);
 
-        internal bool IsItemMoved => IdKey == IdKey.ItemMoved;
-        internal bool IsItemCreated => IdKey == IdKey.ItemCreated;
-        internal bool IsItemUpdated => IdKey == IdKey.ItemUpdated;
-        internal bool IsItemRemoved => IdKey == IdKey.ItemRemoved;
-        internal bool IsItemLinked => IdKey == IdKey.ItemLinked;
-        internal bool IsItemUnlinked => IdKey == IdKey.ItemUnlinked;
-        internal bool IsItemLinkMoved => IdKey == IdKey.ItemChildMoved;
+        internal bool IsItemMoved => OldIdKey == IdKey.ItemMoved;
+        internal bool IsItemCreated => OldIdKey == IdKey.ItemCreated;
+        internal bool IsItemUpdated => OldIdKey == IdKey.ItemUpdated;
+        internal bool IsItemRemoved => OldIdKey == IdKey.ItemRemoved;
+        internal bool IsItemLinked => OldIdKey == IdKey.ItemLinked;
+        internal bool IsItemUnlinked => OldIdKey == IdKey.ItemUnlinked;
+        internal bool IsItemLinkMoved => OldIdKey == IdKey.ItemChildMoved;
 
 
-        internal bool IsExternal => (IdKey & IdKey.IsExternal) != 0;
-        internal bool IsReference => (IdKey & IdKey.IsReference) != 0;
-        internal bool IsCovert => (IdKey & IdKey.SubMask) == IdKey.IsCovert;
-        internal bool IsReadOnly => (IdKey & IdKey.SubMask) == IdKey.IsReadOnly;
-        internal bool CanMultiline => (IdKey & IdKey.SubMask) == IdKey.CanMultiline;
+        internal bool IsExternal => (OldIdKey & IdKey.IsExternal) != 0;
+        internal bool IsReference => (OldIdKey & IdKey.IsReference) != 0;
+        internal bool IsCovert => (OldIdKey & IdKey.SubMask) == IdKey.IsCovert;
+        internal bool IsReadOnly => (OldIdKey & IdKey.SubMask) == IdKey.IsReadOnly;
+        internal bool CanMultiline => (OldIdKey & IdKey.SubMask) == IdKey.CanMultiline;
 
-        internal int ItemKey => (int)(IdKey & IdKey.KeyMask);
+        internal int ItemKey => (int)(OldIdKey & IdKey.KeyMask);
 
-        internal byte TraitIndex => (byte)(IdKey & IdKey.IndexMask);
+        internal byte TraitIndex => (byte)(OldIdKey & IdKey.IndexMask);
         internal byte TraitIndexOf(IdKey idKe) => (byte)(idKe & IdKey.IndexMask);
-        internal bool IsErrorAux => (IdKey & IdKey.IsErrorAux) != 0;
-        internal bool IsErrorAux1 => (IdKey & IdKey.IsErrorAux1) != 0;
-        internal bool IsErrorAux2 => (IdKey & IdKey.IsErrorAux2) != 0;
+        internal bool IsErrorAux => (OldIdKey & IdKey.IsErrorAux) != 0;
+        internal bool IsErrorAux1 => (OldIdKey & IdKey.IsErrorAux1) != 0;
+        internal bool IsErrorAux2 => (OldIdKey & IdKey.IsErrorAux2) != 0;
         #endregion
 
         #region State  ========================================================
@@ -121,10 +127,10 @@ namespace ModelGraph.Core
         #endregion
 
         #region StringKeys  ===================================================
-        internal string KindKey => GetKindKey(IdKey);
-        internal string NameKey => GetNameKey(IdKey);
-        internal string SummaryKey => GetSummaryKey(IdKey);
-        internal string DescriptionKey => GetDescriptionKey(IdKey);
+        internal string KindKey => GetKindKey(OldIdKey);
+        internal string NameKey => GetNameKey(OldIdKey);
+        internal string SummaryKey => GetSummaryKey(OldIdKey);
+        internal string DescriptionKey => GetDescriptionKey(OldIdKey);
 
         internal string GetKindKey(IdKey idKe) => $"{(int)(idKe & IdKey.KeyMask):X3}K";
         internal string GetNameKey(IdKey idKe) => $"{(int)(idKe & IdKey.KeyMask):X3}N";

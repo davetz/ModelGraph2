@@ -14,7 +14,7 @@ namespace ModelGraph.Core
         internal RelationX(RelationXDomain owner, IdKey idKe, bool autoExpandRight = false)
         {
             Owner = owner;
-            IdKey = idKe;
+            OldIdKey = idKe;
             Pairing = Pairing.OneToMany;
 
             if (autoExpandRight) AutoExpandRight = true;
@@ -36,7 +36,7 @@ namespace ModelGraph.Core
         internal RelationXO(RelationXDomain owner, bool autoExpandRight = false)
         {
             Owner = owner;
-            IdKey = IdKey.RelationX;
+            OldIdKey = IdKey.RelationX;
             Pairing = Pairing.OneToMany;
 
             if (autoExpandRight) AutoExpandRight = true;

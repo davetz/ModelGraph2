@@ -9,7 +9,7 @@ namespace ModelGraph.Core
         {
             Owner = owner;
             Item = item;
-            IdKey = idKe;
+            OldIdKey = idKe;
             owner.Add(this);
         }
         #endregion

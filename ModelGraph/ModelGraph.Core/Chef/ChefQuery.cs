@@ -8,12 +8,12 @@ namespace ModelGraph.Core
         #region ValidateQueryXStore  ==========================================
         private void ValidateQueryXStore()
         {
-            foreach (var cx in ComputeXStore.Items)
+            foreach (var cx in ComputeXDomain.Items)
             {
                 ValidateComputeQuery(cx);
             }
             RevalidateUnresolved();
-            foreach (var gx in GraphXStore.Items)
+            foreach (var gx in GraphXDomain.Items)
             {
                 ValidateGraphQuery(gx);
             }
@@ -31,7 +31,7 @@ namespace ModelGraph.Core
             }
             else if (SymbolX_QueryX.TryGetParent(qx, out SymbolX sx))
             {
-                ValidateWhere(qx, qx, QueryXStore.WhereProperty, true);
+                ValidateWhere(qx, qx, QueryXDomain.WhereProperty, true);
             }
         }
 
@@ -42,7 +42,7 @@ namespace ModelGraph.Core
             if (clearError)
             {
                 ClearError(cx);
-                ClearError(cx, ComputeXStore.SelectProperty);
+                ClearError(cx, ComputeXDomain.SelectProperty);
             }
             cx.ModelDelta++;
             if (!ComputeX_QueryX.TryGetChild(cx, out QueryX qx))
@@ -56,12 +56,12 @@ namespace ModelGraph.Core
                 {
                     if (cx.CompuType == CompuType.RowValue)
                     {
-                        TryAddErrorNone(cx, ComputeXStore.SelectProperty, IdKey.ComputeMissingSelectError);
+                        TryAddErrorNone(cx, ComputeXDomain.SelectProperty, IdKey.ComputeMissingSelectError);
                     }
                 }
                 else
                 {
-                    ValidateSelect(qx, cx, ComputeXStore.SelectProperty, clearError);
+                    ValidateSelect(qx, cx, ComputeXDomain.SelectProperty, clearError);
                 }
             }
             if (QueryX_QueryX.TryGetChildren(qx, out IList<QueryX> children))
@@ -86,7 +86,7 @@ namespace ModelGraph.Core
             {
                 var anyUnresolved = false;
 
-                foreach (var cx in ComputeXStore.Items)
+                foreach (var cx in ComputeXDomain.Items)
                 {
                     if (cx.Value.ValType == ValType.IsUnresolved)
                     {
@@ -109,8 +109,8 @@ namespace ModelGraph.Core
                 qx.ModelDelta++;
                 if (clearError)
                 {
-                    ClearError(qx, QueryXStore.WhereProperty);
-                    ClearError(qx, QueryXStore.SelectProperty);
+                    ClearError(qx, QueryXDomain.WhereProperty);
+                    ClearError(qx, QueryXDomain.SelectProperty);
                 }
 
                 if (QueryX_QueryX.TryGetChildren(qx, out IList<QueryX> children))
@@ -134,13 +134,13 @@ namespace ModelGraph.Core
                         qx.Select.TryResolve();
                         if (qx.Select.AnyUnresolved)
                         {
-                            var error = TryAddErrorMany(qx, QueryXStore.SelectProperty, IdKey.QueryUnresolvedSelectError);
+                            var error = TryAddErrorMany(qx, QueryXDomain.SelectProperty, IdKey.QueryUnresolvedSelectError);
                             if (error != null) qx.Select.GetTree(error.List);
                         }
                     }
                     else
                     {
-                        var error = TryAddErrorMany(qx, QueryXStore.SelectProperty, IdKey.QueryInvalidSelectError);
+                        var error = TryAddErrorMany(qx, QueryXDomain.SelectProperty, IdKey.QueryInvalidSelectError);
                         if (error != null) qx.Select.GetTree(error.List);
                     }
                 }
@@ -151,13 +151,13 @@ namespace ModelGraph.Core
                         qx.Where.TryResolve();
                         if (qx.Where.AnyUnresolved)
                         {
-                            var error = TryAddErrorMany(qx, QueryXStore.WhereProperty, IdKey.QueryUnresolvedWhereError);
+                            var error = TryAddErrorMany(qx, QueryXDomain.WhereProperty, IdKey.QueryUnresolvedWhereError);
                             if (error != null) qx.Where.GetTree(error.List);
                         }
                     }
                     else
                     {
-                        var error = TryAddErrorMany(qx, QueryXStore.WhereProperty, IdKey.QueryInvalidWhereError);
+                        var error = TryAddErrorMany(qx, QueryXDomain.WhereProperty, IdKey.QueryInvalidWhereError);
                         if (error != null) qx.Where.GetTree(error.List);
                     }
                 }
@@ -308,7 +308,7 @@ namespace ModelGraph.Core
         #region CreateQueryX  =================================================
         private QueryX CreateQueryX(ViewX vx, Store st)
         {
-            var qxNew = new QueryX(QueryXStore, QueryType.View, true);
+            var qxNew = new QueryX(QueryXDomain, QueryType.View, true);
             ItemCreated(qxNew);
             AppendLink(ViewX_QueryX, vx, qxNew);
             AppendLink(Store_QueryX, st, qxNew);
@@ -316,7 +316,7 @@ namespace ModelGraph.Core
         }
         private QueryX CreateQueryX(GraphX gx, Store st)
         {
-            var qxNew = new QueryX(QueryXStore, QueryType.Graph, true);
+            var qxNew = new QueryX(QueryXDomain, QueryType.Graph, true);
             ItemCreated(qxNew);
             AppendLink(GraphX_QueryX, gx, qxNew);
             AppendLink(Store_QueryX, st, qxNew);
@@ -324,7 +324,7 @@ namespace ModelGraph.Core
         }
         private QueryX CreateQueryX(ComputeX cx, Store st)
         {
-            var qxNew = new QueryX(QueryXStore, QueryType.Value, true);
+            var qxNew = new QueryX(QueryXDomain, QueryType.Value, true);
             ItemCreated(qxNew);
             AppendLink(ComputeX_QueryX, cx, qxNew);
             AppendLink(Store_QueryX, st, qxNew);
@@ -333,7 +333,7 @@ namespace ModelGraph.Core
 
         private QueryX CreateQueryX(GraphX gx, SymbolX sx, Store st)
         {
-            var qxNew = new QueryX(QueryXStore, QueryType.Symbol, true);
+            var qxNew = new QueryX(QueryXDomain, QueryType.Symbol, true);
             ItemCreated(qxNew);
             AppendLink(GraphX_SymbolQueryX, gx, qxNew);
             AppendLink(SymbolX_QueryX, sx, qxNew);
@@ -343,7 +343,7 @@ namespace ModelGraph.Core
 
         private QueryX CreateQueryX(ViewX vx, Relation re)
         {
-            var qxNew = new QueryX(QueryXStore, QueryType.View);
+            var qxNew = new QueryX(QueryXDomain, QueryType.View);
             ItemCreated(qxNew);
             AppendLink(ViewX_QueryX, vx, qxNew);
             AppendLink(Relation_QueryX, re, qxNew);
@@ -353,7 +353,7 @@ namespace ModelGraph.Core
         private QueryX CreateQueryX(QueryX qx, Relation re, QueryType kind)
         {
             qx.IsTail = false;
-            var qxNew = new QueryX(QueryXStore, kind);
+            var qxNew = new QueryX(QueryXDomain, kind);
             ItemCreated(qx);
             AppendLink(QueryX_QueryX, qx, qxNew);
             AppendLink(Relation_QueryX, re, qxNew);

@@ -21,5 +21,10 @@ namespace ModelGraph.Core
             }
             return relationArray;
         }
+
+        #region Identity  =====================================================
+        internal override IdKey VKey => IdKey.RelationStore;
+        internal override string ParentNameId => KindId;
+        #endregion
     }
 }

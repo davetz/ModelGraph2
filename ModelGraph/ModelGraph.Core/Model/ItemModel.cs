@@ -72,10 +72,10 @@ namespace ModelGraph.Core
         internal string GetSummaryKey(IdKey idKe) => $"{(int)(idKe & IdKey.KeyMask):X3}S";
         internal string GetDescriptionKey(IdKey idKe) => $"{(int)(idKe & IdKey.KeyMask):X3}V";
 
-        internal string KindKey => GetKindKey(IsProperty ? Item.IdKey : IdKey);
-        internal string NameKey => GetNameKey(IsProperty ? Item.IdKey : IdKey);
-        internal string SummaryKey => GetSummaryKey(IsProperty ? Item.IdKey : IdKey);
-        internal string DescriptionKey => GetDescriptionKey(IsProperty ? Item.IdKey : IdKey);
+        internal string KindKey => GetKindKey(IsProperty ? Item.OldIdKey : IdKey);
+        internal string NameKey => GetNameKey(IsProperty ? Item.OldIdKey : IdKey);
+        internal string SummaryKey => GetSummaryKey(IsProperty ? Item.OldIdKey : IdKey);
+        internal string DescriptionKey => GetDescriptionKey(IsProperty ? Item.OldIdKey : IdKey);
 
         public override string ToString()
         {
@@ -420,8 +420,8 @@ namespace ModelGraph.Core
             if (Aux1 != null && Aux1 is Property)
             {
                 var code1 = (int)(IdKey & IdKey.KeyMask);
-                var code2 = (int)(Aux1.IdKey & IdKey.KeyMask);
-                return $"{IdKey.ToString()}  ({code1.ToString("X3")}){Environment.NewLine}{Aux1.IdKey.ToString()}  ({code2.ToString("X3")})";
+                var code2 = (int)(Aux1.OldIdKey & IdKey.KeyMask);
+                return $"{IdKey.ToString()}  ({code1.ToString("X3")}){Environment.NewLine}{Aux1.OldIdKey.ToString()}  ({code2.ToString("X3")})";
             }
             else
             {

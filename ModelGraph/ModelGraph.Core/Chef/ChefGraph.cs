@@ -361,7 +361,7 @@ namespace ModelGraph.Core
 
         private void RefreshAllGraphs()
         {
-            foreach (var gx in GraphXStore.Items)
+            foreach (var gx in GraphXDomain.Items)
             {
                 if (gx.Count > 0)
                 {

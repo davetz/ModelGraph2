@@ -12,7 +12,7 @@ namespace ModelGraph.Core
         internal PropertyOf<SymbolX, string> NameProperty;
         internal PropertyOf<SymbolX, string> AttachProperty;
 
-        internal SymbolXDomain(Chef chef) : base(chef, IdKey.SymbolXStore)
+        internal SymbolXDomain(Chef chef) : base(chef, IdKey.SymbolXDomain)
         {
             chef.RegisterItemSerializer((_serializerGuid, this));
             CreateProperties(chef);
@@ -23,14 +23,14 @@ namespace ModelGraph.Core
         {
             var props = new List<Property>(2);
             {
-                var p = NameProperty = new PropertyOf<SymbolX, string>(chef.PropertyStore, IdKey.SymbolXNameProperty);
+                var p = NameProperty = new PropertyOf<SymbolX, string>(chef.PropertyDomain, IdKey.SymbolXNameProperty);
                 p.GetValFunc = (item) => p.Cast(item).Name;
                 p.SetValFunc = (item, value) => { p.Cast(item).Name = value; return true; };
                 p.Value = new StringValue(p);
                 props.Add(p);
             }
             {
-                var p = AttachProperty = new PropertyOf<SymbolX, string>(chef.PropertyStore, IdKey.SymbolXAttatchProperty, chef.AttatchEnum);
+                var p = AttachProperty = new PropertyOf<SymbolX, string>(chef.PropertyDomain, IdKey.SymbolXAttatchProperty, chef.AttatchEnum);
                 p.GetValFunc = (item) => chef.GetEnumZName(p.EnumZ, (int)p.Cast(item).Attach);
                 p.SetValFunc = (item, value) => { p.Cast(item).Attach = (Attach)chef.GetEnumZKey(p.EnumZ, value); return true; };
                 p.Value = new StringValue(p);
@@ -81,7 +81,7 @@ namespace ModelGraph.Core
                 }
             }
             else
-                throw new Exception($"ColumnXStore ReadData, unknown format version: {fv}");
+                throw new Exception($"ColumnXDomain ReadData, unknown format version: {fv}");
         }
 
         public void WriteData(DataWriter w, Dictionary<Item, int> itemIndex)

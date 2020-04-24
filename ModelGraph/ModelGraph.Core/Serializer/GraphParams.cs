@@ -150,13 +150,6 @@ namespace ModelGraph.Core
             }
             return false;
         }
-
-        public void PopulateItemIndex(Dictionary<Item, int> itemIndex) 
-        {
-            var chef = _graphXStore.Owner as Chef;
-            itemIndex[chef.DummyItemRef] = 0;
-            itemIndex[chef.DummyQueryXRef] = 0;
-        }
         #endregion
 
         #region ReadData  =====================================================

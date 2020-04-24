@@ -29,7 +29,7 @@ namespace ModelGraph.Core
         #region CreateRelation  ===============================================
         Relation CreateRelation(IdKey idKe, bool autoExpand = false)
         {
-            switch (IdKey)
+            switch (OldIdKey)
             {
                 case IdKey.RowX_RowX:
                     return new RelationX<RowX, RowX>(this, idKe, autoExpand);
@@ -44,28 +44,28 @@ namespace ModelGraph.Core
         {
             var props = new List<Property>(4);
             {
-                var p = NameProperty = new PropertyOf<Relation, string>(chef.PropertyStore, IdKey.RelationNameProperty);
+                var p = NameProperty = new PropertyOf<Relation, string>(chef.PropertyDomain, IdKey.RelationNameProperty);
                 p.GetValFunc = (item) => p.Cast(item).Name;
                 p.SetValFunc = (item, value) => { p.Cast(item).Name = value; return true; };
                 p.Value = new StringValue(p);
                 props.Add(p);
             }
             {
-                var p = SummaryProperty = new PropertyOf<Relation, string>(chef.PropertyStore, IdKey.RelationSummaryProperty);
+                var p = SummaryProperty = new PropertyOf<Relation, string>(chef.PropertyDomain, IdKey.RelationSummaryProperty);
                 p.GetValFunc = (item) => p.Cast(item).Summary;
                 p.SetValFunc = (item, value) => { p.Cast(item).Summary = value; return true; };
                 p.Value = new StringValue(p);
                 props.Add(p);
             }
             {
-                var p = PairingProperty = new PropertyOf<Relation, string>(chef.PropertyStore, IdKey.RelationPairingProperty, chef.PairingEnum);
+                var p = PairingProperty = new PropertyOf<Relation, string>(chef.PropertyDomain, IdKey.RelationPairingProperty, chef.PairingEnum);
                 p.GetValFunc = (item) => chef.GetEnumZName(p.EnumZ, (int)p.Cast(item).Pairing);
                 p.SetValFunc = (item, value) => p.Cast(item).TrySetPairing((Pairing)chef.GetEnumZKey(p.EnumZ, value));
                 p.Value = new StringValue(p);
                 props.Add(p);
             }
             {
-                var p = IsRequiredProperty = new PropertyOf<Relation, bool>(chef.PropertyStore, IdKey.RelationIsRequiredProperty);
+                var p = IsRequiredProperty = new PropertyOf<Relation, bool>(chef.PropertyDomain, IdKey.RelationIsRequiredProperty);
                 p.GetValFunc = (item) => p.Cast(item).IsRequired;
                 p.SetValFunc = (item, value) => { p.Cast(item).IsRequired = value; return true; };
                 p.Value = new BoolValue(p);

@@ -156,25 +156,5 @@
             new PairZ(ComputeTypeEnum, IdKey.CompuType_CompositeString);
             new PairZ(ComputeTypeEnum, IdKey.CompuType_CompositeReversed);
         }
-
-        private void ReleaseEnums()
-        {
-            ValueTypeEnum = null;
-            PairingEnum = null;
-
-            OrientationEnum = null;
-            LabelingEnum = null;
-            ResizingEnum = null;
-            BarWidthEnum = null;
-
-            SideEnum = null;
-            FacetEnum = null;
-            ConnectEnum = null;
-            ContactEnum = null;
-            ComputeTypeEnum = null;
-            AttatchEnum = null;
-            LineStyleEnum = null;
-            DashStyleEnum = null;
-        }
     }
 }

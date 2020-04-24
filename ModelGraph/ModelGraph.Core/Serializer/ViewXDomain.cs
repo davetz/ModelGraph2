@@ -13,7 +13,7 @@ namespace ModelGraph.Core
         internal PropertyOf<ViewX, string> NameProperty;
         internal PropertyOf<ViewX, string> SummaryProperty;
 
-        internal ViewXDomain(Chef chef) : base(chef, IdKey.ViewXStore, 30)
+        internal ViewXDomain(Chef chef) : base(chef, IdKey.ViewXDomain, 30)
         {
             chef.RegisterItemSerializer((_serializerGuid, this));
             CreateProperties(chef);
@@ -24,14 +24,14 @@ namespace ModelGraph.Core
         {
             var props = new List<Property>(4);
             {
-                var p = NameProperty = new PropertyOf<ViewX, string>(chef.PropertyStore, IdKey.ViewNameProperty);
+                var p = NameProperty = new PropertyOf<ViewX, string>(chef.PropertyDomain, IdKey.ViewNameProperty);
                 p.GetValFunc = (item) => p.Cast(item).Name;
                 p.SetValFunc = (item, value) => { p.Cast(item).Name = value; return true; };
                 p.Value = new StringValue(p);
                 props.Add(p);
             }
             {
-                var p = SummaryProperty = new PropertyOf<ViewX, string>(chef.PropertyStore, IdKey.ViewSummaryProperty);
+                var p = SummaryProperty = new PropertyOf<ViewX, string>(chef.PropertyDomain, IdKey.ViewSummaryProperty);
                 p.GetValFunc = (item) => p.Cast(item).Summary;
                 p.SetValFunc = (item, value) => { p.Cast(item).Summary = value; return true; };
                 p.Value = new StringValue(p);
@@ -65,7 +65,7 @@ namespace ModelGraph.Core
                 }
             }
             else
-                throw new Exception($"ViewXStore ReadData, unknown format version: {fv}");
+                throw new Exception($"ViewXDomain ReadData, unknown format version: {fv}");
         }
 
         public void WriteData(DataWriter w, Dictionary<Item, int> itemIndex)

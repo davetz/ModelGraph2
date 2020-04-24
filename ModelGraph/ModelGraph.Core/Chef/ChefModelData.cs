@@ -2123,10 +2123,10 @@ namespace ModelGraph.Core
 
                     m.InitChildModels(prev);
 
-                    AddChildModel(prev, m, IdKey.MetaViewViewListModel, ViewXStore, null, null, MetaViewXViewList_X);
+                    AddChildModel(prev, m, IdKey.MetaViewViewListModel, ViewXDomain, null, null, MetaViewXViewList_X);
                     AddChildModel(prev, m, IdKey.MetaEnumListModel, EnumZStore, null, null, MetaEnumList_X);
-                    AddChildModel(prev, m, IdKey.MetaTableListModel, TableXStore, null, null, MetaTableList_X);
-                    AddChildModel(prev, m, IdKey.MetaGraphListModel, GraphXStore, null, null, MetaGraphList_X);
+                    AddChildModel(prev, m, IdKey.MetaTableListModel, TableXDomain, null, null, MetaTableList_X);
+                    AddChildModel(prev, m, IdKey.MetaGraphListModel, GraphXDomain, null, null, MetaGraphList_X);
                     AddChildModel(prev, m, IdKey.InternalStoreListModel, this, null, null, InternalStoreList_X);
 
                     return (true, true);
@@ -2590,10 +2590,10 @@ namespace ModelGraph.Core
 
                     m.InitChildModels(prev);
 
-                    AddChildModel(prev, m, IdKey.MetaViewViewListModel, ViewXStore, null, null, MetaViewXViewList_X);
+                    AddChildModel(prev, m, IdKey.MetaViewViewListModel, ViewXDomain, null, null, MetaViewXViewList_X);
                     AddChildModel(prev, m, IdKey.MetaEnumListModel, EnumZStore, null, null, MetaEnumList_X);
-                    AddChildModel(prev, m, IdKey.MetaTableListModel, TableXStore, null, null, MetaTableList_X);
-                    AddChildModel(prev, m, IdKey.MetaGraphListModel, GraphXStore, null, null, MetaGraphList_X);
+                    AddChildModel(prev, m, IdKey.MetaTableListModel, TableXDomain, null, null, MetaTableList_X);
+                    AddChildModel(prev, m, IdKey.MetaGraphListModel, GraphXDomain, null, null, MetaGraphList_X);
                     AddChildModel(prev, m, IdKey.InternalStoreListModel, this, null, null, InternalStoreList_X);
 
                     return (true, true);
@@ -2663,7 +2663,7 @@ namespace ModelGraph.Core
             {
                 ModelParms = (m) =>
                 {
-                    var views = ViewXStore.Items;
+                    var views = ViewXDomain.Items;
                     var (kind, name) = GetKindName(m);
                     var count = 0;
                     foreach (var vx in views) { if (ViewX_ViewX.HasNoParent(vx)) count++; }
@@ -2689,14 +2689,14 @@ namespace ModelGraph.Core
                 ModelDrop = (m, d, doDrop) =>
                 {
                     var vxDrop = d.ViewX;
-                    if (vxDrop != null && vxDrop.Owner == ViewXStore)
+                    if (vxDrop != null && vxDrop.Owner == ViewXDomain)
                     {
                         if (doDrop)
                         {
                             if (ViewX_ViewX.TryGetParent(vxDrop, out ViewX vxDropParent))
                                 RemoveLink(ViewX_ViewX, vxDropParent, vxDrop);
 
-                            var prevIndex = ViewXStore.IndexOf(vxDrop);
+                            var prevIndex = ViewXDomain.IndexOf(vxDrop);
                             ItemMoved(vxDrop, prevIndex, 0);
                         }
                         return DropAction.Move;
@@ -2708,12 +2708,12 @@ namespace ModelGraph.Core
 
                 Validate = (m,prev) =>
                 {
-                    if (ViewXStore.Count == 0) return (false, false);
+                    if (ViewXDomain.Count == 0) return (false, false);
 
-                    if (ViewXStore.ChildDelta == m.ChildDelta) return (true, false);
-                    m.ChildDelta = ViewXStore.ChildDelta;
+                    if (ViewXDomain.ChildDelta == m.ChildDelta) return (true, false);
+                    m.ChildDelta = ViewXDomain.ChildDelta;
 
-                    var items = ViewXStore.Items;
+                    var items = ViewXDomain.Items;
                     m.InitChildModels(prev, items.Count);
 
                     var anyChange = prev.Count != items.Count;
@@ -2737,7 +2737,7 @@ namespace ModelGraph.Core
 
             void Insert(ItemModel model)
             {
-                ItemCreated(new ViewX(ViewXStore, true));
+                ItemCreated(new ViewX(ViewXDomain, true));
             }
         }
         #endregion
@@ -2795,7 +2795,7 @@ namespace ModelGraph.Core
                     {
                         if (d.Item is ViewX vx)
                         {
-                            if (vx.Owner == ViewXStore)
+                            if (vx.Owner == ViewXDomain)
                             {
                                 if (ViewX_QueryX.HasNoChildren(view) && ViewX_Property.HasNoChildren(view))
                                 {
@@ -2863,8 +2863,8 @@ namespace ModelGraph.Core
 
                     if (m.IsExpandedRight)
                     {
-                        anyChange |= AddProperyModel(prev, m, ViewXStore.NameProperty);
-                        anyChange |= AddProperyModel(prev, m, ViewXStore.SummaryProperty);
+                        anyChange |= AddProperyModel(prev, m, ViewXDomain.NameProperty);
+                        anyChange |= AddProperyModel(prev, m, ViewXDomain.SummaryProperty);
                     }
 
                     if (m.IsExpandedLeft)
@@ -2906,7 +2906,7 @@ namespace ModelGraph.Core
 
             void Insert(ItemModel model)
             {
-                var vx = new ViewX(ViewXStore, true);
+                var vx = new ViewX(ViewXDomain, true);
                 ItemCreated(vx);
                 AppendLink(ViewX_ViewX, model.Item, vx);
             }
@@ -3000,9 +3000,9 @@ namespace ModelGraph.Core
 
                     if (m.IsExpandedRight)
                     {
-                        anyChange |= AddProperyModel(prev, m, QueryXStore.RelationProperty);
-                        anyChange |= AddProperyModel(prev, m, QueryXStore.IsReversedProperty);
-                        anyChange |= AddProperyModel(prev, m, QueryXStore.RootWhereProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXDomain.RelationProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXDomain.IsReversedProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXDomain.RootWhereProperty);
                     }
 
                     if (m.IsExpandedLeft)
@@ -3056,7 +3056,7 @@ namespace ModelGraph.Core
 
             void Insert(ItemModel model)
             {
-                var vx = new ViewX(ViewXStore, true);
+                var vx = new ViewX(ViewXDomain, true);
                 ItemCreated(vx);
                 AppendLink(QueryX_ViewX, model.Item, vx);
             }
@@ -3126,7 +3126,7 @@ namespace ModelGraph.Core
             {
                 ModelParms = (m) =>
                 {
-                    var views = ViewXStore.Items;
+                    var views = ViewXDomain.Items;
                     var (kind, name) = GetKindName(m);
                     var count = 0;
                     foreach (var vx in views) { if (ViewX_ViewX.HasNoParent(vx)) count++; }
@@ -3150,13 +3150,13 @@ namespace ModelGraph.Core
 
                 Validate = (m,prev) =>
                 {
-                    if (ViewXStore.Count == 0) return (false, false);
+                    if (ViewXDomain.Count == 0) return (false, false);
 
-                    if (ViewXStore.ChildDelta == m.ChildDelta) return (true, false);
-                    m.ChildDelta = ViewXStore.ChildDelta;
+                    if (ViewXDomain.ChildDelta == m.ChildDelta) return (true, false);
+                    m.ChildDelta = ViewXDomain.ChildDelta;
 
                     m.InitChildModels(prev);
-                    var items = ViewXStore.Items;
+                    var items = ViewXDomain.Items;
 
                     var anyChange = prev.Count != items.Count;
                     foreach (var itm in items)
@@ -3402,7 +3402,7 @@ namespace ModelGraph.Core
                 ModelParms = (m) =>
                 {
                     var (kind, name) = GetKindName(m);
-                    var count = EnumXStore.Count;
+                    var count = EnumXDomain.Count;
 
                     m.CanExpandLeft = (count > 0);
                     m.CanFilter = (count > 2);
@@ -3426,7 +3426,7 @@ namespace ModelGraph.Core
 
                 Validate = (m,prev) =>
                 {
-                    var store = EnumXStore;
+                    var store = EnumXDomain;
                     if (store.Count == 0) return (false, false);
                     if (store.ChildDelta == m.ChildDelta) return (true, false);
 
@@ -3452,7 +3452,7 @@ namespace ModelGraph.Core
 
             void Insert(ItemModel model)
             {
-                ItemCreated(new EnumX(EnumXStore, true));
+                ItemCreated(new EnumX(EnumXDomain, true));
             }
         }
         #endregion
@@ -3465,7 +3465,7 @@ namespace ModelGraph.Core
             {
                 ModelParms = (m) =>
                 {
-                    var count = TableXStore.Count;
+                    var count = TableXDomain.Count;
                     var (kind, name) = GetKindName(m);
 
                     m.CanExpandLeft = (count > 0);
@@ -3494,7 +3494,7 @@ namespace ModelGraph.Core
 
                 Validate = (m,prev) =>
                 {
-                    var store = TableXStore;
+                    var store = TableXDomain;
                     if (store.Count == 0) return (false, false);
                     if (store.ChildDelta == m.ChildDelta) return (true, false);
 
@@ -3520,7 +3520,7 @@ namespace ModelGraph.Core
 
             void Insert(ItemModel model)
             {
-                ItemCreated(new TableX(TableXStore, true));
+                ItemCreated(new TableX(TableXDomain, true));
             }
         }
         #endregion
@@ -3534,7 +3534,7 @@ namespace ModelGraph.Core
                 ModelParms = (m) =>
                 {
                     var (kind, name) = GetKindName(m);
-                    var count = GraphXStore.Count;
+                    var count = GraphXDomain.Count;
 
                     m.CanExpandLeft = (count > 0);
                     m.CanFilter = (count > 2);
@@ -3562,7 +3562,7 @@ namespace ModelGraph.Core
 
                 Validate = (m,prev) =>
                 {
-                    var store = GraphXStore;
+                    var store = GraphXDomain;
                     if (store.Count == 0) return (false, false);
                     if (store.ChildDelta == m.ChildDelta) return (true, false);
 
@@ -3588,7 +3588,7 @@ namespace ModelGraph.Core
 
             void Insert(ItemModel model)
             {
-                ItemCreated(new GraphX(GraphXStore, true));
+                ItemCreated(new GraphX(GraphXDomain, true));
                 model.IsExpandedLeft = true;
             }
         }
@@ -3637,7 +3637,7 @@ namespace ModelGraph.Core
                     if (doDrop)
                     {
                         var gd = m.Item as GraphX;
-                        var sym = new SymbolX(SymbolXStore, true);
+                        var sym = new SymbolX(SymbolXDomain, true);
                         ItemCreated(sym);
                         AppendLink(GraphX_SymbolX, gd, sym);
                         m.IsExpandedLeft = true;
@@ -3675,7 +3675,7 @@ namespace ModelGraph.Core
             void Insert(ItemModel model)
             {
                 var gd = model.Item as GraphX;
-                var sym = new SymbolX(SymbolXStore, true);
+                var sym = new SymbolX(SymbolXDomain, true);
                 ItemCreated(sym);
                 AppendLink(GraphX_SymbolX, gd, sym);
                 model.IsExpandedLeft = true;
@@ -3716,10 +3716,10 @@ namespace ModelGraph.Core
 
                     m.InitChildModels(prev);
 
-                    AddProperyModel(prev, m, GraphXStore.TerminalLengthProperty);
-                    AddProperyModel(prev, m, GraphXStore.TerminalSpacingProperty);
-                    AddProperyModel(prev, m, GraphXStore.TerminalStretchProperty);
-                    AddProperyModel(prev, m, GraphXStore.SymbolSizeProperty);
+                    AddProperyModel(prev, m, GraphXDomain.TerminalLengthProperty);
+                    AddProperyModel(prev, m, GraphXDomain.TerminalSpacingProperty);
+                    AddProperyModel(prev, m, GraphXDomain.TerminalStretchProperty);
+                    AddProperyModel(prev, m, GraphXDomain.SymbolSizeProperty);
 
                     return (true, true);
                 }
@@ -3740,7 +3740,7 @@ namespace ModelGraph.Core
                 ModelParms = (m) =>
                 {
                     var (kind, name) = GetKindName(m);
-                    var count = TableXStore.Count;
+                    var count = TableXDomain.Count;
 
                     m.CanExpandLeft = (count > 0);
                     m.CanFilter = (count > 2);
@@ -3761,7 +3761,7 @@ namespace ModelGraph.Core
 
                 Validate = (m,prev) =>
                 {
-                    var store = TableXStore;
+                    var store = TableXDomain;
                     if (store.Count == 0) return (false, false);
                     if (store.ChildDelta == m.ChildDelta) return (true, false);
 
@@ -3794,7 +3794,7 @@ namespace ModelGraph.Core
                 ModelParms = (m) =>
                 {
                     var (kind, name) = GetKindName(m);
-                    var count = GraphXStore.Count;
+                    var count = GraphXDomain.Count;
 
                     m.CanExpandLeft = (count > 0);
                     m.CanFilter = (count > 2);
@@ -3815,7 +3815,7 @@ namespace ModelGraph.Core
 
                 Validate = (m,prev) =>
                 {
-                    var store = GraphXStore;
+                    var store = GraphXDomain;
                     if (store.Count == 0) return (false, false);
                     if (store.ChildDelta == m.ChildDelta) return (true, false);
 
@@ -3878,8 +3878,8 @@ namespace ModelGraph.Core
 
                     m.InitChildModels(prev);
 
-                    AddProperyModel(prev, m, EnumXStore.TextProperty);
-                    AddProperyModel(prev, m, EnumXStore.ValueProperty);
+                    AddProperyModel(prev, m, EnumXDomain.TextProperty);
+                    AddProperyModel(prev, m, EnumXDomain.ValueProperty);
 
                     return (true, true);
                 }
@@ -3942,8 +3942,8 @@ namespace ModelGraph.Core
                     var anyChange = false;
                     if (m.IsExpandedRight)
                     {
-                        anyChange |= AddProperyModel(prev, m, EnumXStore.NameProperty);
-                        anyChange |= AddProperyModel(prev, m, EnumXStore.SummaryProperty);
+                        anyChange |= AddProperyModel(prev, m, EnumXDomain.NameProperty);
+                        anyChange |= AddProperyModel(prev, m, EnumXDomain.SummaryProperty);
                     }
 
                     if (m.IsExpandedLeft)
@@ -4015,8 +4015,8 @@ namespace ModelGraph.Core
 
                     if (m.IsExpandedRight)
                     {
-                        AddProperyModel(prev, m, TableXStore.NameProperty);
-                        AddProperyModel(prev, m, TableXStore.SummaryProperty);
+                        AddProperyModel(prev, m, TableXDomain.NameProperty);
+                        AddProperyModel(prev, m, TableXDomain.SummaryProperty);
                     }
 
                     if (m.IsExpandedLeft)
@@ -4084,8 +4084,8 @@ namespace ModelGraph.Core
 
                     if (m.IsExpandedRight)
                     {
-                        AddProperyModel(prev, m, GraphXStore.NameProperty);
-                        AddProperyModel(prev, m, GraphXStore.SummaryProperty);
+                        AddProperyModel(prev, m, GraphXDomain.NameProperty);
+                        AddProperyModel(prev, m, GraphXDomain.SummaryProperty);
                     }
 
                     if (m.IsExpandedLeft)
@@ -4156,8 +4156,8 @@ namespace ModelGraph.Core
 
                     m.InitChildModels(prev);
 
-                    AddProperyModel(prev, m, SymbolXStore.NameProperty);
-                    AddProperyModel(prev, m, SymbolXStore.AttachProperty);
+                    AddProperyModel(prev, m, SymbolXDomain.NameProperty);
+                    AddProperyModel(prev, m, SymbolXDomain.AttachProperty);
 
                     return (true, true);
                 }
@@ -4214,10 +4214,10 @@ namespace ModelGraph.Core
 
                     m.InitChildModels(prev);
 
-                    AddProperyModel(prev, m, ColumnXStore.NameProperty);
-                    AddProperyModel(prev, m, ColumnXStore.SummaryProperty);
-                    AddProperyModel(prev, m, ColumnXStore.TypeOfProperty);
-                    AddProperyModel(prev, m, ColumnXStore.IsChoiceProperty);
+                    AddProperyModel(prev, m, ColumnXDomain.NameProperty);
+                    AddProperyModel(prev, m, ColumnXDomain.SummaryProperty);
+                    AddProperyModel(prev, m, ColumnXDomain.TypeOfProperty);
+                    AddProperyModel(prev, m, ColumnXDomain.IsChoiceProperty);
 
                     return (true, true);
                 }
@@ -4301,36 +4301,36 @@ namespace ModelGraph.Core
                             case CompuType.RowValue:
                                 if (qx.HasSelect)
                                 {
-                                    AddProperyModel(prev, m, ComputeXStore.NameProperty);
-                                    AddProperyModel(prev, m, ComputeXStore.SummaryProperty);
-                                    AddProperyModel(prev, m, ComputeXStore.CompuTypeProperty);
-                                    AddProperyModel(prev, m, ComputeXStore.SelectProperty);
-                                    AddProperyModel(prev, m, ComputeXStore.ValueTypeProperty);
+                                    AddProperyModel(prev, m, ComputeXDomain.NameProperty);
+                                    AddProperyModel(prev, m, ComputeXDomain.SummaryProperty);
+                                    AddProperyModel(prev, m, ComputeXDomain.CompuTypeProperty);
+                                    AddProperyModel(prev, m, ComputeXDomain.SelectProperty);
+                                    AddProperyModel(prev, m, ComputeXDomain.ValueTypeProperty);
                                 }
                                 else
                                 {
-                                    AddProperyModel(prev, m, ComputeXStore.NameProperty);
-                                    AddProperyModel(prev, m, ComputeXStore.SummaryProperty);
-                                    AddProperyModel(prev, m, ComputeXStore.CompuTypeProperty);
-                                    AddProperyModel(prev, m, ComputeXStore.SelectProperty);
+                                    AddProperyModel(prev, m, ComputeXDomain.NameProperty);
+                                    AddProperyModel(prev, m, ComputeXDomain.SummaryProperty);
+                                    AddProperyModel(prev, m, ComputeXDomain.CompuTypeProperty);
+                                    AddProperyModel(prev, m, ComputeXDomain.SelectProperty);
                                 }
                                 break;
 
                             case CompuType.RelatedValue:
-                                AddProperyModel(prev, m, ComputeXStore.NameProperty);
-                                AddProperyModel(prev, m, ComputeXStore.SummaryProperty);
-                                AddProperyModel(prev, m, ComputeXStore.CompuTypeProperty);
-                                AddProperyModel(prev, m, ComputeXStore.ValueTypeProperty);
+                                AddProperyModel(prev, m, ComputeXDomain.NameProperty);
+                                AddProperyModel(prev, m, ComputeXDomain.SummaryProperty);
+                                AddProperyModel(prev, m, ComputeXDomain.CompuTypeProperty);
+                                AddProperyModel(prev, m, ComputeXDomain.ValueTypeProperty);
                                 break;
 
                             case CompuType.CompositeString:
                             case CompuType.CompositeReversed:
-                                AddProperyModel(prev, m, ComputeXStore.NameProperty);
-                                AddProperyModel(prev, m, ComputeXStore.SummaryProperty);
-                                AddProperyModel(prev, m, ComputeXStore.CompuTypeProperty);
-                                AddProperyModel(prev, m, ComputeXStore.SeparatorProperty);
-                                AddProperyModel(prev, m, ComputeXStore.SelectProperty);
-                                AddProperyModel(prev, m, ComputeXStore.ValueTypeProperty);
+                                AddProperyModel(prev, m, ComputeXDomain.NameProperty);
+                                AddProperyModel(prev, m, ComputeXDomain.SummaryProperty);
+                                AddProperyModel(prev, m, ComputeXDomain.CompuTypeProperty);
+                                AddProperyModel(prev, m, ComputeXDomain.SeparatorProperty);
+                                AddProperyModel(prev, m, ComputeXDomain.SelectProperty);
+                                AddProperyModel(prev, m, ComputeXDomain.ValueTypeProperty);
                                 break;
                         }
                     }
@@ -4396,7 +4396,7 @@ namespace ModelGraph.Core
 
                     m.InitChildModels(prev);
 
-                    AddProperyModel(prev, m, SymbolXStore.NameProperty);
+                    AddProperyModel(prev, m, SymbolXDomain.NameProperty);
 
                     return (true, true);
                 }
@@ -4481,7 +4481,7 @@ namespace ModelGraph.Core
 
             void Insert(ItemModel model)
             {
-                var col = new ColumnX(ColumnXStore, true);
+                var col = new ColumnX(ColumnXDomain, true);
                 ItemCreated(col); AppendLink(Store_ColumnX, model.Item, col);
             }
         }
@@ -4550,7 +4550,7 @@ namespace ModelGraph.Core
 
             void Insert(ItemModel model)
             {
-                var rel = new RelationXO(RelationXStore);
+                var rel = new RelationXO(RelationXDomain);
                 ItemCreated(rel); AppendLink(Store_ChildRelation, model.Item, rel);
             }
         }
@@ -4618,7 +4618,7 @@ namespace ModelGraph.Core
 
             void Insert(ItemModel model)
             {
-                var rel = new RelationXO(RelationXStore, true); ItemCreated(rel);
+                var rel = new RelationXO(RelationXDomain, true); ItemCreated(rel);
                 AppendLink(Store_ParentRelation, model.Item, rel);
             }
         }
@@ -4827,7 +4827,7 @@ namespace ModelGraph.Core
             void Insert(ItemModel model)
             {
                 var st = model.Item as Store;
-                var cx = new ComputeX(ComputeXStore);
+                var cx = new ComputeX(ComputeXDomain);
                 ItemCreated(cx);
                 AppendLink(Store_ComputeX, st, cx);
 
@@ -4892,10 +4892,10 @@ namespace ModelGraph.Core
 
                     m.InitChildModels(prev);
 
-                    AddProperyModel(prev, m, RelationXStore.NameProperty);
-                    AddProperyModel(prev, m, RelationXStore.SummaryProperty);
-                    AddProperyModel(prev, m, RelationXStore.PairingProperty);
-                    AddProperyModel(prev, m, RelationXStore.IsRequiredProperty);
+                    AddProperyModel(prev, m, RelationXDomain.NameProperty);
+                    AddProperyModel(prev, m, RelationXDomain.SummaryProperty);
+                    AddProperyModel(prev, m, RelationXDomain.PairingProperty);
+                    AddProperyModel(prev, m, RelationXDomain.IsRequiredProperty);
 
                     return (true, true);
                 }
@@ -4961,10 +4961,10 @@ namespace ModelGraph.Core
 
                     m.InitChildModels(prev);
 
-                    AddProperyModel(prev, m, RelationXStore.NameProperty);
-                    AddProperyModel(prev, m, RelationXStore.SummaryProperty);
-                    AddProperyModel(prev, m, RelationXStore.PairingProperty);
-                    AddProperyModel(prev, m, RelationXStore.IsRequiredProperty);
+                    AddProperyModel(prev, m, RelationXDomain.NameProperty);
+                    AddProperyModel(prev, m, RelationXDomain.SummaryProperty);
+                    AddProperyModel(prev, m, RelationXDomain.PairingProperty);
+                    AddProperyModel(prev, m, RelationXDomain.IsRequiredProperty);
 
                     return (true, true);
                 }
@@ -5583,7 +5583,7 @@ namespace ModelGraph.Core
                     var anyChange = false;
                     if (m.IsExpandedRight)
                     {
-                        anyChange |= AddProperyModel(prev, m, QueryXStore.RootWhereProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXDomain.RootWhereProperty);
                     }
 
                     if (m.IsExpandedLeft)
@@ -5701,9 +5701,9 @@ namespace ModelGraph.Core
                     var anyChange = false;
                     if (m.IsExpandedRight)
                     {
-                        anyChange |= AddProperyModel(prev, m, QueryXStore.RelationProperty);
-                        anyChange |= AddProperyModel(prev, m, QueryXStore.IsReversedProperty);
-                        anyChange |= AddProperyModel(prev, m, QueryXStore.RootWhereProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXDomain.RelationProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXDomain.IsReversedProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXDomain.RootWhereProperty);
                     }
 
                     if (m.IsExpandedLeft)
@@ -5811,20 +5811,20 @@ namespace ModelGraph.Core
                     var anyChange = false;
                     if (m.IsExpandedRight)
                     {
-                        anyChange |= AddProperyModel(prev, m, QueryXStore.RelationProperty);
-                        anyChange |= AddProperyModel(prev, m, QueryXStore.IsReversedProperty);
-                        anyChange |= AddProperyModel(prev, m, QueryXStore.IsBreakPointProperty);
-                        anyChange |= AddProperyModel(prev, m, QueryXStore.ExclusiveKeyProperty);
-                                                anyChange |= AddProperyModel(prev, m, QueryXStore.RootWhereProperty);
-                        anyChange |= AddProperyModel(prev, m, QueryXStore.LineColorProperty);
-                        anyChange |= AddProperyModel(prev, m, QueryXStore.LineStyleProperty);
-                        anyChange |= AddProperyModel(prev, m, QueryXStore.DashStyleProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXDomain.RelationProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXDomain.IsReversedProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXDomain.IsBreakPointProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXDomain.ExclusiveKeyProperty);
+                                                anyChange |= AddProperyModel(prev, m, QueryXDomain.RootWhereProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXDomain.LineColorProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXDomain.LineStyleProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXDomain.DashStyleProperty);
 
-                        anyChange |= AddProperyModel(prev, m, QueryXStore.Facet1Property);
-                        anyChange |= AddProperyModel(prev, m, QueryXStore.Connect1Property);
+                        anyChange |= AddProperyModel(prev, m, QueryXDomain.Facet1Property);
+                        anyChange |= AddProperyModel(prev, m, QueryXDomain.Connect1Property);
 
-                        anyChange |= AddProperyModel(prev, m, QueryXStore.Facet2Property);
-                        anyChange |= AddProperyModel(prev, m, QueryXStore.Connect2Property);
+                        anyChange |= AddProperyModel(prev, m, QueryXDomain.Facet2Property);
+                        anyChange |= AddProperyModel(prev, m, QueryXDomain.Connect2Property);
                     }
 
                     if (m.IsExpandedLeft)
@@ -5904,10 +5904,10 @@ namespace ModelGraph.Core
                     var anyChange = false;
                     if (m.IsExpandedRight)
                     {
-                        anyChange |= AddProperyModel(prev, m, QueryXStore.RelationProperty);
-                        anyChange |= AddProperyModel(prev, m, QueryXStore.IsReversedProperty);
-                        anyChange |= AddProperyModel(prev, m, QueryXStore.IsBreakPointProperty);
-                        anyChange |= AddProperyModel(prev, m, QueryXStore.RootWhereProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXDomain.RelationProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXDomain.IsReversedProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXDomain.IsBreakPointProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXDomain.RootWhereProperty);
                     }
 
                     if (m.IsExpandedLeft)
@@ -5983,9 +5983,9 @@ namespace ModelGraph.Core
                     var anyChange = false;
                     if (m.IsExpandedRight)
                     {
-                        anyChange |= AddProperyModel(prev, m, QueryXStore.RelationProperty);
-                        anyChange |= AddProperyModel(prev, m, QueryXStore.IsReversedProperty);
-                        anyChange |= AddProperyModel(prev, m, QueryXStore.RootWhereProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXDomain.RelationProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXDomain.IsReversedProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXDomain.RootWhereProperty);
                     }
 
                     if (m.IsExpandedLeft)
@@ -6065,9 +6065,9 @@ namespace ModelGraph.Core
                     var anyChange = false;
                     if (m.IsExpandedRight)
                     {
-                        anyChange |= AddProperyModel(prev, m, QueryXStore.RelationProperty);
-                        anyChange |= AddProperyModel(prev, m, QueryXStore.IsReversedProperty);
-                        anyChange |= AddProperyModel(prev, m, QueryXStore.RootWhereProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXDomain.RelationProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXDomain.IsReversedProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXDomain.RootWhereProperty);
                     }
 
                     if (m.IsExpandedLeft)
@@ -6147,9 +6147,9 @@ namespace ModelGraph.Core
                     var anyChange = false;
                     if (m.IsExpandedRight)
                     {
-                        anyChange |= AddProperyModel(prev, m, QueryXStore.RelationProperty);
-                        anyChange |= AddProperyModel(prev, m, QueryXStore.IsReversedProperty);
-                        anyChange |= AddProperyModel(prev, m, QueryXStore.RootWhereProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXDomain.RelationProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXDomain.IsReversedProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXDomain.RootWhereProperty);
                     }
 
                     if (m.IsExpandedLeft)
@@ -6229,9 +6229,9 @@ namespace ModelGraph.Core
                     var anyChange = false;
                     if (m.IsExpandedRight)
                     {
-                        anyChange |= AddProperyModel(prev, m, QueryXStore.RelationProperty);
-                        anyChange |= AddProperyModel(prev, m, QueryXStore.IsReversedProperty);
-                        anyChange |= AddProperyModel(prev, m, QueryXStore.RootWhereProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXDomain.RelationProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXDomain.IsReversedProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXDomain.RootWhereProperty);
                     }
 
                     if (m.IsExpandedLeft)
@@ -6294,7 +6294,7 @@ namespace ModelGraph.Core
 
                     m.InitChildModels(prev);
 
-                    AddProperyModel(prev, m, QueryXStore.WhereProperty);
+                    AddProperyModel(prev, m, QueryXDomain.WhereProperty);
 
                     return (true, true);
                 }
@@ -6369,19 +6369,19 @@ namespace ModelGraph.Core
                     {
                         if (qx.HasSelect)
                         {
-                            anyChange |= AddProperyModel(prev, m, QueryXStore.RelationProperty);
-                            anyChange |= AddProperyModel(prev, m, QueryXStore.IsReversedProperty);
-                            anyChange |= AddProperyModel(prev, m, QueryXStore.RootWhereProperty);
-                            anyChange |= AddProperyModel(prev, m, QueryXStore.SelectProperty);
-                            anyChange |= AddProperyModel(prev, m, QueryXStore.ValueTypeProperty);
+                            anyChange |= AddProperyModel(prev, m, QueryXDomain.RelationProperty);
+                            anyChange |= AddProperyModel(prev, m, QueryXDomain.IsReversedProperty);
+                            anyChange |= AddProperyModel(prev, m, QueryXDomain.RootWhereProperty);
+                            anyChange |= AddProperyModel(prev, m, QueryXDomain.SelectProperty);
+                            anyChange |= AddProperyModel(prev, m, QueryXDomain.ValueTypeProperty);
 
                         }
                         else
                         {
-                            anyChange |= AddProperyModel(prev, m, QueryXStore.RelationProperty);
-                            anyChange |= AddProperyModel(prev, m, QueryXStore.IsReversedProperty);
-                            anyChange |= AddProperyModel(prev, m, QueryXStore.RootWhereProperty);
-                            anyChange |= AddProperyModel(prev, m, QueryXStore.SelectProperty);
+                            anyChange |= AddProperyModel(prev, m, QueryXDomain.RelationProperty);
+                            anyChange |= AddProperyModel(prev, m, QueryXDomain.IsReversedProperty);
+                            anyChange |= AddProperyModel(prev, m, QueryXDomain.RootWhereProperty);
+                            anyChange |= AddProperyModel(prev, m, QueryXDomain.SelectProperty);
                         }
                     }
 
@@ -6464,11 +6464,11 @@ namespace ModelGraph.Core
                     var anyChange = false;
                     if (m.IsExpandedRight)
                     {
-                        anyChange |= AddProperyModel(prev, m, QueryXStore.RelationProperty);
-                        anyChange |= AddProperyModel(prev, m, QueryXStore.IsReversedProperty);
-                        anyChange |= AddProperyModel(prev, m, QueryXStore.RootWhereProperty);
-                        anyChange |= AddProperyModel(prev, m, QueryXStore.SelectProperty);
-                        anyChange |= AddProperyModel(prev, m, QueryXStore.ValueTypeProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXDomain.RelationProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXDomain.IsReversedProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXDomain.RootWhereProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXDomain.SelectProperty);
+                        anyChange |= AddProperyModel(prev, m, QueryXDomain.ValueTypeProperty);
                     }
 
                     if (m.IsExpandedLeft)
@@ -7990,7 +7990,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (m.GraphX.IdKey.ToString(), m.GraphX.Name);
+            (string, string) GetKindName(ItemModel m) => (m.GraphX.OldIdKey.ToString(), m.GraphX.Name);
         }
 
         void CreateGraph(ItemModel m)
@@ -8694,17 +8694,17 @@ namespace ModelGraph.Core
 
                     m.InitChildModels(prev);
 
-                    AddChildModel(prev, m, IdKey.InternalStoreModel, ViewXStore, null, null, InternalStore_X);
-                    AddChildModel(prev, m, IdKey.InternalStoreModel, EnumXStore, null, null, InternalStore_X);
-                    AddChildModel(prev, m,  IdKey.InternalStoreModel, TableXStore, null, null, InternalStore_X);
-                    AddChildModel(prev, m, IdKey.InternalStoreModel, GraphXStore, null, null, InternalStore_X);
-                    AddChildModel(prev, m, IdKey.InternalStoreModel, QueryXStore, null, null, InternalStore_X);
-                    AddChildModel(prev, m, IdKey.InternalStoreModel, SymbolXStore, null, null, InternalStore_X);
-                    AddChildModel(prev, m,  IdKey.InternalStoreModel, ColumnXStore, null, null, InternalStore_X);
-                    AddChildModel(prev, m, IdKey.InternalStoreModel, RelationXStore, null, null, InternalStore_X);
-                    AddChildModel(prev, m, IdKey.InternalStoreModel, ComputeXStore, null, null, InternalStore_X);
-                    AddChildModel(prev, m, IdKey.InternalStoreModel, RelationStore, null, null, InternalStore_X);
-                    AddChildModel(prev, m, IdKey.InternalStoreModel, PropertyStore, null, null, InternalStore_X);
+                    AddChildModel(prev, m, IdKey.InternalStoreModel, ViewXDomain, null, null, InternalStore_X);
+                    AddChildModel(prev, m, IdKey.InternalStoreModel, EnumXDomain, null, null, InternalStore_X);
+                    AddChildModel(prev, m,  IdKey.InternalStoreModel, TableXDomain, null, null, InternalStore_X);
+                    AddChildModel(prev, m, IdKey.InternalStoreModel, GraphXDomain, null, null, InternalStore_X);
+                    AddChildModel(prev, m, IdKey.InternalStoreModel, QueryXDomain, null, null, InternalStore_X);
+                    AddChildModel(prev, m, IdKey.InternalStoreModel, SymbolXDomain, null, null, InternalStore_X);
+                    AddChildModel(prev, m,  IdKey.InternalStoreModel, ColumnXDomain, null, null, InternalStore_X);
+                    AddChildModel(prev, m, IdKey.InternalStoreModel, RelationXDomain, null, null, InternalStore_X);
+                    AddChildModel(prev, m, IdKey.InternalStoreModel, ComputeXDomain, null, null, InternalStore_X);
+                    AddChildModel(prev, m, IdKey.InternalStoreModel, RelationDomain, null, null, InternalStore_X);
+                    AddChildModel(prev, m, IdKey.InternalStoreModel, PropertyDomain, null, null, InternalStore_X);
                     
                     return (true, true);
                 }
@@ -9142,7 +9142,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) =>  (GetKind(m.Relation.IdKey), GetIdentity(m.Relation, IdentityStyle.Single));
+            (string, string) GetKindName(ItemModel m) =>  (GetKind(m.Relation.OldIdKey), GetIdentity(m.Relation, IdentityStyle.Single));
 
         }
         #endregion
@@ -9192,7 +9192,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (GetKind(m.Relation.IdKey), GetIdentity(m.Relation, IdentityStyle.Single));
+            (string, string) GetKindName(ItemModel m) => (GetKind(m.Relation.OldIdKey), GetIdentity(m.Relation, IdentityStyle.Single));
         }
         #endregion
 

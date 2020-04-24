@@ -47,7 +47,7 @@ namespace ModelGraph.Core
         internal Node()
         {
             Owner = null;
-            IdKey = IdKey.Node;
+            OldIdKey = IdKey.Node;
             DX = DY = (byte)GraphDefault.MinNodeSize;
         }
         #endregion

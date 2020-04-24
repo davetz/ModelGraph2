@@ -17,7 +17,7 @@ namespace ModelGraph.Core
         internal PropertyOf<ComputeX, string> CompuTypeProperty;
         internal PropertyOf<ComputeX, string> ValueTypeProperty;
 
-        internal ComputeXDomain(Chef chef) : base(chef, IdKey.ComputeXStore)
+        internal ComputeXDomain(Chef chef) : base(chef, IdKey.ComputeXDomain)
         {
             chef.RegisterItemSerializer((_serializerGuid, this));
             CreateProperties(chef);
@@ -27,7 +27,7 @@ namespace ModelGraph.Core
         private void CreateProperties(Chef chef)
         {
             var props = new List<Property>(7);
-            var propertyStore = chef.PropertyStore;
+            var propertyStore = chef.PropertyDomain;
             {
                 var p = NameProperty = new PropertyOf<ComputeX, string>(propertyStore, IdKey.ComputeXNameProperty);
                 p.GetValFunc = (item) => p.Cast(item).Name;
@@ -110,7 +110,7 @@ namespace ModelGraph.Core
                 }
             }
             else
-                throw new Exception($"ColumnXStore ReadData, unknown format version: {fv}");
+                throw new Exception($"ColumnXDomain ReadData, unknown format version: {fv}");
         }
 
         public void WriteData(DataWriter w, Dictionary<Item, int> itemIndex)

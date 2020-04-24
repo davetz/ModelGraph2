@@ -12,7 +12,7 @@
         internal ItemMoved(ChangeSet owner, Item item, int index1, int index2, string name)
         {
             Owner = owner;
-            IdKey = IdKey.ItemMoved;
+            OldIdKey = IdKey.ItemMoved;
             Name = name;
 
             Item = item;

@@ -26,14 +26,14 @@ namespace ModelGraph.Core
         {
             var props1 = new List<Property>(2);
             {
-                var p = NameProperty = new PropertyOf<EnumX, string>(chef.PropertyStore, IdKey.EnumNameProperty);
+                var p = NameProperty = new PropertyOf<EnumX, string>(chef.PropertyDomain, IdKey.EnumNameProperty);
                 p.GetValFunc = (item) => p.Cast(item).Name;
                 p.SetValFunc = (item, value) => { p.Cast(item).Name = value; return true; };
                 p.Value = new StringValue(p);
                 props1.Add(p);
             }
             {
-                var p = SummaryProperty = new PropertyOf<EnumX, string>(chef.PropertyStore, IdKey.EnumSummaryProperty);
+                var p = SummaryProperty = new PropertyOf<EnumX, string>(chef.PropertyDomain, IdKey.EnumSummaryProperty);
                 p.GetValFunc = (item) => p.Cast(item).Summary;
                 p.SetValFunc = (item, value) => { p.Cast(item).Summary = value; return true; };
                 p.Value = new StringValue(p);

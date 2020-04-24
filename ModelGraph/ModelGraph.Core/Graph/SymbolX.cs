@@ -5,9 +5,13 @@ namespace ModelGraph.Core
 {
     public class SymbolX : Item
     {
-        public string Name;
-        public string Summary;
-        public string Description;
+        internal override string Name { get => _name; set => _name = value; }
+        private string _name;
+        internal override string Summary { get => _summary; set => _summary = value; }
+        private string _summary;
+        internal override string Description { get => _description; set => _description = value; }
+        private string _description;
+
         public byte[] Data;
         public List<(Target trg, TargetIndex tix, Contact con, (sbyte dx, sbyte dy) pnt, byte siz)> TargetContacts = new List<(Target, TargetIndex, Contact, (sbyte, sbyte), byte)>(4);
         public Attach Attach;
@@ -17,12 +21,20 @@ namespace ModelGraph.Core
         #region Constructors  =================================================
         public SymbolX(Store owner, bool autoExpand = false)
         {
-            IdKey = IdKey.SymbolX;
+            OldIdKey = IdKey.SymbolX;
             Owner = owner;
             if (autoExpand) AutoExpandRight = true;
 
             owner.Add(this);
         }
+        #endregion
+
+        #region Identity  =====================================================
+        internal override IdKey VKey => IdKey.SymbolX;
+        internal override string SingleNameId => Name;
+        internal override string ParentNameId => GetChef().GraphX_SymbolX.TryGetParent(this, out GraphX p) ? p.SingleNameId : KindId;
+        internal override string SummaryId => Summary;
+        internal override string DescriptionId => Description;
         #endregion
 
         #region Properties/Methods  ===========================================

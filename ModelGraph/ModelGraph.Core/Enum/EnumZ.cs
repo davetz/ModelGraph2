@@ -9,7 +9,7 @@ namespace ModelGraph.Core
         internal EnumZ(StoreOf<EnumZ> owner, IdKey idKe)
         {
             Owner = owner;
-            IdKey = idKe;
+            OldIdKey = idKe;
         }
         #endregion
     }

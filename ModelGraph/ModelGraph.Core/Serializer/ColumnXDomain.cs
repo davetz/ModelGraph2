@@ -14,7 +14,7 @@ namespace ModelGraph.Core
         internal PropertyOf<ColumnX, string> TypeOfProperty { get; private set; }
         internal PropertyOf<ColumnX, bool> IsChoiceProperty { get; private set; }
 
-        internal ColumnXDomain(Chef chef) : base(chef, IdKey.ColumnXStore)
+        internal ColumnXDomain(Chef chef) : base(chef, IdKey.ColumnXDomain)
         {
             chef.RegisterItemSerializer((_serializerGuid, this));
             CreateProperties(chef);
@@ -25,28 +25,28 @@ namespace ModelGraph.Core
         {
             var props = new List<Property>(4);
             {
-                var p = NameProperty = new PropertyOf<ColumnX, string>(chef.PropertyStore, IdKey.ColumnNameProperty);
+                var p = NameProperty = new PropertyOf<ColumnX, string>(chef.PropertyDomain, IdKey.ColumnNameProperty);
                 p.GetValFunc = (item) => p.Cast(item).Name;
                 p.SetValFunc = (item, value) => { p.Cast(item).Name = value; return true; };
                 p.Value = new StringValue(p);
                 props.Add(p);
             }
             {
-                var p = SummaryProperty = new PropertyOf<ColumnX, string>(chef.PropertyStore, IdKey.ColumnSummaryProperty);
+                var p = SummaryProperty = new PropertyOf<ColumnX, string>(chef.PropertyDomain, IdKey.ColumnSummaryProperty);
                 p.GetValFunc = (item) => p.Cast(item).Summary;
                 p.SetValFunc = (item, value) => { p.Cast(item).Summary = value; return true; };
                 p.Value = new StringValue(p);
                 props.Add(p);
             }
             {
-                var p = TypeOfProperty = new PropertyOf<ColumnX, string>(chef.PropertyStore, IdKey.ColumnValueTypeProperty, chef.ValueTypeEnum);
+                var p = TypeOfProperty = new PropertyOf<ColumnX, string>(chef.PropertyDomain, IdKey.ColumnValueTypeProperty, chef.ValueTypeEnum);
                 p.GetValFunc = (item) => chef.GetEnumZName(p.EnumZ, (int)p.Cast(item).Value.ValType);
                 p.SetValFunc = (item, value) => chef.SetColumnValueType(p.Cast(item), chef.GetEnumZKey(p.EnumZ, value));
                 p.Value = new StringValue(p);
                 props.Add(p);
             }
             {
-                var p = IsChoiceProperty = new PropertyOf<ColumnX, bool>(chef.PropertyStore, IdKey.ColumnIsChoiceProperty);
+                var p = IsChoiceProperty = new PropertyOf<ColumnX, bool>(chef.PropertyDomain, IdKey.ColumnIsChoiceProperty);
                 p.GetValFunc = (item) => p.Cast(item).IsChoice;
                 p.SetValFunc = (item, value) => p.Cast(item).IsChoice = value;
                 p.Value = new BoolValue(p);
@@ -85,7 +85,7 @@ namespace ModelGraph.Core
                 }
             }
             else
-                throw new Exception($"ColumnXStore ReadData, unknown format version: {fv}");
+                throw new Exception($"ColumnXDomain ReadData, unknown format version: {fv}");
         }
         #endregion
 

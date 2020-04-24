@@ -9,9 +9,13 @@ namespace ModelGraph.Core
         internal HashSet<Store> NodeOwners = new HashSet<Store>();
         internal Dictionary<Item, Dictionary<QueryX, List<NodeEdge>>> Root_QueryX_Parms = new Dictionary<Item, Dictionary<QueryX, List<NodeEdge>>>(10);
 
-        internal string Name;
-        internal string Summary;
-        internal string Description;
+        internal override string Name { get => _name; set => _name = value; }
+        private string _name;
+        internal override string Summary { get => _summary; set => _summary = value; }
+        private string _summary;
+        internal override string Description { get => _description; set => _description = value; }
+        private string _description;
+
         internal byte SymbolSize = 48;
         internal byte ThinBusSize = 6;
         internal byte WideBusSize = 10;
@@ -28,11 +32,19 @@ namespace ModelGraph.Core
         internal GraphX(Store owner, bool autoExpand = false)
         {
             Owner = owner;
-            IdKey = IdKey.GraphX;
+            OldIdKey = IdKey.GraphX;
             if (autoExpand) AutoExpandRight = true;
 
             owner.Add(this);
         }
+        #endregion
+
+        #region Identity  =====================================================
+        internal override IdKey VKey => IdKey.GraphX;
+        internal override string SingleNameId => Name;
+        internal override string ParentNameId => KindId;
+        internal override string SummaryId => Summary;
+        internal override string DescriptionId => Description;
         #endregion
 
         #region Properties/Methods  ===========================================

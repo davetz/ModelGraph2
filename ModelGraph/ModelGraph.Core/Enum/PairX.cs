@@ -11,12 +11,17 @@ namespace ModelGraph.Core
         internal PairX(EnumX owner, bool autoExpand = false)
         {
             Owner = owner;
-            IdKey = IdKey.PairX;
+            OldIdKey = IdKey.PairX;
             if (autoExpand) AutoExpandRight = true;
 
             owner.Add(this);
         }
         internal EnumX EnumX => Owner as EnumX;
+        #endregion
+
+        #region Identity  =====================================================
+        internal override IdKey VKey => IdKey.PairX;
+        internal override string SingleNameId => DisplayValue;
         #endregion
     }
 }

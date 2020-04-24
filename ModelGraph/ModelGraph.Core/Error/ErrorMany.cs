@@ -12,7 +12,7 @@ namespace ModelGraph.Core
         {
             Owner = owner;
             Item = item;
-            IdKey = idKe;
+            OldIdKey = idKe;
 
             if (text != null) _list.Add(text);
 

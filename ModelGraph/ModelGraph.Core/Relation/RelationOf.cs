@@ -21,7 +21,7 @@ namespace ModelGraph.Core
         internal RelationOf(StoreOf<Relation> owner, IdKey idKe, Pairing pairing = Pairing.OneToMany, int parentCount = 0, int childCount = 0, bool isRequired = false)
         {
             Owner = owner;
-            IdKey = idKe;
+            OldIdKey = idKe;
             Pairing = pairing;
             IsRequired = isRequired;
             Initialize(parentCount, childCount);

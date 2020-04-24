@@ -15,11 +15,18 @@ namespace ModelGraph.Core
         internal TableX(StoreOf<TableX> owner, bool autoExpand = false)
         {
             Owner = owner;
-            IdKey = IdKey.TableX;
+            OldIdKey = IdKey.TableX;
             if (autoExpand) AutoExpandRight = true;
 
             owner.Add(this);
         }
+        #endregion
+
+        #region Identity  =====================================================
+        internal override IdKey VKey => IdKey.TableX;
+        internal override string SingleNameId => Name;
+        internal override string SummaryId => Summary;
+        internal override string DescriptionId => Description;
         #endregion
     }
 }

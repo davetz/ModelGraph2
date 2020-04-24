@@ -27,42 +27,42 @@ namespace ModelGraph.Core
         {
             var props = new List<Property>(6);
             {
-                var p = NameProperty = new PropertyOf<GraphX, string>(chef.PropertyStore, IdKey.GraphNameProperty);
+                var p = NameProperty = new PropertyOf<GraphX, string>(chef.PropertyDomain, IdKey.GraphNameProperty);
                 p.GetValFunc = (item) => p.Cast(item).Name;
                 p.SetValFunc = (item, value) => { p.Cast(item).Name = value; return true; };
                 p.Value = new StringValue(p);
                 props.Add(p);
             }
             {
-                var p = SummaryProperty = new PropertyOf<GraphX, string>(chef.PropertyStore, IdKey.GraphSummaryProperty);
+                var p = SummaryProperty = new PropertyOf<GraphX, string>(chef.PropertyDomain, IdKey.GraphSummaryProperty);
                 p.GetValFunc = (item) => p.Cast(item).Summary;
                 p.SetValFunc = (item, value) => { p.Cast(item).Summary = value; return true; };
                 p.Value = new StringValue(p);
                 props.Add(p);
             }
             {
-                var p = TerminalLengthProperty = new PropertyOf<GraphX, int>(chef.PropertyStore, IdKey.GraphTerminalLengthProperty);
+                var p = TerminalLengthProperty = new PropertyOf<GraphX, int>(chef.PropertyDomain, IdKey.GraphTerminalLengthProperty);
                 p.GetValFunc = (item) => p.Cast(item).TerminalLength;
                 p.SetValFunc = (item, value) => { p.Cast(item).TerminalLength = (byte)value; return true; };
                 p.Value = new Int32Value(p);
                 props.Add(p);
             }
             {
-                var p = TerminalSpacingProperty = new PropertyOf<GraphX, int>(chef.PropertyStore, IdKey.GraphTerminalSpacingProperty);
+                var p = TerminalSpacingProperty = new PropertyOf<GraphX, int>(chef.PropertyDomain, IdKey.GraphTerminalSpacingProperty);
                 p.GetValFunc = (item) => p.Cast(item).TerminalSpacing;
                 p.SetValFunc = (item, value) => { p.Cast(item).TerminalSpacing = (byte)value; return true; };
                 p.Value = new Int32Value(p);
                 props.Add(p);
             }
             {
-                var p = TerminalStretchProperty = new PropertyOf<GraphX, int>(chef.PropertyStore, IdKey.GraphTerminalStretchProperty);
+                var p = TerminalStretchProperty = new PropertyOf<GraphX, int>(chef.PropertyDomain, IdKey.GraphTerminalStretchProperty);
                 p.GetValFunc = (item) => p.Cast(item).TerminalSkew;
                 p.SetValFunc = (item, value) => { p.Cast(item).TerminalSkew = (byte)value; return true; };
                 p.Value = new Int32Value(p);
                 props.Add(p);
             }
             {
-                var p = SymbolSizeProperty = new PropertyOf<GraphX, int>(chef.PropertyStore, IdKey.GraphSymbolSizeProperty);
+                var p = SymbolSizeProperty = new PropertyOf<GraphX, int>(chef.PropertyDomain, IdKey.GraphSymbolSizeProperty);
                 p.GetValFunc = (item) => p.Cast(item).SymbolSize;
                 p.SetValFunc = (item, value) => { p.Cast(item).SymbolSize = (byte)value; return true; };
                 p.Value = new Int32Value(p);
@@ -109,7 +109,7 @@ namespace ModelGraph.Core
                 }
             }
             else
-                throw new Exception($"ColumnXStore ReadData, unknown format version: {fv}");
+                throw new Exception($"ColumnXDomain ReadData, unknown format version: {fv}");
         }
 
         public void WriteData(DataWriter w, Dictionary<Item, int> itemIndex)

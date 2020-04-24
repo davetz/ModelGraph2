@@ -8,12 +8,21 @@ namespace ModelGraph.Core
         private Func<string, string> _localize = (s) => s; //dummy default localizer
         public void SetLocalizer(Func<string, string> localizer) => _localize = localizer;
 
+        internal string GetKindId(IdKey idKe) => _localize($"{(int)(idKe & IdKey.KeyMask):X3}K");
+        internal string GetSingleNameId(IdKey idKe) => _localize($"{(int)(idKe & IdKey.KeyMask):X3}N");
+        internal string GetDoubleNameId(IdKey idKe1, IdKey idKe2) => $"{GetSingleNameId(idKe1)} : {GetSingleNameId(idKe2)}";
+        internal string GetSummaryId(IdKey idKe) => _localize($"{(int)(idKe & IdKey.KeyMask):X3}S");
+        internal string GetDescriptionId(IdKey idKe) => _localize($"{(int)(idKe & IdKey.KeyMask):X3}V");
+        internal string GetAcceleratorId(IdKey idKe) => _localize($"{(int)(idKe & IdKey.KeyMask):X3}A".ToUpper());
+        internal (string, string) GetKindNameId(IdKey idKe) => (GetKindId(idKe), GetSingleNameId(idKe));
+
+
         private Dictionary<IdKey, Func<Item, IdentityStyle, string>> _itemIdentity;
 
         #region GetIdentity  ==================================================
         public string GetIdentity(Item item, IdentityStyle style)
         {
-            if (item != null && _itemIdentity.TryGetValue(item.IdKey, out Func<Item, IdentityStyle, string> id))
+            if (item != null && _itemIdentity.TryGetValue(item.OldIdKey, out Func<Item, IdentityStyle, string> id))
                 return id(item, style);
             else if (item is Relation)
                 return Relation_Identity(item, style);
@@ -50,7 +59,7 @@ namespace ModelGraph.Core
         {
             if (item is null) return BlankName;
             //if (item.TraitKey == 0x1AD) item.SetTrait(IdKey.QueryXNodeSymbol);
-            return $"Internal {item.IdKey.ToString()}";
+            return $"Internal {item.OldIdKey.ToString()}";
         }
         private string Index_Identity(Item item)
         {
@@ -100,7 +109,7 @@ namespace ModelGraph.Core
                         return null;
                 }
             }
-            return $"{BlankName} {item.IdKey}";
+            return $"{BlankName} {item.OldIdKey}";
         }
         #endregion
 
@@ -139,7 +148,7 @@ namespace ModelGraph.Core
                         return null;
                 }
             }
-            return $"{BlankName} {item.IdKey.ToString()}";
+            return $"{BlankName} {item.OldIdKey.ToString()}";
         }
         #endregion
 
@@ -171,7 +180,7 @@ namespace ModelGraph.Core
                         return itm.Description;
                 }
             }
-            return $"{BlankName} {item.IdKey.ToString()}";
+            return $"{BlankName} {item.OldIdKey.ToString()}";
         }
         #endregion
 
@@ -204,7 +213,7 @@ namespace ModelGraph.Core
                         return ex.Description;
                 }
             }
-            return $"{BlankName} {item.IdKey.ToString()}";
+            return $"{BlankName} {item.OldIdKey.ToString()}";
         }
         #endregion
 
@@ -239,7 +248,7 @@ namespace ModelGraph.Core
                         return tx.Description;
                 }
             }
-            return $"{BlankName} {item.IdKey.ToString()}";
+            return $"{BlankName} {item.OldIdKey.ToString()}";
         }
         #endregion
 
@@ -271,7 +280,7 @@ namespace ModelGraph.Core
                         return itm.Description;
                 }
             }
-            return $"{BlankName} {item.IdKey.ToString()}";
+            return $"{BlankName} {item.OldIdKey.ToString()}";
         }
         #endregion
 
@@ -384,7 +393,7 @@ namespace ModelGraph.Core
                         return _localize(GetDescriptionKey(idKe));
                 }
             }
-            return $"{BlankName} {item.IdKey.ToString()}";
+            return $"{BlankName} {item.OldIdKey.ToString()}";
         }
         #endregion
 
@@ -422,7 +431,7 @@ namespace ModelGraph.Core
                         return null;
                 }
             }
-            return $"{BlankName} {item.IdKey.ToString()}";
+            return $"{BlankName} {item.OldIdKey.ToString()}";
         }
         #endregion
 
@@ -461,7 +470,7 @@ namespace ModelGraph.Core
                         return null;
                 }
             }
-            return $"{BlankName} {item.IdKey.ToString()}";
+            return $"{BlankName} {item.OldIdKey.ToString()}";
         }
         #endregion
 
@@ -500,7 +509,7 @@ namespace ModelGraph.Core
                         return null;
                 }
             }
-            return $"{BlankName} {item.IdKey.ToString()}";
+            return $"{BlankName} {item.OldIdKey.ToString()}";
         }
         #endregion
 
@@ -535,7 +544,7 @@ namespace ModelGraph.Core
                         return null;
                 }
             }
-            return $"{BlankName} {item.IdKey.ToString()}";
+            return $"{BlankName} {item.OldIdKey.ToString()}";
         }
         #endregion
 
@@ -571,7 +580,7 @@ namespace ModelGraph.Core
                         return _localize(itm.DescriptionKey);
                 }
             }
-            return $"{BlankName} {item.IdKey.ToString()}";
+            return $"{BlankName} {item.OldIdKey.ToString()}";
         }
         #endregion
 
@@ -609,7 +618,7 @@ namespace ModelGraph.Core
                         return _localize(itm.DescriptionKey);
                 }
             }
-            return $"{BlankName} {item.IdKey.ToString()}";
+            return $"{BlankName} {item.OldIdKey.ToString()}";
         }
         #endregion
 
@@ -639,7 +648,7 @@ namespace ModelGraph.Core
                         return _localize(itm.DescriptionKey);
                 }
             }
-            return $"{BlankName} {item.IdKey.ToString()}";
+            return $"{BlankName} {item.OldIdKey.ToString()}";
         }
         #endregion
 
