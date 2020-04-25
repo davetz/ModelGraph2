@@ -675,9 +675,6 @@ namespace ModelGraph.Core
         {
             switch (root.ControlType)
             {
-                case ControlType.AppRootChef:
-                    return GetName(IdKey.AppRootModelTab);
-
                 case ControlType.PrimaryTree:
                 case ControlType.PartialTree:
                 case ControlType.GraphDisplay:
@@ -693,8 +690,6 @@ namespace ModelGraph.Core
         {
             switch (root.ControlType)
             {
-                case ControlType.AppRootChef:
-                    return null;
 
                 case ControlType.PrimaryTree:
                     if (Repository == null)
@@ -723,8 +718,6 @@ namespace ModelGraph.Core
         {
             switch (root.ControlType)
             {
-                case ControlType.AppRootChef:
-                    return GetName(IdKey.AppRootModelTab);
 
                 case ControlType.PrimaryTree:
                     return RepoName();
@@ -755,8 +748,6 @@ namespace ModelGraph.Core
         {
             switch (root.ControlType)
             {
-                case ControlType.AppRootChef:
-                    return null;
 
                 case ControlType.PrimaryTree:
                     if (Repository == null)

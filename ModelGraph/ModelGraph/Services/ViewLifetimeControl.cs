@@ -33,11 +33,11 @@ namespace ModelGraph.Services
         public string Title { get; set; }
 
         #region ModelPageService  =============================================
-        public RootModel RootModel { get; set; }
+        public IModel IModel { get; set; }
         public void CloseModel()
         {
-            if (RootModel is null) return;
-            RootModel = null;
+            if (IModel is null) return;
+            IModel = null;
 
             var task = Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
             {

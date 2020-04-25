@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ModelGraph.Core
 {
-    public class StoreOf<T> : Store where T : Item
+    public abstract class StoreOf<T> : Store where T : Item
     {
         private List<T> _items = new List<T>(0);    // list of child items
 

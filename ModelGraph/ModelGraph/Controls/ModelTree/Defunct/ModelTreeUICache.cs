@@ -299,7 +299,7 @@ namespace ModelGraph.Controls
                 obj.Style = _itemInfoStyle;
             }
 
-            obj.Text = _root.ModelInfo;
+            obj.Text = "";//_root.ModelInfo;
             obj.DataContext = model;
 
             _stackPanelCache[index].Children.Add(obj);
@@ -942,7 +942,7 @@ namespace ModelGraph.Controls
                                 AddFilterCount(index, m);
                             }
                         }
-                        if (_root.ModelInfo != null)
+                        if (false)//_root.ModelInfo != null)
                         {
                             AddItemInfo(index, m);
                         }

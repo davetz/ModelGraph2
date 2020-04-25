@@ -31,5 +31,7 @@ namespace ModelGraph.Core
                 }
             }
         }
+        public int GetSerializerItemCount() => 0;
+        public void RegisterInternal(Dictionary<int, Item> internalItem) { }
     }
 }

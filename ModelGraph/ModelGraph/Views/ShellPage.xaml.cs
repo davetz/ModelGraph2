@@ -51,11 +51,11 @@ namespace ModelGraph.Views
         #region ModelPageService  =============================================
         //
         #region InsertModelPage  ==============================================
-        public void InsertModelPage(RootModel model)
+        public void InsertModelPage(IModel model)
         {
             if (model is null) return;
 
-            model.Chef.SetLocalizer(Helpers.ResourceExtensions.CoreLocalizer());
+            model.DataChef.SetLocalizer(Helpers.ResourceExtensions.CoreLocalizer());
 
             var item = navigationView.MenuItems
                             .OfType<WinUI.NavigationViewItem>()
@@ -92,7 +92,7 @@ namespace ModelGraph.Views
         #endregion
         //
         #region RemoveModelPage  ==============================================
-        public void RemoveModelPage(RootModel model)
+        public void RemoveModelPage(IModel model)
         {
             var item = navigationView.MenuItems
                             .OfType<WinUI.NavigationViewItem>()
@@ -173,7 +173,7 @@ namespace ModelGraph.Views
                             .First(menuItem => (string)menuItem.Content == (string)args.InvokedItem);
 
 
-            if (item.Tag is RootModel model)
+            if (item.Tag is IModel model)
             {
                 NavigationService.Navigate(typeof(ModelPage), model);
             }

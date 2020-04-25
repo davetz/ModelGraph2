@@ -1,10 +1,22 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ModelGraph.Core
 {
     public partial class Chef
     {
+        internal IList<IModel> GetChildModels(RootTreeModel root)
+        {
+            var list = new List<IModel>(10);
+            foreach (var item in Items)
+            {
+                if (item == root) continue;
+                if (item is IModel m) list.Add(m);
+            }
+            return list;
+        }
+
         #region PostRequest  ==================================================
         // These methods are called from the ui thread and typically they invoke 
         // some type of change to the dataChefs objects (create, remove, update)
@@ -28,8 +40,6 @@ namespace ModelGraph.Core
         }
         internal void PostRefreshViewList(RootModel root, ItemModel select, int scroll, ChangeType change)
         {
-            if (root.ControlType == ControlType.AppRootChef) return;
-
             root.SelectModel = select;
             PostModelRequest(root, () => RefreshViewFlatList(root, scroll, change));
         }

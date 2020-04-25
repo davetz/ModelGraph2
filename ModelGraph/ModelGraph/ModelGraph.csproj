@@ -150,10 +150,10 @@
     <Compile Include="Controls\ModelGraph\ModelGraphControlEvents.cs" />
     <Compile Include="Controls\ModelGraph\ModelGraphControlPanel.cs" />
     <Compile Include="Controls\ModelGraph\ModelGraphControlVisualAids.cs" />
-    <Compile Include="Controls\ModelTree\ModelTreeControl.xaml.cs">
+    <Compile Include="Controls\ModelTree\Defunct\ModelTreeControl.xaml.cs">
       <DependentUpon>ModelTreeControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ModelTree\ModelTreeUICache.cs" />
+    <Compile Include="Controls\ModelTree\Defunct\ModelTreeUICache.cs" />
     <Compile Include="Controls\Shapes\Central.cs" />
     <Compile Include="Controls\Shapes\Circle.cs" />
     <Compile Include="Controls\Shapes\Ellipes.cs" />
@@ -224,7 +224,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ModelTree\ModelTreeControl.xaml">
+    <Page Include="Controls\ModelTree\Defunct\ModelTreeControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

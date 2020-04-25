@@ -516,5 +516,11 @@ namespace ModelGraph.Core
         const byte B7 = 0x40;
         const byte B8 = 0x80;
         #endregion
+
+        #region ISerializer  ==================================================
+        public int GetSerializerItemCount() => 0;
+        public void PopulateItemIndex(Dictionary<Item, int> itemIndex) { }
+        public void RegisterInternal(Dictionary<int, Item> internalItem) { }
+        #endregion
     }
 }

@@ -34,24 +34,24 @@ namespace ModelGraph.Views
 
         internal void NavigatedTo(object parm)
         {
-            if (parm is RootModel m1)
+            if (parm is IModel m1)
             {
                 GetModelControl(m1);
                 NavigationService.ActiveModelPage = this;
             }
-            else if (parm is ViewLifetimeControl viewControl && viewControl.RootModel is RootModel m2)
+            else if (parm is ViewLifetimeControl viewControl && viewControl.IModel is IModel m2)
             {
                 GetModelControl(m2);
-                //await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => { viewControl.PageControl = new IModelControl(viewControl.RootModel); ModelControl = viewControl.PageControl;  ControlGrid.Children.Add(viewControl.PageControl); });
+                //await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => { viewControl.PageControl = new IModelControl(viewControl.IModel); ModelControl = viewControl.PageControl;  ControlGrid.Children.Add(viewControl.PageControl); });
             }
             ControlGrid.Children.Add(PageControl as UIElement);
 
 
-            void GetModelControl(RootModel m)
+            void GetModelControl(IModel m)
             {
                 if (m.PageControl is null)
                 {
-                    m.Chef.SetLocalizer(ResourceExtensions.CoreLocalizer());
+                    m.DataChef.SetLocalizer(ResourceExtensions.CoreLocalizer());
 
                     switch (m.ControlType)
                     {

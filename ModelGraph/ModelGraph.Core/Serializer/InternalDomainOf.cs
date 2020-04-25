@@ -1,9 +1,10 @@
 ﻿
 using System.Collections.Generic;
+using Windows.Storage.Streams;
 
 namespace ModelGraph.Core
 {
-    public class InternalDomainOf<T> : StoreOf<T>, IDomain where T : Item
+    public abstract class InternalDomainOf<T> : StoreOf<T>, ISerializer, IDomain where T : Item
     {
         public InternalDomainOf(Chef owner, IdKey idKe, int capacity = 0) : base(owner, idKe, capacity) { }
 
@@ -29,5 +30,10 @@ namespace ModelGraph.Core
                 if (item.IsReference) internalItems.Add(item.ItemKey, item);
             }
         }
+
+        public bool HasData() => false;
+        public void ReadData(DataReader r, Item[] items) { }
+        public void WriteData(DataWriter w, Dictionary<Item, int> itemIndex) { }
+
     }
 }

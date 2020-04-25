@@ -74,5 +74,12 @@ namespace ModelGraph.Core
             InitializeModelActions();
         }
         #endregion
+
+        #region Release  ======================================================
+        internal void Release()
+        {
+            Items.Clear();
+        }
+        #endregion
     }
 }

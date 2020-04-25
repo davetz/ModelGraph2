@@ -16,13 +16,13 @@ namespace ModelGraph.Controls
         private Chef _chef;
         private Graph _graph;
         private readonly Size _desiredSize = new Size { Height = 800, Width = 800 };
-        public RootModel RootModel { get; }
+        public IModel Model { get; }
 
-        public ModelGraphControl(RootModel model)
+        public ModelGraphControl(IModel model)
         {
-            _chef = model.Chef;
-            RootModel = model;
-            _graph = model.Graph;
+            Model = model ?? throw new ArgumentNullException(nameof(model));
+            _chef = model.DataChef;
+            _graph = model.RootItem as Graph;
 
             _selector = new Selector(_graph);
 
@@ -53,9 +53,17 @@ namespace ModelGraph.Controls
         }
 
         #region IPageControl  =================================================
-        public async void Dispatch(UIRequest rq)
+        public void Refresh()
         {
-            await ModelPageService.Current.Dispatch(rq, this);
+            if (EditorCanvas == null) return;
+
+            CheckGraphSymbols();
+            EditorCanvas.Invalidate();
+        }
+        public void CreateNewPage(IModel model, ControlType ctlType)
+        {
+            if (model is null) return;
+            _ = ModelPageService.Current.CreateNewPageAsync(model, ctlType);
         }
         #endregion
 
@@ -69,16 +77,9 @@ namespace ModelGraph.Controls
 
             EditorCanvas.RemoveFromVisualTree();
             EditorCanvas = null;
-            RootModel?.Release();
+            IModel?.Release();
         }
         public void Revert() { }
-        public void Refresh()
-        {
-            if (EditorCanvas == null) return;
-
-            CheckGraphSymbols();
-            EditorCanvas.Invalidate();
-        }
         private void CheckGraphSymbols()
         {
             var N = _graph.SymbolCount;
@@ -129,6 +130,9 @@ namespace ModelGraph.Controls
             EditorCanvas = null;
         }
         public (int Width, int Height) PreferredSize => (400, 320);
+
+        public IModel IModel => throw new NotImplementedException();
+
         public void SetSize(double width, double height)
         {
             if (EditorCanvas == null) return;

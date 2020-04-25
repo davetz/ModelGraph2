@@ -19,7 +19,7 @@ namespace ModelGraph.Controls
     {
         //public Grid PrevOwner { get; set; }
 
-        public ModelTreeControl(RootModel root)
+        public ModelTreeControl(IModel root)
         {
             _root = root;
 
@@ -35,9 +35,9 @@ namespace ModelGraph.Controls
             {
                 TreeCanvas.Width = Width = width;
                 TreeCanvas.Height = Height = height;
-                _root.ViewCapacity = (int)(Height / _elementHieght);
+                //_root.ViewCapacity = (int)(Height / _elementHieght);
                 _viewIsReady = true;
-                _root.PostRefreshViewList(_selectModel);
+                //_root.PostRefreshViewList(_selectModel);
             }
         }
         bool ViewIsNotReady() => !_viewIsReady;
@@ -46,7 +46,7 @@ namespace ModelGraph.Controls
         #endregion
 
         #region Fields  =======================================================
-        RootModel _root;
+        IModel _root;
         ItemModel _selectModel;
         List<ItemModel> _viewList = new List<ItemModel>();
         List<ModelCommand> _menuCommands = new List<ModelCommand>();
@@ -122,11 +122,12 @@ namespace ModelGraph.Controls
         #endregion
 
         #region IPageControl  =================================================
-        public async void Dispatch(UIRequest rq)
+        public void CreateNewPage(IModel model, ControlType ctlType)
         {
-            await ModelPageService.Current.Dispatch(rq, this);
+            if (model is null) return;
+            _ = ModelPageService.Current.CreateNewPageAsync(model, ctlType);
         }
-        public RootModel RootModel => _root;
+        public IModel IModel => _root;
         #endregion
 
         #region IModelControl  ================================================
@@ -247,7 +248,7 @@ namespace ModelGraph.Controls
         void PostRefreshViewList(ItemModel m, int s = 0, ChangeType c = ChangeType.NoChange)
         {
             ResetCacheDelta(m);
-            _root.PostRefreshViewList(m, s, c);
+            //_root.PostRefreshViewList(m, s, c);
         }
         #endregion
 
@@ -459,11 +460,11 @@ namespace ModelGraph.Controls
         {
             if (ViewIsNotReady()) return;
             if (_viewList is null) return;
-            if (_root.IsChanged) RefreshRoot();
+            //if (_root.IsChanged) RefreshRoot();
 
             _viewList.Clear();
-            _viewList.AddRange(_root.ViewFlatList);
-            _selectModel = _root.SelectModel;
+            //_viewList.AddRange(_root.ViewFlatList);
+           // _selectModel = _root.SelectModel;
 
             _pointWheelEnabled = false;
 
@@ -485,7 +486,7 @@ namespace ModelGraph.Controls
         private void RefreshRoot()
         {
             var buttonCommands = new List<ModelCommand>();
-            _root.PageButtonComands(buttonCommands);
+           // _root.PageButtonComands(buttonCommands);
 
             var N = buttonCommands.Count;
             var M = ControlPanel.Children.Count;
@@ -508,7 +509,7 @@ namespace ModelGraph.Controls
                 }
             }
             ModelTitle.Text = _root.TitleName;
-            _root.IsChanged = false;
+           // _root.IsChanged = false;
         }
 
         #endregion
@@ -663,7 +664,7 @@ namespace ModelGraph.Controls
                 _selectModel = _viewList[0];
                 viewIndex = 0;
             }
-            _root.SelectModel = _selectModel;
+           // _root.SelectModel = _selectModel;
             var cacheIndex = _cacheIndex[viewIndex];
 
             SelectGrid.Width = ActualWidth;

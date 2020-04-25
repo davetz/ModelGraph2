@@ -31,15 +31,15 @@ namespace ModelGraph.Services
         public CoreDispatcher MainDispatcher { get; private set; }
 
         #region ModelPageService  =============================================
-        public void CloseRelatedModels(RootModel rootModel)
+        public void CloseRelatedModels(IModel model)
         {
             var views = SecondaryViews.ToArray();
             foreach (var view in views)
             {
-                var model = view.RootModel;
+                var m = view.IModel;
 
-                if (model is null) continue;
-                if (model.Chef != rootModel.Chef) continue;
+                if (m is null) continue;
+                if (m.DataChef != m.DataChef) continue;
 
                 view.CloseModel();
             }
@@ -48,16 +48,16 @@ namespace ModelGraph.Services
         {
 
         }
-        public async Task<ViewLifetimeControl> TryShowAsStandaloneAsync(string windowTitle, Type pageType, RootModel rootModel)
+        public async Task<ViewLifetimeControl> TryShowAsStandaloneAsync(string windowTitle, Type pageType, IModel model)
         {
-            ViewLifetimeControl viewControl = await CreateViewLifetimeControlAsync(windowTitle, pageType, rootModel);
+            ViewLifetimeControl viewControl = await CreateViewLifetimeControlAsync(windowTitle, pageType, model);
             SecondaryViews.Add(viewControl);
             viewControl.StartViewInUse();
             var viewShown = await ApplicationViewSwitcher.TryShowAsStandaloneAsync(viewControl.Id, ViewSizePreference.Default, ApplicationView.GetForCurrentView().Id, ViewSizePreference.Default);
             viewControl.StopViewInUse();
             return viewControl;
         }
-        private async Task<ViewLifetimeControl> CreateViewLifetimeControlAsync(string windowTitle, Type pageType, RootModel rootModel = null)
+        private async Task<ViewLifetimeControl> CreateViewLifetimeControlAsync(string windowTitle, Type pageType, IModel model = null)
         {
             ViewLifetimeControl viewControl = null;
 
@@ -65,7 +65,7 @@ namespace ModelGraph.Services
             {
                 viewControl = ViewLifetimeControl.CreateForCurrentView();
                 viewControl.Title = windowTitle;
-                viewControl.RootModel = rootModel;
+                viewControl.IModel = model;
                 viewControl.StartViewInUse();
                 var frame = new Frame
                 {

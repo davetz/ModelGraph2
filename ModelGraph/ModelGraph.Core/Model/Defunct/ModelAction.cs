@@ -5,7 +5,7 @@ namespace ModelGraph.Core
 {
     internal class ModelAction
     {/*
-        Each ItemModel contains an instance of ModelAction.
+        Each LineModel contains an instance of ModelAction.
         Once initialized it constrains and directs the actions 
         initiated from the UI controls. 
      */

@@ -76,7 +76,7 @@ namespace ModelGraph.Core
             var maxSize = 4;
             foreach (var itm in Items)
             {
-                if (itm is IDomain d) maxSize += d.GetSerializerItemCount();
+                if (itm is ISerializer s) maxSize += s.GetSerializerItemCount();
             }
             var itemIndex = new Dictionary<Item, int>(maxSize)
             {
@@ -86,7 +86,7 @@ namespace ModelGraph.Core
 
             foreach (var itm in Items)
             {
-                if (itm is IDomain d) d.PopulateItemIndex(itemIndex);
+                if (itm is ISerializer s) s.PopulateItemIndex(itemIndex);
             }
             return itemIndex;
         }
@@ -135,7 +135,7 @@ namespace ModelGraph.Core
 
             foreach (var itm in Items)
             {
-                if (itm is IDomain d) d.RegisterInternal(internalItem);
+                if (itm is ISerializer s) s.RegisterInternal(internalItem);
             }
             return internalItem;
         }
@@ -165,6 +165,10 @@ namespace ModelGraph.Core
                 if (item.IsExternal) itemIndex[item] = index++;
             }
         }
+
+        public int GetSerializerItemCount() => 0;
+        public void PopulateItemIndex(Dictionary<Item, int> itemIndex) { }
+        public void RegisterInternal(Dictionary<int, Item> internalItem) { }
         #endregion
     }
 }
