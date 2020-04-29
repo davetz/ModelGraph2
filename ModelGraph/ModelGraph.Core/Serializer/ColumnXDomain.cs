@@ -8,52 +8,37 @@ namespace ModelGraph.Core
     {
         static Guid _serializerGuid = new Guid("3E7097FE-22D5-43B2-964A-9DB843F6D55B");
         static byte _formatVersion = 1;
+        internal override IdKey ViKey => IdKey.ColumnXDomain;
 
-        internal PropertyOf<ColumnX, string> NameProperty { get; private set; }
-        internal PropertyOf<ColumnX, string> SummaryProperty { get; private set; }
-        internal PropertyOf<ColumnX, string> TypeOfProperty { get; private set; }
-        internal PropertyOf<ColumnX, bool> IsChoiceProperty { get; private set; }
-
-        internal ColumnXDomain(Chef chef) : base(chef, IdKey.ColumnXDomain)
+        internal ColumnXDomain(Chef chef)
         {
+            Owner = chef;
+
             chef.RegisterItemSerializer((_serializerGuid, this));
             CreateProperties(chef);
+
+            chef.Add(this);
         }
 
         #region CreateProperties  =============================================
         private void CreateProperties(Chef chef)
         {
-            var props = new List<Property>(4);
-            {
-                var p = NameProperty = new PropertyOf<ColumnX, string>(chef.PropertyDomain, IdKey.ColumnNameProperty);
-                p.GetValFunc = (item) => p.Cast(item).Name;
-                p.SetValFunc = (item, value) => { p.Cast(item).Name = value; return true; };
-                p.Value = new StringValue(p);
-                props.Add(p);
-            }
-            {
-                var p = SummaryProperty = new PropertyOf<ColumnX, string>(chef.PropertyDomain, IdKey.ColumnSummaryProperty);
-                p.GetValFunc = (item) => p.Cast(item).Summary;
-                p.SetValFunc = (item, value) => { p.Cast(item).Summary = value; return true; };
-                p.Value = new StringValue(p);
-                props.Add(p);
-            }
-            {
-                var p = TypeOfProperty = new PropertyOf<ColumnX, string>(chef.PropertyDomain, IdKey.ColumnValueTypeProperty, chef.ValueTypeEnum);
-                p.GetValFunc = (item) => chef.GetEnumZName(p.EnumZ, (int)p.Cast(item).Value.ValType);
-                p.SetValFunc = (item, value) => chef.SetColumnValueType(p.Cast(item), chef.GetEnumZKey(p.EnumZ, value));
-                p.Value = new StringValue(p);
-                props.Add(p);
-            }
-            {
-                var p = IsChoiceProperty = new PropertyOf<ColumnX, bool>(chef.PropertyDomain, IdKey.ColumnIsChoiceProperty);
-                p.GetValFunc = (item) => p.Cast(item).IsChoice;
-                p.SetValFunc = (item, value) => p.Cast(item).IsChoice = value;
-                p.Value = new BoolValue(p);
-                props.Add(p);
-            }
-            chef.RegisterStaticProperties(typeof(ColumnX), props);
+            var sto = chef.GetItem<PropertyDomain>();
+
+            chef.RegisterReferenceItem(new Property_ColumnX_Name(sto));
+            chef.RegisterReferenceItem(new Property_ColumnX_Summary(sto));
+            chef.RegisterReferenceItem(new Property_ColumnX_ValueType(sto));
+            chef.RegisterReferenceItem(new Property_ColumnX_IsChoice(sto));
+
+            chef.RegisterStaticProperties(typeof(ColumnX), GetProps(chef)); //used by property name lookup
         }
+        private Property[] GetProps(Chef chef) => new Property[]
+        {
+            chef.GetItem<Property_ColumnX_Name>(),
+            chef.GetItem<Property_ColumnX_Summary>(),
+            chef.GetItem<Property_ColumnX_ValueType>(),
+            chef.GetItem<Property_ColumnX_IsChoice>(),
+        };
         #endregion
 
         #region ISerializer  ==================================================

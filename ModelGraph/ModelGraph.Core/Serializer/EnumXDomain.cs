@@ -8,56 +8,42 @@ namespace ModelGraph.Core
     {
         static Guid _serializerGuid = new Guid("8D4CEAD8-E3C5-4342-88AC-1B4B625A9A4C");
         static byte _formatVersion = 1;
+        internal override IdKey ViKey => IdKey.EnumXDomain;
 
-        internal PropertyOf<EnumX, string> NameProperty;
-        internal PropertyOf<EnumX, string> SummaryProperty;
-
-        internal PropertyOf<PairX, string> TextProperty;
-        internal PropertyOf<PairX, string> ValueProperty;
-
-        internal EnumXDomain(Chef chef) : base(chef, IdKey.EnumXStore, 10)
+        internal EnumXDomain(Chef chef)
         {
+            Owner = chef;
+
             chef.RegisterItemSerializer((_serializerGuid, this));
             CreateProperties(chef);
+
+            chef.Add(this);
         }
 
         #region CreateProperties  =============================================
         private void CreateProperties(Chef chef)
         {
-            var props1 = new List<Property>(2);
-            {
-                var p = NameProperty = new PropertyOf<EnumX, string>(chef.PropertyDomain, IdKey.EnumNameProperty);
-                p.GetValFunc = (item) => p.Cast(item).Name;
-                p.SetValFunc = (item, value) => { p.Cast(item).Name = value; return true; };
-                p.Value = new StringValue(p);
-                props1.Add(p);
-            }
-            {
-                var p = SummaryProperty = new PropertyOf<EnumX, string>(chef.PropertyDomain, IdKey.EnumSummaryProperty);
-                p.GetValFunc = (item) => p.Cast(item).Summary;
-                p.SetValFunc = (item, value) => { p.Cast(item).Summary = value; return true; };
-                p.Value = new StringValue(p);
-                props1.Add(p);
-            }
-            chef.RegisterStaticProperties(typeof(EnumX), props1);
+            var sto = chef.GetItem<PropertyDomain>();
 
-            var props2 = new List<Property>(2);
-            {
-                var p = TextProperty = new PropertyOf<PairX, string>(chef.PropertyZStore, IdKey.EnumTextProperty);
-                p.GetValFunc = (item) => p.Cast(item).DisplayValue;
-                p.SetValFunc = (item, value) => { p.Cast(item).DisplayValue = value; p.Owner.ChildDelta++; return true; };
-                p.Value = new StringValue(p);
-                props2.Add(p);
-            }
-            {
-                var p = ValueProperty = new PropertyOf<PairX, string>(chef.PropertyZStore, IdKey.EnumValueProperty);
-                p.GetValFunc = (item) => p.Cast(item).ActualValue;
-                p.SetValFunc = (item, value) => { p.Cast(item).ActualValue = value; p.Owner.ChildDelta++; return true; };
-                p.Value = new StringValue(p);
-                props2.Add(p);
-            }
-            chef.RegisterStaticProperties(typeof(PairX), props2);
+            chef.RegisterReferenceItem(new Property_EnumX_Name(sto));
+            chef.RegisterReferenceItem(new Property_EnumX_Summary(sto));
+
+            chef.RegisterReferenceItem(new Property_PairX_Text(sto));
+            chef.RegisterReferenceItem(new Property_PairX_Value(sto));
+
+            chef.RegisterStaticProperties(typeof(EnumX), GetProps1(chef)); //used by property name lookup
+            chef.RegisterStaticProperties(typeof(PairX), GetProps2(chef)); //used by property name lookup
         }
+        private Property[] GetProps1(Chef chef) => new Property[]
+        {
+            chef.GetItem<Property_EnumX_Name>(),
+            chef.GetItem<Property_EnumX_Summary>(),
+        };
+        private Property[] GetProps2(Chef chef) => new Property[]
+        {
+            chef.GetItem<Property_PairX_Text>(),
+            chef.GetItem<Property_PairX_Value>(),
+        };
         #endregion
 
         #region ISerializer  ==================================================

@@ -5,80 +5,79 @@ namespace ModelGraph.Core
 {
     public partial class Chef
     {
-        internal DummyItem DummyItemRef { get; private set; }
-        internal QueryX DummyQueryXRef { get; private set; }
+        private int ChangeSequence = 1;
+        private readonly Dictionary<Type, Item> Type_InstanceOf = new Dictionary<Type, Item>(200);
+        private readonly Dictionary<ushort, Item> IdKey_ReferenceItem = new Dictionary<ushort, Item>(200);
 
-        internal ChangeSet ChangeSet { get; private set; }
-        internal ChangeRoot ChangeRoot { get; private set; }
-        internal int ChangeSequence { get; private set; }
+        internal void RegisterPrivateItem(Item item) => Type_InstanceOf[item.GetType()] = item;
 
-        internal ErrorStore ErrorStore { get; private set; }
-        internal EnumZStore EnumZStore { get; private set; }
-        internal PropertyZStore PropertyZStore { get; private set; }
-        internal RelationZStore RelationZStore { get; private set; }
+        internal void RegisterReferenceItem(Item item) { IdKey_ReferenceItem[item.ItemKey] = item; Type_InstanceOf[item.GetType()] = item; }
 
-        internal PropertyDomain PropertyDomain { get; private set; }
-        internal RelationDomain RelationDomain { get; private set; }
-
-        internal Store[] PrimeStores { get; private set; }
-
-        internal EnumXDomain EnumXDomain { get; private set; }
-        internal ViewXDomain ViewXDomain { get; private set; }
-        internal TableXDomain TableXDomain { get; private set; }
-        internal GraphXDomain GraphXDomain { get; private set; }
-        internal GraphParams GraphParams { get; private set; }
-        internal QueryXDomain QueryXDomain { get; private set; }
-        internal ColumnXDomain ColumnXDomain { get; private set; }
-        internal SymbolXDomain SymbolXDomain { get; private set; }
-        internal ComputeXDomain ComputeXDomain { get; private set; }
-        internal RelationXDomain RelationXDomain { get; private set; }
-
-        #region InitializeStores  =============================================
-        private void InitializeStores()
+        internal T GetItem<T>() where T : Item
         {
-            DummyItemRef = new DummyItem(this);
-            DummyQueryXRef = new DummyQueryX(this);
+            if (Type_InstanceOf.TryGetValue(typeof(T), out Item itm) && itm is T val)
+                return val;
+            throw new InvalidOperationException($"Chef GetItem<T>() : could not find type {typeof(T)}");
+        }
 
-            ChangeRoot = new ChangeRoot(this);
-            ChangeSequence = 1;
-            ChangeSet = new ChangeSet(ChangeRoot, ChangeSequence);
+        #region PrimeStores  ==================================================
+        internal Store[] PrimeStores => new Store[]
+        {
+            GetItem<EnumXDomain>(),
+            GetItem<ViewXDomain>(),
+            GetItem<TableXDomain>(),
+            GetItem<GraphXDomain>(),
+            GetItem<QueryXDomain>(),
+            GetItem<ColumnXDomain>(),
+            GetItem<SymbolXDomain>(),
+            GetItem<ComputeXDomain>(),
+            GetItem<RelationXDomain>(),
+            GetItem<RelationDomain>(),
+            GetItem<PropertyDomain>(),
+        };
+        #endregion
 
-            ErrorStore = new ErrorStore(this);
-            EnumZStore = new EnumZStore(this);
+        #region InitializeDomains  ============================================
+        private void InitializeDomains()
+        {
+            RegisterReferenceItem(new DummyItem(this));
+            RegisterReferenceItem(new DummyQueryX(this));
+
+            RegisterPrivateItem(new ChangeRoot(this));
+
+            RegisterPrivateItem(new ChangeSet(GetItem<ChangeRoot>(), ChangeSequence));
+
+            RegisterPrivateItem(new ErrorStore(this));
+            RegisterPrivateItem(new EnumZStore(this));
             InitializeEnums();
 
-            PropertyZStore = new PropertyZStore(this);
-            RelationZStore = new RelationZStore(this);
+            RegisterPrivateItem(new PropertyZStore(this));
+            RegisterPrivateItem(new RelationZStore(this));
 
-            PropertyDomain = new PropertyDomain(this);
-            RelationDomain = new RelationDomain(this);
+            RegisterReferenceItem(new PropertyDomain(this));
+            RegisterReferenceItem(new RelationDomain(this));
 
-            EnumXDomain = new EnumXDomain(this);
-            ViewXDomain = new ViewXDomain(this);
-            TableXDomain = new TableXDomain(this);
-            GraphXDomain = new GraphXDomain(this);
-            GraphParams = new GraphParams(this, GraphXDomain);
+            RegisterReferenceItem(new EnumXDomain(this));
+            RegisterReferenceItem(new ViewXDomain(this));
+            RegisterReferenceItem(new TableXDomain(this));
+            RegisterReferenceItem(new GraphXDomain(this));
+            RegisterReferenceItem(new GraphParams(this, GetItem<GraphXDomain>()));
 
-            QueryXDomain = new QueryXDomain(this);
-            ColumnXDomain = new ColumnXDomain(this);
-            SymbolXDomain = new SymbolXDomain(this);
-            ComputeXDomain = new ComputeXDomain(this);
-            RelationXDomain = new RelationXDomain(this);
+            RegisterReferenceItem(new QueryXDomain(this));
+            RegisterReferenceItem(new ColumnXDomain(this));
+            RegisterReferenceItem(new SymbolXDomain(this));
+            RegisterReferenceItem(new ComputeXDomain(this));
+            RegisterReferenceItem(new RelationXDomain(this));
+        }
+        #endregion
 
-            PrimeStores = new Store[]
-            {
-                EnumXDomain,
-                ViewXDomain,
-                TableXDomain,
-                GraphXDomain,
-                QueryXDomain,
-                ColumnXDomain,
-                SymbolXDomain,
-                ComputeXDomain,
-                RelationXDomain,
-                RelationDomain,
-                PropertyDomain,
-            };
+        #region Override Chef.Discard()  ======================================
+        /// <summary>Remove pointers to all objects that were created by this dataChef</summary>
+        internal override void Discard()
+        {
+            Type_InstanceOf.Clear();
+            IdKey_ReferenceItem.Clear();
+            base.Discard();
         }
         #endregion
     }

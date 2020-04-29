@@ -87,26 +87,26 @@ namespace ModelGraph.Core
         #region Store ================================================(0E0-0FF)
         // root level containers for the hierarchal item trees
 
-        EnumXStore = 0x0E1 | IsReference,
+        EnumXDomain = 0x0E1 | IsReference,
         ViewXDomain = 0x0E2 | IsReference,
-        TableXStore = 0x0E3 | IsReference,
-        GraphXStore = 0x0E4 | IsReference,
-        QueryXStore = 0x0E5 | IsReference,
-        ValueXStore = 0x0E6 | IsReference,
+        TableXDomain = 0x0E3 | IsReference,
+        GraphXDomain = 0x0E4 | IsReference,
+        QueryXDomain = 0x0E5 | IsReference,
+        ValueXDomain = 0x0E6 | IsReference,
         SymbolXDomain = 0x0E7 | IsReference,
         ColumnXDomain = 0x0E8 | IsReference,
         ComputeXDomain = 0x0E9 | IsReference,
-        RelationXStore = 0x0EA | IsReference,
+        RelationXDomain = 0x0EA | IsReference,
 
         PrimeStore = 0x0F0, // exposes internal tables (metadata / configuration)
         EnumZStore = 0x0F1,
         ErrorStore = 0x0F2,
         GroupStore = 0x0F3,
-        PropertyStore = 0x0F4 | IsReference,
-        RelationStore = 0x0F5 | IsReference,
+        PropertyDomain = 0x0F4 | IsReference,
+        RelationDomain = 0x0F5 | IsReference,
         PropertyZStore = 0x0F6,
         RelationZStore = 0x0F7,
-        DummyStore = 0xFF | IsReference,
+        GraphParams = 0xFF,
 
         #endregion
 

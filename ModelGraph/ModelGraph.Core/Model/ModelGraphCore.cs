@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿
 namespace ModelGraph.Core
 {
     public static class ModelGraphCore
     {
-        public static IRootModel CreateRootModel()
+        public static RootTreeModel CreateRootTreeModel()
         {
             return new RootTreeModel();
         }

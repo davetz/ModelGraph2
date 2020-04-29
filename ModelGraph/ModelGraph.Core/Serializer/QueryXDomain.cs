@@ -28,7 +28,7 @@ namespace ModelGraph.Core
         internal PropertyOf<QueryX, string> Facet2Property;
         internal PropertyOf<QueryX, string> Connect2Property;
 
-        internal QueryXDomain(Chef chef) : base(chef, IdKey.QueryXStore)
+        internal QueryXDomain(Chef chef) : base(chef, IdKey.QueryXDomain)
         {
             chef.RegisterItemSerializer((_serializerGuid, this));
             CreateProperties(chef);

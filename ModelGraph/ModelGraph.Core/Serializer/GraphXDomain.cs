@@ -16,7 +16,7 @@ namespace ModelGraph.Core
         internal PropertyOf<GraphX, int> TerminalStretchProperty;
         internal PropertyOf<GraphX, int> SymbolSizeProperty;
 
-        internal GraphXDomain(Chef chef) : base(chef, IdKey.GraphXStore)
+        internal GraphXDomain(Chef chef) : base(chef, IdKey.GraphXDomain)
         {
             chef.RegisterItemSerializer((_serializerGuid, this));
             CreateProperties(chef);

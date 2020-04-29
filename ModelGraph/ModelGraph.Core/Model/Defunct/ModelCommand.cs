@@ -8,15 +8,15 @@ namespace ModelGraph.Core
     public class ModelCommand
     {
         public Chef Chef;
-        public ItemModel Model;
-        public Action<ItemModel> Action;
-        public Action<ItemModel, Object> Action1;
+        public ItemModelOld Model;
+        public Action<ItemModelOld> Action;
+        public Action<ItemModelOld, Object> Action1;
         public Object Parameter1;
         public string Name;
         public string Summary;
         internal IdKey IdKey;
 
-        public ModelCommand(Chef chef, ItemModel model, IdKey idKe, Action<ItemModel> action)
+        public ModelCommand(Chef chef, ItemModelOld model, IdKey idKe, Action<ItemModelOld> action)
         {
             Chef = chef;
             Model = model;
@@ -32,7 +32,7 @@ namespace ModelGraph.Core
             Action = null;
             Action1 = null;
         }
-        public ModelCommand(Chef chef, ItemModel model, IdKey idKe, Action<ItemModel, Object> action)
+        public ModelCommand(Chef chef, ItemModelOld model, IdKey idKe, Action<ItemModelOld, Object> action)
         {
             Chef = chef;
             Model = model;

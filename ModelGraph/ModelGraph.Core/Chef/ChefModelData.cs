@@ -184,7 +184,7 @@ namespace ModelGraph.Core
         #endregion
 
         #region AddChildModel  ================================================
-        internal bool AddChildModel(List<ItemModel> prev, ItemModel m, IdKey idKe, Item item, Item aux1, Item aux2, ModelAction get)
+        internal bool AddChildModel(List<ItemModelOld> prev, ItemModelOld m, IdKey idKe, Item item, Item aux1, Item aux2, ModelAction get)
         {/*
             I am construction a new list of itemModels but if posible I want to reuse an existing model from the previous itemModel list.
             The existing models are compared with the parameters of the candidate model to see if it matches. A new model will be created if necessary.
@@ -210,7 +210,7 @@ namespace ModelGraph.Core
 
                 if (TryCopyPrevious(j)) return true; // I reused the existing model.
             }
-            m.ChildModels.Add(ItemModel.Create(m, idKe, item, aux1, aux2, get));
+            m.ChildModels.Add(ItemModelOld.Create(m, idKe, item, aux1, aux2, get));
             return true; // I had to create a new model
 
             // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
@@ -227,7 +227,7 @@ namespace ModelGraph.Core
 
                 // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
 
-                bool IsMatch(ItemModel cm)
+                bool IsMatch(ItemModelOld cm)
                 {
                     if (cm == null) return false;
                     if (cm.ParentModel != m) return false;
@@ -243,7 +243,7 @@ namespace ModelGraph.Core
         #endregion
 
         #region AddProperyModel  ==============================================
-        private bool AddProperyModels(List<ItemModel> prev, ItemModel model, IEnumerable<ColumnX> cols)
+        private bool AddProperyModels(List<ItemModelOld> prev, ItemModelOld model, IEnumerable<ColumnX> cols)
         {
             var anyChange = false;
             var item = model.Item;
@@ -253,7 +253,7 @@ namespace ModelGraph.Core
             }
             return anyChange;
         }
-        private bool AddProperyModels(List<ItemModel> prev, ItemModel model, IEnumerable<Property> propList)
+        private bool AddProperyModels(List<ItemModelOld> prev, ItemModelOld model, IEnumerable<Property> propList)
         {
             var anyChange = false;
             foreach (var prop in propList)
@@ -262,7 +262,7 @@ namespace ModelGraph.Core
             }
             return anyChange;
         }
-        private bool AddProperyModel(List<ItemModel> prev, ItemModel model, Property prop)
+        private bool AddProperyModel(List<ItemModelOld> prev, ItemModelOld model, Property prop)
         {
             var item = model.Item;
             if (prop.IsColumnX)
@@ -272,7 +272,7 @@ namespace ModelGraph.Core
             else
                 return NewPropertyModel(prev, model, item, prop);
         }
-        private bool NewPropertyModel(List<ItemModel> prev, ItemModel model, Item item, ColumnX col)
+        private bool NewPropertyModel(List<ItemModelOld> prev, ItemModelOld model, Item item, ColumnX col)
         {
             if (EnumX_ColumnX.TryGetParent(col, out EnumX enu))
                 return AddChildModel(prev, model, IdKey.ComboPropertyModel, item, col, enu, ComboColumn_X);
@@ -281,7 +281,7 @@ namespace ModelGraph.Core
             else
                 return AddChildModel(prev, model, IdKey.TextPropertyModel, item, col, null, TextColumn_X);
         }
-        private bool NewPropertyModel(List<ItemModel> prev, List<ItemModel> curr, ItemModel model, Item item, ComputeX cx)
+        private bool NewPropertyModel(List<ItemModelOld> prev, List<ItemModelOld> curr, ItemModelOld model, Item item, ComputeX cx)
         {
             if (EnumX_ColumnX.TryGetParent(cx, out EnumX enu))
                 return AddChildModel(prev, model, IdKey.ComboPropertyModel, item, cx, enu, ComboProperty_X);
@@ -290,7 +290,7 @@ namespace ModelGraph.Core
             else
                 return AddChildModel(prev, model, IdKey.TextPropertyModel, item, cx, null, TextCompute_X);
         }
-        private bool NewPropertyModel(List<ItemModel> prev, ItemModel model, Item item, Property prop)
+        private bool NewPropertyModel(List<ItemModelOld> prev, ItemModelOld model, Item item, Property prop)
         {
             if (Property_Enum.TryGetValue(prop, out EnumZ enu))
                 return AddChildModel(prev, model, IdKey.ComboPropertyModel, item, prop, enu, ComboProperty_X);
@@ -302,7 +302,7 @@ namespace ModelGraph.Core
         #endregion
 
         #region RefreshViewFlatList  ==========================================
-        internal void RefreshViewFlatList(RootModel root, int scroll = 0, ChangeType change = ChangeType.NoChange)
+        internal void RefreshViewFlatList(RootModelOld root, int scroll = 0, ChangeType change = ChangeType.NoChange)
         {
             var select = root.SelectModel;
             var viewList = root.ViewFlatList;
@@ -311,9 +311,9 @@ namespace ModelGraph.Core
 
             if (capacity > 0)
             {
-                var first = ItemModel.FirstValidModel(viewList);
+                var first = ItemModelOld.FirstValidModel(viewList);
                 var start = (first == null);
-                var previous = new List<ItemModel>();
+                var previous = new List<ItemModelOld>();
                 var modelStack = new TreeModelStack();
 
                 UpdateSelectModel(select, change);
@@ -392,7 +392,7 @@ namespace ModelGraph.Core
                     if (start) { if (N > 0) N--; else S--; }
 
                     ValidateModel(m, previous);
-                    ItemModel.Release(previous);
+                    ItemModelOld.Release(previous);
                     modelStack.PushChildren(m);
                 }
                 #endregion
@@ -444,12 +444,12 @@ namespace ModelGraph.Core
         {/*
             Keep track of unvisited nodes in a depth first graph traversal
          */
-            private List<(List<ItemModel> Models, int Index)> _stack;
-            internal TreeModelStack() { _stack = new List<(List<ItemModel> Models, int Index)>(); }
+            private List<(List<ItemModelOld> Models, int Index)> _stack;
+            internal TreeModelStack() { _stack = new List<(List<ItemModelOld> Models, int Index)>(); }
             internal bool IsNotEmpty => (_stack.Count > 0);
-            internal void PushRoot(ItemModel m) { _stack.Add((new List<ItemModel>(1) { m }, 0)); }
-            internal void PushChildren(ItemModel m) { if (m.ViewModelCount > 0) _stack.Add((m.ViewModels, 0)); }
-            internal ItemModel PopNext()
+            internal void PushRoot(ItemModelOld m) { _stack.Add((new List<ItemModelOld>(1) { m }, 0)); }
+            internal void PushChildren(ItemModelOld m) { if (m.ViewModelCount > 0) _stack.Add((m.ViewModels, 0)); }
+            internal ItemModelOld PopNext()
             {
                 var end = _stack.Count - 1;
                 var (Models, Index) = _stack[end];
@@ -471,7 +471,7 @@ namespace ModelGraph.Core
             Trace the traversal of an itemModel tree.
             The end result is a flat list of itemModels (of a predefined length).
          */
-            ItemModel[] _buffer;
+            ItemModelOld[] _buffer;
             int _first;
             int _count;
             readonly int _scroll;
@@ -481,21 +481,21 @@ namespace ModelGraph.Core
             {
                 _scroll = scroll;
                 _length = length;
-                _buffer = new ItemModel[length + scroll];
+                _buffer = new ItemModelOld[length + scroll];
             }
 
-            internal void Add(ItemModel m) => _buffer[Index(_count++)] = m;
+            internal void Add(ItemModelOld m) => _buffer[Index(_count++)] = m;
 
             internal bool SetFirst() { _first = (_count - 1); return true; }
 
-            internal bool GetHead(List<ItemModel> list)
+            internal bool GetHead(List<ItemModelOld> list)
             {
                 var first = (_first - _scroll);
                 if (first < 0) first = 0;
                 return CopyBuffer(first, list);
             }
 
-            internal bool GetTail(List<ItemModel> list)
+            internal bool GetTail(List<ItemModelOld> list)
             {
                 var first = (_count < _buffer.Length) ? 0 : ((_count - _first) < _length) ? (_count - _length + _scroll) : _first + _scroll;
                 return CopyBuffer(first, list);
@@ -503,7 +503,7 @@ namespace ModelGraph.Core
 
             #region PrivateMethods  ===========================================
             int Index(int inx) => inx % _buffer.Length;
-            bool CopyBuffer(int first, List<ItemModel> list)
+            bool CopyBuffer(int first, List<ItemModelOld> list)
             {
                 for (int i = 0, j = first; (i < _length && j < _count); i++, j++)
                 {
@@ -516,7 +516,7 @@ namespace ModelGraph.Core
         #endregion
 
         #region UpdateSelectModel  ============================================
-        void UpdateSelectModel(ItemModel m, ChangeType change)
+        void UpdateSelectModel(ItemModelOld m, ChangeType change)
         {
             if (m != null)
             {
@@ -579,7 +579,7 @@ namespace ModelGraph.Core
         #endregion
 
         #region ValidateModel  ================================================
-        bool ValidateModel(ItemModel m, List<ItemModel> previous)
+        bool ValidateModel(ItemModelOld m, List<ItemModelOld> previous)
         {
             if (m is null || m.Item is null) return false;
             if (m.Item.AutoExpandLeft)
@@ -603,7 +603,7 @@ namespace ModelGraph.Core
 
             if (!m.IsSorted && !m.IsFiltered) return WithAllChildren();
 
-            var filterList = new List<(string, ItemModel)>(m.ChildModelCount);
+            var filterList = new List<(string, ItemModelOld)>(m.ChildModelCount);
 
             if (m.IsFiltered)
             {
@@ -637,7 +637,7 @@ namespace ModelGraph.Core
 
             if (filterList.Count > 0)
             {
-                m.ViewModels = new List<ItemModel>(filterList.Count);
+                m.ViewModels = new List<ItemModelOld>(filterList.Count);
                 foreach (var e in filterList) { m.ViewModels.Add(e.Item2); }
             }
             else
@@ -652,7 +652,7 @@ namespace ModelGraph.Core
             }
             bool WithNoChildren()
             {
-                ItemModel.Release(m.ChildModels);
+                ItemModelOld.Release(m.ChildModels);
 
                 m.ChildModels = null;
                 m.ViewModels = null;
@@ -661,17 +661,17 @@ namespace ModelGraph.Core
             }
             bool WithAllChildren()
             {
-                m.ViewModels = new List<ItemModel>(m.ChildModels);
+                m.ViewModels = new List<ItemModelOld>(m.ChildModels);
                 return true;
             }
         }
 
-        int FilterListCompare((string, ItemModel) x, (string, ItemModel) y) => x.Item1.CompareTo(y.Item1);
+        int FilterListCompare((string, ItemModelOld) x, (string, ItemModelOld) y) => x.Item1.CompareTo(y.Item1);
         #endregion
         #endregion
 
         #region GetAppTabName  ================================================
-        internal string GetAppTabName(RootModel root)
+        internal string GetAppTabName(RootModelOld root)
         {
             switch (root.ControlType)
             {
@@ -686,7 +686,7 @@ namespace ModelGraph.Core
         #endregion
 
         #region GetAppTabSummary  =============================================
-        internal string GetAppTabSummary(RootModel root)
+        internal string GetAppTabSummary(RootModelOld root)
         {
             switch (root.ControlType)
             {
@@ -714,7 +714,7 @@ namespace ModelGraph.Core
         #endregion
 
         #region GetAppTitleName  ==============================================
-        internal string GetAppTitleName(RootModel root)
+        internal string GetAppTitleName(RootModelOld root)
         {
             switch (root.ControlType)
             {
@@ -744,7 +744,7 @@ namespace ModelGraph.Core
         #endregion
 
         #region GetAppTitleSummary  ===========================================
-        internal string GetAppTitleSummary(RootModel root)
+        internal string GetAppTitleSummary(RootModelOld root)
         {
             switch (root.ControlType)
             {
@@ -811,7 +811,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
         }
         #endregion
 
@@ -842,7 +842,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
         }
         #endregion
 
@@ -873,7 +873,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
         }
         #endregion
 
@@ -904,7 +904,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
         }
         #endregion
 
@@ -935,7 +935,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
         }
         #endregion
 
@@ -966,7 +966,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
         }
         #endregion
 
@@ -997,7 +997,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
         }
         #endregion
 
@@ -1028,7 +1028,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
         }
         #endregion
 
@@ -1059,7 +1059,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
         }
         #endregion
 
@@ -1090,7 +1090,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
         }
         #endregion
 
@@ -1121,7 +1121,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
         }
         #endregion
 
@@ -1152,7 +1152,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
         }
         #endregion
 
@@ -1183,7 +1183,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
         }
         #endregion
 
@@ -1214,7 +1214,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
         }
         #endregion
 
@@ -1245,7 +1245,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
         }
         #endregion
 
@@ -1276,7 +1276,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
         }
         #endregion
 
@@ -1309,7 +1309,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
         }
         #endregion
        
@@ -1340,7 +1340,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
         }
         #endregion
 
@@ -1416,27 +1416,27 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
 
             #region ButtonCommands  ===========================================
-            void SaveAsModel(ItemModel model)
+            void SaveAsModel(ItemModelOld model)
             {
-                var root = model as RootModel;
+                var root = model as RootModelOld;
                 root.IsChanged = true;
                 root.UIRequestSaveAsModel();
             }
-            void SaveModel(ItemModel model)
+            void SaveModel(ItemModelOld model)
             {
-                var root = model as RootModel;
+                var root = model as RootModelOld;
                 var dataChef = root.Chef;
                 root.UIRequestSaveModel();
             }
 
-            void CloseModel(ItemModel m) => m.GetRootModel().UIRequestCloseModel();
-            void AppSaveSymbol(ItemModel m) => m.GetRootModel().UIRequestSaveModel();
-            void AppReloadSymbol(ItemModel m) => m.GetRootModel().UIRequestReloadModel();
+            void CloseModel(ItemModelOld m) => m.GetRootModel().UIRequestCloseModel();
+            void AppSaveSymbol(ItemModelOld m) => m.GetRootModel().UIRequestSaveModel();
+            void AppReloadSymbol(ItemModelOld m) => m.GetRootModel().UIRequestReloadModel();
 
-            void ReloadModel(ItemModel m)
+            void ReloadModel(ItemModelOld m)
             {
                 var repo = Repository;
                 var root = m.GetRootModel();
@@ -1479,7 +1479,7 @@ namespace ModelGraph.Core
 
         //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-        (string, string) GetColumnXKindName(ItemModel m) => (null, m.ColumnX.Name);
+        (string, string) GetColumnXKindName(ItemModelOld m) => (null, m.ColumnX.Name);
         #endregion
 
         #region 615 CheckColumn_X  ============================================
@@ -1629,7 +1629,7 @@ namespace ModelGraph.Core
 
         //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-        (string, string) GetPropertyKindName(ItemModel m)
+        (string, string) GetPropertyKindName(ItemModelOld m)
         {
             var name = _localize(m.Property.NameKey);
             return (null, m.Property.HasItemName ? $"{m.Property.GetItemName(m.Item)} {name}" : name);
@@ -1736,7 +1736,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, m.ComputeX.Name);
+            (string, string) GetKindName(ItemModelOld m) => (null, m.ComputeX.Name);
         }
         #endregion
 
@@ -1767,7 +1767,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
         }
         #endregion
 
@@ -1798,7 +1798,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
         }
         #endregion
 
@@ -1829,7 +1829,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
         }
         #endregion
 
@@ -1860,7 +1860,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
         }
         #endregion
 
@@ -1891,17 +1891,17 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
         }
         #endregion
 
 
         #region RemoveItemMenuCommand  ========================================
-        void RemoveItemMenuCommand(ItemModel m, List<ModelCommand> mc)
+        void RemoveItemMenuCommand(ItemModelOld m, List<ModelCommand> mc)
         {
             mc.Add(new ModelCommand(this, m, IdKey.RemoveCommand, RemoveItem));
         }
-        void RemoveItem(ItemModel m) => RemoveItem(m.Item);
+        void RemoveItem(ItemModelOld m) => RemoveItem(m.Item);
         #endregion
 
 
@@ -1944,7 +1944,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
         }
         #endregion
 
@@ -2001,11 +2001,11 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            void CreateSecondaryMetadataTree(ItemModel m) => m.GetRootModel().UIRequestCreatePage(ControlType.PartialTree, IdKey.ErrorRootModel, m.Item, ErrorRoot_X);
+            void CreateSecondaryMetadataTree(ItemModelOld m) => m.GetRootModel().UIRequestCreatePage(ControlType.PartialTree, IdKey.ErrorRootModel, m.Item, ErrorRoot_X);
         }
         #endregion
 
@@ -2068,11 +2068,11 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            void CreateSecondaryMetadataTree(ItemModel m) => m.GetRootModel().UIRequestCreatePage(ControlType.PartialTree, IdKey.ChangeRootModel, m.Item, ChangeRoot_X);
+            void CreateSecondaryMetadataTree(ItemModelOld m) => m.GetRootModel().UIRequestCreatePage(ControlType.PartialTree, IdKey.ChangeRootModel, m.Item, ChangeRoot_X);
         }
         #endregion
 
@@ -2126,11 +2126,11 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            void CreateSecondaryMetadataTree(ItemModel m) => m.GetRootModel().UIRequestCreatePage(ControlType.PartialTree, IdKey.MetadataSubRootModel, m.Item, MetadataSubRoot_X);
+            void CreateSecondaryMetadataTree(ItemModelOld m) => m.GetRootModel().UIRequestCreatePage(ControlType.PartialTree, IdKey.MetadataSubRootModel, m.Item, MetadataSubRoot_X);
         }
         #endregion
 
@@ -2183,11 +2183,11 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            void CreateSecondaryModelingTree(ItemModel m) => m.GetRootModel().UIRequestCreatePage(ControlType.PartialTree, IdKey.ModelingSubRootModel, m.Item, ModelingSubRoot_X);
+            void CreateSecondaryModelingTree(ItemModelOld m) => m.GetRootModel().UIRequestCreatePage(ControlType.PartialTree, IdKey.ModelingSubRootModel, m.Item, ModelingSubRoot_X);
         }
         #endregion
 
@@ -2227,7 +2227,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
         }
         #endregion
 
@@ -2275,7 +2275,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.Item.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.Item.NameKey));
         }
         #endregion
 
@@ -2299,9 +2299,9 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, GetName(m));
+            (string, string) GetKindName(ItemModelOld m) => (null, GetName(m));
 
-            string GetName(ItemModel m)
+            string GetName(ItemModelOld m)
             {
                 var e = m.Error;
                 var i = m.ParentModel.GetChildlIndex(m);
@@ -2365,11 +2365,11 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, GetName(m));
+            (string, string) GetKindName(ItemModelOld m) => (null, GetName(m));
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            string GetName(ItemModel m)
+            string GetName(ItemModelOld m)
             {
                 var cs = m.ChangeSet;
                 return cs.IsCongealed ? _localize(cs.NameKey) : cs.Name;
@@ -2377,7 +2377,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            void ModelMerge(ItemModel model)
+            void ModelMerge(ItemModelOld model)
             {
                 var chg = model.Item as ChangeSet;
                 chg.Merge();
@@ -2385,7 +2385,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            void ModelUndo(ItemModel model)
+            void ModelUndo(ItemModelOld model)
             {
                 var chg = model.Item as ChangeSet;
                 Undo(chg);
@@ -2393,7 +2393,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            void ModelRedo(ItemModel model)
+            void ModelRedo(ItemModelOld model)
             {
                 var chg = model.Item as ChangeSet;
                 Redo(chg);
@@ -2421,7 +2421,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (_localize(m.Item.KindKey), m.ItemChange.Name);
+            (string, string) GetKindName(ItemModelOld m) => (_localize(m.Item.KindKey), m.ItemChange.Name);
         }
         #endregion
 
@@ -2452,7 +2452,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
         }
         #endregion
 
@@ -2483,7 +2483,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
         }
         #endregion
 
@@ -2514,7 +2514,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
         }
         #endregion
 
@@ -2545,7 +2545,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
         }
         #endregion
 
@@ -2593,7 +2593,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
         }
         #endregion
 
@@ -2640,7 +2640,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
         }
         #endregion
 
@@ -2722,11 +2722,11 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            void Insert(ItemModel model)
+            void Insert(ItemModelOld model)
             {
                 ItemCreated(new ViewX(ViewXDomain, true));
             }
@@ -2891,18 +2891,18 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, m.ViewX.Name);
+            (string, string) GetKindName(ItemModelOld m) => (null, m.ViewX.Name);
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            void Insert(ItemModel model)
+            void Insert(ItemModelOld model)
             {
                 var vx = new ViewX(ViewXDomain, true);
                 ItemCreated(vx);
                 AppendLink(ViewX_ViewX, model.Item, vx);
             }
         }
-        internal void ViewXView_M(ItemModel m, RootModel root)
+        internal void ViewXView_M(ItemModelOld m, RootModelOld root)
         {
             var view = m.Item as ViewX;
 
@@ -3029,7 +3029,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m)
+            (string, string) GetKindName(ItemModelOld m)
             {
                 var qx = m.Item as QueryX;
                 if (Relation_QueryX.TryGetParent(qx, out Relation re))
@@ -3045,7 +3045,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            void Insert(ItemModel model)
+            void Insert(ItemModelOld model)
             {
                 var vx = new ViewX(ViewXDomain, true);
                 ItemCreated(vx);
@@ -3081,7 +3081,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
         }
         #endregion
 
@@ -3105,7 +3105,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (GetIdentity(m.Item, IdentityStyle.Kind), GetIdentity(m.Item, IdentityStyle.Double));
+            (string, string) GetKindName(ItemModelOld m) => (GetIdentity(m.Item, IdentityStyle.Kind), GetIdentity(m.Item, IdentityStyle.Double));
         }
         #endregion
 
@@ -3161,7 +3161,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
         }
         #endregion
 
@@ -3249,7 +3249,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, m.ViewX.Name);
+            (string, string) GetKindName(ItemModelOld m) => (null, m.ViewX.Name);
         }
         #endregion
 
@@ -3326,7 +3326,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (GetIdentity(m.Item.Owner, IdentityStyle.Single), GetIdentity(m.Item, IdentityStyle.Single));
+            (string, string) GetKindName(ItemModelOld m) => (GetIdentity(m.Item.Owner, IdentityStyle.Single), GetIdentity(m.Item, IdentityStyle.Single));
         }
         #endregion
 
@@ -3377,7 +3377,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (_localize(m.KindKey), GetIdentity(m.QueryX, IdentityStyle.Single));
+            (string, string) GetKindName(ItemModelOld m) => (_localize(m.KindKey), GetIdentity(m.QueryX, IdentityStyle.Single));
         }
         #endregion
 
@@ -3437,11 +3437,11 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            void Insert(ItemModel model)
+            void Insert(ItemModelOld model)
             {
                 ItemCreated(new EnumX(EnumXDomain, true));
             }
@@ -3505,11 +3505,11 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            void Insert(ItemModel model)
+            void Insert(ItemModelOld model)
             {
                 ItemCreated(new TableX(TableXDomain, true));
             }
@@ -3573,11 +3573,11 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            void Insert(ItemModel model)
+            void Insert(ItemModelOld model)
             {
                 ItemCreated(new GraphX(GraphXDomain, true));
                 model.IsExpandedLeft = true;
@@ -3659,11 +3659,11 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            void Insert(ItemModel model)
+            void Insert(ItemModelOld model)
             {
                 var gd = model.Item as GraphX;
                 var sym = new SymbolX(SymbolXDomain, true);
@@ -3718,7 +3718,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
         }
         #endregion
 
@@ -3772,7 +3772,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
         }
         #endregion
 
@@ -3826,7 +3826,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
         }
         #endregion
 
@@ -3878,7 +3878,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, m.PairX.DisplayValue);
+            (string, string) GetKindName(ItemModelOld m) => (null, m.PairX.DisplayValue);
         }
         #endregion
 
@@ -3949,11 +3949,11 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, m.EnumX.Name);
+            (string, string) GetKindName(ItemModelOld m) => (null, m.EnumX.Name);
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            void Insert(ItemModel m)
+            void Insert(ItemModelOld m)
             {
                 ItemCreated(new PairX(m.EnumX, true));
             }
@@ -4025,7 +4025,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, m.TableX.Name);
+            (string, string) GetKindName(ItemModelOld m) => (null, m.TableX.Name);
         }
         #endregion
 
@@ -4095,7 +4095,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, m.GraphX.Name);
+            (string, string) GetKindName(ItemModelOld m) => (null, m.GraphX.Name);
         }
         #endregion
 
@@ -4156,11 +4156,11 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, m.SymbolX.Name);
+            (string, string) GetKindName(ItemModelOld m) => (null, m.SymbolX.Name);
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            void CreateSecondarySymbolEdit(ItemModel m) => m.GetRootModel().UIRequestCreatePage(ControlType.SymbolEditor, IdKey.SymbolEditorModel, m.Item, SymbolEditor_X);
+            void CreateSecondarySymbolEdit(ItemModelOld m) => m.GetRootModel().UIRequestCreatePage(ControlType.SymbolEditor, IdKey.SymbolEditorModel, m.Item, SymbolEditor_X);
         }
         #endregion
 
@@ -4216,7 +4216,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, m.ColumnX.Name);
+            (string, string) GetKindName(ItemModelOld m) => (null, m.ColumnX.Name);
         }
         #endregion
 
@@ -4342,7 +4342,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, m.ComputeX.Name);
+            (string, string) GetKindName(ItemModelOld m) => (null, m.ComputeX.Name);
         }
         #endregion
 
@@ -4395,12 +4395,12 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, m.SymbolX.Name);
+            (string, string) GetKindName(ItemModelOld m) => (null, m.SymbolX.Name);
 
             #region ButtonCommands  ===========================================
-            void Save(ItemModel m)
+            void Save(ItemModelOld m)
             {
-                var root = m as RootModel;
+                var root = m as RootModelOld;
                 root.UIRequestSaveSymbol();
             }
             #endregion
@@ -4466,11 +4466,11 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            void Insert(ItemModel model)
+            void Insert(ItemModelOld model)
             {
                 var col = new ColumnX(ColumnXDomain, true);
                 ItemCreated(col); AppendLink(Store_ColumnX, model.Item, col);
@@ -4535,11 +4535,11 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            void Insert(ItemModel model)
+            void Insert(ItemModelOld model)
             {
                 var rel = new RelationXO(RelationXDomain);
                 ItemCreated(rel); AppendLink(Store_ChildRelation, model.Item, rel);
@@ -4603,11 +4603,11 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            void Insert(ItemModel model)
+            void Insert(ItemModelOld model)
             {
                 var rel = new RelationXO(RelationXDomain, true); ItemCreated(rel);
                 AppendLink(Store_ParentRelation, model.Item, rel);
@@ -4675,11 +4675,11 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            void Insert(ItemModel model)
+            void Insert(ItemModelOld model)
             {
                 ItemCreated(new PairX(model.Item as EnumX, true));
             }
@@ -4751,7 +4751,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
         }
         #endregion
 
@@ -4811,11 +4811,11 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            void Insert(ItemModel model)
+            void Insert(ItemModelOld model)
             {
                 var st = model.Item as Store;
                 var cx = new ComputeX(ComputeXDomain);
@@ -4894,7 +4894,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, GetIdentity(m.RelationX, IdentityStyle.Single));
+            (string, string) GetKindName(ItemModelOld m) => (null, GetIdentity(m.RelationX, IdentityStyle.Single));
         }
         #endregion
 
@@ -4963,7 +4963,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, GetIdentity(m.RelationX, IdentityStyle.Single));
+            (string, string) GetKindName(ItemModelOld m) => (null, GetIdentity(m.RelationX, IdentityStyle.Single));
         }
         #endregion
 
@@ -5032,7 +5032,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
         }
         #endregion
 
@@ -5101,7 +5101,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
         }
         #endregion
 
@@ -5141,7 +5141,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m)
+            (string, string) GetKindName(ItemModelOld m)
             {
                 if (m.Item.IsColumnX) return (null, m.ColumnX.Name);
                 if (m.Item.IsComputeX) return (null, m.ComputeX.Name);
@@ -5186,7 +5186,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m)
+            (string, string) GetKindName(ItemModelOld m)
             {
                 if (m.Item.IsColumnX) return (null, m.ColumnX.Name);
                 if (m.Item.IsComputeX) return (null, m.ComputeX.Name);
@@ -5257,7 +5257,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
         }
         #endregion
 
@@ -5324,7 +5324,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
@@ -5383,7 +5383,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
         }
         #endregion
         
@@ -5446,7 +5446,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (_localize(m.KindKey), GetIdentity(m.Item, IdentityStyle.Single));
+            (string, string) GetKindName(ItemModelOld m) => (_localize(m.KindKey), GetIdentity(m.Item, IdentityStyle.Single));
         }
         #endregion
 
@@ -5470,24 +5470,24 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (_localize(m.KindKey), $"{m.TableX.Name} : {m.ColumnX.Name}");
+            (string, string) GetKindName(ItemModelOld m) => (_localize(m.KindKey), $"{m.TableX.Name} : {m.ColumnX.Name}");
         }
         #endregion
 
 
         #region MetaGraphMenuCommands  ========================================
-        void MetaGraphMenuCommands(ItemModel m, List<ModelCommand> mc)
+        void MetaGraphMenuCommands(ItemModelOld m, List<ModelCommand> mc)
         {
             mc.Add(new ModelCommand(this, m, IdKey.RemoveCommand, RemoveItem));
             mc.Add(new ModelCommand(this, m, IdKey.MakePathHeadCommand, MakePathtHead));
             mc.Add(new ModelCommand(this, m, IdKey.MakeGroupHeadCommand, MakeGroupHead));
             mc.Add(new ModelCommand(this, m, IdKey.MakeEgressHeadCommand, MakeEgressHead));
 
-            void MakePathtHead(ItemModel mt) => TryConvert(mt, QueryType.Path);
-            void MakeGroupHead(ItemModel mt) => TryConvert(mt, QueryType.Group);
-            void MakeEgressHead(ItemModel mt) => TryConvert(mt, QueryType.Egress);
+            void MakePathtHead(ItemModelOld mt) => TryConvert(mt, QueryType.Path);
+            void MakeGroupHead(ItemModelOld mt) => TryConvert(mt, QueryType.Group);
+            void MakeEgressHead(ItemModelOld mt) => TryConvert(mt, QueryType.Egress);
 
-            void TryConvert(ItemModel mt, QueryType kind)
+            void TryConvert(ItemModelOld mt, QueryType kind)
             {
                 var qx = mt.QueryX;
                 var N = QueryX_QueryX.ChildCount(qx);
@@ -5617,7 +5617,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m)
+            (string, string) GetKindName(ItemModelOld m)
             {
                 var name = (Store_QueryX.TryGetParent(m.Item, out Store sto)) ? GetIdentity(sto, IdentityStyle.Single) : Chef.BlankName;
                 return (_localize(m.NameKey), name);
@@ -5737,7 +5737,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (_localize(m.KindKey), QueryXLinkName(m));
+            (string, string) GetKindName(ItemModelOld m) => (_localize(m.KindKey), QueryXLinkName(m));
         }
         #endregion
 
@@ -5834,7 +5834,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (_localize(m.KindKey), QueryXHeadName(m));
+            (string, string) GetKindName(ItemModelOld m) => (_localize(m.KindKey), QueryXHeadName(m));
         }
         #endregion
 
@@ -5917,7 +5917,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (_localize(m.KindKey), QueryXLinkName(m));
+            (string, string) GetKindName(ItemModelOld m) => (_localize(m.KindKey), QueryXLinkName(m));
         }
         #endregion
 
@@ -5995,7 +5995,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (_localize(m.KindKey), QueryXHeadName(m));
+            (string, string) GetKindName(ItemModelOld m) => (_localize(m.KindKey), QueryXHeadName(m));
         }
         #endregion
 
@@ -6077,7 +6077,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (_localize(m.KindKey), QueryXLinkName(m));
+            (string, string) GetKindName(ItemModelOld m) => (_localize(m.KindKey), QueryXLinkName(m));
         }
         #endregion
 
@@ -6159,7 +6159,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (_localize(m.KindKey), QueryXHeadName(m));
+            (string, string) GetKindName(ItemModelOld m) => (_localize(m.KindKey), QueryXHeadName(m));
         }
         #endregion
 
@@ -6241,7 +6241,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (_localize(m.KindKey), QueryXLinkName(m));
+            (string, string) GetKindName(ItemModelOld m) => (_localize(m.KindKey), QueryXLinkName(m));
         }
         #endregion
 
@@ -6293,7 +6293,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (_localize(m.KindKey), (SymbolX_QueryX.TryGetParent(m.Item, out SymbolX sym)) ? sym.Name : null);
+            (string, string) GetKindName(ItemModelOld m) => (_localize(m.KindKey), (SymbolX_QueryX.TryGetParent(m.Item, out SymbolX sym)) ? sym.Name : null);
         }
         #endregion
 
@@ -6392,7 +6392,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (_localize(m.KindKey), QueryXLinkName(m));
+            (string, string) GetKindName(ItemModelOld m) => (_localize(m.KindKey), QueryXLinkName(m));
         }
         #endregion
 
@@ -6478,9 +6478,9 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (_localize(m.KindKey), QueryXLinkName(m));
+            (string, string) GetKindName(ItemModelOld m) => (_localize(m.KindKey), QueryXLinkName(m));
         }
-        string QueryXComputeName(ItemModel m)
+        string QueryXComputeName(ItemModelOld m)
         {
             var sd = m.Item as QueryX;
 
@@ -6551,12 +6551,12 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, GetIdentity(m.Item, IdentityStyle.Single));
+            (string, string) GetKindName(ItemModelOld m) => (null, GetIdentity(m.Item, IdentityStyle.Single));
         }
 
         //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-        private (bool, bool) RowX_VX(ItemModel m, List<ItemModel> prev)
+        private (bool, bool) RowX_VX(ItemModelOld m, List<ItemModelOld> prev)
         {
             var rx = m.RowX;
 
@@ -6580,7 +6580,7 @@ namespace ModelGraph.Core
             return (true, anyChange);
         }
 
-        private DropAction ReorderStoreItem(ItemModel m, ItemModel d, bool doDrop)
+        private DropAction ReorderStoreItem(ItemModelOld m, ItemModelOld d, bool doDrop)
         {
             if (!(m.Item.Owner is Store sto)) return DropAction.None;
             if (!m.IsSiblingModel(d)) return DropAction.None;
@@ -6623,7 +6623,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, m.ViewX.Name);
+            (string, string) GetKindName(ItemModelOld m) => (null, m.ViewX.Name);
         }
         #endregion
 
@@ -6690,11 +6690,11 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, m.TableX.Name);
+            (string, string) GetKindName(ItemModelOld m) => (null, m.TableX.Name);
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            void Insert(ItemModel m) => ItemCreated(new RowX(m.TableX, true));
+            void Insert(ItemModelOld m) => ItemCreated(new RowX(m.TableX, true));
         }
         #endregion
 
@@ -6749,11 +6749,11 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (_localize(m.KindKey), m.Graph.GraphX.Name);
+            (string, string) GetKindName(ItemModelOld m) => (_localize(m.KindKey), m.Graph.GraphX.Name);
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            void CreateSecondaryModelGraph(ItemModel m)
+            void CreateSecondaryModelGraph(ItemModelOld m)
             {
                 var g = m.Graph;
                 RegisterGraphInstance(g);
@@ -6787,7 +6787,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (_localize(m.KindKey), m.Graph.GraphX.Name);
+            (string, string) GetKindName(ItemModelOld m) => (_localize(m.KindKey), m.Graph.GraphX.Name);
         }
         #endregion
 
@@ -6859,7 +6859,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (_localize(m.KindKey), GetRelationName(m.RelationX));
+            (string, string) GetKindName(ItemModelOld m) => (_localize(m.KindKey), GetRelationName(m.RelationX));
         }
         #endregion
 
@@ -6931,7 +6931,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (_localize(m.KindKey), GetRelationName(m.RelationX));
+            (string, string) GetKindName(ItemModelOld m) => (_localize(m.KindKey), GetRelationName(m.RelationX));
         }
         #endregion
 
@@ -6977,12 +6977,12 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (m.RowX.TableX.Name, GetRowName(m.RowX));
+            (string, string) GetKindName(ItemModelOld m) => (m.RowX.TableX.Name, GetRowName(m.RowX));
         }
 
         //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-        void UnlinkRelatedChild(ItemModel m)
+        void UnlinkRelatedChild(ItemModelOld m)
         {
             var key = m.Aux2;
             var rel = m.Aux1 as Relation;
@@ -6992,7 +6992,7 @@ namespace ModelGraph.Core
 
         //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-        DropAction ReorderRelatedChild (ItemModel model, ItemModel drop, bool doDrop)
+        DropAction ReorderRelatedChild (ItemModelOld model, ItemModelOld drop, bool doDrop)
         {
             if (model.Aux2 == null) return DropAction.None;
             if (model.Aux1 == null || !(model.Aux1 is Relation rel)) return DropAction.None;
@@ -7068,11 +7068,11 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (m.RowX.TableX.Name, GetRowName(m.RowX));
+            (string, string) GetKindName(ItemModelOld m) => (m.RowX.TableX.Name, GetRowName(m.RowX));
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            void UnlinkRelatedParent(ItemModel m)
+            void UnlinkRelatedParent(ItemModelOld m)
             {
                 var key = m.Item;
                 var rel = m.Aux1 as Relation;
@@ -7109,11 +7109,11 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (_localize(m.KindKey), $"{m.TableX.Name}: {m.ColumnX.Name}");
+            (string, string) GetKindName(ItemModelOld m) => (_localize(m.KindKey), $"{m.TableX.Name}: {m.ColumnX.Name}");
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            void UnlinkRelatedColumn(ItemModel m)
+            void UnlinkRelatedColumn(ItemModelOld m)
             {
                 var col = m.Item;
                 var tbl = m.Aux1;
@@ -7169,7 +7169,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
         }
         #endregion
 
@@ -7220,7 +7220,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
         }
         #endregion
 
@@ -7271,7 +7271,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
         }
         #endregion
 
@@ -7317,7 +7317,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
         }
         #endregion
 
@@ -7364,9 +7364,9 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (_localize(m.KindKey), QueryXFilterName(m.Query.QueryX));
+            (string, string) GetKindName(ItemModelOld m) => (_localize(m.KindKey), QueryXFilterName(m.Query.QueryX));
         }
-        private string QueryLinkName(ItemModel modle)
+        private string QueryLinkName(ItemModelOld modle)
         {
             var s = modle.Query;
             return QueryXFilterName(s.QueryX);
@@ -7400,7 +7400,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (_localize(m.KindKey), QueryXFilterName(m.Query.QueryX));
+            (string, string) GetKindName(ItemModelOld m) => (_localize(m.KindKey), QueryXFilterName(m.Query.QueryX));
         }
         #endregion
 
@@ -7431,9 +7431,9 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (_localize(m.KindKey), QueryXFilterName(m.Query.QueryX));
+            (string, string) GetKindName(ItemModelOld m) => (_localize(m.KindKey), QueryXFilterName(m.Query.QueryX));
         }
-        private (bool, bool) QueryPathLink_VX(ItemModel m, List<ItemModel> prev)
+        private (bool, bool) QueryPathLink_VX(ItemModelOld m, List<ItemModelOld> prev)
         {
             var q = m.Query;
             var items = q.Items;
@@ -7483,7 +7483,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (_localize(m.KindKey), QueryXFilterName(m.Query.QueryX));
+            (string, string) GetKindName(ItemModelOld m) => (_localize(m.KindKey), QueryXFilterName(m.Query.QueryX));
         }
         #endregion
 
@@ -7514,9 +7514,9 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (_localize(m.KindKey), QueryXFilterName(m.Query.QueryX));
+            (string, string) GetKindName(ItemModelOld m) => (_localize(m.KindKey), QueryXFilterName(m.Query.QueryX));
         }
-        private (bool, bool) QueryGroupLink_VX(ItemModel m, List<ItemModel> prev)
+        private (bool, bool) QueryGroupLink_VX(ItemModelOld m, List<ItemModelOld> prev)
         {
             var q = m.Query;
             var items = q.Items;
@@ -7566,7 +7566,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (_localize(m.KindKey), QueryXFilterName(m.Query.QueryX));
+            (string, string) GetKindName(ItemModelOld m) => (_localize(m.KindKey), QueryXFilterName(m.Query.QueryX));
         }
         #endregion
 
@@ -7597,9 +7597,9 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (_localize(m.KindKey), QueryXFilterName(m.Query.QueryX));
+            (string, string) GetKindName(ItemModelOld m) => (_localize(m.KindKey), QueryXFilterName(m.Query.QueryX));
         }
-        private (bool, bool) QueryEgressLink_VX(ItemModel m, List<ItemModel> prev)
+        private (bool, bool) QueryEgressLink_VX(ItemModelOld m, List<ItemModelOld> prev)
         {
             var q = m.Query;
             var items = q.Items;
@@ -7672,7 +7672,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (m.RowX.TableX.Name, GetRowName(m.RowX));
+            (string, string) GetKindName(ItemModelOld m) => (m.RowX.TableX.Name, GetRowName(m.RowX));
         }
         #endregion
 
@@ -7716,7 +7716,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => ($"{_localize(m.KindKey)} {m.RowX.TableX.Name}", GetRowName(m.RowX));
+            (string, string) GetKindName(ItemModelOld m) => ($"{_localize(m.KindKey)} {m.RowX.TableX.Name}", GetRowName(m.RowX));
         }
         #endregion
 
@@ -7743,7 +7743,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => ($"{_localize(m.KindKey)} {m.RowX.TableX.Name}", GetRowName(m.RowX));
+            (string, string) GetKindName(ItemModelOld m) => ($"{_localize(m.KindKey)} {m.RowX.TableX.Name}", GetRowName(m.RowX));
         }
         #endregion
 
@@ -7787,7 +7787,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => ($"{_localize(m.KindKey)} {m.RowX.TableX.Name}", GetRowName(m.RowX));
+            (string, string) GetKindName(ItemModelOld m) => ($"{_localize(m.KindKey)} {m.RowX.TableX.Name}", GetRowName(m.RowX));
         }
         #endregion
 
@@ -7814,7 +7814,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => ($"{_localize(m.KindKey)} {m.RowX.TableX.Name}", GetRowName(m.RowX));
+            (string, string) GetKindName(ItemModelOld m) => ($"{_localize(m.KindKey)} {m.RowX.TableX.Name}", GetRowName(m.RowX));
         }
         #endregion
 
@@ -7858,7 +7858,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => ($"{_localize(m.KindKey)} {m.RowX.TableX.Name}", GetRowName(m.RowX));
+            (string, string) GetKindName(ItemModelOld m) => ($"{_localize(m.KindKey)} {m.RowX.TableX.Name}", GetRowName(m.RowX));
         }
         #endregion
 
@@ -7885,7 +7885,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => ($"{_localize(m.KindKey)} {m.RowX.TableX.Name}", GetRowName(m.RowX));
+            (string, string) GetKindName(ItemModelOld m) => ($"{_localize(m.KindKey)} {m.RowX.TableX.Name}", GetRowName(m.RowX));
         }
         #endregion
 
@@ -7981,10 +7981,10 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (m.GraphX.OldIdKey.ToString(), m.GraphX.Name);
+            (string, string) GetKindName(ItemModelOld m) => (m.GraphX.OldIdKey.ToString(), m.GraphX.Name);
         }
 
-        void CreateGraph(ItemModel m)
+        void CreateGraph(ItemModelOld m)
         {
             CreateGraph(m.GraphX, out Graph g);
             RegisterGraphInstance(g);
@@ -8042,7 +8042,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
         }
         #endregion
 
@@ -8093,7 +8093,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
         }
         #endregion
 
@@ -8144,7 +8144,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
         }
         #endregion
 
@@ -8194,7 +8194,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
         }
         #endregion
 
@@ -8240,7 +8240,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (_localize(m.KindKey), m.Level.Name);
+            (string, string) GetKindName(ItemModelOld m) => (_localize(m.KindKey), m.Level.Name);
         }
         #endregion
 
@@ -8286,7 +8286,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (GetPathKind(m.Path), GetPathName(m.Path));
+            (string, string) GetKindName(ItemModelOld m) => (GetPathKind(m.Path), GetPathName(m.Path));
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
@@ -8357,7 +8357,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, m.TableX.Name);
+            (string, string) GetKindName(ItemModelOld m) => (null, m.TableX.Name);
         }
         #endregion
 
@@ -8417,7 +8417,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (_localize(m.KindKey), GetIdentity(m.Node.Item, IdentityStyle.Double));
+            (string, string) GetKindName(ItemModelOld m) => (_localize(m.KindKey), GetIdentity(m.Node.Item, IdentityStyle.Double));
         }
         #endregion
 
@@ -8457,7 +8457,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (_localize(m.KindKey), GetHeadTailName(m.Edge.Node1.Item, m.Edge.Node2.Item));
+            (string, string) GetKindName(ItemModelOld m) => (_localize(m.KindKey), GetHeadTailName(m.Edge.Node1.Item, m.Edge.Node2.Item));
         }
         #endregion
 
@@ -8506,7 +8506,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
         }
         #endregion
 
@@ -8529,7 +8529,7 @@ namespace ModelGraph.Core
             };
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string Kind, string Name) GetKindName(ItemModel m)
+            (string Kind, string Name) GetKindName(ItemModelOld m)
             {
                 GetHeadTail(m.Query.QueryX, out Store head, out Store tail);
                 var name = $"{GetIdentity(m.Item, IdentityStyle.Double)}  -->  {GetIdentity(tail, IdentityStyle.Single)}: <?>";
@@ -8592,7 +8592,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(GetNameKey(IdKey.PrimeComputeModel)));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(GetNameKey(IdKey.PrimeComputeModel)));
         }
         #endregion
 
@@ -8643,7 +8643,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, GetIdentity(m.Store, IdentityStyle.Single));
+            (string, string) GetKindName(ItemModelOld m) => (null, GetIdentity(m.Store, IdentityStyle.Single));
         }
         #endregion
 
@@ -8703,7 +8703,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(GetNameKey(IdKey.InternalStoreListModel)));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(GetNameKey(IdKey.InternalStoreListModel)));
         }
         #endregion
 
@@ -8758,7 +8758,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.Store.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.Store.NameKey));
         }
         #endregion
 
@@ -8825,7 +8825,7 @@ namespace ModelGraph.Core
                 }
             };
 
-            (string, string) GetKindName(ItemModel m) => (GetIdentity(m.Item, IdentityStyle.Kind), GetIdentity(m.Item, IdentityStyle.StoreItem));
+            (string, string) GetKindName(ItemModelOld m) => (GetIdentity(m.Item, IdentityStyle.Kind), GetIdentity(m.Item, IdentityStyle.StoreItem));
         }
 
         //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
@@ -8895,7 +8895,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) =>  (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) =>  (null, _localize(m.NameKey));
         }
         #endregion
 
@@ -8948,7 +8948,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
         }
         #endregion
 
@@ -8988,7 +8988,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
         }
         #endregion
 
@@ -9028,7 +9028,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (null, _localize(m.NameKey));
+            (string, string) GetKindName(ItemModelOld m) => (null, _localize(m.NameKey));
         }
         #endregion
 
@@ -9056,7 +9056,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (_localize(m.Item.KindKey), GetIdentity(m.Item, IdentityStyle.Double));
+            (string, string) GetKindName(ItemModelOld m) => (_localize(m.Item.KindKey), GetIdentity(m.Item, IdentityStyle.Double));
         }
         #endregion
 
@@ -9084,7 +9084,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (_localize(m.KindKey), $"({GetIdentity(m.Aux1, IdentityStyle.Double)}) --> ({GetIdentity(m.Aux2, IdentityStyle.Double)})");
+            (string, string) GetKindName(ItemModelOld m) => (_localize(m.KindKey), $"({GetIdentity(m.Aux1, IdentityStyle.Double)}) --> ({GetIdentity(m.Aux2, IdentityStyle.Double)})");
         }
         #endregion
 
@@ -9133,7 +9133,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) =>  (GetKind(m.Relation.OldIdKey), GetIdentity(m.Relation, IdentityStyle.Single));
+            (string, string) GetKindName(ItemModelOld m) =>  (GetKind(m.Relation.OldIdKey), GetIdentity(m.Relation, IdentityStyle.Single));
 
         }
         #endregion
@@ -9183,7 +9183,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (GetKind(m.Relation.OldIdKey), GetIdentity(m.Relation, IdentityStyle.Single));
+            (string, string) GetKindName(ItemModelOld m) => (GetKind(m.Relation.OldIdKey), GetIdentity(m.Relation, IdentityStyle.Single));
         }
         #endregion
 
@@ -9250,7 +9250,7 @@ namespace ModelGraph.Core
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-            (string, string) GetKindName(ItemModel m) => (GetIdentity(m.Item, IdentityStyle.Kind), GetIdentity(m.Item, IdentityStyle.StoreItem));
+            (string, string) GetKindName(ItemModelOld m) => (GetIdentity(m.Item, IdentityStyle.Kind), GetIdentity(m.Item, IdentityStyle.StoreItem));
 
             //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 

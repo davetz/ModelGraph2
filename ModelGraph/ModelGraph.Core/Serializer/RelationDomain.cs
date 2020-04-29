@@ -7,11 +7,19 @@ namespace ModelGraph.Core
 {
     public class RelationDomain : InternalDomainOf<Relation>, IRelationStore
     {
-        internal RelationDomain(Chef owner) : base(owner, IdKey.RelationStore, 30)
+        internal RelationDomain(Chef owner) : base(owner, IdKey.RelationDomain, 30)
         {
             new RelationLink(owner, this);
         }
 
+        #region CreateRelations  ==============================================
+        private void CreateRelations()
+        {
+
+        }
+        #endregion
+
+        #region GetRelationArray  =============================================
         public Relation[] GetRelationArray()
         {
             var relationArray = new Relation[Count];
@@ -21,10 +29,11 @@ namespace ModelGraph.Core
             }
             return relationArray;
         }
+        #endregion
 
         #region Identity  =====================================================
-        internal override IdKey VKey => IdKey.RelationStore;
-        internal override string GetParentNameId(Chef chef) => GetKindId(chef);
+        internal override IdKey ViKey => IdKey.RelationDomain;
+        public override string GetParentNameId(Chef chef) => GetKindId(chef);
         #endregion
     }
 }

@@ -13,7 +13,7 @@ namespace ModelGraph.Core
         internal PropertyOf<TableX, string> NameProperty;
         internal PropertyOf<TableX, string> SummaryProperty;
 
-        internal TableXDomain(Chef chef) : base(chef, IdKey.TableXStore, 30)
+        internal TableXDomain(Chef chef) : base(chef, IdKey.TableXDomain, 30)
         {
             chef.RegisterItemSerializer((_serializerGuid, this));
             CreateProperties(chef);

@@ -44,10 +44,6 @@ namespace ModelGraph.Services
                 view.CloseModel();
             }
         }
-        public void TryShowModel(IModelPageControl pageControl)
-        {
-
-        }
         public async Task<ViewLifetimeControl> TryShowAsStandaloneAsync(string windowTitle, Type pageType, IModel model)
         {
             ViewLifetimeControl viewControl = await CreateViewLifetimeControlAsync(windowTitle, pageType, model);

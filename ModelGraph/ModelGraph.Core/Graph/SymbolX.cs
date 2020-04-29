@@ -30,11 +30,11 @@ namespace ModelGraph.Core
         #endregion
 
         #region Identity  =====================================================
-        internal override IdKey VKey => IdKey.SymbolX;
-        internal override string GetSingleNameId(Chef chef) => string.IsNullOrWhiteSpace(Name) ? BlankName : Name;
-        internal override string GetParentNameId(Chef chef) => chef.GraphX_SymbolX.TryGetParent(this, out GraphX p) ? p.GetSingleNameId(chef) : GetKindId(chef);
-        internal override string GetSummaryId(Chef chef) => Summary;
-        internal override string GetDescriptionId(Chef chef) => Description;
+        internal override IdKey ViKey => IdKey.SymbolX;
+        public override string GetSingleNameId(Chef chef) => string.IsNullOrWhiteSpace(Name) ? BlankName : Name;
+        public override string GetParentNameId(Chef chef) => chef.GraphX_SymbolX.TryGetParent(this, out GraphX p) ? p.GetSingleNameId(chef) : GetKindId(chef);
+        public override string GetSummaryId(Chef chef) => Summary;
+        public override string GetDescriptionId(Chef chef) => Description;
         #endregion
 
         #region Properties/Methods  ===========================================

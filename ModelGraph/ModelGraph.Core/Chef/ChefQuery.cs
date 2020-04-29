@@ -456,7 +456,7 @@ namespace ModelGraph.Core
 
         //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-        internal string GetQueryXRelationName(ItemModel m)
+        internal string GetQueryXRelationName(ItemModelOld m)
         {
             if (Relation_QueryX.TryGetParent(m.Item, out Relation parent))
             {
@@ -467,7 +467,7 @@ namespace ModelGraph.Core
 
         //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-        internal string QueryXLinkName(ItemModel model)
+        internal string QueryXLinkName(ItemModelOld model)
         {
             return QueryXFilterName(model.Item as QueryX);
         }
@@ -491,7 +491,7 @@ namespace ModelGraph.Core
 
         //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-        internal string QueryXHeadName(ItemModel m)
+        internal string QueryXHeadName(ItemModelOld m)
         {
             var sd = m.Item as QueryX;
             GetHeadTail(sd, out Store head1, out Store tail1);

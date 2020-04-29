@@ -20,13 +20,13 @@ namespace ModelGraph.Core
         #region PostRequest  ==================================================
         // These methods are called from the ui thread and typically they invoke 
         // some type of change to the dataChefs objects (create, remove, update)
-        internal void PostAction(ItemModel model, Action action)
+        internal void PostAction(ItemModelOld model, Action action)
         {
             if (model.IsInvalid) return;
 
             PostModelRequest(model.GetRootModel(), action);
         }
-        internal void PostRefresh(ItemModel model)
+        internal void PostRefresh(ItemModelOld model)
         {
             PostModelRequest(model.GetRootModel(), () => { });
         }
@@ -38,16 +38,16 @@ namespace ModelGraph.Core
             else if (command.Action1 != null)
                 PostModelRequest(model.GetRootModel(), () => { command.Action1(model, command.Parameter1); });
         }
-        internal void PostRefreshViewList(RootModel root, ItemModel select, int scroll, ChangeType change)
+        internal void PostRefreshViewList(RootModelOld root, ItemModelOld select, int scroll, ChangeType change)
         {
             root.SelectModel = select;
             PostModelRequest(root, () => RefreshViewFlatList(root, scroll, change));
         }
-        internal void PostSetValue(ItemModel model, bool value)
+        internal void PostSetValue(ItemModelOld model, bool value)
         {
             PostSetValue(model, value.ToString());
         }
-        internal void PostSetValue(ItemModel model, string value)
+        internal void PostSetValue(ItemModelOld model, string value)
         {
             if (model.IsInvalid) return;
 
@@ -58,7 +58,7 @@ namespace ModelGraph.Core
 
             PostModelRequest(model.GetRootModel(), () => {SetValue(model, value); });
         }
-        internal void PostSetValue(ItemModel model, int index)
+        internal void PostSetValue(ItemModelOld model, int index)
         {
             if (index < 0) return;
             if (model.IsInvalid) return;
@@ -81,7 +81,7 @@ namespace ModelGraph.Core
         #region ExecuteRequest ================================================
         //  Called from the ui thread and runs on a background thred
 
-        private async void PostModelRequest(RootModel model, Action action)
+        private async void PostModelRequest(RootModelOld model, Action action)
         {
             await Task.Run(() => { ExecuteRequest(model, action); }); // runs on worker thread 
             //<=== control immediatley returns to the ui thread
@@ -92,7 +92,7 @@ namespace ModelGraph.Core
             var rootModels = _rootModels.ToArray(); // get a copy of the root model list
             foreach (var root in rootModels) { root.PageDispatch(); }
         }
-        private void ExecuteRequest(RootModel model, Action action)
+        private void ExecuteRequest(RootModelOld model, Action action)
         {
             // the dataAction will likey modify the dataChef's objects, 
             // so we can't have multiple threads stepping on each other
@@ -108,7 +108,7 @@ namespace ModelGraph.Core
                     if (root != model) Refresh(root); // then do all the others
                 }
 
-                void Refresh(RootModel m)
+                void Refresh(RootModelOld m)
                 {
                     if (m.HasFlatList) RefreshViewFlatList(m);
                     m.UIRequestRefreshModel();

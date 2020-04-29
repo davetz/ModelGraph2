@@ -5,14 +5,14 @@ using System.Text.RegularExpressions;
 
 namespace ModelGraph.Core
 {
-    public class ItemModel
+    public class ItemModelOld
     {
         public Item Item;
         public Item Aux1;
         public Item Aux2;
-        public ItemModel ParentModel;        // allows bidirectional tree taversal
-        public List<ItemModel> ChildModels;  // all child models before filter sort
-        public List<ItemModel> ViewModels;   // collection of child models after filter sort
+        public ItemModelOld ParentModel;        // allows bidirectional tree taversal
+        public List<ItemModelOld> ChildModels;  // all child models before filter sort
+        public List<ItemModelOld> ViewModels;   // collection of child models after filter sort
         public string ViewFilter;            // UI imposed Kind/Name filter
         internal ModelAction Get;            // custom actions for this itemModel
        
@@ -25,8 +25,8 @@ namespace ModelGraph.Core
         public byte Depth;
 
         #region Constructor  ==================================================
-        internal ItemModel() { } // supports RootModel constructor
-        private ItemModel(ItemModel parent, IdKey idKe, Item item, Item aux1, Item aux2, ModelAction action)
+        internal ItemModelOld() { } // supports RootModel constructor
+        private ItemModelOld(ItemModelOld parent, IdKey idKe, Item item, Item aux1, Item aux2, ModelAction action)
         {
             IdKey = idKe;
             Item = item;
@@ -38,11 +38,11 @@ namespace ModelGraph.Core
             if (parent == null) return;
             Depth = (byte)(parent.Depth + 1);
         }
-        internal static ItemModel Create(ItemModel parent, IdKey idKe, Item item, Item aux1, Item aux2, ModelAction action)
+        internal static ItemModelOld Create(ItemModelOld parent, IdKey idKe, Item item, Item aux1, Item aux2, ModelAction action)
         {
-            return new ItemModel(parent, idKe, item, aux1, aux2, action);
+            return new ItemModelOld(parent, idKe, item, aux1, aux2, action);
         }
-        internal static void Release(ItemModel m)
+        internal static void Release(ItemModelOld m)
         {
             //if (m is null) return;
             //Release(m.ChildModels);
@@ -54,7 +54,7 @@ namespace ModelGraph.Core
             //m.ChildModels = null;
             //m.ViewModels = null;
         }
-        internal static void Release(List<ItemModel> childModels)
+        internal static void Release(List<ItemModelOld> childModels)
         {
             //if (childModels is null) return;
 
@@ -202,11 +202,11 @@ namespace ModelGraph.Core
             Error TryGetSpecificError()
             {
                 if (IsErrorAux2)
-                    return Item.GetChef().TryGetError(Item, Aux1, Aux2);
+                    return Item.DataChef.TryGetError(Item, Aux1, Aux2);
                 else if (IsErrorAux1)
-                    return Item.GetChef().TryGetError(Item, Aux1);
+                    return Item.DataChef.TryGetError(Item, Aux1);
                 else
-                    return Item.GetChef().TryGetError(Item);
+                    return Item.DataChef.TryGetError(Item);
             }
 
             bool NoErrorChange()
@@ -246,11 +246,11 @@ namespace ModelGraph.Core
         #endregion
 
         #region ModelAction  ==================================================
-        public bool ModelUsed(ItemModel cm) => (Get.ModelUsed == null) ? true : Get.ModelUsed(this, cm);
+        public bool ModelUsed(ItemModelOld cm) => (Get.ModelUsed == null) ? true : Get.ModelUsed(this, cm);
         public string ModelInfo => (Get.ModelInfo == null) ? null : Get.ModelInfo(this);
         public string ModelSummary => (Get.ModelSummary == null) ? null : Get.ModelSummary(this);
         public string ModelDescription => (Get.ModelDescription == null) ? null : Get.ModelDescription(this);
-        public (bool HasChildren, bool HasChanged) Validate(List<ItemModel> buffer) => (Get.Validate == null) ? (false, false) : Get.Validate(this, buffer);
+        public (bool HasChildren, bool HasChanged) Validate(List<ItemModelOld> buffer) => (Get.Validate == null) ? (false, false) : Get.Validate(this, buffer);
 
         public int IndexValue => (Get.IndexValue == null) ? 0 : Get.IndexValue(this);
         public bool BoolValue => (Get.BoolValue == null) ? false : Get.BoolValue(this);
@@ -302,8 +302,8 @@ namespace ModelGraph.Core
             return list.Count > 0;
         }
         //=====================================================================
-        public void DragStart() { Chef.DragDropSource = this; }
-        public DropAction DragEnter() => ModelDrop(this, Chef.DragDropSource, false);
+        //public void DragStart() { Chef.DragDropSource = this; }
+        //public DropAction DragEnter() => ModelDrop(this, Chef.DragDropSource, false);
         public void DragDrop()
         {
             var drop = Chef.DragDropSource;
@@ -313,7 +313,7 @@ namespace ModelGraph.Core
         }
 
         #region ModelDrop  ====================================================
-        internal Func<ItemModel, ItemModel, bool, DropAction> ModelDrop
+        internal Func<ItemModelOld, ItemModelOld, bool, DropAction> ModelDrop
         {
             get
             {
@@ -326,17 +326,17 @@ namespace ModelGraph.Core
                     return Get.ModelDrop ?? DropActionNone;
             }
         }
-        DropAction DropActionNone(ItemModel model, ItemModel drop, bool doit) => DropAction.None;
+        DropAction DropActionNone(ItemModelOld model, ItemModelOld drop, bool doit) => DropAction.None;
         #endregion
 
         #region PostAction  ===================================================
         public void PostRefresh() => DataChef?.PostRefresh(this);
-        public void PostRefreshViewList(ItemModel select, int scroll = 0, ChangeType change = ChangeType.NoChange) => DataChef?.PostRefreshViewList(GetRootModel(), select, scroll, change);
+        public void PostRefreshViewList(ItemModelOld select, int scroll = 0, ChangeType change = ChangeType.NoChange) => DataChef?.PostRefreshViewList(GetRootModel(), select, scroll, change);
         public void PostSetValue(int value) => DataChef?.PostSetValue(this, value);
         public void PostSetValue(bool value) => DataChef?.PostSetValue(this, value);
         public void PostSetValue(string value) => DataChef?.PostSetValue(this, value);
         public void PostAction(Action action) => DataChef?.PostAction(this, action);
-        public static ItemModel FirstValidModel(List<ItemModel> viewList)
+        public static ItemModelOld FirstValidModel(List<ItemModelOld> viewList)
         {
             if (viewList.Count > 0)
             {
@@ -377,14 +377,16 @@ namespace ModelGraph.Core
                 }
             }
         }
+
+        
         #endregion
         #endregion
 
         #region Properties/Methods  ===========================================
-        internal void InitChildModels(List<ItemModel> prev, int capacity = 0)
+        internal void InitChildModels(List<ItemModelOld> prev, int capacity = 0)
         {
             var cap = (capacity < 20) ? 20 : capacity;
-            if (ChildModels == null) ChildModels = new List<ItemModel>(cap);
+            if (ChildModels == null) ChildModels = new List<ItemModelOld>(cap);
             if (ChildModels.Capacity < cap) ChildModels.Capacity = cap;
 
             if (prev.Capacity < ChildModels.Capacity) prev.Capacity = ChildModels.Capacity;
@@ -403,7 +405,7 @@ namespace ModelGraph.Core
 
         public bool IsInvalid => (Item == null || Item.IsInvalid);
 
-        public int GetChildlIndex(ItemModel child)
+        public int GetChildlIndex(ItemModelOld child)
         {
             if (ViewModels != null)
             {
@@ -431,7 +433,7 @@ namespace ModelGraph.Core
         }
         public int ViewModelCount => (ViewModels is null) ? 0 : ViewModels.Count;
         internal int ChildModelCount => (ChildModels is null) ? 0 : ChildModels.Count;
-        public bool IsChildModel(ItemModel model)
+        public bool IsChildModel(ItemModelOld model)
         {
             if (ViewModels == null) return false;
             foreach (var child in ViewModels)
@@ -440,16 +442,16 @@ namespace ModelGraph.Core
             }
             return false;
         }
-        public bool IsSiblingModel(ItemModel model)
+        public bool IsSiblingModel(ItemModelOld model)
         {
             return (ParentModel == model.ParentModel);
         }
 
-        public RootModel GetRootModel()
+        public RootModelOld GetRootModel()
         {
             var mdl = this;
             while (mdl.ParentModel != null) { mdl = mdl.ParentModel; }
-            if (mdl is RootModel root) return root;
+            if (mdl is RootModelOld root) return root;
             throw new Exception("Corrupt TreeModel Hierachy");
         }
         #endregion

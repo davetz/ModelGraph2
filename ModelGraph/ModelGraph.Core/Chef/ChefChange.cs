@@ -38,7 +38,7 @@ namespace ModelGraph.Core
         #endregion
 
         #region Expand All  ===================================================
-        private void ExpandAllChangeSets(ItemModel model)
+        private void ExpandAllChangeSets(ItemModelOld model)
         {
             if (ChangeRoot == null) return;
             ChangeRoot.AutoExpandChanges();
@@ -67,7 +67,7 @@ namespace ModelGraph.Core
 
                 ChangeRoot.Add(ChangeSet);
                 ChangeSequence += 1;
-                ChangeSet = new ChangeSet(ChangeRoot, ChangeSequence);
+                RegisterPrivateItem(new ChangeSet(ChangeRoot, ChangeSequence));
                 ResetCacheValues();
                 RefreshAllGraphs();
             }
@@ -220,7 +220,7 @@ namespace ModelGraph.Core
         #endregion
 
         #region ItemUpdated  ==================================================
-        private void SetValue(ItemModel m, string newValue)
+        private void SetValue(ItemModelOld m, string newValue)
         {
             m.Item.ModelDelta++;
             if (m.Property.IsCovert)

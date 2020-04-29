@@ -26,6 +26,10 @@ namespace ModelGraph.Core
         {
             _itemType_Properties.Add(type, props.ToArray());
         }
+        internal void RegisterStaticProperties(Type type, Property[] props)
+        {
+            _itemType_Properties.Add(type, props);
+        }
         #endregion
 
         #region LookUpProperty  ===============================================
@@ -53,21 +57,6 @@ namespace ModelGraph.Core
                 }
             }
             if (_itemType_Properties.TryGetValue(store.GetChildType(), out Property[] arr))
-            {
-                foreach (var pr in arr)
-                {
-                    if (string.Compare(name, _localize(pr.NameKey), true) == 0) { prop = pr; return true; }
-                }
-            }
-            return false;
-        }
-        internal bool TryLookUpProperty(Type type, string name, out Property prop)
-        {
-            prop = null;
-
-            if (string.IsNullOrWhiteSpace(name)) return false;
-
-            if (_itemType_Properties.TryGetValue(type, out Property[] arr))
             {
                 foreach (var pr in arr)
                 {

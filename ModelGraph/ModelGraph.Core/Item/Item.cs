@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 
 namespace ModelGraph.Core
 {
@@ -18,20 +19,20 @@ namespace ModelGraph.Core
         public const string InvalidItem = "#######";
 
         #region Identity  =====================================================
-        internal virtual IdKey VKey => OldIdKey;
+        internal virtual IdKey ViKey => OldIdKey;
         internal virtual string Name { get => "??"; set => _ = value; }
         internal virtual string Summary { get => ""; set => _ = value; }
         internal virtual string Description { get => ""; set => _ = value; }
 
-        internal virtual string GetKindId(Chef chef) => chef.GetKindId(VKey);
-        internal virtual string GetSingleNameId(Chef chef) => GetChef().GetSingleNameId(VKey);
-        internal virtual string GetParentNameId(Chef chef) => Owner.GetSingleNameId(chef);
-        internal virtual string GetDoubleNameId(Chef chef) => $"{GetParentNameId(chef)} : {GetSingleNameId(chef)}";
-        internal virtual string GetChangeLogId(Chef chef) => GetDoubleNameId(chef);
-        internal virtual (string, string) GetKindNameId(Chef chef) => (GetKindId(chef), GetSingleNameId(chef));
-        internal virtual string GetSummaryId(Chef chef) => chef.GetSummaryId(VKey);
-        internal virtual string GetDescriptionId(Chef chef) => chef.GetDescriptionId(VKey);
-
+        public virtual string GetKindId(Chef chef) => chef.GetKindId(ViKey);
+        public virtual string GetSingleNameId(Chef chef) => DataChef.GetSingleNameId(ViKey);
+        public virtual string GetParentNameId(Chef chef) => Owner.GetSingleNameId(chef);
+        public virtual string GetDoubleNameId(Chef chef) => $"{GetParentNameId(chef)} : {GetSingleNameId(chef)}";
+        public virtual string GetChangeLogId(Chef chef) => GetDoubleNameId(chef);
+        public virtual (string, string) GetKindNameId(Chef chef) => (GetKindId(chef), GetSingleNameId(chef));
+        public virtual string GetSummaryId(Chef chef) => chef.GetSummaryId(ViKey);
+        public virtual string GetDescriptionId(Chef chef) => chef.GetDescriptionId(ViKey);
+        public virtual string GetAcceleratorId(Chef chef) => chef.GetAcceleratorId(ViKey);
         internal string GetIndexId()
         {
             var inx = Index;
@@ -72,11 +73,9 @@ namespace ModelGraph.Core
         internal bool IsExternal => (OldIdKey & IdKey.IsExternal) != 0;
         internal bool IsReference => (OldIdKey & IdKey.IsReference) != 0;
         internal bool IsCovert => (OldIdKey & IdKey.SubMask) == IdKey.IsCovert;
-        internal bool IsReadOnly => (OldIdKey & IdKey.SubMask) == IdKey.IsReadOnly;
-        internal bool CanMultiline => (OldIdKey & IdKey.SubMask) == IdKey.CanMultiline;
 
-        internal int ItemKey => (int)(OldIdKey & IdKey.KeyMask);
-
+        internal ushort ItemKey => GetItemKey(ViKey);
+        internal ushort GetItemKey(IdKey idKe) => (ushort)(idKe & IdKey.KeyMask);
         internal byte TraitIndex => (byte)(OldIdKey & IdKey.IndexMask);
         internal byte TraitIndexOf(IdKey idKe) => (byte)(idKe & IdKey.IndexMask);
         internal bool IsErrorAux => (OldIdKey & IdKey.IsErrorAux) != 0;
@@ -100,14 +99,12 @@ namespace ModelGraph.Core
         internal bool IsPath => (QueryKind == QueryType.Path);
         internal bool IsGroup => (QueryKind == QueryType.Group);
         internal bool IsSegue => (QueryKind == QueryType.Egress);
-        internal bool IsValue => (QueryKind == QueryType.Value);
         internal bool IsReversed { get { return GetFlag(State.IsReversed); } set { SetFlag(State.IsReversed, value); } }
         internal bool IsRadial { get { return GetFlag(State.IsRadial); } set { SetFlag(State.IsRadial, value); } }
 
         internal bool IsBreakPoint { get { return GetFlag(State.IsBreakPoint); } set { SetFlag(State.IsBreakPoint, value); } }
         internal bool IsPersistent { get { return GetFlag(State.IsPersistent); } set { SetFlag(State.IsPersistent, value); } }
 
-        internal bool IsLimited { get { return GetFlag(State.IsLimited); } set { SetFlag(State.IsLimited, value); } }
         internal bool IsRequired { get { return GetFlag(State.IsRequired); } set { SetFlag(State.IsRequired, value); } }
 
         internal bool IsUndone { get { return GetFlag(State.IsUndone); } set { SetFlag(State.IsUndone, value); } }
@@ -115,12 +112,9 @@ namespace ModelGraph.Core
         internal bool IsCongealed { get { return GetFlag(State.IsCongealed); } set { SetFlag(State.IsCongealed, value); } }
 
         internal bool IsChoice { get { return GetFlag(State.IsChoice); } set { SetFlag(State.IsChoice, value); } }
-        internal bool NeedsRefresh { get { return GetFlag(State.NeedsRefresh); } set { SetFlag(State.NeedsRefresh, value); } }
 
         internal bool IsQueryGraphLink => !IsRoot && QueryKind == QueryType.Graph;
         internal bool IsQueryGraphRoot => IsRoot && QueryKind == QueryType.Graph;
-
-        internal bool IsValueXHead => IsHead && QueryKind == QueryType.Value;// IdKey == IdKey.QueryXValueHead;
 
         internal bool IsGraphLink => (!IsRoot && QueryKind == QueryType.Graph);
         internal bool IsPathHead => IsHead && QueryKind == QueryType.Path;
@@ -128,11 +122,14 @@ namespace ModelGraph.Core
         internal bool IsSegueHead => IsHead && QueryKind == QueryType.Egress;
 
         // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
-
+        // deleted items can be restored, but discarded items are gone forever
+        // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
         internal bool IsNew { get { return (_flags & B1) != 0; } set { _flags = value ? (byte)(_flags | B1) : (byte)(_flags & ~B1); } }
         internal bool IsDeleted { get { return (_flags & B2) != 0; } set { _flags = value ? (byte)(_flags | B2) : (byte)(_flags & ~B2); } }
-        internal bool AutoExpandLeft { get { return (_flags & B3) != 0; } set { _flags = value ? (byte)(_flags | B3) : (byte)(_flags & ~B3); } }
-        internal bool AutoExpandRight { get { return (_flags & B4) != 0; } set { _flags = value ? (byte)(_flags | B4) : (byte)(_flags & ~B4); } }
+        internal bool IsDiscarded { get { return (_flags & B3) != 0; } set { _flags = value ? (byte)(_flags | B3) : (byte)(_flags & ~B3); } }
+        internal bool IsUnsable { get => IsDeleted || IsDiscarded; }
+        internal bool AutoExpandLeft { get { return (_flags & B4) != 0; } set { _flags = value ? (byte)(_flags | B4) : (byte)(_flags & ~B4); } }
+        internal bool AutoExpandRight { get { return (_flags & B5) != 0; } set { _flags = value ? (byte)(_flags | B5) : (byte)(_flags & ~B5); } }
         #endregion
 
         #region StringKeys  ===================================================
@@ -150,18 +147,39 @@ namespace ModelGraph.Core
 
         #region Property/Methods ==============================================
         internal int Index => (Owner is Store st) ? st.IndexOf(this) : -1;
-        internal bool IsInvalid => IsDeleted;
-        internal bool IsValid => !IsInvalid;
 
         internal Store Store => Owner as Store;
-        /// <summary>
-        /// Walk up item tree hierachy to find the parent DataChef
-        /// </summary>
-        internal Chef GetChef()
+
+
+        /// <summary>Walk up item tree hierachy to find the parent DataChef</summary>
+        public Chef DataChef => GetDataChef();
+        private Chef GetDataChef()
         {
-            var item = this;
-            while (item != null) { if (item.IsDataChef) return item as Chef; item = item.Owner; }
+            var itm = this;
+            for (int i = 0; i < 100; i++)
+            {
+                if (itm is null) break;
+                if (itm is Chef chef) return chef;
+                itm = itm.Owner;
+            }
             throw new Exception("GetChef: Corrupted item hierarchy"); // I seriously hope this never happens
+        }
+
+
+        internal bool IsInvalid => !HasValidLinkToChef();
+        internal bool IsValid => HasValidLinkToChef();
+        private bool HasValidLinkToChef()
+        {
+            var itm = this;
+            for (int i = 0; i < 100; i++)// avoid an infinite loop
+            {
+                if (itm is null) return false;
+                if (itm.IsUnsable) return false;
+                if (itm is Chef) return true;
+                if (itm is LineModel m && m.Item.IsInvalid) return false; 
+                itm = itm.Owner;
+            }
+            return false;
         }
         #endregion
 

@@ -5,16 +5,26 @@ namespace ModelGraph.Core
     public class EnumZStore : StoreOf<EnumZ>
     {
         #region Constructors  =================================================
-        internal EnumZStore(Chef owner)
+        internal EnumZStore(Chef chef)
         {
-            Owner = owner;
+            Owner = chef;
             SetCapacity(20);
-            owner.Add(this);
+            AddChildren(chef);
+
+            chef.Add(this);
+        }
+        #endregion
+
+        #region AddChildren  ==================================================
+        void AddChildren(Chef chef)
+        {
+            chef.RegisterPrivateItem(new Enum_ValueType(this));
+
         }
         #endregion
 
         #region Identity  =====================================================
-        internal override IdKey VKey => IdKey.EnumZStore;
+        internal override IdKey ViKey => IdKey.EnumZStore;
         #endregion
     }
 }

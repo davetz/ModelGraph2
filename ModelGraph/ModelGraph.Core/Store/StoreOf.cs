@@ -7,20 +7,9 @@ namespace ModelGraph.Core
     {
         private List<T> _items = new List<T>(0);    // list of child items
 
-        #region Constructor  ==================================================
-        public StoreOf() { }
-        public StoreOf(Store owner, IdKey idKe, int capacity = 0)
-        {
-            Owner = owner;
-            OldIdKey = idKe;
-            SetCapacity(capacity);
-            owner?.Add(this);
-        }
-        #endregion
-
         #region Count/Items/GetItems  =========================================
-        internal IList<T> Items => _items.AsReadOnly(); // protected from accidental corruption
-        internal override int Count => (_items == null) ? 0 : _items.Count;
+        public IList<T> Items => (_items is null) ? new List<T>(0).AsReadOnly() : _items.AsReadOnly(); // protected from accidental corruption
+        internal override int Count => (_items is null) ? 0 : _items.Count;
         internal override List<Item> GetItems() => new List<Item>(_items);
         internal override void RemoveAll() { _items.Clear(); UpdateDelta(); }
         internal override Type GetChildType() => typeof(T);
@@ -32,6 +21,7 @@ namespace ModelGraph.Core
 
         internal void SetCapacity(int exactCount)
         {
+            if (_items is null) return;
             if (exactCount > 0)
             {
                 var cap = (int)((exactCount + 1) * 1.1); // allow for modest expansion
@@ -43,22 +33,51 @@ namespace ModelGraph.Core
         // Add  =============================================================
         internal void Add(T item)
         {
-            UpdateDelta();
+            if (_items is null) return;
             _items.Add(item);
+            UpdateDelta();
         }
         internal override void Add(Item item) => Add(Cast(item));
 
         // Remove  ==========================================================
         internal void Remove(T item)
         {
-            UpdateDelta();
+            if (_items is null) return;
             _items.Remove(item);
+            UpdateDelta();
+        }
+        // Discard  ===========================================================
+        /// <summary>Discard my self and recursivly discard all child Items</summary>
+        internal override void Discard()
+        {
+            IsDiscarded = true;
+            DiscardChildren();
+            _items = null;
+            UpdateDelta();
+        }
+        // DiscardChildren  ===================================================
+        /// <summary>Recursivly discard all child Items</summary>
+        internal override void DiscardChildren()
+        {
+            if (_items is null) return;
+
+            foreach (var item in _items)
+            {
+                if (item is Store sto) 
+                    sto.Discard();
+                else
+                    item.IsDiscarded = true;
+            }
+            _items.Clear();
+            UpdateDelta();
         }
         public override void Remove(Item item) => Remove(Cast(item));
 
         // Insert  ============================================================
         internal void Insert(T item, int index)
         {
+            if (_items is null) return;
+
             var i = (index < 0) ? 0 : index;
 
             UpdateDelta();
@@ -70,12 +89,14 @@ namespace ModelGraph.Core
         internal override void Insert(Item item, int index) => Insert(Cast(item), index); 
 
         // IndexOf  ===========================================================
-        internal int IndexOf(T item) => _items.IndexOf(item);
+        internal int IndexOf(T item) => (_items is null) ? -1 : IndexOf(item);
         internal override int IndexOf(Item item) => IndexOf(Cast(item));
 
         // Move  ==============================================================
         internal void Move(T item, int index)
         {
+            if (_items is null) return;
+
             if (_items.Remove(item))
             {
                 UpdateDelta();

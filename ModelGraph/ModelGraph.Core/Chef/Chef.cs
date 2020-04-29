@@ -6,7 +6,7 @@ namespace ModelGraph.Core
     public partial class Chef : StoreOf<Store>
     {
         public IRepository Repository { get; set; }
-        public static ItemModel DragDropSource; 
+        public static LineModel DragDropSource; 
 
         private bool ShowItemIndex;
 
@@ -20,14 +20,14 @@ namespace ModelGraph.Core
         #endregion
 
         #region RootModels  ===================================================
-        private RootModel PrimaryRootModel;
-        private List<RootModel> _rootModels = new List<RootModel>(10);
-        internal void AddRootModel(RootModel root)
+        private RootModelOld PrimaryRootModel;
+        private List<RootModelOld> _rootModels = new List<RootModelOld>(10);
+        internal void AddRootModel(RootModelOld root)
         {
             if (PrimaryRootModel == null) PrimaryRootModel = root;
             _rootModels.Add(root);
         }
-        internal void RemoveRootModel(RootModel root)
+        internal void RemoveRootModel(RootModelOld root)
         {
             if (_rootModels is null) return;
 
@@ -64,7 +64,7 @@ namespace ModelGraph.Core
             ClearItemErrors();
             InitializeItemIdentity();
 
-            InitializeStores();
+            InitializeDomains();
             InitializeRelations();
 
             CreateProperties();

@@ -17,7 +17,7 @@ namespace ModelGraph.Core
 
 
         #region Constructor  ==================================================
-        internal RelationXDomain(Chef chef) : base(chef, IdKey.RelationXStore)
+        internal RelationXDomain(Chef chef) : base(chef, IdKey.RelationXDomain)
         {
             chef.RegisterItemSerializer((_serializerGuid, this));
             CreateProperties(chef);

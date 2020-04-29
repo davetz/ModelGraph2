@@ -9,26 +9,26 @@ namespace ModelGraph.Core
         Once initialized it constrains and directs the actions 
         initiated from the UI controls. 
      */
-        internal Func<ItemModel,ItemModel, bool> ModelUsed;
+        internal Func<ItemModelOld,ItemModelOld, bool> ModelUsed;
 
-        internal Func<ItemModel, string> ModelInfo;
-        internal Func<ItemModel, string> ModelSummary;
-        internal Func<ItemModel, string> ModelDescription;
+        internal Func<ItemModelOld, string> ModelInfo;
+        internal Func<ItemModelOld, string> ModelSummary;
+        internal Func<ItemModelOld, string> ModelDescription;
 
-        internal Func<ItemModel, int> IndexValue;
-        internal Func<ItemModel, bool> BoolValue;
-        internal Func<ItemModel, string> TextValue;
-        internal Func<ItemModel, string[]> ListValue;
+        internal Func<ItemModelOld, int> IndexValue;
+        internal Func<ItemModelOld, bool> BoolValue;
+        internal Func<ItemModelOld, string> TextValue;
+        internal Func<ItemModelOld, string[]> ListValue;
 
-        internal Func<ItemModel, List<ItemModel>, (bool, bool)> Validate;
+        internal Func<ItemModelOld, List<ItemModelOld>, (bool, bool)> Validate;
 
-        internal Action<ItemModel, List<ModelCommand>> MenuCommands;
-        internal Action<ItemModel, List<ModelCommand>> ButtonCommands;
+        internal Action<ItemModelOld, List<ModelCommand>> MenuCommands;
+        internal Action<ItemModelOld, List<ModelCommand>> ButtonCommands;
 
-        internal Func<ItemModel, ItemModel, bool, DropAction> ModelDrop;
-        internal Func<ItemModel, ItemModel, bool, DropAction> ReorderItems;
+        internal Func<ItemModelOld, ItemModelOld, bool, DropAction> ModelDrop;
+        internal Func<ItemModelOld, ItemModelOld, bool, DropAction> ReorderItems;
 
-        internal Func<ItemModel, (string Kind, string Name)> ModelKindName;
-        internal Func<ItemModel, (string Kind, string Name, int Count, ModelType Type)> ModelParms;
+        internal Func<ItemModelOld, (string Kind, string Name)> ModelKindName;
+        internal Func<ItemModelOld, (string Kind, string Name, int Count, ModelType Type)> ModelParms;
     }
 }

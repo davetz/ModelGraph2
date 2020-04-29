@@ -36,9 +36,9 @@ namespace ModelGraph.Core
         #endregion
 
         #region Identity  =====================================================
-        internal override IdKey VKey => GetIdKey();
+        internal override IdKey ViKey => GetIdKey();
 
-        internal override string GetSingleNameId(Chef chef)
+        public override string GetSingleNameId(Chef chef)
         {
             string name;
             if (IsRoot)

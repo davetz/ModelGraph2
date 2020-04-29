@@ -100,8 +100,6 @@ namespace ModelGraph.Core
             if (count > items.Length)
                 throw new Exception("Invalid number of guid references");
 
-            var internalItem = GetInternalItems();
-
             var fv = r.ReadByte();
 
             if (fv == 1)
@@ -109,7 +107,7 @@ namespace ModelGraph.Core
                 for (int i = 0; i < count; i++)
                 {
                     var key = r.ReadUInt16();
-                    if (internalItem.TryGetValue(key, out Item item))
+                    if (IdKey_ReferenceItem.TryGetValue(key, out Item item))
                         items[i] = item;
                     else
                     {//==================================Refactor Patch
@@ -124,20 +122,6 @@ namespace ModelGraph.Core
             }
             else
                 throw new Exception($"Chef ReadData, unknown format version: {fv}");
-
-        }
-        Dictionary<int, Item> GetInternalItems()
-        {
-            var internalItem = new Dictionary<int, Item>(100);
-
-            internalItem.Add(DummyItemRef.ItemKey, DummyItemRef);
-            internalItem.Add(DummyQueryXRef.ItemKey, DummyQueryXRef);
-
-            foreach (var itm in Items)
-            {
-                if (itm is ISerializer s) s.RegisterInternal(internalItem);
-            }
-            return internalItem;
         }
 
         public void WriteData(DataWriter w, Dictionary<Item, int> itemIndex)

@@ -5,8 +5,6 @@ namespace ModelGraph.Core
 {
     public abstract class ExternalDomainOf<T> : StoreOf<T>, IDomain where T : Item
     {
-        public ExternalDomainOf(Chef owner, IdKey idKe, int capacity = 0) : base(owner, idKe, capacity) { }
-
         public bool HasData() => Count > 0;
 
         public int GetSerializerItemCount()
@@ -53,10 +51,6 @@ namespace ModelGraph.Core
                     }
                 }
             }
-        }
-        public void RegisterInternal(Dictionary<int, Item> internalItems)
-        {
-            internalItems.Add(ItemKey, this);
         }
     }
 }

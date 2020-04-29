@@ -29,11 +29,11 @@ namespace ModelGraph.Core
         #endregion
 
         #region Identity  =====================================================
-        internal override IdKey VKey => IdKey.ComputeX;
-        internal override string GetSingleNameId(Chef chef) => string.IsNullOrWhiteSpace(Name) ? BlankName : Name;
-        internal override string GetParentNameId(Chef chef) => chef.Store_ComputeX.TryGetParent(this, out Store p) ? p.GetSingleNameId(chef) : GetKindId(chef);
-        internal override string GetSummaryId(Chef chef) => Summary;
-        internal override string GetDescriptionId(Chef chef) => Description;
+        internal override IdKey ViKey => IdKey.ComputeX;
+        public override string GetSingleNameId(Chef chef) => string.IsNullOrWhiteSpace(Name) ? BlankName : Name;
+        public override string GetParentNameId(Chef chef) => chef.Store_ComputeX.TryGetParent(this, out Store p) ? p.GetSingleNameId(chef) : GetKindId(chef);
+        public override string GetSummaryId(Chef chef) => Summary;
+        public override string GetDescriptionId(Chef chef) => Description;
         #endregion
 
         #region Property/Methods  =============================================

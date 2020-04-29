@@ -57,7 +57,7 @@ namespace ModelGraph.Core
                 return false;
             }
 
-            if (_owner.GetChef().TryGetComputedValue(_owner, key))
+            if (_owner.DataChef.TryGetComputedValue(_owner, key))
                 return _values.TryGetValue(key, out val);
             else
             {

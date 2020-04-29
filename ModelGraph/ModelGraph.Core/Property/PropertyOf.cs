@@ -9,8 +9,12 @@ namespace ModelGraph.Core
         internal Func<Item, T2, bool> SetValFunc;
         internal Func<Item, string> GetItemNameFunc;
 
+        internal virtual T2 GetValue(Chef chef, Item item) => default;
+        internal virtual void SetValue(Chef chef, Item item, T2 val) { }
+        internal virtual string GetParentName(Chef chef, Item item) => default;
 
         #region Constructor  ==================================================
+        internal PropertyOf() { }
         internal PropertyOf(Store owner, IdKey idKe, EnumZ enumZ = null)
         {
             Owner = owner;

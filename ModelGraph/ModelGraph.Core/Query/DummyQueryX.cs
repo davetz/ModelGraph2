@@ -6,6 +6,7 @@ namespace ModelGraph.Core
 {
     class DummyQueryX : QueryX
     {
+        internal override IdKey ViKey => IdKey.DummyQueryX;
         internal DummyQueryX(Chef owner) //QueryXNode, referenced in GraphParms
         {
             Owner = owner;

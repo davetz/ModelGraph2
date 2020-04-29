@@ -10,8 +10,9 @@ namespace ModelGraph.Core
         // Ensure all edges and nodes have parameters.
         bool ValidateGraphParms(Graph g)
         {
+            var dummyItemRef = GetItem<DummyItem>();
             var gx = g.GraphX;
-            var rt = (g.SeedItem == null) ? DummyItemRef : g.SeedItem;
+            var rt = (g.SeedItem == null) ? dummyItemRef : g.SeedItem;
             var anyChange = false;
 
             #region Build validPathPairs dictionary  ==========================

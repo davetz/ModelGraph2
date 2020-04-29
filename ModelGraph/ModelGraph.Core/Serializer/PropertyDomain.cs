@@ -7,13 +7,13 @@ namespace ModelGraph.Core
 {
     public class PropertyDomain : InternalDomainOf<Property>
     {
-        internal PropertyDomain(Chef owner) : base(owner, IdKey.PropertyStore, 100)
+        internal PropertyDomain(Chef owner) : base(owner, IdKey.PropertyDomain, 100)
         {
         }
 
         #region Identity  =====================================================
-        internal override IdKey VKey => IdKey.PropertyStore;
-        internal override string GetParentNameId(Chef chef) => GetKindId(chef);
+        internal override IdKey ViKey => IdKey.PropertyDomain;
+        public override string GetParentNameId(Chef chef) => GetKindId(chef);
         #endregion
 
     }

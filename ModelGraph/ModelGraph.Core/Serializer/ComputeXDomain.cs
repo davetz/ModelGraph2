@@ -8,78 +8,43 @@ namespace ModelGraph.Core
     {
         static Guid _serializerGuid = new Guid("35522B27-A925-4CE0-8D65-EDEF451097F2");
         static byte _formatVersion = 1;
+        internal override IdKey ViKey => IdKey.ComputeXDomain;
 
-        internal PropertyOf<ComputeX, string> NameProperty;
-        internal PropertyOf<ComputeX, string> SummaryProperty;
-        internal PropertyOf<ComputeX, string> WhereProperty;
-        internal PropertyOf<ComputeX, string> SelectProperty;
-        internal PropertyOf<ComputeX, string> SeparatorProperty;
-        internal PropertyOf<ComputeX, string> CompuTypeProperty;
-        internal PropertyOf<ComputeX, string> ValueTypeProperty;
-
-        internal ComputeXDomain(Chef chef) : base(chef, IdKey.ComputeXDomain)
+        internal ComputeXDomain(Chef chef)
         {
+            Owner = chef;
+
             chef.RegisterItemSerializer((_serializerGuid, this));
             CreateProperties(chef);
+
+            chef.Add(this);
         }
 
         #region CreateProperties  =============================================
         private void CreateProperties(Chef chef)
         {
-            var props = new List<Property>(7);
-            var propertyStore = chef.PropertyDomain;
-            {
-                var p = NameProperty = new PropertyOf<ComputeX, string>(propertyStore, IdKey.ComputeXNameProperty);
-                p.GetValFunc = (item) => p.Cast(item).Name;
-                p.SetValFunc = (item, value) => { p.Cast(item).Name = value; return true; };
-                p.Value = new StringValue(p);
-                props.Add(p);
-            }
-            {
-                var p = SummaryProperty = new PropertyOf<ComputeX, string>(propertyStore, IdKey.ComputeXSummaryProperty);
-                p.GetValFunc = (item) => p.Cast(item).Summary;
-                p.SetValFunc = (item, value) => { p.Cast(item).Summary = value; return true; };
-                p.Value = new StringValue(p);
-                props.Add(p);
-            }
-            {
-                var p = CompuTypeProperty = new PropertyOf<ComputeX, string>(propertyStore, IdKey.ComputeXCompuTypeProperty, chef.ComputeTypeEnum);
-                p.GetValFunc = (item) => chef.GetEnumZName(p.EnumZ, (int)p.Cast(item).CompuType);
-                p.SetValFunc = (item, value) => chef.TrySetComputeTypeProperty(p.Cast(item), chef.GetEnumZKey(p.EnumZ, value));
-                p.Value = new StringValue(p);
-                props.Add(p);
-            }
-            {
-                var p = WhereProperty = new PropertyOf<ComputeX, string>(propertyStore, IdKey.ComputeXWhereProperty);
-                p.GetValFunc = (item) => chef.GetWhereProperty(p.Cast(item));
-                p.SetValFunc = (item, value) => chef.TrySetWhereProperty(p.Cast(item), value);
-                p.Value = new StringValue(p);
-                p.GetItemNameFunc = (item) => chef.GetSelectorName(p.Cast(item));
-                props.Add(p);
-            }
-            {
-                var p = SelectProperty = new PropertyOf<ComputeX, string>(propertyStore, IdKey.ComputeXSelectProperty);
-                p.GetValFunc = (item) => chef.GetSelectProperty(p.Cast(item));
-                p.SetValFunc = (item, value) => chef.TrySetSelectProperty(p.Cast(item), value);
-                p.Value = new StringValue(p);
-                p.GetItemNameFunc = (item) => { return chef.GetSelectorName(p.Cast(item)); };
-                props.Add(p);
-            }
-            {
-                var p = SeparatorProperty = new PropertyOf<ComputeX, string>(propertyStore, IdKey.ComputeXSeparatorProperty);
-                p.GetValFunc = (item) => p.Cast(item).Separator;
-                p.SetValFunc = (item, value) => { p.Cast(item).Separator = value; return true; };
-                p.Value = new StringValue(p);
-                props.Add(p);
-            }
-            {
-                var p = ValueTypeProperty = new PropertyOf<ComputeX, string>(propertyStore, IdKey.ComputeXValueTypeProperty, chef.ValueTypeEnum);
-                p.GetValFunc = (item) => chef.GetEnumZName(p.EnumZ, (int)p.Cast(item).Value.ValType);
-                p.Value = new StringValue(p);
-                props.Add(p);
-            }
-            chef.RegisterStaticProperties(typeof(ComputeX), props);
+            var sto = chef.GetItem<PropertyDomain>();
+
+            chef.RegisterReferenceItem(new Property_ComputeX_Name(sto));
+            chef.RegisterReferenceItem(new Property_ComputeX_Summary(sto));
+            chef.RegisterReferenceItem(new Property_ComputeX_CompuType(sto));
+            chef.RegisterReferenceItem(new Property_ComputeX_Where(sto));
+            chef.RegisterReferenceItem(new Property_ComputeX_Select(sto));
+            chef.RegisterReferenceItem(new Property_ComputeX_Separator(sto));
+            chef.RegisterReferenceItem(new Property_ComputeX_ValueType(sto));
+
+            chef.RegisterStaticProperties(typeof(ComputeX), GetProps(chef)); //used by property name lookup
         }
+        private Property[] GetProps(Chef chef) => new Property[]
+        {
+            chef.GetItem<Property_ComputeX_Name>(),
+            chef.GetItem<Property_ComputeX_Summary>(),
+            chef.GetItem<Property_ComputeX_CompuType>(),
+            chef.GetItem<Property_ComputeX_Where>(),
+            chef.GetItem<Property_ComputeX_Select>(),
+            chef.GetItem<Property_ComputeX_Separator>(),
+            chef.GetItem<Property_ColumnX_ValueType>(),
+        };
         #endregion
 
         #region ISerializer  ==================================================

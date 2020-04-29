@@ -4,27 +4,14 @@ using Windows.Storage.Streams;
 
 namespace ModelGraph.Core
 {
-    public class GraphParams : ISerializer
+    public class GraphParams : Item, ISerializer
     {
         static Guid _serializerGuid = new Guid("88223880-DC1E-40DD-BFB2-711372B7BA2D");
         static byte _formatVersion = 1;
+        internal override IdKey ViKey => IdKey.GraphParams;
 
-        internal PropertyOf<Node, int[]> CenterXYProperty;
-        internal PropertyOf<Node, int[]> SizeWHProperty;
-        internal PropertyOf<Node, string> LabelingProperty;
-        internal PropertyOf<Node, string> ResizingProperty;
-        internal PropertyOf<Node, string> BarWidthProperty;
-        internal PropertyOf<Node, string> OrientationProperty;
-
-        internal PropertyOf<Edge, string> Facet1Property;
-        internal PropertyOf<Edge, string> Facet2Property;
-
-
-        GraphXDomain _graphXStore;
-
-        internal GraphParams(Chef chef, GraphXDomain graphXStore)
+        internal GraphParams(Chef chef)
         {
-            _graphXStore = graphXStore;
             CreateProperties(chef);
 
             chef.RegisterLinkSerializer((_serializerGuid, this));
@@ -33,68 +20,35 @@ namespace ModelGraph.Core
         #region CreateProperties  =============================================
         private void CreateProperties(Chef chef)
         {
-            var props1 = new List<Property>(6);
-            {
-                var p = CenterXYProperty = new PropertyOf<Node, int[]>(chef.PropertyZStore, IdKey.NodeCenterXYProperty);
-                p.GetValFunc = (item) => p.Cast(item).CenterXY;
-                p.SetValFunc = (item, value) => { p.Cast(item).CenterXY = value; return true; };
-                p.Value = new Int32ArrayValue(p);
-                props1.Add(p);
-            }
-            {
-                var p = SizeWHProperty = new PropertyOf<Node, int[]>(chef.PropertyZStore, IdKey.NodeSizeWHProperty);
-                p.GetValFunc = (item) => p.Cast(item).SizeWH;
-                p.SetValFunc = (item, value) => { p.Cast(item).SizeWH = value; return true; };
-                p.Value = new Int32ArrayValue(p);
-                props1.Add(p);
-            }
-            {
-                var p = OrientationProperty = new PropertyOf<Node, string>(chef.PropertyZStore, IdKey.NodeOrientationProperty, chef.OrientationEnum);
-                p.GetValFunc = (item) => chef.GetEnumZName(p.EnumZ, (int)p.Cast(item).Aspect);
-                p.SetValFunc = (item, value) => { p.Cast(item).Aspect = (Aspect)chef.GetEnumZKey(p.EnumZ, value); return true; };
-                p.Value = new StringValue(p);
-                props1.Add(p);
-            }
-            {
-                var p = LabelingProperty = new PropertyOf<Node, string>(chef.PropertyZStore, IdKey.NodeLabelingProperty, chef.LabelingEnum);
-                p.GetValFunc = (item) => chef.GetEnumZName(p.EnumZ, (int)p.Cast(item).Labeling);
-                p.SetValFunc = (item, value) => { p.Cast(item).Labeling = (Labeling)chef.GetEnumZKey(p.EnumZ, value); return true; };
-                p.Value = new StringValue(p);
-                props1.Add(p);
-            }
-            {
-                var p = ResizingProperty = new PropertyOf<Node, string>(chef.PropertyZStore, IdKey.NodeResizingProperty, chef.ResizingEnum);
-                p.GetValFunc = (item) => chef.GetEnumZName(p.EnumZ, (int)p.Cast(item).Sizing);
-                p.SetValFunc = (item, value) => { p.Cast(item).Sizing = (Sizing)chef.GetEnumZKey(p.EnumZ, value); return true; };
-                p.Value = new StringValue(p);
-                props1.Add(p);
-            }
-            {
-                var p = BarWidthProperty = new PropertyOf<Node, string>(chef.PropertyZStore, IdKey.NodeBarWidthProperty, chef.BarWidthEnum);
-                p.GetValFunc = (item) => chef.GetEnumZName(p.EnumZ, (int)p.Cast(item).BarWidth);
-                p.SetValFunc = (item, value) => { p.Cast(item).BarWidth = (BarWidth)chef.GetEnumZKey(p.EnumZ, value); return true; };
-                p.Value = new StringValue(p);
-                props1.Add(p);
-            }
-            chef.RegisterStaticProperties(typeof(Node), props1);
+            var sto = chef.GetItem<PropertyDomain>();
 
-            var props2 = new List<Property>(2);
-            {
-                var p = Facet1Property = new PropertyOf<Edge, string>(chef.PropertyZStore, IdKey.EdgeFacet1Property, chef.FacetEnum);
-                p.GetValFunc = (item) => chef.GetEnumZName(p.EnumZ, (int)p.Cast(item).Facet1);
-                p.SetValFunc = (item, value) => { p.Cast(item).Facet1 = (Facet)chef.GetEnumZKey(p.EnumZ, value); return true; };
-                p.Value = new StringValue(p);
-                props2.Add(p);
-            }
-            {
-                var p = Facet2Property = new PropertyOf<Edge, string>(chef.PropertyZStore, IdKey.EdgeFacet2Property, chef.FacetEnum);
-                p.GetValFunc = (item) => chef.GetEnumZName(p.EnumZ, (int)p.Cast(item).Facet2);
-                p.SetValFunc = (item, value) => { p.Cast(item).Facet2 = (Facet)chef.GetEnumZKey(p.EnumZ, value); return true; };
-                p.Value = new StringValue(p);
-                props2.Add(p);
-            }
-            chef.RegisterStaticProperties(typeof(Edge), props2);
+            chef.RegisterReferenceItem(new Property_Node_CenterXY(sto));
+            chef.RegisterReferenceItem(new Property_Node_SizeWH(sto));
+            chef.RegisterReferenceItem(new Property_Node_Aspect(sto));
+            chef.RegisterReferenceItem(new Property_Node_Labeling(sto));
+            chef.RegisterReferenceItem(new Property_Node_Resizing(sto));
+            chef.RegisterReferenceItem(new Property_Node_BarWidth(sto));
+
+            chef.RegisterReferenceItem(new Property_Edge_Facet1(sto));
+            chef.RegisterReferenceItem(new Property_Edge_Facet2(sto));
+
+            chef.RegisterStaticProperties(typeof(Node), GetProps1(chef)); //used by property name lookup
+            chef.RegisterStaticProperties(typeof(Edge), GetProps2(chef)); //used by property name lookup
         }
+        private Property[] GetProps1(Chef chef) => new Property[]
+{
+            chef.GetItem<Property_Node_CenterXY>(),
+            chef.GetItem<Property_Node_SizeWH>(),
+            chef.GetItem<Property_Node_Aspect>(),
+            chef.GetItem<Property_Node_Labeling>(),
+            chef.GetItem<Property_Node_Resizing>(),
+            chef.GetItem<Property_Node_BarWidth>(),
+        };
+        private Property[] GetProps2(Chef chef) => new Property[]
+        {
+            chef.GetItem<Property_Edge_Facet1>(),
+            chef.GetItem<Property_Edge_Facet2>(),
+        };
         #endregion
 
         #region HasData  ======================================================
@@ -155,7 +109,8 @@ namespace ModelGraph.Core
         #region ReadData  =====================================================
         public void ReadData(DataReader r, Item[] items)
         {
-            var chef = _graphXStore.Owner as Chef;
+            var chef = DataChef;
+            var dummyQueryXRef = chef.GetItem<DummyQueryX>();
 
             var Item_Node = new Dictionary<Item,Node>(1000);
 
@@ -199,7 +154,7 @@ namespace ModelGraph.Core
                             var NodeEdgeList = new List<NodeEdge>(neCount);
                             QueryX_NodeEdgeList[qx] = NodeEdgeList;
 
-                            if (qx == chef.DummyQueryXRef)
+                            if (qx == dummyQueryXRef)
                             {
                                 #region ReadNodeParams  =======================
                                 for (int l = 0; l < neCount; l++)
@@ -291,7 +246,9 @@ namespace ModelGraph.Core
         #region WriteData  ====================================================
         public void WriteData(DataWriter w, Dictionary<Item, int> itemIndex)
         {
-            var chef = _graphXStore.Owner as Chef;
+            var chef = DataChef;
+            var dummyQueryXRef = chef.GetItem<DummyQueryX>();
+            var graphXDomain = chef.GetItem<GraphXDomain>();
 
             #region RemoveInvalidItems  =======================================
             // hit list of items that no longer exists
@@ -300,7 +257,7 @@ namespace ModelGraph.Core
             var rtqxneList = new List<(Item ri, QueryX qx, NodeEdge ge)>();
 
             // find items that are referenced in the graph parms, but no longer exist
-            foreach (var gx in _graphXStore.Items)//GD
+            foreach (var gx in graphXDomain.Items)//GD
             {
                 rtList.Clear();
                 rtqxList.Clear();
@@ -316,7 +273,7 @@ namespace ModelGraph.Core
                             var qx = e2.Key;
                             if (itemIndex.ContainsKey(qx))
                             {
-                                if (qx == chef.DummyQueryXRef)
+                                if (qx == dummyQueryXRef)
                                 {
                                     foreach (var ne in e2.Value)
                                     {
@@ -379,7 +336,7 @@ namespace ModelGraph.Core
             w.WriteByte(_formatVersion);//*************************************
 
             // now write the remaining valid graph params to the storage file
-            foreach (var gx in _graphXStore.Items)//GraphX
+            foreach (var gx in graphXDomain.Items)//GraphX
             {
                 if (gx.Root_QueryX_Parms.Count == 0) continue;
 

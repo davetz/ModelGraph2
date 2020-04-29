@@ -20,8 +20,8 @@ namespace ModelGraph.Core
         #endregion
 
         #region Identity  =====================================================
-        internal override IdKey VKey => IdKey.PairX;
-        internal override string GetSingleNameId(Chef chef) => string.IsNullOrWhiteSpace(DisplayValue) ? BlankName : DisplayValue;
+        internal override IdKey ViKey => IdKey.PairX;
+        public override string GetSingleNameId(Chef chef) => string.IsNullOrWhiteSpace(DisplayValue) ? BlankName : DisplayValue;
         #endregion
     }
 }

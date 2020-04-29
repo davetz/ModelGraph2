@@ -5,7 +5,6 @@ namespace ModelGraph.Core
 {
     public interface ISerializer
     {
-        void RegisterInternal(Dictionary<int, Item> internalItem);
         int GetSerializerItemCount();
         void PopulateItemIndex(Dictionary<Item, int> itemIndex); //every item serialized or referenced by a serialized item
 

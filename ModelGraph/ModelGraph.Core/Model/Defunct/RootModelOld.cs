@@ -3,15 +3,15 @@ using System.Collections.Generic;
 
 namespace ModelGraph.Core
 {
-    public class RootModel : ItemModel
+    public class RootModelOld : ItemModelOld
     {
         public Chef Chef { get; private set; }
         public IPageControl PageControl { get; set; } // reference the UI PageControl
 
         // used by the ModelTreeControl
         public int ViewCapacity = 25; // updated when the view screen size changes
-        public ItemModel SelectModel;   // the user selected model
-        public List<ItemModel> ViewFlatList = new List<ItemModel>(); // flat list of models visible to the user 
+        public ItemModelOld SelectModel;   // the user selected model
+        public List<ItemModelOld> ViewFlatList = new List<ItemModelOld>(); // flat list of models visible to the user 
         internal bool HasFlatList => ControlType == ControlType.PrimaryTree || ControlType == ControlType.PartialTree;
 
         public ControlType ControlType;

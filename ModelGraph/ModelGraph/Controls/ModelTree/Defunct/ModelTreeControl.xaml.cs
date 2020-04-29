@@ -6,22 +6,17 @@ using Windows.UI.Xaml.Documents;
 using Windows.UI.Xaml.Input;
 using ModelGraph.Core;
 using ModelGraph.Helpers;
-using Windows.Storage.Pickers;
-using Windows.Storage;
 using ModelGraph.Services;
-using System.Diagnostics;
 using Windows.System;
-using ModelGraph.Repository;
 
 namespace ModelGraph.Controls
 {
     public sealed partial class ModelTreeControl : Page, IPageControl, IModelPageControl
     {
-        //public Grid PrevOwner { get; set; }
-
         public ModelTreeControl(IModel root)
         {
             _root = root;
+            _chef = root.DataChef;
 
             InitializeComponent();
             Initialize();
@@ -46,11 +41,12 @@ namespace ModelGraph.Controls
         #endregion
 
         #region Fields  =======================================================
+        Chef _chef;
         IModel _root;
-        ItemModel _selectModel;
-        List<ItemModel> _viewList = new List<ItemModel>();
-        List<ModelCommand> _menuCommands = new List<ModelCommand>();
-        List<ModelCommand> _buttonCommands = new List<ModelCommand>();
+        LineModel _selectModel;
+        List<LineModel> _viewList = new List<LineModel>();
+        List<LineCommand> _menuCommands = new List<LineCommand>();
+        List<LineCommand> _buttonCommands = new List<LineCommand>();
 
         ToolTip _itemIdentityTip;
         ToolTip _modelIdentityTip;
@@ -229,23 +225,18 @@ namespace ModelGraph.Controls
             _itemIdentityTip.Opened -= ItemIdentityTip_Opened;
             _modelIdentityTip.Opened -= ModelIdentityTip_Opened;
 
-            foreach (var cmd in _menuCommands) { cmd.Release(); }
-            foreach (var cmd in _buttonCommands) { cmd.Release(); }
-
             _root = null;
             _selectModel = null;
-            _viewList = null;
+            _viewList.Clear();
             _menuCommands.Clear();
-            _menuCommands = null;
             _buttonCommands.Clear();
-            _buttonCommands = null;
             _itemIdentityTip = null;
             _modelIdentityTip = null;
         }
         #endregion
 
         #region PostRefreshViewList  ==========================================
-        void PostRefreshViewList(ItemModel m, int s = 0, ChangeType c = ChangeType.NoChange)
+        void PostRefreshViewList(LineModel m, int s = 0, ChangeType c = ChangeType.NoChange)
         {
             ResetCacheDelta(m);
             //_root.PostRefreshViewList(m, s, c);
@@ -413,15 +404,15 @@ namespace ModelGraph.Controls
         void ItemIdentityTip_Opened(object sender, RoutedEventArgs e)
         {
             var tip = sender as ToolTip;
-            var mdl = tip.DataContext as ItemModel;
-            var content = mdl.ModelSummary;
+            var mdl = tip.DataContext as LineModel;
+            var content = mdl.GetSummaryId(_chef);
             tip.Content = string.IsNullOrWhiteSpace(content) ? null : content;
         }
         void ModelIdentityTip_Opened(object sender, RoutedEventArgs e)
         {
             var tip = sender as ToolTip;
-            var mdl = tip.DataContext as ItemModel;
-            tip.Content = mdl.ModelIdentity;
+            var mdl = tip.DataContext as LineModel;
+            tip.Content = mdl.GetModelIdentity();
         }
         #endregion
 
@@ -446,7 +437,7 @@ namespace ModelGraph.Controls
             RefreshSelect();
             e.Handled = true;
         }
-        ItemModel PointerModel(Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
+        LineModel PointerModel(Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
         {
             var p = e.GetCurrentPoint(TreeCanvas);
             var i = (int)(p.Position.Y / _elementHieght);
@@ -568,18 +559,18 @@ namespace ModelGraph.Controls
             }
 
 
-            if (_selectModel.ModelDescription != null)
+            if (_selectModel.GetDescriptionId(_chef) != null)
             {
                 HelpButton.Visibility = Visibility.Visible;
-                PopulateItemHelp(_selectModel.ModelDescription);
+                PopulateItemHelp(_selectModel.GetDescriptionId(_chef));
             }
             else
             {
                 HelpButton.Visibility = Visibility.Collapsed;
             }
 
-            _selectModel.MenuComands(_menuCommands);
-            _selectModel.PageButtonComands(_buttonCommands);
+            _selectModel.GetMenuComands(_chef, _menuCommands);
+            _selectModel.GetButtonComands(_chef, _buttonCommands);
 
             var cmds = _buttonCommands;
             var len1 = cmds.Count;
@@ -591,10 +582,10 @@ namespace ModelGraph.Controls
                 {
                     var cmd = _buttonCommands[i];
                     _itemButtons[i].DataContext = cmd;
-                    _itemButtons[i].Content = cmd.Name;
-                    _itemButtonTips[i].Content = cmd.Summary;
+                    _itemButtons[i].Content = cmd.GetSingleNameId(_chef);
+                    _itemButtonTips[i].Content = cmd.GetSummaryId(_chef);
                     _itemButtons[i].Visibility = Visibility.Visible;
-                    var key = cmd.AcceleratorKey;
+                    var key = cmd.GetAcceleratorId(_chef);
                     if (cmd.IsInsertCommand)
                     {
                         var acc = new KeyboardAccelerator { Key = VirtualKey.Insert };
@@ -641,8 +632,8 @@ namespace ModelGraph.Controls
                     {
                         var cmd = cmds[i];
                         _menuItems[i].DataContext = cmd;
-                        _menuItems[i].Text = cmd.Name;
-                        _menuItemTips[i].Content = cmd.Summary;
+                        _menuItems[i].Text = cmd.GetSingleNameId(_chef);
+                        _menuItemTips[i].Content = cmd.GetSummaryId(_chef);
                     }
                 }
             }
@@ -678,7 +669,7 @@ namespace ModelGraph.Controls
         // given the focusModel try to determine what is the most
         // logical text box to enter, then set the keyboard focus to it,
         // otherwise set focus to our reliable dummy FocusButton
-        private void TrySetControlFocus(ItemModel focusModel = null)
+        private void TrySetControlFocus(LineModel focusModel = null)
         {
             if (focusModel != null) _selectModel = focusModel;
 
@@ -736,13 +727,13 @@ namespace ModelGraph.Controls
         private void Accelerator_ModelCopy_Invoked(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
         {
             if (_selectModel.CanDrag)
-                _selectModel.DragStart();
+                _selectModel.DragStart(_chef);
             args.Handled = true;
         }
         private void Accelerator_ModelPaste_Invoked(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
         {
-            if (_selectModel.DragEnter() != DropAction.None)
-            _selectModel.DragDrop();
+            if (_selectModel.DragEnter(_chef) != DropAction.None)
+            _selectModel.DragDrop(_chef);
             args.Handled = true;
         }
         private void Accelerator_SortMode_Invoked(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
@@ -757,10 +748,10 @@ namespace ModelGraph.Controls
         }
         private void Accelerator_Invoked(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
         {
-            if (_acceleratorKeyCommands.TryGetValue(sender, out ModelCommand cmd)) cmd.Execute();
+            if (_acceleratorKeyCommands.TryGetValue(sender, out LineCommand cmd)) cmd.Execute();
             args.Handled = true;
         }
-        private readonly Dictionary<KeyboardAccelerator, ModelCommand> _acceleratorKeyCommands = new Dictionary<KeyboardAccelerator, ModelCommand>();
+        private readonly Dictionary<KeyboardAccelerator, LineCommand> _acceleratorKeyCommands = new Dictionary<KeyboardAccelerator, LineCommand>();
 
         private readonly List<KeyboardAccelerator> menuCommandAccelerators = new List<KeyboardAccelerator>(4);
         private readonly List<KeyboardAccelerator> buttonCommandAccelerators = new List<KeyboardAccelerator>(4);
@@ -859,7 +850,7 @@ namespace ModelGraph.Controls
         {
             //args.DragUI.SetContentFromDataPackage();
             var obj = sender as TextBlock;
-            var mdl = obj.DataContext as ItemModel;
+            var mdl = obj.DataContext as LineModel;
 
             if (mdl.CanDrag)
             {
@@ -874,7 +865,7 @@ namespace ModelGraph.Controls
         {
             e.DragUIOverride.IsContentVisible = false;
             var obj = sender as TextBlock;
-            var mdl = obj.DataContext as ItemModel;
+            var mdl = obj.DataContext as LineModel;
 
             var type = mdl.DragEnter();
             switch (type)
@@ -899,7 +890,7 @@ namespace ModelGraph.Controls
         void ItemName_Drop(object sender, DragEventArgs e)
         {
             var obj = sender as TextBlock;
-            var mdl = obj.DataContext as ItemModel;
+            var mdl = obj.DataContext as LineModel;
             mdl.DragDrop();
         }
         #endregion
@@ -916,7 +907,7 @@ namespace ModelGraph.Controls
             obj.Opacity = 0.5;
         }
 
-        void RefreshExpandTree(ItemModel model, TextBlock obj)
+        void RefreshExpandTree(LineModel model, TextBlock obj)
         {
             if (model.CanExpandLeft)
             {
@@ -932,7 +923,7 @@ namespace ModelGraph.Controls
             if (_selectModel == PointerModel(e))
             {
                 var obj = sender as TextBlock;
-                _selectModel = obj.DataContext as ItemModel;
+                _selectModel = obj.DataContext as LineModel;
                 PostRefreshViewList(_selectModel, 0, ChangeType.ToggleLeft);
             }
         }
@@ -944,7 +935,7 @@ namespace ModelGraph.Controls
             if (_selectModel == PointerModel(e))
             {
                 var obj = sender as TextBlock;
-                _selectModel = obj.DataContext as ItemModel;
+                _selectModel = obj.DataContext as LineModel;
                 PostRefreshViewList(_selectModel, 0, ChangeType.ToggleRight);
             }
         }
@@ -954,7 +945,7 @@ namespace ModelGraph.Controls
         void ModelIdentity_PointerEntered(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
         {
             var obj = sender as TextBlock;
-            _modelIdentityTip.DataContext = obj.DataContext as ItemModel;
+            _modelIdentityTip.DataContext = obj.DataContext as LineModel;
             ToolTipService.SetToolTip(obj, _modelIdentityTip);
         }
         #endregion
@@ -976,7 +967,7 @@ namespace ModelGraph.Controls
                 return;
             }
 
-            var mdl = obj.DataContext as ItemModel;
+            var mdl = obj.DataContext as LineModel;
             if (mdl.IsSortAscending)
             {
                 mdl.IsSortAscending = false;
@@ -1016,7 +1007,7 @@ namespace ModelGraph.Controls
                 return;
             }
 
-            var mdl = obj.DataContext as ItemModel;
+            var mdl = obj.DataContext as LineModel;
             if (mdl.IsUsedFilter)
             {
                 mdl.IsUsedFilter = false;
@@ -1052,7 +1043,7 @@ namespace ModelGraph.Controls
         {
             if (obj == null) return;
 
-            var mdl = obj.DataContext as ItemModel;
+            var mdl = obj.DataContext as LineModel;
 
             PostRefreshViewList(_selectModel, 0, ChangeType.ToggleFilter);
         }
@@ -1062,7 +1053,7 @@ namespace ModelGraph.Controls
         void FilterText_KeyDown(object sender, Windows.UI.Xaml.Input.KeyRoutedEventArgs e)
         {
             var obj = sender as TextBox;
-            var mdl = obj.DataContext as ItemModel;
+            var mdl = obj.DataContext as LineModel;
 
             if (e.Key == Windows.System.VirtualKey.Enter || e.Key == Windows.System.VirtualKey.Tab)
             {
@@ -1100,13 +1091,13 @@ namespace ModelGraph.Controls
         {
             var obj = sender as TextBox;
             _focusControl = obj;
-            _selectModel = obj.DataContext as ItemModel;
+            _selectModel = obj.DataContext as LineModel;
             RefreshSelect(false);
         }
         void TextProperty_LostFocus(object sender, RoutedEventArgs e)
         {
             var obj = sender as TextBox;
-            var mdl = obj.DataContext as ItemModel;
+            var mdl = obj.DataContext as LineModel;
             if ((string)obj.Tag != obj.Text)
             {
                 mdl.PostSetValue(obj.Text);
@@ -1118,7 +1109,7 @@ namespace ModelGraph.Controls
             {
                 e.Handled = true;
                 var obj = sender as TextBox;
-                var mdl = obj.DataContext as ItemModel;
+                var mdl = obj.DataContext as LineModel;
                 if ((string)obj.Tag != obj.Text)
                 {
                     mdl.PostSetValue(obj.Text);
@@ -1132,7 +1123,7 @@ namespace ModelGraph.Controls
             {
                 e.Handled = true;
                 var obj = sender as TextBox;
-                var mdl = obj.DataContext as ItemModel;
+                var mdl = obj.DataContext as LineModel;
                 if ((string)obj.Tag != obj.Text)
                 {
                     obj.Text = mdl.TextValue ?? string.Empty;
@@ -1147,13 +1138,13 @@ namespace ModelGraph.Controls
         {
             var obj = sender as CheckBox;
             _focusControl = obj;
-            _selectModel = obj.DataContext as ItemModel;
+            _selectModel = obj.DataContext as LineModel;
             RefreshSelect(false);
         }
         void Check_KeyDown(object sender, Windows.UI.Xaml.Input.KeyRoutedEventArgs e)
         {
             var obj = sender as CheckBox;
-            var mdl = obj.DataContext as ItemModel;
+            var mdl = obj.DataContext as LineModel;
             var val = obj.IsChecked ?? false;
 
             if (e.Key == VirtualKey.Escape)
@@ -1183,7 +1174,7 @@ namespace ModelGraph.Controls
             else
             {
                 var obj = sender as CheckBox;
-                var mdl = obj.DataContext as ItemModel;
+                var mdl = obj.DataContext as LineModel;
                 var val = obj.IsChecked ?? false;
                 mdl.PostSetValue(val);
             }
@@ -1195,19 +1186,19 @@ namespace ModelGraph.Controls
         {
             var obj = sender as ComboBox;
             _focusControl = obj;
-            _selectModel = obj.DataContext as ItemModel;
+            _selectModel = obj.DataContext as LineModel;
             RefreshSelect(false);
         }
         void ComboProperty_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var obj = sender as ComboBox;
-            var mdl = obj.DataContext as ItemModel;
+            var mdl = obj.DataContext as LineModel;
             mdl.PostSetValue(obj.SelectedIndex);
         }
         void ComboProperty_KeyDown(object sender, Windows.UI.Xaml.Input.KeyRoutedEventArgs e)
         {
             var obj = sender as ComboBox;
-            var mdl = obj.DataContext as ItemModel;
+            var mdl = obj.DataContext as LineModel;
             if (e.Key == VirtualKey.Escape)
             {
                 e.Handled = true;
@@ -1225,12 +1216,12 @@ namespace ModelGraph.Controls
         void PropertyBorder_PointerEntered(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
         {
             var obj = sender as Border;
-            _itemIdentityTip.DataContext = obj.DataContext as ItemModel;
+            _itemIdentityTip.DataContext = obj.DataContext as LineModel;
         }
         #endregion
 
         #region FindNextItemModel  ============================================
-        void FindNextItemModel(ItemModel m)
+        void FindNextItemModel(LineModel m)
         {
             var k = _viewList.IndexOf(m) + 1;
             for (int i = k; i < _viewList.Count; i++)

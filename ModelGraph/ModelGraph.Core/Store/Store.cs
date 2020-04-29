@@ -11,6 +11,8 @@ namespace ModelGraph.Core
         internal abstract void Insert(Item item, int index);
         public abstract void Remove(Item item);
         internal abstract void RemoveAll();
+        internal abstract void Discard();
+        internal abstract void DiscardChildren();
         internal abstract int IndexOf(Item item);
         internal abstract List<Item> GetItems();
         internal abstract int Count { get; }
@@ -18,7 +20,7 @@ namespace ModelGraph.Core
 
         internal bool TryLookUpProperty(string name, out Property property)
         {
-            return GetChef().TryLookUpProperty(this, name, out property);
+            return DataChef.TryLookUpProperty(this, name, out property);
         }
     }
 }
