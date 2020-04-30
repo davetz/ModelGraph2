@@ -2,12 +2,12 @@
 namespace ModelGraph.Core
 {/*
  */
-    public class Enum_FacetType : EnumZ
+    public class Enum_Facet : EnumZ
     {
         internal override IdKey ViKey => IdKey.FacetEnum;
 
         #region Constructor  ==================================================
-        internal Enum_FacetType(StoreOf<EnumZ> owner)
+        internal Enum_Facet(StoreOf<EnumZ> owner)
         {
             Owner = owner;
 

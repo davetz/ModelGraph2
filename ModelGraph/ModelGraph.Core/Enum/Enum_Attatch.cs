@@ -1,12 +1,13 @@
 ﻿
 namespace ModelGraph.Core
-{
-    public class Enum_ContactType : EnumZ
+{/*
+ */
+    public class Enum_Attatch : EnumZ
     {
-        internal override IdKey ViKey => IdKey.ContactEnum;
+        internal override IdKey ViKey => IdKey.AttatchEnum;
 
         #region Constructor  ==================================================
-        internal Enum_ContactType(StoreOf<EnumZ> owner)
+        internal Enum_Attatch(StoreOf<EnumZ> owner)
         {
             Owner = owner;
 
@@ -19,9 +20,10 @@ namespace ModelGraph.Core
         #region CreateChildren  ===============================================
         void CreateChildren()
         {
-            Add(new PairZ(this, IdKey.Contact_Any));
-            Add(new PairZ(this, IdKey.Contact_One));
-            Add(new PairZ(this, IdKey.Contact_None));
+            Add(new PairZ(this, IdKey.Attatch_Normal));
+            Add(new PairZ(this, IdKey.Attatch_Radial));
+            Add(new PairZ(this, IdKey.Attatch_RightAngle));
+            Add(new PairZ(this, IdKey.Attatch_SkewedAngle));
         }
         #endregion
     }

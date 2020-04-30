@@ -13,7 +13,7 @@ namespace ModelGraph.Core
             owner.Add(this);
         }
 
-        internal override string GetValue(Chef chef, Item item) => chef.GetItem<Enum_LabelingType>().GetEnumName(chef, (int)Cast(item).Labeling);
-        internal override void SetValue(Chef chef, Item item, string val) => Cast(item).Labeling = (Labeling)chef.GetItem<Enum_LabelingType>().GetKey(chef, val);
+        internal override string GetValue(Chef chef, Item item) => chef.GetItem<Enum_Labeling>().GetEnumName(chef, (int)Cast(item).Labeling);
+        internal override void SetValue(Chef chef, Item item, string val) => Cast(item).Labeling = (Labeling)chef.GetItem<Enum_Labeling>().GetKey(chef, val);
     }
 }

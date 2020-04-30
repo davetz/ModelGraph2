@@ -12,9 +12,12 @@ namespace ModelGraph.Core
 
         internal GraphParams(Chef chef)
         {
-            CreateProperties(chef);
+            Owner = chef;
 
+            CreateProperties(chef);
             chef.RegisterLinkSerializer((_serializerGuid, this));
+
+            chef.Add(this);
         }
 
         #region CreateProperties  =============================================
@@ -36,7 +39,7 @@ namespace ModelGraph.Core
             chef.RegisterStaticProperties(typeof(Edge), GetProps2(chef)); //used by property name lookup
         }
         private Property[] GetProps1(Chef chef) => new Property[]
-{
+        {
             chef.GetItem<Property_Node_CenterXY>(),
             chef.GetItem<Property_Node_SizeWH>(),
             chef.GetItem<Property_Node_Aspect>(),

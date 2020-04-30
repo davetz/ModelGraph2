@@ -7,9 +7,15 @@ namespace ModelGraph.Core
 {
     public class RelationDomain : InternalDomainOf<Relation>, IRelationStore
     {
-        internal RelationDomain(Chef owner) : base(owner, IdKey.RelationDomain, 30)
+        internal RelationDomain(Chef chef)
         {
-            new RelationLink(owner, this);
+            Owner = chef;
+
+            SetCapacity(30);
+            new RelationLink(chef, this);
+            CreateRelations();
+
+            chef.Add(this);
         }
 
         #region CreateRelations  ==============================================

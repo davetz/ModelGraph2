@@ -1,12 +1,12 @@
 ﻿
 namespace ModelGraph.Core
 {
-    public class Enum_PairingType : EnumZ
+    public class Enum_Pairing : EnumZ
     {
         internal override IdKey ViKey => IdKey.PairingEnum;
 
         #region Constructor  ==================================================
-        internal Enum_PairingType(StoreOf<EnumZ> owner)
+        internal Enum_Pairing(StoreOf<EnumZ> owner)
         {
             Owner = owner;
 

@@ -1,13 +1,12 @@
 ﻿
 namespace ModelGraph.Core
-{/*
- */
-    public class Enum_ResizingType : EnumZ
+{
+    public class Enum_Contact : EnumZ
     {
-        internal override IdKey ViKey => IdKey.ResizingEnum;
+        internal override IdKey ViKey => IdKey.ContactEnum;
 
         #region Constructor  ==================================================
-        internal Enum_ResizingType(StoreOf<EnumZ> owner)
+        internal Enum_Contact(StoreOf<EnumZ> owner)
         {
             Owner = owner;
 
@@ -20,9 +19,9 @@ namespace ModelGraph.Core
         #region CreateChildren  ===============================================
         void CreateChildren()
         {
-            Add(new PairZ(this, IdKey.Resizing_Auto));
-            Add(new PairZ(this, IdKey.Resizing_Fixed));
-            Add(new PairZ(this, IdKey.Resizing_Manual));
+            Add(new PairZ(this, IdKey.Contact_Any));
+            Add(new PairZ(this, IdKey.Contact_One));
+            Add(new PairZ(this, IdKey.Contact_None));
         }
         #endregion
     }

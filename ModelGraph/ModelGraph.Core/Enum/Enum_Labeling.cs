@@ -2,12 +2,12 @@
 namespace ModelGraph.Core
 {/*
  */
-    public class Enum_LabelingType : EnumZ
+    public class Enum_Labeling : EnumZ
     {
         internal override IdKey ViKey => IdKey.LabelingEnum;
 
         #region Constructor  ==================================================
-        internal Enum_LabelingType(StoreOf<EnumZ> owner)
+        internal Enum_Labeling(StoreOf<EnumZ> owner)
         {
             Owner = owner;
 

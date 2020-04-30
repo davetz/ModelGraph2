@@ -6,8 +6,6 @@ namespace ModelGraph.Core
 {
     public abstract class InternalDomainOf<T> : StoreOf<T>, ISerializer, IDomain where T : Item
     {
-        public InternalDomainOf(Chef owner, IdKey idKe, int capacity = 0) : base(owner, idKe, capacity) { }
-
         public int GetSerializerItemCount()
         {
             return 1 + Count; //===================count my self and my children

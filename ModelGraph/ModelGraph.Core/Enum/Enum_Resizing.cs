@@ -2,12 +2,12 @@
 namespace ModelGraph.Core
 {/*
  */
-    public class Enum_AttatchType : EnumZ
+    public class Enum_Resizing : EnumZ
     {
-        internal override IdKey ViKey => IdKey.AttatchEnum;
+        internal override IdKey ViKey => IdKey.ResizingEnum;
 
         #region Constructor  ==================================================
-        internal Enum_AttatchType(StoreOf<EnumZ> owner)
+        internal Enum_Resizing(StoreOf<EnumZ> owner)
         {
             Owner = owner;
 
@@ -20,10 +20,9 @@ namespace ModelGraph.Core
         #region CreateChildren  ===============================================
         void CreateChildren()
         {
-            Add(new PairZ(this, IdKey.Attatch_Normal));
-            Add(new PairZ(this, IdKey.Attatch_Radial));
-            Add(new PairZ(this, IdKey.Attatch_RightAngle));
-            Add(new PairZ(this, IdKey.Attatch_SkewedAngle));
+            Add(new PairZ(this, IdKey.Resizing_Auto));
+            Add(new PairZ(this, IdKey.Resizing_Fixed));
+            Add(new PairZ(this, IdKey.Resizing_Manual));
         }
         #endregion
     }

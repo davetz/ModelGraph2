@@ -2,12 +2,12 @@
 namespace ModelGraph.Core
 {/*
  */
-    public class Enum_ConnectType : EnumZ
+    public class Enum_Connect : EnumZ
     {
         internal override IdKey ViKey => IdKey.ConnectEnum;
 
         #region Constructor  ==================================================
-        internal Enum_ConnectType(StoreOf<EnumZ> owner)
+        internal Enum_Connect(StoreOf<EnumZ> owner)
         {
             Owner = owner;
 

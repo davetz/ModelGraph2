@@ -8,68 +8,41 @@ namespace ModelGraph.Core
     {
         static Guid _serializerGuid = new Guid("48C7FA8C-88F1-4203-8E54-3255C1F8C528");
         static byte _formatVersion = 1;
+        internal override IdKey ViKey => IdKey.GraphXDomain;
 
-        internal PropertyOf<GraphX, string> NameProperty;
-        internal PropertyOf<GraphX, string> SummaryProperty;
-        internal PropertyOf<GraphX, int> TerminalLengthProperty;
-        internal PropertyOf<GraphX, int> TerminalSpacingProperty;
-        internal PropertyOf<GraphX, int> TerminalStretchProperty;
-        internal PropertyOf<GraphX, int> SymbolSizeProperty;
-
-        internal GraphXDomain(Chef chef) : base(chef, IdKey.GraphXDomain)
+        internal GraphXDomain(Chef chef) 
         {
+            Owner = chef;
+
             chef.RegisterItemSerializer((_serializerGuid, this));
             CreateProperties(chef);
+
+            chef.Add(this);
         }
 
         #region CreateProperties  =============================================
         private void CreateProperties(Chef chef)
         {
-            var props = new List<Property>(6);
-            {
-                var p = NameProperty = new PropertyOf<GraphX, string>(chef.PropertyDomain, IdKey.GraphNameProperty);
-                p.GetValFunc = (item) => p.Cast(item).Name;
-                p.SetValFunc = (item, value) => { p.Cast(item).Name = value; return true; };
-                p.Value = new StringValue(p);
-                props.Add(p);
-            }
-            {
-                var p = SummaryProperty = new PropertyOf<GraphX, string>(chef.PropertyDomain, IdKey.GraphSummaryProperty);
-                p.GetValFunc = (item) => p.Cast(item).Summary;
-                p.SetValFunc = (item, value) => { p.Cast(item).Summary = value; return true; };
-                p.Value = new StringValue(p);
-                props.Add(p);
-            }
-            {
-                var p = TerminalLengthProperty = new PropertyOf<GraphX, int>(chef.PropertyDomain, IdKey.GraphTerminalLengthProperty);
-                p.GetValFunc = (item) => p.Cast(item).TerminalLength;
-                p.SetValFunc = (item, value) => { p.Cast(item).TerminalLength = (byte)value; return true; };
-                p.Value = new Int32Value(p);
-                props.Add(p);
-            }
-            {
-                var p = TerminalSpacingProperty = new PropertyOf<GraphX, int>(chef.PropertyDomain, IdKey.GraphTerminalSpacingProperty);
-                p.GetValFunc = (item) => p.Cast(item).TerminalSpacing;
-                p.SetValFunc = (item, value) => { p.Cast(item).TerminalSpacing = (byte)value; return true; };
-                p.Value = new Int32Value(p);
-                props.Add(p);
-            }
-            {
-                var p = TerminalStretchProperty = new PropertyOf<GraphX, int>(chef.PropertyDomain, IdKey.GraphTerminalStretchProperty);
-                p.GetValFunc = (item) => p.Cast(item).TerminalSkew;
-                p.SetValFunc = (item, value) => { p.Cast(item).TerminalSkew = (byte)value; return true; };
-                p.Value = new Int32Value(p);
-                props.Add(p);
-            }
-            {
-                var p = SymbolSizeProperty = new PropertyOf<GraphX, int>(chef.PropertyDomain, IdKey.GraphSymbolSizeProperty);
-                p.GetValFunc = (item) => p.Cast(item).SymbolSize;
-                p.SetValFunc = (item, value) => { p.Cast(item).SymbolSize = (byte)value; return true; };
-                p.Value = new Int32Value(p);
-                props.Add(p);
-            }
-            chef.RegisterStaticProperties(typeof(GraphX), props);
+            var sto = chef.GetItem<PropertyDomain>();
+
+            chef.RegisterReferenceItem(new Property_GraphX_Name(sto));
+            chef.RegisterReferenceItem(new Property_GraphX_Summary(sto));
+            chef.RegisterReferenceItem(new Property_GraphX_TerminalLength(sto));
+            chef.RegisterReferenceItem(new Property_GraphX_TerminalSpacing(sto));
+            chef.RegisterReferenceItem(new Property_GraphX_TerminalStretch(sto));
+            chef.RegisterReferenceItem(new Property_GraphX_SymbolSize(sto));
+
+            chef.RegisterStaticProperties(typeof(Node), GetProps(chef)); //used by property name lookup
         }
+        private Property[] GetProps(Chef chef) => new Property[]
+        {
+            chef.GetItem<Property_GraphX_Name>(),
+            chef.GetItem<Property_GraphX_Summary>(),
+            chef.GetItem<Property_GraphX_TerminalLength>(),
+            chef.GetItem<Property_GraphX_TerminalSpacing>(),
+            chef.GetItem<Property_GraphX_TerminalStretch>(),
+            chef.GetItem<Property_GraphX_SymbolSize>(),
+        };
         #endregion
 
         #region ISerializer  ==================================================

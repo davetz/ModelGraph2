@@ -7,8 +7,13 @@ namespace ModelGraph.Core
 {
     public class PropertyDomain : InternalDomainOf<Property>
     {
-        internal PropertyDomain(Chef owner) : base(owner, IdKey.PropertyDomain, 100)
+        internal PropertyDomain(Chef chef)
         {
+            Owner = chef;
+
+            SetCapacity(100);
+
+            chef.Add(this);
         }
 
         #region Identity  =====================================================
