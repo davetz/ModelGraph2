@@ -4,13 +4,13 @@ using Windows.Storage.Streams;
 
 namespace ModelGraph.Core
 {
-    public class ColumnXDomain : ExternalDomainOf<ColumnX>, ISerializer
+    public class StoreOf_ColumnX : StoreOf_External<ColumnX>, ISerializer
     {
         static Guid _serializerGuid = new Guid("3E7097FE-22D5-43B2-964A-9DB843F6D55B");
         static byte _formatVersion = 1;
         internal override IdKey ViKey => IdKey.ColumnXDomain;
 
-        internal ColumnXDomain(Chef chef)
+        internal StoreOf_ColumnX(Chef chef)
         {
             Owner = chef;
 
@@ -23,10 +23,8 @@ namespace ModelGraph.Core
         #region CreateProperties  =============================================
         private void CreateProperties(Chef chef)
         {
-            var sto = chef.GetItem<PropertyDomain>();
+            var sto = chef.Get<StoreOf_Property>();
 
-            chef.RegisterReferenceItem(new Property_ColumnX_Name(sto));
-            chef.RegisterReferenceItem(new Property_ColumnX_Summary(sto));
             chef.RegisterReferenceItem(new Property_ColumnX_ValueType(sto));
             chef.RegisterReferenceItem(new Property_ColumnX_IsChoice(sto));
 
@@ -34,10 +32,12 @@ namespace ModelGraph.Core
         }
         private Property[] GetProps(Chef chef) => new Property[]
         {
-            chef.GetItem<Property_ColumnX_Name>(),
-            chef.GetItem<Property_ColumnX_Summary>(),
-            chef.GetItem<Property_ColumnX_ValueType>(),
-            chef.GetItem<Property_ColumnX_IsChoice>(),
+            chef.Get<Property_Item_Name>(),
+            chef.Get<Property_Item_Summary>(),
+            chef.Get<Property_Item_Description>(),
+
+            chef.Get<Property_ColumnX_ValueType>(),
+            chef.Get<Property_ColumnX_IsChoice>(),
         };
         #endregion
 

@@ -17,7 +17,7 @@ namespace ModelGraph.Core
         {
             Owner = owner;
             OldIdKey = IdKey.ItemChildMoved;
-            Name = name;
+            _name = name;
 
             Key = key;
             Item = item;

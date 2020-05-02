@@ -5,7 +5,7 @@ namespace ModelGraph.Core
     {
         internal override IdKey ViKey => IdKey.Item_Error;
 
-        internal Relation_Item_Error(RelationZStore owner)
+        internal Relation_Item_Error(StoreOf_RelationZ owner)
         {
             Owner = owner;
             Pairing = Pairing.OneToMany;

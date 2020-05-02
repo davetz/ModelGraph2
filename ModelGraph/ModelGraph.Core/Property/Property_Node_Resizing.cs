@@ -5,7 +5,7 @@ namespace ModelGraph.Core
     {
         internal override IdKey ViKey => IdKey.NodeResizingProperty;
 
-        internal Property_Node_Resizing(PropertyDomain owner)
+        internal Property_Node_Resizing(StoreOf_Property owner)
         {
             Owner = owner;
             Value = new StringValue(this);
@@ -13,7 +13,7 @@ namespace ModelGraph.Core
             owner.Add(this);
         }
 
-        internal override string GetValue(Chef chef, Item item) => chef.GetItem<Enum_Resizing>().GetEnumName(chef, (int)Cast(item).Sizing);
-        internal override void SetValue(Chef chef, Item item, string val) => Cast(item).Sizing = (Sizing)chef.GetItem<Enum_Resizing>().GetKey(chef, val);
+        internal override string GetValue(Item item) { var chef = DataChef; return chef.Get<Enum_Resizing>().GetEnumName(chef, (int)Cast(item).Sizing); }
+        internal override void SetValue(Item item, string val) { var chef = DataChef; Cast(item).Sizing = (Sizing)chef.Get<Enum_Resizing>().GetKey(chef, val); }
     }
 }

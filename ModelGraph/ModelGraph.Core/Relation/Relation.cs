@@ -5,18 +5,22 @@ namespace ModelGraph.Core
 {
     public abstract class Relation : Item // used by undo/redo changes and StoreOf<Relation> _relationStore
     {
+        private State _state;
         internal Pairing Pairing;
 
-        internal abstract bool HasChildLink(Item key);
-        internal abstract bool HasParentLink(Item key);
-        internal bool HasNoParent(Item key)
+        #region State  ========================================================
+        private bool GetFlag(State flag) => (_state & flag) != 0;
+        private void SetFlag(State flag, bool value = true) { if (value) _state |= flag; else _state &= ~flag; }
+        private enum State : ushort
         {
-            return !HasParentLink(key);
+            IsRequired = 0x2, // Relation
         }
-        internal bool HasNoChildren(Item key)
-        {
-            return !HasChildLink(key);
-        }
+
+        internal bool IsRequired { get { return GetFlag(State.IsRequired); } set { SetFlag(State.IsRequired, value); } }
+
+        internal override ushort GetState() => (ushort)_state;
+        internal override void SetState(ushort val) => _state = (State)val;
+        #endregion
 
         #region Serializer  ===================================================
         internal abstract (int, int)[] GetChildren1Items(Dictionary<Item, int> itemIndex);
@@ -31,6 +35,17 @@ namespace ModelGraph.Core
         #endregion
 
         #region RequiredMethods  ==============================================
+        internal bool HasNoParent(Item key)
+        {
+            return !HasParentLink(key);
+        }
+        internal bool HasNoChildren(Item key)
+        {
+            return !HasChildLink(key);
+        }
+        internal abstract bool HasChildLink(Item key);
+        internal abstract bool HasParentLink(Item key);
+
         internal abstract bool TrySetPairing(Pairing pairing);
         internal abstract bool IsValidParentChild(Item parentItem, Item childItem);
         internal abstract int ChildCount(Item key);

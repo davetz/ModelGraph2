@@ -1,14 +1,16 @@
 ﻿namespace ModelGraph.Core
 {
-    public class ChangeRoot : StoreOf<ChangeSet>
+    public class StoreOf_ChangeSet : StoreOf<ChangeSet>
     {
-        #region Constructor  ==================================================
-        internal ChangeRoot(Chef owner)
-        {
-            Owner = owner;
-            OldIdKey = IdKey.ChangeRoot;
+        internal static int ChangeSequence = 0;
+        internal override IdKey ViKey => IdKey.ChangeRoot;
 
-            owner.Add(this); // we want to be in the dataChef's item tree hierarchy
+        #region Constructor  ==================================================
+        internal StoreOf_ChangeSet(Chef chef)
+        {
+            Owner = chef;
+
+            chef.Add(this); // we want to be in the dataChef's item tree hierarchy
         }
         #endregion
 

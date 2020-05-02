@@ -5,7 +5,7 @@ namespace ModelGraph.Core
     {
         internal override IdKey ViKey => IdKey.ColumnValueTypeProperty;
 
-        internal Property_ColumnX_ValueType(PropertyDomain owner)
+        internal Property_ColumnX_ValueType(StoreOf_Property owner)
         {
             Owner = owner;
             Value = new StringValue(this);
@@ -13,8 +13,8 @@ namespace ModelGraph.Core
             owner.Add(this);
         }
 
-        internal override string GetValue(Chef chef, Item item) => chef.GetItem<Enum_ValueType>().GetEnumName(chef, (int)Cast(item).Value.ValType);
-        internal override void SetValue(Chef chef, Item item, string val) => chef.SetColumnValueType(Cast(item), chef.GetItem<Enum_ValueType>().GetKey(chef, val));
-        internal override string GetParentName(Chef chef, Item item) => chef.GetItem<Relation_Store_ColumnX>().TryGetParent(item, out Store p) ? p.GetSingleNameId(chef) : InvalidItem;
+        internal override string GetValue(Item item) { var chef = DataChef; return chef.Get<Enum_ValueType>().GetEnumName(chef, (int)Cast(item).Value.ValType); }
+        internal override void SetValue(Item item, string val) { var chef = DataChef; chef.SetColumnValueType(Cast(item), chef.Get<Enum_ValueType>().GetKey(chef, val)); }
+        internal override string GetParentName(Chef chef, Item item) => chef.Get<Relation_Store_ColumnX>().TryGetParent(item, out Store p) ? p.GetSingleNameId(chef) : InvalidItem;
     }
 }

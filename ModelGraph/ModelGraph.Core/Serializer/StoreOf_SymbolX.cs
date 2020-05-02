@@ -4,40 +4,39 @@ using Windows.Storage.Streams;
 
 namespace ModelGraph.Core
 {
-    public class SymbolXDomain : ExternalDomainOf<SymbolX>, ISerializer
+    public class StoreOf_SymbolX : StoreOf_External<SymbolX>, ISerializer
     {
         static Guid _serializerGuid = new Guid("D3956312-BEC7-4988-8228-DCA95CF23781");
         static byte _formatVersion = 1;
+        internal override IdKey ViKey => IdKey.SymbolXDomain;
 
-        internal PropertyOf<SymbolX, string> NameProperty;
-        internal PropertyOf<SymbolX, string> AttachProperty;
-
-        internal SymbolXDomain(Chef chef) : base(chef, IdKey.SymbolXDomain)
+        internal StoreOf_SymbolX(Chef chef)
         {
+            Owner = chef;
+
             chef.RegisterItemSerializer((_serializerGuid, this));
             CreateProperties(chef);
+
+            chef.Add(this);
         }
 
         #region CreateProperties  =============================================
         private void CreateProperties(Chef chef)
         {
-            var props = new List<Property>(2);
-            {
-                var p = NameProperty = new PropertyOf<SymbolX, string>(chef.PropertyDomain, IdKey.SymbolXNameProperty);
-                p.GetValFunc = (item) => p.Cast(item).Name;
-                p.SetValFunc = (item, value) => { p.Cast(item).Name = value; return true; };
-                p.Value = new StringValue(p);
-                props.Add(p);
-            }
-            {
-                var p = AttachProperty = new PropertyOf<SymbolX, string>(chef.PropertyDomain, IdKey.SymbolXAttatchProperty, chef.AttatchEnum);
-                p.GetValFunc = (item) => chef.GetEnumZName(p.EnumZ, (int)p.Cast(item).Attach);
-                p.SetValFunc = (item, value) => { p.Cast(item).Attach = (Attach)chef.GetEnumZKey(p.EnumZ, value); return true; };
-                p.Value = new StringValue(p);
-                props.Add(p);
-            }
-            chef.RegisterStaticProperties(typeof(SymbolX), props);
+            var sto = chef.Get<StoreOf_Property>();
+
+            chef.RegisterReferenceItem(new Property_SymbolX_Attatch(sto));
+
+            chef.RegisterStaticProperties(typeof(Node), GetProps(chef)); //used by property name lookup
         }
+        private Property[] GetProps(Chef chef) => new Property[]
+        {
+            chef.Get<Property_Item_Name>(),
+            chef.Get<Property_Item_Summary>(),
+            chef.Get<Property_Item_Description>(),
+
+            chef.Get<Property_SymbolX_Attatch>(),
+        };
         #endregion
 
         #region ISerializer  ==================================================

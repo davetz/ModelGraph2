@@ -5,7 +5,7 @@ namespace ModelGraph.Core
     {
         internal override IdKey ViKey => IdKey.ComputeXCompuTypeProperty;
 
-        internal Property_ComputeX_CompuType(PropertyDomain owner)
+        internal Property_ComputeX_CompuType(StoreOf_Property owner)
         {
             Owner = owner;
             Value = new StringValue(this);
@@ -13,8 +13,8 @@ namespace ModelGraph.Core
             owner.Add(this);
         }
 
-        internal override string GetValue(Chef chef, Item item) => chef.GetItem<Enum_CompuType>().GetEnumName(chef, (int)Cast(item).CompuType);
-        internal override void SetValue(Chef chef, Item item, string val) => Cast(item).CompuType = (CompuType)chef.GetItem<Enum_CompuType>().GetKey(chef, val);
-        internal override string GetParentName(Chef chef, Item item) => chef.GetItem<Relation_Store_ComputeX>().TryGetParent(item, out Store p) ? p.GetSingleNameId(chef) : InvalidItem;
+        internal override string GetValue(Item item) { var chef = DataChef; return chef.Get<Enum_CompuType>().GetEnumName(chef, (int)Cast(item).CompuType); }
+        internal override void SetValue(Item item, string val) { var chef = DataChef; Cast(item).CompuType = (CompuType)chef.Get<Enum_CompuType>().GetKey(chef, val); }
+        internal override string GetParentName(Chef chef, Item item) => chef.Get<Relation_Store_ComputeX>().TryGetParent(item, out Store p) ? p.GetSingleNameId(chef) : InvalidItem;
     }
 }

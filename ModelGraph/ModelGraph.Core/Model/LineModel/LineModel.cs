@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using Windows.UI.Xaml.Shapes;
 
 namespace ModelGraph.Core
 {
@@ -9,7 +7,6 @@ namespace ModelGraph.Core
     {
         public Item Item { get; protected set; }
         private State _state;
-        private Flags _flags;
         public byte Depth;      // depth of tree hierarchy
 
         public LineModel ParentModel => Owner as LineModel;
@@ -31,8 +28,6 @@ namespace ModelGraph.Core
         private enum State : ushort
         {
             None = 0,
-            IsReadOnly = 0x8000,
-            IsMultiline = 0x4000,
             HasFailedValueFilter = 0x2000,
             HasFailedUsageFilter = 0x1000,
 
@@ -63,8 +58,6 @@ namespace ModelGraph.Core
         private void SetState(State state, State changedState, bool value) { var prev = GetState(state); if (value) _state |= state; else _state &= ~state; if (prev != value) _state |= changedState; }
 
         public bool IsChanged { get { return GetState(State.IsChanged); } set { SetState(State.IsChanged, value); } }
-        public bool IsReadOnly { get { return GetState(State.IsReadOnly); } set { SetState(State.IsReadOnly, value); } }
-        public bool IsMultiline { get { return GetState(State.IsMultiline); } set { SetState(State.IsMultiline, value); } }
         public bool IsFilterFocus { get { return GetState(State.IsFilterFocus); } set { SetState(State.IsFilterFocus, value); } }
         internal bool HasNoError { get { return GetState(State.HasNoError); } set { SetState(State.HasNoError, value); } }
 
@@ -94,33 +87,6 @@ namespace ModelGraph.Core
         internal bool AnyFilterSortChanged => GetState(State.AnyFilterSortChanged);
         internal void ClearChangedFlags() => _state &= ~State.AnyFilterSortChanged;
         internal void ClearSortUsageMode() => _state &= ~State.SortUsageMode;
-        #endregion
-
-        #region Flags  ========================================================
-        [Flags]
-        private enum Flags : byte
-        {
-            None = 0,
-            CanDrag = 0x01,
-            CanSort = 0x02,
-            CanFilter = 0x04,
-            CanMultiline = 0x08,
-
-            CanExpandLeft = 0x10,
-            CanExpandRight = 0x20,
-            CanFilterUsage = 0x40,
-        }
-        private bool GetFlag(Flags flag) => (_flags & flag) != 0;
-        private void SetFlag(Flags flag, bool value) { if (value) _flags |= flag; else _flags &= ~flag; }
-
-        public bool CanDrag { get { return GetFlag(Flags.CanDrag); } set { SetFlag(Flags.CanDrag, value); } }
-        public bool CanSort { get { return GetFlag(Flags.CanSort); } set { SetFlag(Flags.CanSort, value); } }
-        public bool CanFilter { get { return GetFlag(Flags.CanFilter); } set { SetFlag(Flags.CanFilter, value); } }
-        public bool CanMultiline { get { return GetFlag(Flags.CanMultiline); } set { SetFlag(Flags.CanMultiline, value); } }
-        public bool CanExpandLeft { get { return GetFlag(Flags.CanExpandLeft); } set { SetFlag(Flags.CanExpandLeft, value); } }
-        public bool CanExpandRight { get { return GetFlag(Flags.CanExpandRight); } set { SetFlag(Flags.CanExpandRight, value); } }
-        public bool CanFilterUsage { get { return GetFlag(Flags.CanFilterUsage); } set { SetFlag(Flags.CanFilterUsage, value); } }
-
         #endregion
 
         #region CommonMethods   ===============================================
@@ -174,17 +140,15 @@ namespace ModelGraph.Core
         #endregion
 
         #region Virtual Functions  ============================================
-        public virtual bool IsProperty => false;
-        public virtual bool IsTextProperty => false;
-        public virtual bool IsCheckProperty => false;
-        public virtual bool IsComboProperty => false;
+        public byte ItemDelta => (byte)(Item.ChildDelta + Item.ModelDelta);
+        public virtual bool CanDrag => false;
+        public virtual bool CanSort => false;
+        public virtual bool CanFilter => false;
+        public virtual bool CanExpandLeft => false;
+        public virtual bool CanExpandRight => false;
+        public virtual bool CanFilterUsage => false;
 
         public virtual string GetModelInfo(Chef chef) => default;
-
-        public virtual int GetPropertyIndexValue(Chef chef) => default;
-        public virtual bool GetPropertyBoolValue(Chef chef) => default;
-        public virtual string GetPropertyTextValue(Chef chef) => default;
-        public virtual string[] GetPropertylListValue(Chef chef) => default;
 
         internal virtual (bool, bool) Validate(Chef chef) => (false, false);
 
@@ -198,7 +162,9 @@ namespace ModelGraph.Core
         public virtual DropAction DragDrop(Chef chef) => DropAction.None;
         public virtual DropAction ReorderItems(Chef chef, LineModel target, bool doDrop) => DropAction.None;
 
-        public virtual (string Kind, string Name, int Count, ModelType Type) GetLineParms(Chef chef) => (null, BlankName, 0, ModelType.Default);
+        public virtual (string Kind, string Name, int Count, ModelType Type) GetParms(Chef chef) => (null, BlankName, 0, ModelType.Default);
+
+        public virtual Error TryGetError(Chef chef) => default;
 
 
         public virtual string GetModelIdentity() =>  $"{ViKey}  ({ItemKey:X3})";

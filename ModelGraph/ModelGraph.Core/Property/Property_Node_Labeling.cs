@@ -5,7 +5,7 @@ namespace ModelGraph.Core
     {
         internal override IdKey ViKey => IdKey.NodeLabelingProperty;
 
-        internal Property_Node_Labeling(PropertyDomain owner)
+        internal Property_Node_Labeling(StoreOf_Property owner)
         {
             Owner = owner;
             Value = new StringValue(this);
@@ -13,7 +13,7 @@ namespace ModelGraph.Core
             owner.Add(this);
         }
 
-        internal override string GetValue(Chef chef, Item item) => chef.GetItem<Enum_Labeling>().GetEnumName(chef, (int)Cast(item).Labeling);
-        internal override void SetValue(Chef chef, Item item, string val) => Cast(item).Labeling = (Labeling)chef.GetItem<Enum_Labeling>().GetKey(chef, val);
+        internal override string GetValue(Item item) { var chef = DataChef; return chef.Get<Enum_Labeling>().GetEnumName(chef, (int)Cast(item).Labeling); }
+        internal override void SetValue(Item item, string val) { var chef = DataChef; Cast(item).Labeling = (Labeling)chef.Get<Enum_Labeling>().GetKey(chef, val); }
     }
 }

@@ -4,8 +4,9 @@ namespace ModelGraph.Core
     public class Property_QueryX_Relation : PropertyOf<QueryX, string>
     {
         internal override IdKey ViKey => IdKey.QueryXRelationProperty;
+        internal override bool IsReadonly => true;
 
-        internal Property_QueryX_Relation(PropertyDomain owner)
+        internal Property_QueryX_Relation(StoreOf_Property owner)
         {
             Owner = owner;
             Value = new StringValue(this);
@@ -13,6 +14,6 @@ namespace ModelGraph.Core
             owner.Add(this);
         }
 
-        internal override string GetValue(Chef chef, Item item) => chef.GetQueryXRelationName(Cast(item));
+        internal override string GetValue(Item item) => DataChef.GetQueryXRelationName(Cast(item));
     }
 }

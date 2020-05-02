@@ -7,33 +7,6 @@ namespace ModelGraph.Core
  */
     public partial class Chef
     {
-        #region ChoiceColumns  ================================================
-        private bool HasChoiceColumns(TableX tx)
-        {
-            if (Store_ColumnX.TryGetChildren(tx, out IList<ColumnX> lst))
-            { 
-                foreach (var col in lst)
-                {
-                    if (col.IsChoice) return true;
-                }
-            }
-            return false;
-        }
-        private bool TryGetChoiceColumns(TableX tx, out IList<ColumnX> columns)
-        {
-            if (!Store_ColumnX.TryGetChildren(tx, out columns)) return false;
-
-            var allColumns = columns;
-            columns = new List<ColumnX>(allColumns.Count);
-
-            foreach (var col in allColumns)
-            {
-                if (col.IsChoice) columns.Add(col);
-            }
-            return columns.Count > 0;
-        }
-        #endregion
-
         #region SetColumnValueType  ===========================================
         internal bool SetColumnValueType(ColumnX col, int val)
         {
@@ -45,7 +18,7 @@ namespace ModelGraph.Core
             var newGroup = Value.GetValGroup(type);
             var preGroup = Value.GetValGroup(col.Value.ValType);
 
-            if (!Store_ColumnX.TryGetParent(col, out Store tbl)) return false;
+            if (!Get<Relation_Store_ColumnX>().TryGetParent(col, out Store tbl)) return false;
 
             var N = tbl.Count;
 

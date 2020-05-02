@@ -5,7 +5,7 @@ namespace ModelGraph.Core
     {
         internal override IdKey ViKey => IdKey.NodeOrientationProperty;
 
-        internal Property_Node_Aspect(PropertyDomain owner)
+        internal Property_Node_Aspect(StoreOf_Property owner)
         {
             Owner = owner;
             Value = new StringValue(this);
@@ -13,7 +13,7 @@ namespace ModelGraph.Core
             owner.Add(this);
         }
 
-        internal override string GetValue(Chef chef, Item item) => chef.GetItem<Enum_Aspect>().GetEnumName(chef, (int)Cast(item).Aspect);
-        internal override void SetValue(Chef chef, Item item, string val) => Cast(item).Aspect = (Aspect)chef.GetItem<Enum_Aspect>().GetKey(chef, val);
+        internal override string GetValue(Item item) { var chef = DataChef; return chef.Get<Enum_Aspect>().GetEnumName(chef, (int)Cast(item).Aspect); }
+        internal override void SetValue(Item item, string val) { var chef = DataChef; Cast(item).Aspect = (Aspect)chef.Get<Enum_Aspect>().GetKey(chef, val); }
     }
 }

@@ -11,6 +11,9 @@ namespace ModelGraph.Core
         #region GetHeadTail  ==================================================
         internal void GetHeadTail(Relation rel, out Store head, out Store tail)
         {
+            var relation_Store_ChildRelation = Get<Relation_Store_ChildRelation>();
+            var relation_Store_ParentRelation = Get<Relation_Store_ParentRelation>();
+
             if (rel == null)
             {
                 head = null;
@@ -18,13 +21,13 @@ namespace ModelGraph.Core
             }
             else if (rel.IsRelationX)
             {
-                Store_ChildRelation.TryGetParent(rel, out Store ch); head = ch; 
-                Store_ParentRelation.TryGetParent(rel, out Store pa); tail = pa;
+                relation_Store_ChildRelation.TryGetParent(rel, out Store ch); head = ch;
+                relation_Store_ParentRelation.TryGetParent(rel, out Store pa); tail = pa;
             }
             else
             {
-                Store_ChildRelation.TryGetParent(rel, out head);
-                Store_ParentRelation.TryGetParent(rel, out tail);
+                relation_Store_ChildRelation.TryGetParent(rel, out head);
+                relation_Store_ParentRelation.TryGetParent(rel, out tail);
             }
         }
         #endregion
@@ -35,13 +38,16 @@ namespace ModelGraph.Core
         private const string identitySuffix = ")";
         internal string GetRelationName(Relation rel)
         {
+            var relation_Store_ChildRelation = Get<Relation_Store_ChildRelation>();
+            var relation_Store_ParentRelation = Get<Relation_Store_ParentRelation>();
+
             var name = (rel is RelationXO rx) ? rx.Name : "Internal";
             var id = string.IsNullOrWhiteSpace(name) ? string.Empty : name;
             var identity = $"({id})  ";
             var childName = BlankName;
             var parentName = BlankName;
-            if (Store_ParentRelation.TryGetParent(rel, out Store childTable)) childName = childTable.Name;
-            if (Store_ChildRelation.TryGetParent(rel, out Store parentTable)) parentName = parentTable.Name;
+            if (relation_Store_ParentRelation.TryGetParent(rel, out Store childTable)) childName = childTable.Name;
+            if (relation_Store_ChildRelation.TryGetParent(rel, out Store parentTable)) parentName = parentTable.Name;
             StringBuilder sb = new StringBuilder(132);
             sb.Append(identity);
             sb.Append(parentName);
@@ -51,10 +57,13 @@ namespace ModelGraph.Core
         }
         internal void SetRelationName(RelationXO rel, string value)
         {
+            var relation_Store_ChildRelation = Get<Relation_Store_ChildRelation>();
+            var relation_Store_ParentRelation = Get<Relation_Store_ParentRelation>();
+
             var childName = BlankName;
             var parentName = BlankName;
-            if (Store_ParentRelation.TryGetParent(rel, out Store childTable)) childName = childTable.Name;
-            if (Store_ChildRelation.TryGetParent(rel, out Store parentTable)) parentName = parentTable.Name;
+            if (relation_Store_ParentRelation.TryGetParent(rel, out Store childTable)) childName = childTable.Name;
+            if (relation_Store_ChildRelation.TryGetParent(rel, out Store parentTable)) parentName = parentTable.Name;
             StringBuilder sb = new StringBuilder(value);
             sb.Replace(parentName + parentNameSuffix, "");
             sb.Replace(childName + childNameSuffix, "");
@@ -63,7 +72,7 @@ namespace ModelGraph.Core
         }
         string GetRelationName(QueryX sd)
         {
-            return (Relation_QueryX.TryGetParent(sd, out Relation rel) ? GetRelationName(rel) : null);
+            return (Get<Relation_Relation_QueryX>().TryGetParent(sd, out Relation rel) ? GetRelationName(rel) : null);
         }
         #endregion
 
@@ -71,7 +80,7 @@ namespace ModelGraph.Core
         internal void RemoveLink(Relation rel, Item parent, Item child)
         {
             MarkItemUnlinked(rel, parent, child);
-            Redo(ChangeSet);
+            Redo(Get<ChangeSet>());
         }
 
         internal void AppendLink(Relation rel, Item parent, Item child)

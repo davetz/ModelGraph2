@@ -5,7 +5,7 @@ namespace ModelGraph.Core
     {
         internal override IdKey ViKey => IdKey.QueryXWhereProperty;
 
-        internal Property_QueryX_Where(PropertyDomain owner)
+        internal Property_QueryX_Where(StoreOf_Property owner)
         {
             Owner = owner;
             Value = new StringValue(this);
@@ -13,8 +13,8 @@ namespace ModelGraph.Core
             owner.Add(this);
         }
 
-        internal override string GetValue(Chef chef, Item item) => Cast(item).WhereString;
-        internal override void SetValue(Chef chef, Item item, string val) => chef.TrySetWhereProperty(Cast(item), val);
-        internal override string GetParentName(Chef chef, Item item) => chef.GetWhereName(Cast(item));
+        internal override string GetValue(Item item) => Cast(item).WhereString;
+        internal override void SetValue(Item item, string val) => DataChef.TrySetWhereProperty(Cast(item), val);
+        internal override string GetParentName(Chef chef, Item item) => DataChef.GetWhereName(Cast(item));
     }
 }

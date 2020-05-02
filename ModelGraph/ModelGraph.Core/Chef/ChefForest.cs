@@ -11,11 +11,14 @@ namespace ModelGraph.Core
         /// </summary>
         private bool TryGetForest(Graph g, Item seed, HashSet<Store> nodeOwners)
         {
+            var relation_GraphX_QueryX = Get<Relation_GraphX_QueryX>();
+            var relation_QueryX_QueryX = Get<Relation_QueryX_QueryX>();
+
             g.Forest = null;
             var gx = g.GraphX;
 
             RebuildGraphX_ARGBList_NodeOwners(gx);
-            if (GraphX_QueryX.TryGetChildren(gx, out IList<QueryX> roots))
+            if (relation_GraphX_QueryX.TryGetChildren(gx, out IList<QueryX> roots))
             {
                 var workList = new List<Query>();
                 if (TryGetForestRoots(roots, seed, workList, out Query[] forest))
@@ -32,7 +35,7 @@ namespace ModelGraph.Core
                         if (query.Items == null) continue;
                         foreach (var itm in query.Items) { if (nodeOwners.Contains(itm.Store)) g.NodeItems.Add(itm); }
 
-                        if (QueryX_QueryX.TryGetChildren(query.Owner, out IList<QueryX> qxChildren))
+                        if (relation_QueryX_QueryX.TryGetChildren(query.Owner, out IList<QueryX> qxChildren))
                         {
                             var N = query.Items.Length;
                             query.Children = new Query[N][];
@@ -68,8 +71,11 @@ namespace ModelGraph.Core
         /// </summary>
         private bool TryGetForest(ComputeX cx, Item seed, List<Query> selectors, out Query[] forest)
         {
+            var relation_ComputeX_QueryX = Get<Relation_ComputeX_QueryX>();
+            var relation_QueryX_QueryX = Get<Relation_QueryX_QueryX>();
+
             forest = null;
-            if (ComputeX_QueryX.TryGetChildren(cx, out IList<QueryX> qxRoots))
+            if (relation_ComputeX_QueryX.TryGetChildren(cx, out IList<QueryX> qxRoots))
             {
                 var workList = new List<Query>();
                 if (TryGetForestRoots(qxRoots, seed, workList, out forest))
@@ -80,7 +86,7 @@ namespace ModelGraph.Core
                         var q = workQueue.Dequeue();
                         if (q.Items != null)
                         {
-                            if (QueryX_QueryX.TryGetChildren(q.Owner, out IList<QueryX> qxChildren))
+                            if (relation_QueryX_QueryX.TryGetChildren(q.Owner, out IList<QueryX> qxChildren))
                             {
                                 var N = q.Items.Length;
                                 q.Children = new Query[N][];
@@ -119,15 +125,15 @@ namespace ModelGraph.Core
 
         #region GetRoots  =====================================================
         bool TryGetForestRoots(IList<QueryX> qxRoots, Item seed, List<Query> workList, out Query[] forest)
-        {/*
-            Create the roots of a query forest.
-         */
+        {
+            var relation_Store_QueryX = Get<Relation_Store_QueryX>();
+
             workList.Clear();
             if (qxRoots != null && qxRoots.Count > 0)
             {
                 foreach (var qx in qxRoots)
                 {
-                    if (Store_QueryX.TryGetParent(qx, out Store sto))
+                    if (relation_Store_QueryX.TryGetParent(qx, out Store sto))
                     {
                         if (seed == null || seed.Owner != sto && sto.Count > 0)
                         {
@@ -151,7 +157,7 @@ namespace ModelGraph.Core
         #region GetChildQuery  ================================================
         Query GetChildQuery(Graph g, QueryX qx, Query q, Item item, Dictionary<byte, List<(Item, Item)>> keyPairs)
         {
-            if (!Relation_QueryX.TryGetParent(qx, out Relation r)) return null;
+            if (!Get<Relation_Relation_QueryX>().TryGetParent(qx, out Relation r)) return null;
 
             List<Item> items = null;
             if (qx.IsReversed)
@@ -177,7 +183,7 @@ namespace ModelGraph.Core
             if (qx.IsExclusive) items = RemoveDuplicates(qx, item, items, keyPairs);
             if (items == null) return null;
 
-            if (QueryX_QueryX.HasNoChildren(qx)) { qx.IsTail = true; }
+            if (Get<Relation_QueryX_QueryX>().HasNoChildren(qx)) { qx.IsTail = true; }
 
             var q2 = new Query(qx, q, item, items.ToArray());
             if (qx.IsTail)
@@ -221,7 +227,7 @@ namespace ModelGraph.Core
         #region GetChildQuery  ================================================
         Query GetChildQuery(QueryX qx, Query q, Item item)
         {
-            if (!Relation_QueryX.TryGetParent(qx, out Relation r)) return null;
+            if (!Get<Relation_Relation_QueryX>().TryGetParent(qx, out Relation r)) return null;
 
             List<Item> items = null;
             if (qx.IsReversed)

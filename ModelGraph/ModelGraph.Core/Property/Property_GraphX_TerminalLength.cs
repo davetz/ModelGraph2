@@ -5,7 +5,7 @@ namespace ModelGraph.Core
     {
         internal override IdKey ViKey => IdKey.GraphTerminalLengthProperty;
 
-        internal Property_GraphX_TerminalLength(PropertyDomain owner)
+        internal Property_GraphX_TerminalLength(StoreOf_Property owner)
         {
             Owner = owner;
             Value = new Int32Value(this);
@@ -13,7 +13,7 @@ namespace ModelGraph.Core
             owner.Add(this);
         }
 
-        internal override int GetValue(Chef chef, Item item) => Cast(item).TerminalLength;
-        internal override void SetValue(Chef chef, Item item, int val) => Cast(item).TerminalLength = (byte)val;
+        internal override int GetValue(Item item) => Cast(item).TerminalLength;
+        internal override void SetValue(Item item, int val) => Cast(item).TerminalLength = (byte)val;
     }
 }

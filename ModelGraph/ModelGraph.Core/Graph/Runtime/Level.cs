@@ -22,7 +22,7 @@ namespace ModelGraph.Core
         internal int Count => Paths.Count;
         internal void Add(Path path) { Paths.Add(path); }
         internal Graph Graph { get { return Owner as Graph; } }
-        internal string Name => Graph.Levels.IndexOf(this).ToString();
+        public override string GetSingleNameId(Chef chef) => Graph.Levels.IndexOf(this).ToString();
         #endregion
     }
 }

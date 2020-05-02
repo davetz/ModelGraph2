@@ -31,14 +31,9 @@ namespace ModelGraph.Core
         #region Identity  =====================================================
         internal override IdKey ViKey => IdKey.ComputeX;
         public override string GetSingleNameId(Chef chef) => string.IsNullOrWhiteSpace(Name) ? BlankName : Name;
-        public override string GetParentNameId(Chef chef) => chef.Store_ComputeX.TryGetParent(this, out Store p) ? p.GetSingleNameId(chef) : GetKindId(chef);
+        public override string GetParentNameId(Chef chef) => chef.Get<Relation_Store_ComputeX>().TryGetParent(this, out Store p) ? p.GetSingleNameId(chef) : GetKindId(chef);
         public override string GetSummaryId(Chef chef) => Summary;
         public override string GetDescriptionId(Chef chef) => Description;
-        #endregion
-
-        #region Property/Methods  =============================================
-        internal override bool HasItemName => false;
-        internal override string GetItemName(Item itm) { return null; }
         #endregion
     }
 }

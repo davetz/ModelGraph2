@@ -5,7 +5,7 @@ namespace ModelGraph.Core
     {
         internal override IdKey ViKey => IdKey.QueryXLineColorProperty;
 
-        internal Property_QueryX_LineColor(PropertyDomain owner)
+        internal Property_QueryX_LineColor(StoreOf_Property owner)
         {
             Owner = owner;
             Value = new StringValue(this);
@@ -13,7 +13,7 @@ namespace ModelGraph.Core
             owner.Add(this);
         }
 
-        internal override string GetValue(Chef chef, Item item) => Cast(item).PathParm.LineColor;
-        internal override void SetValue(Chef chef, Item item, string val) => Cast(item).PathParm.LineColor = val;
+        internal override string GetValue(Item item) => Cast(item).PathParm.LineColor;
+        internal override void SetValue(Item item, string val) => Cast(item).PathParm.LineColor = val;
     }
 }

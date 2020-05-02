@@ -32,27 +32,24 @@ namespace ModelGraph.Core
         // can not be undone, also remove any change items wich have been undon. 
         public void CongealChanges()
         {
+            var ChangeRoot = Get<StoreOf_ChangeSet>();
+
             ChangeRoot.CongealChanges();
             ChangeRoot.ChildDelta++;
         }
         #endregion
 
-        #region Expand All  ===================================================
-        private void ExpandAllChangeSets(ItemModelOld model)
-        {
-            if (ChangeRoot == null) return;
-            ChangeRoot.AutoExpandChanges();
-            model.IsExpandedLeft = true;
-        }
-        #endregion
 
         #region ChangeSet  ====================================================
         internal void CheckChanges()
         {
+            var ChangeSet = Get<ChangeSet>();
+            var ChangeRoot = Get<StoreOf_ChangeSet>();
+
             if (ChangeSet.Count > 0)
             {
                 var item = ChangeSet.Items[ChangeSet.Count - 1];
-                var changeText = $"{_localize(item.KindKey)}  {item.Name}";
+                var changeText = $"{_localize(item.KindKey)}  {item._name}";
                 if (_changeRootInfoItem != null && item.OldIdKey == _changeRootInfoItem.OldIdKey)
                     _changeRootInfoCount += 1;
                 else
@@ -89,7 +86,7 @@ namespace ModelGraph.Core
         }
         internal void Delete(ChangeSet chng)
         {
-            ChangeRoot.Remove(chng);
+            Get<StoreOf_ChangeSet>().Remove(chng);
         }
         internal void Undo(ChangeSet chng)
         {
@@ -130,7 +127,7 @@ namespace ModelGraph.Core
             var n1 = index1 + 1;
             var n2 = index2 + 1;
             var name = $"{GetIdentity(item, IdentityStyle.Double)}     {n1.ToString()}->{n2.ToString()}";
-            var chg = new ItemMoved(ChangeSet, item, index1, index2, name);
+            var chg = new ItemMoved(Get<ChangeSet>(), item, index1, index2, name);
             Redo(chg);
         }
         internal void Undo(ItemMoved chng)
@@ -151,6 +148,8 @@ namespace ModelGraph.Core
         #region ItemCreated  ==================================================
         internal void ItemCreated(Item item)
         {
+            var ChangeSet = Get<ChangeSet>();
+
             string name = GetIdentity(item, IdentityStyle.ChangeLog);
             var store = item.Owner as Store;
 
@@ -159,7 +158,7 @@ namespace ModelGraph.Core
                 var row = item as RowX;
                 var tbl = item.Owner as TableX;
 
-                if (Store_ColumnX.TryGetChildren(tbl, out IList<ColumnX> cols))
+                if (Get<Relation_Store_ColumnX>().TryGetChildren(tbl, out IList<ColumnX> cols))
                 {
                     var vals = new List<string>(cols.Count);
                     foreach (var col in cols)
@@ -182,7 +181,7 @@ namespace ModelGraph.Core
                 var tx = rx.TableX;
 
                 tx.Remove(rx);
-                if (Store_ColumnX.TryGetChildren(tx, out IList<ColumnX> lst)) { foreach (var cx in lst) { cx.Value.Remove(rx); } }
+                if (Get<Relation_Store_ColumnX>().TryGetChildren(tx, out IList<ColumnX> lst)) { foreach (var cx in lst) { cx.Value.Remove(rx); } }
             }
             else
             {
@@ -220,22 +219,22 @@ namespace ModelGraph.Core
         #endregion
 
         #region ItemUpdated  ==================================================
-        private void SetValue(ItemModelOld m, string newValue)
+        private void SetValue(Item itm, Property prop, string newValue)
         {
-            m.Item.ModelDelta++;
-            if (m.Property.IsCovert)
+            itm.ModelDelta++;
+            if (prop.IsCovert)
             {
-                m.Property.Value.SetString(m.Item, newValue);
+                prop.Value.SetString(itm, newValue);
             }
             else
             {
-                var oldValue = m.Property.Value.GetString(m.Item);
+                var oldValue = prop.Value.GetString(itm);
                 if (IsNotSameValue(oldValue, newValue))
                 {
-                    var name = $"{GetIdentity(m.Item, IdentityStyle.ChangeLog)}    {GetIdentity(m.Property, IdentityStyle.Single)}:  old<{oldValue}>  new<{newValue}>";
-                    if (m.Property.Value.SetString(m.Item, newValue))
+                    var name = $"{GetIdentity(itm, IdentityStyle.ChangeLog)}    {GetIdentity(prop, IdentityStyle.Single)}:  old<{oldValue}>  new<{newValue}>";
+                    if (prop.Value.SetString(itm, newValue))
                     {
-                        new ItemUpdated(ChangeSet, m.Item, m.Property, oldValue, newValue, name);
+                        new ItemUpdated(Get<ChangeSet>(), itm, prop, oldValue, newValue, name);
                     }
                 }
             }
@@ -267,17 +266,17 @@ namespace ModelGraph.Core
             var inx = (sto == null) ? -1 : sto.IndexOf(item);
             var name = GetIdentity(item, IdentityStyle.ChangeLog);
 
-            if (item.IsRowX && Store_ColumnX.TryGetChildren(sto, out IList<ColumnX> cols))
+            if (item.IsRowX && Get<Relation_Store_ColumnX>().TryGetChildren(sto, out IList<ColumnX> cols))
             {
                 var vals = new List<string>(cols.Count);
                 foreach (var col in cols)
                 {
                     vals.Add(col.Value.GetString(item));
                 }
-                new ItemRemoved(ChangeSet, item, inx, name, cols, vals);
+                new ItemRemoved(Get<ChangeSet>(), item, inx, name, cols, vals);
             }
             else
-                new ItemRemoved(ChangeSet, item, inx, name);
+                new ItemRemoved(Get<ChangeSet>(), item, inx, name);
         }
         internal void Redo(ItemRemoved cg)
         {
@@ -314,7 +313,7 @@ namespace ModelGraph.Core
 
             var name = $" [{rnam}]   ({nam1}) --> ({nam2})";
             (int parentIndex, int chilldIndex) = rel.AppendLink(item1, item2);
-            var chg = new ItemLinked(ChangeSet, rel, item1, item2, parentIndex, chilldIndex, name);
+            var chg = new ItemLinked(Get<ChangeSet>(), rel, item1, item2, parentIndex, chilldIndex, name);
         }
         internal void Undo(ItemLinked chng)
         {
@@ -339,7 +338,7 @@ namespace ModelGraph.Core
             var rnam = GetIdentity(rel, IdentityStyle.Single);
 
             var name = $" [{rnam}]   ({nam1}) --> ({nam2})";
-            var chg = new ItemUnLinked(ChangeSet, rel, item1, item2, parentIndex, childIndex, name);
+            var chg = new ItemUnLinked(Get<ChangeSet>(), rel, item1, item2, parentIndex, childIndex, name);
         }
 
         internal void Redo(ItemUnLinked cg)
@@ -361,7 +360,7 @@ namespace ModelGraph.Core
             var n1 = index1 + 1;
             var n2 = index2 + 1;
             var name = $" [{GetIdentity(relation, IdentityStyle.Single)}]     {GetIdentity(item, IdentityStyle.Double)}     {n1.ToString()}->{n2.ToString()}";
-            var chg = new ItemChildMoved(ChangeSet, relation, key, item, index1, index2, name);
+            var chg = new ItemChildMoved(Get<ChangeSet>(), relation, key, item, index1, index2, name);
             Redo(chg);
         }
         internal void Undo(ItemChildMoved chng)
@@ -381,7 +380,7 @@ namespace ModelGraph.Core
             var n1 = index1 + 1;
             var n2 = index2 + 1;
             var name = $" [{GetIdentity(relation, IdentityStyle.Single)}]     {GetIdentity(item, IdentityStyle.Double)}     {n1.ToString()}->{n2.ToString()}";
-            var chg = new ItemParentMoved(ChangeSet, relation, key, item, index1, index2, name);
+            var chg = new ItemParentMoved(Get<ChangeSet>(), relation, key, item, index1, index2, name);
             Redo(chg);
         }
         internal void Undo(ItemParentMoved chng)
@@ -432,7 +431,7 @@ namespace ModelGraph.Core
             }
 
             foreach (var item in hitList) { MarkItemRemoved(item); }
-            Redo(ChangeSet);
+            Redo(Get<ChangeSet>());
 
             #region PrivateMethods  ===========================================
 
@@ -463,7 +462,7 @@ namespace ModelGraph.Core
             {
                 if (item.Owner is TableX tx)
                 {
-                    if (Store_ChildRelation.TryGetChildren(tx, out IList<Relation> txRelations))
+                    if (Get<Relation_Store_ChildRelation>().TryGetChildren(tx, out IList<Relation> txRelations))
                     {
                         relations = new List<Relation>(txRelations);
                         return true;
@@ -471,14 +470,14 @@ namespace ModelGraph.Core
                     relations = null;
                     return false;
                 }
-                return Store_ChildRelation.TryGetChildren(item.Owner, out relations);
+                return Get<Relation_Store_ChildRelation>().TryGetChildren(item.Owner, out relations);
             }
 
             bool TryGetParentRelations(Item item, out IList<Relation> relations)
             {
                 if (item.Owner is TableX tx)
                 {
-                    if (Store_ParentRelation.TryGetChildren(tx, out IList<Relation> txRelations))
+                    if (Get<Relation_Store_ParentRelation>().TryGetChildren(tx, out IList<Relation> txRelations))
                     {
                         relations = new List<Relation>(txRelations);
                         return true;
@@ -486,7 +485,7 @@ namespace ModelGraph.Core
                     relations = null;
                     return false;
                 }
-                return Store_ParentRelation.TryGetChildren(item.Owner, out relations);
+                return Get<Relation_Store_ParentRelation>().TryGetChildren(item.Owner, out relations);
             }
 
             bool TryMarkItemUnlinked(Relation rel, Item item1, Item item2)

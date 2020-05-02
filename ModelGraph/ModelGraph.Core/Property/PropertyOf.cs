@@ -2,37 +2,14 @@
 
 namespace ModelGraph.Core
 {
-    public class PropertyOf<T1, T2> : Property, IValueStore<T2> where T1 : Item
+    public abstract class PropertyOf<T1, T2> : Property, IValueStore<T2> where T1 : Item
     {
-        internal EnumZ EnumZ;
-        internal Func<Item, T2> GetValFunc;
-        internal Func<Item, T2, bool> SetValFunc;
-        internal Func<Item, string> GetItemNameFunc;
 
-        internal virtual T2 GetValue(Chef chef, Item item) => default;
-        internal virtual void SetValue(Chef chef, Item item, T2 val) { }
-        internal virtual string GetParentName(Chef chef, Item item) => default;
-
-        #region Constructor  ==================================================
-        internal PropertyOf() { }
-        internal PropertyOf(Store owner, IdKey idKe, EnumZ enumZ = null)
-        {
-            Owner = owner;
-            OldIdKey = idKe;
-            EnumZ = enumZ;
-
-            owner.Add(this);
-        }
-        #endregion
+        internal virtual T2 GetValue(Item item) => default;
+        internal virtual void SetValue(Item item, T2 val) { }
 
         #region Property  =====================================================
         internal T1 Cast(Item item) { return item as T1; }
-
-        internal bool Valid(Item item) { return (item is T1); }
-        internal bool Invalid(Item item) { return !(item is T1); }
-
-        internal override bool HasItemName => (GetItemNameFunc != null);
-        internal override string GetItemName(Item itm) { return Invalid(itm) ? Chef.InvalidItem : GetItemNameFunc(itm); }
         #endregion
 
         #region IValueStore  ==================================================
@@ -42,8 +19,8 @@ namespace ModelGraph.Core
         public void Remove(Item key) { }
         public void SetOwner(ComputeX cx) { }
 
-        public bool GetVal(Item key, out T2 val) { if (GetValFunc is null) return Value.NoValue(out val); val = GetValFunc(key); return true; }
-        public bool SetVal(Item key, T2 value) => (SetValFunc is null) ? false : SetValFunc(key, value);
+        public bool GetVal(Item key, out T2 val) { val = GetValue(key); return true; }
+        public bool SetVal(Item key, T2 value) { if (IsReadonly) return false; SetValue(key, value); return true; }
         #endregion
     }
 }

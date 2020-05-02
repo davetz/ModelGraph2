@@ -5,7 +5,7 @@ namespace ModelGraph.Core
     {
         internal override IdKey ViKey => IdKey.ValueXSelectProperty;
 
-        internal Property_QueryX_Select(PropertyDomain owner)
+        internal Property_QueryX_Select(StoreOf_Property owner)
         {
             Owner = owner;
             Value = new StringValue(this);
@@ -13,8 +13,8 @@ namespace ModelGraph.Core
             owner.Add(this);
         }
 
-        internal override string GetValue(Chef chef, Item item) => Cast(item).SelectString;
-        internal override void SetValue(Chef chef, Item item, string val) => chef.TrySetSelectProperty(Cast(item), val);
-        internal override string GetParentName(Chef chef, Item item) => chef.GetSelectName(Cast(item));
+        internal override string GetValue(Item item) => Cast(item).SelectString;
+        internal override void SetValue(Item item, string val) => DataChef.TrySetSelectProperty(Cast(item), val);
+        internal override string GetParentName(Chef chef, Item item) => DataChef.GetSelectName(Cast(item));
     }
 }

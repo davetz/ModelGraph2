@@ -11,9 +11,9 @@ namespace ModelGraph.Core
         {
             Owner = owner;
 
-            CreateChildren());
+            CreateChildren();
 
-            owner.Add(this));
+            owner.Add(this);
         }
         #endregion
 
@@ -35,7 +35,7 @@ namespace ModelGraph.Core
             Add(new PairZ(this, IdKey.Connect_South_East));
             Add(new PairZ(this, IdKey.Connect_South_West));
             Add(new PairZ(this, IdKey.Connect_South_East_West));
-\        }
+        }
         #endregion
     }
 }

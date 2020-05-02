@@ -5,7 +5,7 @@ namespace ModelGraph.Core
     {
         internal override IdKey ViKey => IdKey.ComputeXSeparatorProperty;
 
-        internal Property_ComputeX_Separator(PropertyDomain owner)
+        internal Property_ComputeX_Separator(StoreOf_Property owner)
         {
             Owner = owner;
             Value = new StringValue(this);
@@ -13,7 +13,7 @@ namespace ModelGraph.Core
             owner.Add(this);
         }
 
-        internal override string GetValue(Chef chef, Item item) => Cast(item).Separator;
-        internal override void SetValue(Chef chef, Item item, string val) => Cast(item).Separator = val;
+        internal override string GetValue(Item item) => Cast(item).Separator;
+        internal override void SetValue(Item item, string val) => Cast(item).Separator = val;
     }
 }

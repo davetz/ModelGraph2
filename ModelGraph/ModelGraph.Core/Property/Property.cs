@@ -5,7 +5,11 @@ namespace ModelGraph.Core
     {
         internal Value Value = Chef.ValuesUnknown;
 
-        internal abstract bool HasItemName { get; }
-        internal abstract string GetItemName(Item itm);
+        internal virtual bool HasParentName => false;
+        internal virtual string GetParentName(Chef chef, Item itm) => default;
+
+        internal virtual bool IsReadonly => false;
+        internal virtual bool IsMultiline => false;
+
     }
 }

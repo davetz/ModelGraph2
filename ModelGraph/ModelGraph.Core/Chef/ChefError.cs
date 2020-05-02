@@ -121,27 +121,29 @@ namespace ModelGraph.Core
         internal void ClearError(Item item, Error error)
         {
             if (error.IsErrorAux) throw new System.Exception("Corrupt Error Hierarcy");
-            ErrorStore.Remove(error);
+            Get<StoreOf_Error>().Remove(error);
             _itemError.Remove(item);
             item.ErrorDelta++;
         }
         internal void ClearError(Item item, Item aux1, Error error)
         {
             if (!error.IsErrorAux1) throw new System.Exception("Corrupt Error Hierarcy");
-            ErrorStore.Remove(error);
+            Get<StoreOf_Error>().Remove(error);
             _itemErrorAux1.Remove((item, aux1));
             item.ErrorDelta++;
         }
         internal void ClearError(Item item, Item aux1, Item aux2, Error error)
         {
             if (!error.IsErrorAux1) throw new System.Exception("Corrupt Error Hierarcy");
-            ErrorStore.Remove(error);
+            Get<StoreOf_Error>().Remove(error);
             _itemErrorAux2.Remove((item, aux1, aux2));
             item.ErrorDelta++;
         }
 
         internal void ClearErrors(HashSet<IdKey> traits)
         {
+            var storeOf_Error = Get<StoreOf_Error>();
+
             var removeError = new Dictionary<Item, Error>();
             var removeErrorAux1 = new Dictionary<(Item, Item), Error>();
             var removeErrorAux2 = new Dictionary<(Item, Item, Item), Error>();
@@ -161,19 +163,19 @@ namespace ModelGraph.Core
             foreach (var e in removeError)
             {
                 _itemError.Remove(e.Key);
-                ErrorStore.Remove(e.Value);
+                storeOf_Error.Remove(e.Value);
                 e.Value.Item.ErrorDelta++;
             }
             foreach (var e in removeErrorAux1)
             {
                 _itemErrorAux1.Remove(e.Key);
-                ErrorStore.Remove(e.Value);
+                storeOf_Error.Remove(e.Value);
                 e.Value.Item.ErrorDelta++;
             }
             foreach (var e in removeErrorAux2)
             {
                 _itemErrorAux2.Remove(e.Key);
-                ErrorStore.Remove(e.Value);
+                storeOf_Error.Remove(e.Value);
                 e.Value.Item.ErrorDelta++;
             }
         }
@@ -193,7 +195,7 @@ namespace ModelGraph.Core
 
                 ClearError(item, prevError);
             }
-            return AddError(item, new ErrorNone(ErrorStore, item, idKe));
+            return AddError(item, new ErrorNone(Get<StoreOf_Error>(), item, idKe));
         }
         internal ErrorNoneAux TryAddErrorNone(Item item, Item aux1, IdKey idKe)
         {
@@ -208,7 +210,7 @@ namespace ModelGraph.Core
 
                 ClearError(item, aux1, prevError);
             }
-            return AddError(item, aux1, new ErrorNoneAux(ErrorStore, item, aux1, idKe));
+            return AddError(item, aux1, new ErrorNoneAux(Get<StoreOf_Error>(), item, aux1, idKe));
         }
         internal ErrorNoneAux2 TryAddErrorNone(Item item, Item aux1, Item aux2, IdKey idKe)
         {
@@ -223,7 +225,7 @@ namespace ModelGraph.Core
 
                 ClearError(item, aux1, aux2, prevError);
             }
-            return AddError(item, aux1, aux2, new ErrorNoneAux2(ErrorStore, item, aux1, aux2, idKe));
+            return AddError(item, aux1, aux2, new ErrorNoneAux2(Get<StoreOf_Error>(), item, aux1, aux2, idKe));
         }
 
         internal ErrorOne TryAddErrorOne(Item item, IdKey idKe, string text = null)
@@ -239,7 +241,7 @@ namespace ModelGraph.Core
 
                 ClearError(item, prevError);
             }
-            return AddError(item, new ErrorOne(ErrorStore, item, idKe, text));
+            return AddError(item, new ErrorOne(Get<StoreOf_Error>(), item, idKe, text));
         }
         internal ErrorOneAux TryAddErrorOne(Item item, Item aux1, IdKey idKe, string text = null)
         {
@@ -254,7 +256,7 @@ namespace ModelGraph.Core
 
                 ClearError(item, aux1, prevError);
             }
-            return AddError(item, aux1, new ErrorOneAux(ErrorStore, item, aux1, idKe, text));
+            return AddError(item, aux1, new ErrorOneAux(Get<StoreOf_Error>(), item, aux1, idKe, text));
         }
         internal ErrorOneAux2 TryAddErrorOne(Item item, Item aux1, Item aux2, IdKey idKe, string text = null)
         {
@@ -269,7 +271,7 @@ namespace ModelGraph.Core
 
                 ClearError(item, aux1, aux2, prevError);
             }
-            return AddError(item, aux1, aux2, new ErrorOneAux2(ErrorStore, item, aux1, aux2, idKe, text));
+            return AddError(item, aux1, aux2, new ErrorOneAux2(Get<StoreOf_Error>(), item, aux1, aux2, idKe, text));
         }
 
         internal ErrorMany TryAddErrorMany(Item item, IdKey idKe, string text = null)
@@ -285,7 +287,7 @@ namespace ModelGraph.Core
 
                 ClearError(item, prevError);
             }
-            return AddError(item, new ErrorMany(ErrorStore, item, idKe, text));
+            return AddError(item, new ErrorMany(Get<StoreOf_Error>(), item, idKe, text));
         }
         internal ErrorManyAux TryAddErrorMany(Item item, Item aux1, IdKey idKe, string text = null)
         {
@@ -300,7 +302,7 @@ namespace ModelGraph.Core
 
                 ClearError(item, aux1, prevError);
             }
-            return AddError(item, aux1, new ErrorManyAux(ErrorStore, item, aux1, idKe, text));
+            return AddError(item, aux1, new ErrorManyAux(Get<StoreOf_Error>(), item, aux1, idKe, text));
         }
         internal ErrorManyAux2 TryAddErrorMany(Item item, Item aux1, Item aux2, IdKey idKe, string text = null)
         {
@@ -315,7 +317,7 @@ namespace ModelGraph.Core
 
                 ClearError(item, aux1, aux2, prevError);
             }
-            return AddError(item, aux1, aux2, new ErrorManyAux2(ErrorStore, item, aux1, aux2, idKe, text));
+            return AddError(item, aux1, aux2, new ErrorManyAux2(Get<StoreOf_Error>(), item, aux1, aux2, idKe, text));
         }
         #endregion
 

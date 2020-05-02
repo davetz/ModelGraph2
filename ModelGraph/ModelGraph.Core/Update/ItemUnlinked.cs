@@ -15,7 +15,7 @@
         {
             Owner = owner;
             OldIdKey = IdKey.ItemUnlinked;
-            Name = name;
+            _name = name;
 
             Child = child;
             Parent = parent;

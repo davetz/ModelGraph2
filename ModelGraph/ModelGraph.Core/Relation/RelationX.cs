@@ -14,7 +14,7 @@ namespace ModelGraph.Core
 
         #region Constructors  =================================================
         internal RelationX() { }
-        internal RelationX(RelationXDomain owner, IdKey idKe, bool autoExpandRight = false)
+        internal RelationX(StoreOf_RelationX owner, IdKey idKe, bool autoExpandRight = false)
         {
             Owner = owner;
             OldIdKey = idKe;
@@ -36,7 +36,7 @@ namespace ModelGraph.Core
         private string _description;
 
         #region Constructors  =================================================
-        internal RelationXO(RelationXDomain owner, bool autoExpandRight = false)
+        internal RelationXO(StoreOf_RelationX owner, bool autoExpandRight = false)
         {
             Owner = owner;
             OldIdKey = IdKey.RelationX;

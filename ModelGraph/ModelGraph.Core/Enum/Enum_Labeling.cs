@@ -11,9 +11,9 @@ namespace ModelGraph.Core
         {
             Owner = owner;
 
-            CreateChildren());
+            CreateChildren();
 
-            owner.Add(this));
+            owner.Add(this);
         }
         #endregion
 
@@ -36,7 +36,7 @@ namespace ModelGraph.Core
             Add(new PairZ(this, IdKey.Labeling_TopRightCorner));
             Add(new PairZ(this, IdKey.Labeling_BottomLeftSide));
             Add(new PairZ(this, IdKey.Labeling_BottomRightSide));
-            Add(new PairZ(this, IdKey.Labeling_BottomLeftCorner);
+            Add(new PairZ(this, IdKey.Labeling_BottomLeftCorner));
             Add(new PairZ(this, IdKey.Labeling_BottomRightCorner));
         }
         #endregion

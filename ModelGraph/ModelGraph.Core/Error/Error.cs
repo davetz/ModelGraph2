@@ -3,7 +3,8 @@
     public abstract class Error : Item
     {
         internal Item Item;
-        internal string Name;
+        internal override string Name { get => _name; set => _name = value; }
+        internal string _name;
 
         internal abstract void Add(string text);
         internal abstract void Clear();

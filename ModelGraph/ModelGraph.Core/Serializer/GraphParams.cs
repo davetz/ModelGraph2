@@ -23,7 +23,7 @@ namespace ModelGraph.Core
         #region CreateProperties  =============================================
         private void CreateProperties(Chef chef)
         {
-            var sto = chef.GetItem<PropertyDomain>();
+            var sto = chef.Get<StoreOf_Property>();
 
             chef.RegisterReferenceItem(new Property_Node_CenterXY(sto));
             chef.RegisterReferenceItem(new Property_Node_SizeWH(sto));
@@ -40,28 +40,30 @@ namespace ModelGraph.Core
         }
         private Property[] GetProps1(Chef chef) => new Property[]
         {
-            chef.GetItem<Property_Node_CenterXY>(),
-            chef.GetItem<Property_Node_SizeWH>(),
-            chef.GetItem<Property_Node_Aspect>(),
-            chef.GetItem<Property_Node_Labeling>(),
-            chef.GetItem<Property_Node_Resizing>(),
-            chef.GetItem<Property_Node_BarWidth>(),
+            chef.Get<Property_Node_CenterXY>(),
+            chef.Get<Property_Node_SizeWH>(),
+            chef.Get<Property_Node_Aspect>(),
+            chef.Get<Property_Node_Labeling>(),
+            chef.Get<Property_Node_Resizing>(),
+            chef.Get<Property_Node_BarWidth>(),
         };
         private Property[] GetProps2(Chef chef) => new Property[]
         {
-            chef.GetItem<Property_Edge_Facet1>(),
-            chef.GetItem<Property_Edge_Facet2>(),
+            chef.Get<Property_Edge_Facet1>(),
+            chef.Get<Property_Edge_Facet2>(),
         };
         #endregion
 
         #region HasData  ======================================================
         public bool HasData()
         {
-            var chef = _graphXStore.Owner as Chef;
-            var dummyItemRef = chef.DummyItemRef;
-            var dummyQueryXRef = chef.DummyQueryXRef;
 
-            var gxList = _graphXStore.Items;
+            var chef = DataChef;
+            var graphXDomain = chef.Get<StoreOf_GraphX>();
+            var dummyQueryXRef = chef.Get<DummyQueryX>();
+
+
+            var gxList = graphXDomain.Items;
             foreach (var gx in gxList)
             {
                 if (gx.Root_QueryX_Parms is null) continue;
@@ -113,7 +115,7 @@ namespace ModelGraph.Core
         public void ReadData(DataReader r, Item[] items)
         {
             var chef = DataChef;
-            var dummyQueryXRef = chef.GetItem<DummyQueryX>();
+            var dummyQueryXRef = chef.Get<DummyQueryX>();
 
             var Item_Node = new Dictionary<Item,Node>(1000);
 
@@ -250,8 +252,8 @@ namespace ModelGraph.Core
         public void WriteData(DataWriter w, Dictionary<Item, int> itemIndex)
         {
             var chef = DataChef;
-            var dummyQueryXRef = chef.GetItem<DummyQueryX>();
-            var graphXDomain = chef.GetItem<GraphXDomain>();
+            var dummyQueryXRef = chef.Get<DummyQueryX>();
+            var graphXDomain = chef.Get<StoreOf_GraphX>();
 
             #region RemoveInvalidItems  =======================================
             // hit list of items that no longer exists
@@ -331,7 +333,7 @@ namespace ModelGraph.Core
 
             // count number of gx.GraphParams that have data
             var gxCount = 0;
-            foreach (var gx in _graphXStore.Items)//GraphX
+            foreach (var gx in graphXDomain.Items)//GraphX
             {
                 if (gx.Root_QueryX_Parms.Count > 0) gxCount++;
             }
@@ -364,7 +366,7 @@ namespace ModelGraph.Core
                             if (e2.Value.Count > 0)
                             {
                                 #region WriteQuerys  ==========================
-                                if (e2.Key == chef.DummyQueryXRef)
+                                if (e2.Key == dummyQueryXRef)
                                 {
                                     #region WriteNodes  =======================
                                     foreach (var en in e2.Value)//NodeEdge
@@ -445,7 +447,7 @@ namespace ModelGraph.Core
             x2 = y2 = float.MinValue;
             foreach (var e3 in qxParams)
             {
-                if (e3.Key == chef.DummyQueryXRef)
+                if (e3.Key == chef.Get<DummyQueryX>())
                 {
                     foreach (var gp in e3.Value)//GP
                     {
@@ -465,17 +467,6 @@ namespace ModelGraph.Core
         #endregion
         #endregion
 
-        #region Flags  ========================================================
-        const byte BZ = 0;
-        const byte B1 = 0x1;
-        const byte B2 = 0x2;
-        const byte B3 = 0x4;
-        const byte B4 = 0x8;
-        const byte B5 = 0x10;
-        const byte B6 = 0x20;
-        const byte B7 = 0x40;
-        const byte B8 = 0x80;
-        #endregion
 
         #region ISerializer  ==================================================
         public int GetSerializerItemCount() => 0;

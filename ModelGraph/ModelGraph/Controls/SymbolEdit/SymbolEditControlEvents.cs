@@ -706,13 +706,13 @@ namespace ModelGraph.Controls
 
             ApplyAutoFlip();
 
-            List<ModelCommand> buttonCommands = new List<ModelCommand>(2);
+            List<LineCommand> buttonCommands = new List<LineCommand>(2);
             //_rootModel.PageButtonComands(buttonCommands);
-            foreach (var cmd in buttonCommands)
-            {
-                if (cmd.IsSaveCommand) cmd.Execute();
-                return;
-            }
+            //foreach (var cmd in buttonCommands)
+            //{
+            //    if (cmd.IsSaveCommand) cmd.Execute();
+            //    return;
+            //}
         }
 
         private void ReloadButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)

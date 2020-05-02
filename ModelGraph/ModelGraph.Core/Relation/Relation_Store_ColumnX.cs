@@ -5,7 +5,7 @@ namespace ModelGraph.Core
     {
         internal override IdKey ViKey => IdKey.Store_ColumnX;
 
-        internal Relation_Store_ColumnX(RelationDomain owner)
+        internal Relation_Store_ColumnX(StoreOf_Relation owner)
         {
             Owner = owner;
             Pairing = Pairing.OneToMany;

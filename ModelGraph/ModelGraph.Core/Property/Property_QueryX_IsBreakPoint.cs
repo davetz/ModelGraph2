@@ -5,7 +5,7 @@ namespace ModelGraph.Core
     {
         internal override IdKey ViKey => IdKey.QueryXIsBreakPointProperty;
 
-        internal Property_QueryX_IsBreakPoint(PropertyDomain owner)
+        internal Property_QueryX_IsBreakPoint(StoreOf_Property owner)
         {
             Owner = owner;
             Value = new BoolValue(this);
@@ -13,7 +13,7 @@ namespace ModelGraph.Core
             owner.Add(this);
         }
 
-        internal override bool GetValue(Chef chef, Item item) => Cast(item).IsBreakPoint;
-        internal override void SetValue(Chef chef, Item item, bool val) => Cast(item).IsBreakPoint = val;
+        internal override bool GetValue(Item item) => Cast(item).IsBreakPoint;
+        internal override void SetValue(Item item, bool val) => Cast(item).IsBreakPoint = val;
     }
 }

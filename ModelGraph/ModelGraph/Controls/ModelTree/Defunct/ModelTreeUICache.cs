@@ -681,7 +681,7 @@ namespace ModelGraph.Controls
         #endregion
 
         #region AddTextProperty  ==============================================
-        private void AddTextProperty(int index, LineModel model)
+        private void AddTextProperty(int index, PropertyModel model)
         {
             var obj = _textPropertyCache[index];
             if (obj == null)
@@ -695,7 +695,7 @@ namespace ModelGraph.Controls
             }
 
             obj.DataContext = model;
-            var txt = model.TextValue;
+            var txt = model.GetTextValue(_chef);
             obj.Text = txt ?? string.Empty;
             obj.Tag = obj.Text;
             obj.IsReadOnly = model.IsReadOnly;
@@ -720,7 +720,7 @@ namespace ModelGraph.Controls
         #endregion
 
         #region AddCheckProperty  =============================================
-        private void AddCheckProperty(int index, LineModel model)
+        private void AddCheckProperty(int index, PropertyModel model)
         {
             var obj = _checkPropertyCache[index];
             if (obj == null)
@@ -735,7 +735,7 @@ namespace ModelGraph.Controls
             }
 
             obj.DataContext = model;
-            obj.IsChecked = model.BoolValue;
+            obj.IsChecked = model.GetBoolValue(_chef);
 
             _stackPanelCache[index].Children.Add(obj);
         }
@@ -756,7 +756,7 @@ namespace ModelGraph.Controls
         #endregion
 
         #region AddComboProperty  =============================================
-        private void AddComboProperty(int index, LineModel model)
+        private void AddComboProperty(int index, PropertyModel model)
         {
             var obj = _comboPropertyCache[index];
             if (obj == null)
@@ -770,8 +770,8 @@ namespace ModelGraph.Controls
             }
 
             obj.DataContext = model;
-            obj.ItemsSource = model.ListValue;
-            obj.SelectedIndex = model.IndexValue;
+            obj.ItemsSource = model.GetlListValue(_chef);
+            obj.SelectedIndex = model.GetIndexValue(_chef);
 
             _stackPanelCache[index].Children.Add(obj);
         }
@@ -794,7 +794,7 @@ namespace ModelGraph.Controls
         #region CheckItemHasError  ============================================
         private void CheckItemHasError(int index, LineModel model)
         {
-            var error = model.TryGetError();
+            var error = model.TryGetError(_chef);
             if (error is null) return;
 
             var obj = _itemHasErrorCache[index];
@@ -879,75 +879,72 @@ namespace ModelGraph.Controls
             }
             Canvas.SetTop(sp, viewIndex * _elementHieght);
 
-            if (sp.DataContext == m && _modelDeltaCache[index] == m.ModelDelta) return; //reusing previouslly cached ui elements
+            if (sp.DataContext == m && _modelDeltaCache[index] == m.ItemDelta) return; //reusing previouslly cached ui elements
             _modelCacheIndex[m] = index;
 
             sp.Children.Clear();
             sp.DataContext = m;
-            _modelDeltaCache[index] = m.ModelDelta;
+            _modelDeltaCache[index] = m.ItemDelta;
 
-            var (kind, name, count, type) = m.ModelParms;
+            var (kind, name, count, type) = m.GetParms(_chef);
 
             AddModelIdentity(index, m);
             AddTreeIndent(index, m);
             AddExpandLeft(index, m);
 
-            switch (type)
+            if (m is PropertyModel pm)
             {
-                case ModelType.TextProperty:
-                    //=========================================================
-                    AddPropertyName(index, name, m);
-                    AddTextProperty(index, m);
-                    CheckItemHasError(index, m);
-                    break;
+                if (pm.IsTextModel)
+                {
+                    AddPropertyName(index, name, pm);
+                    AddTextProperty(index, pm);
+                    CheckItemHasError(index, pm);
+                    return;
+                }
+                else if (pm.IsCheckModel)
+                {
+                    AddPropertyName(index, name, pm);
+                    AddCheckProperty(index, pm);
+                    CheckItemHasError(index, pm);
+                    return;
+                }
+                else if (pm.IsComboModel)
+                {
+                    AddPropertyName(index, name, pm);
+                    AddComboProperty(index, pm);
+                    CheckItemHasError(index, pm);
+                    return;
+                }
+                AddItemKind(index, kind, m);
+                AddItemName(index, name, m);
+                if (m.CanExpandRight) AddExpandRight(index, m);
+                CheckItemHasError(index, m);
 
-                case ModelType.CheckProperty:
-                    //=========================================================
-                    AddPropertyName(index, name, m);
-                    AddCheckProperty(index, m);
-                    CheckItemHasError(index, m);
-                    break;
+                if (count > 0)
+                {
+                    AddSortMode(index, m, (m.CanSort));
 
-                case ModelType.ComboProperty:
-                    //=========================================================
-                    AddPropertyName(index, name, m);
-                    AddComboProperty(index, m);
-                    CheckItemHasError(index, m);
-                    break;
+                    AddTotalCount(index, count, m);
+                    AddUsageMode(index, m, (m.CanFilterUsage));
+                    AddFilterMode(index, m, m.CanFilter);
 
-                default:
-                    //=========================================================
-                    AddItemKind(index, kind, m);
-                    AddItemName(index, name, m);
-                    if (m.CanExpandRight) AddExpandRight(index, m);
-                    CheckItemHasError(index, m);
-
-                    if (count > 0)
+                    if (m.CanFilter)
                     {
-                        AddSortMode(index, m, (m.CanSort));
-
-                        AddTotalCount(index, count, m);
-                        AddUsageMode(index, m, (m.CanFilterUsage));
-                        AddFilterMode(index, m, m.CanFilter);
-
-                        if (m.CanFilter)
+                        if (m.IsFilterVisible)
                         {
-                            if (m.IsFilterVisible)
-                            {
-                                AddFilterText(index, m);
-                                AddFilterCount(index, m);
-                            }
-                            else if (m.IsUsedFilter || m.IsNotUsedFilter)
-                            {
-                                AddFilterCount(index, m);
-                            }
+                            AddFilterText(index, m);
+                            AddFilterCount(index, m);
                         }
-                        if (false)//_root.ModelInfo != null)
+                        else if (m.IsUsedFilter || m.IsNotUsedFilter)
                         {
-                            AddItemInfo(index, m);
+                            AddFilterCount(index, m);
                         }
                     }
-                    break;
+                    //if (false)//_root.ModelInfo != null)
+                    //{
+                    //    AddItemInfo(index, m);
+                    //}
+                }
             }
         }
         private void ClearStackPanel(int index)

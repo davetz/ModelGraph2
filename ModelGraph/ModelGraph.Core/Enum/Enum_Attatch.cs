@@ -2,12 +2,12 @@
 namespace ModelGraph.Core
 {/*
  */
-    public class Enum_Attatch : EnumZ
+    public class Enum_Attach : EnumZ
     {
         internal override IdKey ViKey => IdKey.AttatchEnum;
 
         #region Constructor  ==================================================
-        internal Enum_Attatch(StoreOf<EnumZ> owner)
+        internal Enum_Attach(StoreOf<EnumZ> owner)
         {
             Owner = owner;
 

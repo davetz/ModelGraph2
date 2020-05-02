@@ -5,7 +5,7 @@ namespace ModelGraph.Core
     {
         internal override IdKey ViKey => IdKey.NodeSizeWHProperty;
 
-        internal Property_Node_SizeWH(PropertyDomain owner)
+        internal Property_Node_SizeWH(StoreOf_Property owner)
         {
             Owner = owner;
             Value = new Int32ArrayValue(this);
@@ -13,7 +13,7 @@ namespace ModelGraph.Core
             owner.Add(this);
         }
 
-        internal override int[] GetValue(Chef chef, Item item) => Cast(item).SizeWH;
-        internal override void SetValue(Chef chef, Item item, int[] val) => Cast(item).SizeWH = val;
+        internal override int[] GetValue(Item item) => Cast(item).SizeWH;
+        internal override void SetValue(Item item, int[] val) => Cast(item).SizeWH = val;
     }
 }

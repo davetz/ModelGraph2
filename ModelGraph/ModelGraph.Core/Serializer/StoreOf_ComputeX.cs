@@ -4,13 +4,13 @@ using Windows.Storage.Streams;
 
 namespace ModelGraph.Core
 {
-    public class ComputeXDomain : ExternalDomainOf<ComputeX>, ISerializer
+    public class StoreOf_ComputeX : StoreOf_External<ComputeX>, ISerializer
     {
         static Guid _serializerGuid = new Guid("35522B27-A925-4CE0-8D65-EDEF451097F2");
         static byte _formatVersion = 1;
         internal override IdKey ViKey => IdKey.ComputeXDomain;
 
-        internal ComputeXDomain(Chef chef)
+        internal StoreOf_ComputeX(Chef chef)
         {
             Owner = chef;
 
@@ -23,10 +23,8 @@ namespace ModelGraph.Core
         #region CreateProperties  =============================================
         private void CreateProperties(Chef chef)
         {
-            var sto = chef.GetItem<PropertyDomain>();
+            var sto = chef.Get<StoreOf_Property>();
 
-            chef.RegisterReferenceItem(new Property_ComputeX_Name(sto));
-            chef.RegisterReferenceItem(new Property_ComputeX_Summary(sto));
             chef.RegisterReferenceItem(new Property_ComputeX_CompuType(sto));
             chef.RegisterReferenceItem(new Property_ComputeX_Where(sto));
             chef.RegisterReferenceItem(new Property_ComputeX_Select(sto));
@@ -37,13 +35,15 @@ namespace ModelGraph.Core
         }
         private Property[] GetProps(Chef chef) => new Property[]
         {
-            chef.GetItem<Property_ComputeX_Name>(),
-            chef.GetItem<Property_ComputeX_Summary>(),
-            chef.GetItem<Property_ComputeX_CompuType>(),
-            chef.GetItem<Property_ComputeX_Where>(),
-            chef.GetItem<Property_ComputeX_Select>(),
-            chef.GetItem<Property_ComputeX_Separator>(),
-            chef.GetItem<Property_ColumnX_ValueType>(),
+            chef.Get<Property_Item_Name>(),
+            chef.Get<Property_Item_Summary>(),
+            chef.Get<Property_Item_Description>(),
+
+            chef.Get<Property_ComputeX_CompuType>(),
+            chef.Get<Property_ComputeX_Where>(),
+            chef.Get<Property_ComputeX_Select>(),
+            chef.Get<Property_ComputeX_Separator>(),
+            chef.Get<Property_ColumnX_ValueType>(),
         };
         #endregion
 

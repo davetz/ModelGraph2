@@ -700,7 +700,7 @@
     <value>Name</value>
   </data>
   <data name="401S" xml:space="preserve">
-    <value>Name of this view</value>
+    <value>Name of this item</value>
   </data>
   <data name="402N" xml:space="preserve">
     <value>Summary</value>
@@ -709,10 +709,10 @@
     <value>Summary (used in hover over tool tip)</value>
   </data>
   <data name="403N" xml:space="preserve">
-    <value>Show Item Index</value>
+    <value>Description</value>
   </data>
   <data name="403S" xml:space="preserve">
-    <value>Include the Item's index in the item's name string</value>
+    <value>Full (verbose) decription of this item</value>
   </data>
   <data name="404N" xml:space="preserve">
     <value>Show Item Hash Code</value>

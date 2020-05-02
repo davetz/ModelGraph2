@@ -17,7 +17,7 @@ namespace ModelGraph.Core
         {
             Owner = owner;
             OldIdKey = IdKey.ItemRemoved;
-            Name = name;
+            _name = name;
 
             Item = item;
             AtIndex = index;

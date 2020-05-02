@@ -80,8 +80,8 @@ namespace ModelGraph.Core
             }
             var itemIndex = new Dictionary<Item, int>(maxSize)
             {
-                [DummyItemRef] = 0,
-                [DummyQueryXRef] = 0
+                [Get<DummyItem>()] = 0,
+                [Get<DummyQueryX>()] = 0
             };
 
             foreach (var itm in Items)
@@ -96,6 +96,9 @@ namespace ModelGraph.Core
         public bool HasData() => true;
         public void ReadData(DataReader r, Item[] items)
         {
+            var relation_Store_ChildRelation = Get<Relation_Store_ChildRelation>();
+            var relation_Stoer_ParentRelation = Get<Relation_Store_ParentRelation>();
+
             var count = r.ReadUInt16();
             if (count > items.Length)
                 throw new Exception("Invalid number of guid references");
@@ -112,9 +115,9 @@ namespace ModelGraph.Core
                     else
                     {//==================================Refactor Patch
                         if (key == (ushort)(IdKey.TableX_ChildRelationX & IdKey.KeyMask))
-                            items[i] = Store_ChildRelation;
+                            items[i] = relation_Store_ChildRelation;
                         else if (key == (ushort)(IdKey.TableX_ParentRelationX & IdKey.KeyMask))
-                            items[i] = Store_ParentRelation;
+                            items[i] = relation_Stoer_ParentRelation;
                         else
                             throw new Exception("Unkown key reference");
                     }

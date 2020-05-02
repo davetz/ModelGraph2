@@ -5,7 +5,7 @@ namespace ModelGraph.Core
     {
         internal override IdKey ViKey => IdKey.GraphTerminalSpacingProperty;
 
-        internal Property_GraphX_TerminalSpacing(PropertyDomain owner)
+        internal Property_GraphX_TerminalSpacing(StoreOf_Property owner)
         {
             Owner = owner;
             Value = new Int32Value(this);
@@ -13,7 +13,7 @@ namespace ModelGraph.Core
             owner.Add(this);
         }
 
-        internal override int GetValue(Chef chef, Item item) => Cast(item).TerminalSpacing;
-        internal override void SetValue(Chef chef, Item item, int val) => Cast(item).TerminalSpacing = (byte)val;
+        internal override int GetValue(Item item) => Cast(item).TerminalSpacing;
+        internal override void SetValue(Item item, int val) => Cast(item).TerminalSpacing = (byte)val;
     }
 }

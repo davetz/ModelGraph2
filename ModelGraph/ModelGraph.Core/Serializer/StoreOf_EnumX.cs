@@ -4,13 +4,13 @@ using Windows.Storage.Streams;
 
 namespace ModelGraph.Core
 {
-    public class EnumXDomain : ExternalDomainOf<EnumX>, ISerializer
+    public class StoreOf_EnumX : StoreOf_External<EnumX>, ISerializer
     {
         static Guid _serializerGuid = new Guid("8D4CEAD8-E3C5-4342-88AC-1B4B625A9A4C");
         static byte _formatVersion = 1;
         internal override IdKey ViKey => IdKey.EnumXDomain;
 
-        internal EnumXDomain(Chef chef)
+        internal StoreOf_EnumX(Chef chef)
         {
             Owner = chef;
 
@@ -23,10 +23,7 @@ namespace ModelGraph.Core
         #region CreateProperties  =============================================
         private void CreateProperties(Chef chef)
         {
-            var sto = chef.GetItem<PropertyDomain>();
-
-            chef.RegisterReferenceItem(new Property_EnumX_Name(sto));
-            chef.RegisterReferenceItem(new Property_EnumX_Summary(sto));
+            var sto = chef.Get<StoreOf_Property>();
 
             chef.RegisterReferenceItem(new Property_PairX_Text(sto));
             chef.RegisterReferenceItem(new Property_PairX_Value(sto));
@@ -36,13 +33,14 @@ namespace ModelGraph.Core
         }
         private Property[] GetProps1(Chef chef) => new Property[]
         {
-            chef.GetItem<Property_EnumX_Name>(),
-            chef.GetItem<Property_EnumX_Summary>(),
+            chef.Get<Property_Item_Name>(),
+            chef.Get<Property_Item_Summary>(),
+            chef.Get<Property_Item_Description>(),
         };
         private Property[] GetProps2(Chef chef) => new Property[]
         {
-            chef.GetItem<Property_PairX_Text>(),
-            chef.GetItem<Property_PairX_Value>(),
+            chef.Get<Property_PairX_Text>(),
+            chef.Get<Property_PairX_Value>(),
         };
         #endregion
 

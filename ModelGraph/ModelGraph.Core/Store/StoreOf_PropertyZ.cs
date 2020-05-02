@@ -2,10 +2,10 @@
 
 namespace ModelGraph.Core
 {
-    public class RelationZStore : StoreOf<Relation>
+    public class StoreOf_PropertyZ : StoreOf<Property>
     {
         #region Constructors  =================================================
-        internal RelationZStore(Chef owner)
+        internal StoreOf_PropertyZ(Chef owner)
         {
             Owner = owner;
             SetCapacity(10);
@@ -14,7 +14,7 @@ namespace ModelGraph.Core
         #endregion
 
         #region Identity  =====================================================
-        internal override IdKey ViKey => IdKey.RelationZStore;
+        internal override IdKey ViKey => IdKey.PropertyZStore;
         #endregion
     }
 }

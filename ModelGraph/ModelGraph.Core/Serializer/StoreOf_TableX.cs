@@ -5,40 +5,33 @@ using Windows.Storage.Streams;
 
 namespace ModelGraph.Core
 {
-    public class TableXDomain : ExternalDomainOf<TableX>, ISerializer
+    public class StoreOf_TableX : StoreOf_External<TableX>, ISerializer
     {
         static Guid _serializerGuid = new Guid("93EC136C-6C38-474D-844B-6B8326526CB5");
         static byte _formatVersion = 1;
+        internal override IdKey ViKey => IdKey.TableXDomain;
 
-        internal PropertyOf<TableX, string> NameProperty;
-        internal PropertyOf<TableX, string> SummaryProperty;
-
-        internal TableXDomain(Chef chef) : base(chef, IdKey.TableXDomain, 30)
+        internal StoreOf_TableX(Chef chef)
         {
+            Owner = chef;
+
             chef.RegisterItemSerializer((_serializerGuid, this));
             CreateProperties(chef);
+
+            chef.Add(this);
         }
 
         #region CreateProperties  =============================================
         private void CreateProperties(Chef chef)
         {
-            var props = new List<Property>(2);
-            {
-                var p = NameProperty = new PropertyOf<TableX, string>(chef.PropertyDomain, IdKey.TableNameProperty);
-                p.GetValFunc = (item) => p.Cast(item).Name;
-                p.SetValFunc = (item, value) => { p.Cast(item).Name = value; return true; };
-                p.Value = new StringValue(p);
-                props.Add(p);
-            }
-            {
-                var p = SummaryProperty = new PropertyOf<TableX, string>(chef.PropertyDomain, IdKey.TableSummaryProperty);
-                p.GetValFunc = (item) => p.Cast(item).Summary;
-                p.SetValFunc = (item, value) => { p.Cast(item).Summary = value; return true; };
-                p.Value = new StringValue(p);
-                props.Add(p);
-            }
-            chef.RegisterStaticProperties(typeof(TableX), props);
+            chef.RegisterStaticProperties(typeof(TableX), GetProps(chef)); //used by property name lookup
         }
+        private Property[] GetProps(Chef chef) => new Property[]
+        {
+            chef.Get<Property_Item_Name>(),
+            chef.Get<Property_Item_Summary>(),
+            chef.Get<Property_Item_Description>(),
+        };
         #endregion
 
         #region ISerializer  ==================================================

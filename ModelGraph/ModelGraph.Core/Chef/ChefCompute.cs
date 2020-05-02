@@ -16,32 +16,33 @@ namespace ModelGraph.Core
         #region ResetCacheValues  =============================================
         private void ResetCacheValues()
         {
-            foreach (var cx in ComputeXDomain.Items) { cx.Value.Clear(); }
+            var items = Get<StoreOf_ComputeX>().Items;
+            foreach (var cx in items) { cx.Value.Clear(); }
         }
         #endregion 
 
         #region <Get/Set>SelectString  ========================================
         internal string GetWhereProperty(ComputeX cx)
         {
-            if (!ComputeX_QueryX.TryGetChild(cx, out QueryX qx)) return InvalidItem;
+            if (!Get<Relation_ComputeX_QueryX>().TryGetChild(cx, out QueryX qx)) return InvalidItem;
 
             return (qx.HasWhere) ? qx.WhereString : null;
         }
         internal bool TrySetWhereProperty(ComputeX cx, string value)
         {
-            if (!ComputeX_QueryX.TryGetChild(cx, out QueryX qx)) return false;
+            if (!Get<Relation_ComputeX_QueryX>().TryGetChild(cx, out QueryX qx)) return false;
 
             return TrySetWhereProperty(qx, value);
         }
         internal string GetSelectProperty(ComputeX cx)
         {
-            if (!ComputeX_QueryX.TryGetChild(cx, out QueryX qx)) return InvalidItem;
+            if (!Get<Relation_ComputeX_QueryX>().TryGetChild(cx, out QueryX qx)) return InvalidItem;
 
             return (qx.HasSelect) ? qx.SelectString : null;
         }
         internal bool TrySetSelectProperty(ComputeX cx, string value)
         {
-            if (!ComputeX_QueryX.TryGetChild(cx, out QueryX qx)) return false;
+            if (!Get<Relation_ComputeX_QueryX>().TryGetChild(cx, out QueryX qx)) return false;
 
             return TrySetSelectProperty(qx, value);
         }
@@ -67,7 +68,7 @@ namespace ModelGraph.Core
             This method is called by valueDictionary when a key-value-pair does
             not exist for the callers key.
          */
-            if (!ComputeX_QueryX.TryGetChild(cx, out QueryX qx) || cx.Value.IsEmpty)
+            if (!Get<Relation_ComputeX_QueryX>().TryGetChild(cx, out QueryX qx) || cx.Value.IsEmpty)
                 return false;
 
             switch (cx.CompuType)
@@ -148,7 +149,7 @@ namespace ModelGraph.Core
             {
                 case CompuType.RowValue:
 
-                    if (!ComputeX_QueryX.TryGetChild(cx, out QueryX vx) || vx.Select == null || vx.Select.ValueType == ValType.IsInvalid)
+                    if (!Get<Relation_ComputeX_QueryX>().TryGetChild(cx, out QueryX vx) || vx.Select == null || vx.Select.ValueType == ValType.IsInvalid)
                         cx.Value = ValuesInvalid;
                     else
                         AllocateCache(vx);
@@ -192,10 +193,13 @@ namespace ModelGraph.Core
         #region GetRelatedValueType  ==========================================
         ValType GetRelatedValueType(ComputeX cx)
         {
-            if (!ComputeX_QueryX.TryGetChild(cx, out QueryX qx))
+            var relation_QueryX_QueryX = Get<Relation_QueryX_QueryX>();
+            var relation_Relation_QueryX = Get<Relation_Relation_QueryX>();
+
+            if (!Get<Relation_ComputeX_QueryX>().TryGetChild(cx, out QueryX qx))
                 return ValType.IsInvalid; //computeX must have a root queryX reference
 
-            if (!QueryX_QueryX.TryGetChildren(qx, out IList<QueryX> list1))
+            if (!relation_QueryX_QueryX.TryGetChildren(qx, out IList<QueryX> list1))
                 return ValType.IsInvalid; //computeX must have atleast one queryX reference
 
             var workQueue = new Queue<QueryX>(list1);
@@ -209,7 +213,7 @@ namespace ModelGraph.Core
              */
                 var qt = workQueue.Dequeue();
 
-                if (Relation_QueryX.TryGetParent(qt, out Relation r) && (r.Pairing == Pairing.ManyToMany || (!qt.IsReversed && r.Pairing == Pairing.OneToMany)))
+                if (relation_Relation_QueryX.TryGetParent(qt, out Relation r) && (r.Pairing == Pairing.ManyToMany || (!qt.IsReversed && r.Pairing == Pairing.OneToMany)))
                     isMultiple = true;
 
                 if (qt.HasValidSelect && qt.Select.ValueType < ValType.MaximumType)
@@ -217,7 +221,7 @@ namespace ModelGraph.Core
                     vTypes.Add(qt.Select.ValueType);
                 }
 
-                if (QueryX_QueryX.TryGetChildren(qt, out IList<QueryX> list2))
+                if (relation_QueryX_QueryX.TryGetChildren(qt, out IList<QueryX> list2))
                 {
                     isMultiple |= list2.Count > 1;
                     foreach (var child in list2) { workQueue.Enqueue(child); }
@@ -287,7 +291,7 @@ namespace ModelGraph.Core
         #region GetSelectorName  ==============================================
         internal string GetSelectorName(ComputeX item)
         {
-            return Store_ComputeX.TryGetParent(item, out Store tbl) ? GetIdentity(tbl, IdentityStyle.Single) : "Select";
+            return Get<Relation_Store_ComputeX>().TryGetParent(item, out Store tbl) ? GetIdentity(tbl, IdentityStyle.Single) : "Select";
         }
         internal int GetValueType(QueryX qx)
         {

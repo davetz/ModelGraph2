@@ -17,7 +17,7 @@ namespace ModelGraph.Core
         {
             Owner = owner;
             OldIdKey = IdKey.ItemLinked;
-            Name = name;
+            _name = name;
 
             Child = child;
             Parent = parent;

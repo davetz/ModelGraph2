@@ -273,9 +273,12 @@ namespace ModelGraph.Core
         Property = 0x400,
 
         //=========================================
-        ViewNameProperty = 0x401 | IsReference,
-        ViewSummaryProperty = 0x402 | IsReference,
-        IncludeItemIdentityIndexProperty = 0x403 | IsCovert,
+        ItemNameProperty = 0x401 | IsReference, // works for all items
+        ItemSummaryProperty = 0x402 | IsReference, // works for all items
+        ItemDescriptionProperty = 0x403 | IsReference, // works for all items
+
+        //=========================================
+        IncludeItemIdentityIndexProperty = 0x404 | IsCovert,
 
         //=========================================
         EnumNameProperty = 0x411 | IsReference,

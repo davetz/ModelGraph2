@@ -14,7 +14,7 @@
         {
             Owner = owner;
             OldIdKey = IdKey.ItemUpdated;
-            Name = name;
+            _name = name;
 
             Item = item;
             Property = property;

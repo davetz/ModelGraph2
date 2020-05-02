@@ -10,7 +10,10 @@ namespace ModelGraph.Core
         // Ensure all edges and nodes have parameters.
         bool ValidateGraphParms(Graph g)
         {
-            var dummyItemRef = GetItem<DummyItem>();
+            var dummyItemRef = Get<DummyItem>();
+            var dummyQueryXRef = Get<DummyQueryX>();
+            var GraphX_SymbolX = Get<Relation_GraphX_SymbolX>();
+
             var gx = g.GraphX;
             var rt = (g.SeedItem == null) ? dummyItemRef : g.SeedItem;
             var anyChange = false;
@@ -55,7 +58,7 @@ namespace ModelGraph.Core
                 foreach (var e1 in qxParams)
                 {
                     List<NodeEdge> invalidParams = null;
-                    if (e1.Key == DummyQueryXRef)
+                    if (e1.Key == dummyQueryXRef)
                     {
 
                         foreach (var pm in e1.Value)
@@ -133,13 +136,13 @@ namespace ModelGraph.Core
 
                 #region Add new QxParams  =====================================
 
-                if (!qxParams.TryGetValue(DummyQueryXRef, out List<NodeEdge> parmList))
+                if (!qxParams.TryGetValue(dummyQueryXRef, out List<NodeEdge> parmList))
                 {
                     // there weren't any existing node parms,
                     // so create all new ones
                     anyChange = true;
                     parmList = new List<NodeEdge>(g.NodeItems.Count);
-                    qxParams.Add(DummyQueryXRef, parmList);
+                    qxParams.Add(dummyQueryXRef, parmList);
                     foreach (var item in g.NodeItems)
                     {
                         Node node1 = new Node
@@ -184,7 +187,7 @@ namespace ModelGraph.Core
                 foreach (var e1 in validPathPairs)
                 {
                     // skip over the nodes, they are already done
-                    if (e1.Key == DummyQueryXRef) continue;
+                    if (e1.Key == dummyQueryXRef) continue;
 
                     if (!qxParams.TryGetValue(e1.Key, out List<NodeEdge> paramList))
                     {
@@ -362,6 +365,8 @@ namespace ModelGraph.Core
 
         private void RefreshAllGraphs()
         {
+            var GraphXDomain = Get<StoreOf_GraphX>();
+
             foreach (var gx in GraphXDomain.Items)
             {
                 if (gx.Count > 0)
@@ -373,6 +378,9 @@ namespace ModelGraph.Core
 
         internal bool RefreshGraphX(QueryX qx)
         {
+            var GraphX_QueryX = Get<Relation_GraphX_QueryX>();
+            var QueryX_QueryX = Get<Relation_QueryX_QueryX>();
+
             var qr = qx;
             while (QueryX_QueryX.TryGetParent(qr, out qx)) { qr = qx; }
 
@@ -385,6 +393,11 @@ namespace ModelGraph.Core
 
         private void RebuildGraphX_ARGBList_NodeOwners(GraphX gx)
         {
+            var GraphX_QueryX = Get<Relation_GraphX_QueryX>();
+            var QueryX_QueryX = Get<Relation_QueryX_QueryX>();
+            var Store_ColumnX = Get<Relation_Store_ColumnX>();
+            var GraphX_ColorColumnX = Get<Relation_GraphX_ColorColumnX>();
+
             gx.Color.Reset();
             gx.NodeOwners.Clear();
 
@@ -463,6 +476,9 @@ namespace ModelGraph.Core
         #region AssignNodeColor  ==============================================
         private void AssignNodeColor(Graph g)
         {
+            var GraphX_ColorColumnX = Get<Relation_GraphX_ColorColumnX>();
+            var Store_ColumnX = Get<Relation_Store_ColumnX>();
+
             var group_Color = new Dictionary<Item, byte>();
             var item_group = new Dictionary<Item, Item>();
 

@@ -4,13 +4,13 @@ using Windows.Storage.Streams;
 
 namespace ModelGraph.Core
 {
-    public class GraphXDomain : ExternalDomainOf<GraphX>, ISerializer
+    public class StoreOf_GraphX : StoreOf_External<GraphX>, ISerializer
     {
         static Guid _serializerGuid = new Guid("48C7FA8C-88F1-4203-8E54-3255C1F8C528");
         static byte _formatVersion = 1;
         internal override IdKey ViKey => IdKey.GraphXDomain;
 
-        internal GraphXDomain(Chef chef) 
+        internal StoreOf_GraphX(Chef chef) 
         {
             Owner = chef;
 
@@ -23,10 +23,8 @@ namespace ModelGraph.Core
         #region CreateProperties  =============================================
         private void CreateProperties(Chef chef)
         {
-            var sto = chef.GetItem<PropertyDomain>();
+            var sto = chef.Get<StoreOf_Property>();
 
-            chef.RegisterReferenceItem(new Property_GraphX_Name(sto));
-            chef.RegisterReferenceItem(new Property_GraphX_Summary(sto));
             chef.RegisterReferenceItem(new Property_GraphX_TerminalLength(sto));
             chef.RegisterReferenceItem(new Property_GraphX_TerminalSpacing(sto));
             chef.RegisterReferenceItem(new Property_GraphX_TerminalStretch(sto));
@@ -36,12 +34,14 @@ namespace ModelGraph.Core
         }
         private Property[] GetProps(Chef chef) => new Property[]
         {
-            chef.GetItem<Property_GraphX_Name>(),
-            chef.GetItem<Property_GraphX_Summary>(),
-            chef.GetItem<Property_GraphX_TerminalLength>(),
-            chef.GetItem<Property_GraphX_TerminalSpacing>(),
-            chef.GetItem<Property_GraphX_TerminalStretch>(),
-            chef.GetItem<Property_GraphX_SymbolSize>(),
+            chef.Get<Property_Item_Name>(),
+            chef.Get<Property_Item_Summary>(),
+            chef.Get<Property_Item_Description>(),
+
+            chef.Get<Property_GraphX_TerminalLength>(),
+            chef.Get<Property_GraphX_TerminalSpacing>(),
+            chef.Get<Property_GraphX_TerminalStretch>(),
+            chef.Get<Property_GraphX_SymbolSize>(),
         };
         #endregion
 

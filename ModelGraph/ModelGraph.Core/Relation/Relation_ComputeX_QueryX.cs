@@ -5,7 +5,7 @@ namespace ModelGraph.Core
     {
         internal override IdKey ViKey => IdKey.ComputeX_QueryX;
 
-        internal Relation_ComputeX_QueryX(RelationDomain owner)
+        internal Relation_ComputeX_QueryX(StoreOf_Relation owner)
         {
             Owner = owner;
             Pairing = Pairing.OneToOne;

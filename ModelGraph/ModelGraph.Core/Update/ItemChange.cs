@@ -3,7 +3,8 @@ namespace ModelGraph.Core
 {
     public abstract class ItemChange : Item
     {
-        internal string Name;
+        internal string _name;
+        internal override string Name { get => _name; }
 
         #region Properties/Methods  ===========================================
         internal ChangeSet ChangeSet => Owner as ChangeSet;

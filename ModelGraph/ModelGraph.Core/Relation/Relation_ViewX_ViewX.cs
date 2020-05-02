@@ -5,7 +5,7 @@ namespace ModelGraph.Core
     {
         internal override IdKey ViKey => IdKey.ViewX_ViewX;
 
-        internal Relation_ViewX_ViewX(RelationDomain owner)
+        internal Relation_ViewX_ViewX(StoreOf_Relation owner)
         {
             Owner = owner;
             Pairing = Pairing.OneToMany;

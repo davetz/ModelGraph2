@@ -2,10 +2,10 @@
 
 namespace ModelGraph.Core
 {
-    public class ErrorStore : StoreOf<Error>
+    public class StoreOf_Error : StoreOf<Error>
     {
         #region Constructors  =================================================
-        internal ErrorStore(Chef owner)
+        internal StoreOf_Error(Chef owner)
         {
             Owner = owner;
             SetCapacity(20);

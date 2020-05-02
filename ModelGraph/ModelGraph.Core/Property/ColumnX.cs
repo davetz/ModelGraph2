@@ -27,14 +27,10 @@ namespace ModelGraph.Core
         #region Identity  =====================================================
         internal override IdKey ViKey => IdKey.ColumnX;
         public override string GetSingleNameId(Chef chef) => string.IsNullOrWhiteSpace(Name) ? BlankName : Name;
-        public override string GetParentNameId(Chef chef) => chef.Store_ColumnX.TryGetParent(this, out Store p) ? p.GetSingleNameId(chef) : GetKindId(chef);
+        public override string GetParentNameId(Chef chef) => chef.Get<Relation_Store_ColumnX>().TryGetParent(this, out Store p) ? p.GetSingleNameId(chef) : GetKindId(chef);
         public override string GetSummaryId(Chef chef) => Summary;
         public override string GetDescriptionId(Chef chef) => Description;
         #endregion
 
-        #region Property  =====================================================
-        internal override bool HasItemName => false;
-        internal override string GetItemName(Item key) => null;
-        #endregion
     }
 }

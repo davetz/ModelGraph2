@@ -5,7 +5,7 @@ namespace ModelGraph.Core
     {
         internal override IdKey ViKey => IdKey.NodeBarWidthProperty;
 
-        internal Property_Node_BarWidth(PropertyDomain owner)
+        internal Property_Node_BarWidth(StoreOf_Property owner)
         {
             Owner = owner;
             Value = new StringValue(this);
@@ -13,7 +13,7 @@ namespace ModelGraph.Core
             owner.Add(this);
         }
 
-        internal override string GetValue(Chef chef, Item item) => chef.GetItem<Enum_BarWidth>().GetEnumName(chef, (int)Cast(item).BarWidth);
-        internal override void SetValue(Chef chef, Item item, string val) => Cast(item).BarWidth = (BarWidth)chef.GetItem<Enum_BarWidth>().GetKey(chef, val);
+        internal override string GetValue(Item item) { var chef = DataChef; return chef.Get<Enum_BarWidth>().GetEnumName(chef, (int)Cast(item).BarWidth); }
+        internal override void SetValue(Item item, string val) { var chef = DataChef; Cast(item).BarWidth = (BarWidth)chef.Get<Enum_BarWidth>().GetKey(chef, val); }
     }
 }

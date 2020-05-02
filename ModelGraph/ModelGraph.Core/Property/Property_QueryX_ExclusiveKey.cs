@@ -5,7 +5,7 @@ namespace ModelGraph.Core
     {
         internal override IdKey ViKey => IdKey.QueryXExclusiveKeyProperty;
 
-        internal Property_QueryX_ExclusiveKey(PropertyDomain owner)
+        internal Property_QueryX_ExclusiveKey(StoreOf_Property owner)
         {
             Owner = owner;
             Value = new ByteValue(this);
@@ -13,7 +13,7 @@ namespace ModelGraph.Core
             owner.Add(this);
         }
 
-        internal override byte GetValue(Chef chef, Item item) => Cast(item).ExclusiveKey;
-        internal override void SetValue(Chef chef, Item item, byte val) => Cast(item).ExclusiveKey = val;
+        internal override byte GetValue(Item item) => Cast(item).ExclusiveKey;
+        internal override void SetValue(Item item, byte val) => Cast(item).ExclusiveKey = val;
     }
 }

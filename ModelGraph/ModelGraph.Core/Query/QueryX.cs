@@ -12,7 +12,7 @@ namespace ModelGraph.Core
 
         #region Constructor  ==================================================
         internal QueryX() { }
-        internal QueryX(QueryXDomain owner, QueryType kind, bool isRoot = false, bool isHead = false)
+        internal QueryX(StoreOf_QueryX owner, QueryType kind, bool isRoot = false, bool isHead = false)
         {
             Owner = owner;
             OldIdKey = IdKey.QueryX;
@@ -26,7 +26,7 @@ namespace ModelGraph.Core
 
             owner.Add(this);
         }
-        internal QueryX(QueryXDomain owner)
+        internal QueryX(StoreOf_QueryX owner)
         {
             Owner = owner;
             OldIdKey = IdKey.QueryX;
@@ -43,14 +43,14 @@ namespace ModelGraph.Core
             string name;
             if (IsRoot)
             {
-                if (chef.Store_QueryX.TryGetParent(this, out Store st))
+                if (chef.Get<Relation_Store_QueryX>().TryGetParent(this, out Store st))
                     name = st.GetDoubleNameId(chef);
                 else
                     name = InvalidItem;
             }
             else
             {
-                if (chef.Relation_QueryX.TryGetParent(this, out Relation re))
+                if (chef.Get<Relation_Relation_QueryX>().TryGetParent(this, out Relation re))
                 {
                     chef.GetHeadTail(this, out Store head, out Store tail);
                     name = $"{head.GetSingleNameId(chef)} --> {tail.GetSingleNameId(chef)}";

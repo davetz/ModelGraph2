@@ -5,7 +5,7 @@ namespace ModelGraph.Core
     {
         internal override IdKey ViKey => IdKey.QueryXConnect1Property;
 
-        internal Property_QueryX_Connect1(PropertyDomain owner)
+        internal Property_QueryX_Connect1(StoreOf_Property owner)
         {
             Owner = owner;
             Value = new StringValue(this);
@@ -13,7 +13,7 @@ namespace ModelGraph.Core
             owner.Add(this);
         }
 
-        internal override string GetValue(Chef chef, Item item) => chef.GetTargetString(Cast(item).PathParm.Target1);
-        internal override void SetValue(Chef chef, Item item, string val) => Cast(item).PathParm.Target1 = chef.GetTargetValue(val);
+        internal override string GetValue(Item item) => DataChef.GetTargetString(Cast(item).PathParm.Target1);
+        internal override void SetValue(Item item, string val) => Cast(item).PathParm.Target1 = DataChef.GetTargetValue(val);
     }
 }

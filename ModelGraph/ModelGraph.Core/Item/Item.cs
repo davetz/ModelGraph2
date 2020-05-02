@@ -87,9 +87,9 @@ namespace ModelGraph.Core
         private bool GetFlag(State flag) => (_state & flag) != 0;
         private void SetFlag(State flag, bool value = true) { if (value) _state |= flag; else _state &= ~flag; }
 
-        internal bool HasState() => _state != 0;
-        internal ushort GetState() => (ushort)_state;
-        internal void SetState(ushort state)  => _state = (State)state;
+        internal bool HasState() => GetState() != 0;
+        internal virtual ushort GetState() => 0;
+        internal virtual void SetState(ushort state) { }
 
         internal QueryType QueryKind { get { return (QueryType)(_state & State.Index); } set { _state = ((_state & ~State.Index) | (State)(value)); } }
 
@@ -105,7 +105,6 @@ namespace ModelGraph.Core
         internal bool IsBreakPoint { get { return GetFlag(State.IsBreakPoint); } set { SetFlag(State.IsBreakPoint, value); } }
         internal bool IsPersistent { get { return GetFlag(State.IsPersistent); } set { SetFlag(State.IsPersistent, value); } }
 
-        internal bool IsRequired { get { return GetFlag(State.IsRequired); } set { SetFlag(State.IsRequired, value); } }
 
         internal bool IsUndone { get { return GetFlag(State.IsUndone); } set { SetFlag(State.IsUndone, value); } }
         internal bool IsVirgin { get { return GetFlag(State.IsVirgin); } set { SetFlag(State.IsVirgin, value); } }

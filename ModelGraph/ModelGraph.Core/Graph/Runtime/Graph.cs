@@ -63,8 +63,6 @@ namespace ModelGraph.Core
 
         public bool TryGetTopLevel(out Level lvl) { lvl = null; if (Count == 0) return false; lvl = Levels[Last] as Level; return true; }
 
-        public string Name => GraphX.Name;
-
         public int NodeCount { get { return (Nodes == null) ? 0 : Nodes.Count; } }
         public int EdgeCount { get { return (Edges == null) ? 0 : Edges.Count; } }
         public int SymbolCount { get { return (Symbols == null) ? 0 : Symbols.Length; } }

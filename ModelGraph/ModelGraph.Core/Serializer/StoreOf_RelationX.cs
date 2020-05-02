@@ -5,10 +5,11 @@ using Windows.Storage.Streams;
 
 namespace ModelGraph.Core
 {
-    public class RelationXDomain : ExternalDomainOf<Relation>, ISerializer, IRelationStore
+    public class StoreOf_RelationX : StoreOf_External<Relation>, ISerializer, IRelationStore
     {
         static Guid _serializerGuid = new Guid("D950F508-B774-4838-B81A-757EFDC40518");
         static byte _formatVersion = 1;
+        internal override IdKey ViKey => IdKey.RelationXDomain;
 
         internal PropertyOf<Relation, string> NameProperty;
         internal PropertyOf<Relation, string> SummaryProperty;
@@ -17,62 +18,39 @@ namespace ModelGraph.Core
 
 
         #region Constructor  ==================================================
-        internal RelationXDomain(Chef chef) : base(chef, IdKey.RelationXDomain)
+        internal StoreOf_RelationX(Chef chef)
         {
+            Owner = chef;
+
             chef.RegisterItemSerializer((_serializerGuid, this));
             CreateProperties(chef);
 
             new RelationXLink(chef, this);
+
+            chef.Add(this);
         }
         #endregion
 
-        #region CreateRelation  ===============================================
-        Relation CreateRelation(IdKey idKe, bool autoExpand = false)
-        {
-            switch (OldIdKey)
-            {
-                case IdKey.RowX_RowX:
-                    return new RelationX<RowX, RowX>(this, idKe, autoExpand);
-                default:
-                    throw new ArgumentException($"RelationXDomain: CreateRelation() Invalid IdKey {idKe}");
-            }
-        }
-        #endregion
 
         #region CreateProperties  =============================================
         private void CreateProperties(Chef chef)
         {
-            var props = new List<Property>(4);
-            {
-                var p = NameProperty = new PropertyOf<Relation, string>(chef.PropertyDomain, IdKey.RelationNameProperty);
-                p.GetValFunc = (item) => p.Cast(item).Name;
-                p.SetValFunc = (item, value) => { p.Cast(item).Name = value; return true; };
-                p.Value = new StringValue(p);
-                props.Add(p);
-            }
-            {
-                var p = SummaryProperty = new PropertyOf<Relation, string>(chef.PropertyDomain, IdKey.RelationSummaryProperty);
-                p.GetValFunc = (item) => p.Cast(item).Summary;
-                p.SetValFunc = (item, value) => { p.Cast(item).Summary = value; return true; };
-                p.Value = new StringValue(p);
-                props.Add(p);
-            }
-            {
-                var p = PairingProperty = new PropertyOf<Relation, string>(chef.PropertyDomain, IdKey.RelationPairingProperty, chef.PairingEnum);
-                p.GetValFunc = (item) => chef.GetEnumZName(p.EnumZ, (int)p.Cast(item).Pairing);
-                p.SetValFunc = (item, value) => p.Cast(item).TrySetPairing((Pairing)chef.GetEnumZKey(p.EnumZ, value));
-                p.Value = new StringValue(p);
-                props.Add(p);
-            }
-            {
-                var p = IsRequiredProperty = new PropertyOf<Relation, bool>(chef.PropertyDomain, IdKey.RelationIsRequiredProperty);
-                p.GetValFunc = (item) => p.Cast(item).IsRequired;
-                p.SetValFunc = (item, value) => { p.Cast(item).IsRequired = value; return true; };
-                p.Value = new BoolValue(p);
-                props.Add(p);
-            }
-            chef.RegisterStaticProperties(typeof(RelationXO), props) ;
+            var sto = chef.Get<StoreOf_Property>();
+
+            chef.RegisterReferenceItem(new Property_Relation_Pairing(sto));
+            chef.RegisterReferenceItem(new Property_Relation_IsRequired(sto));
+
+            chef.RegisterStaticProperties(typeof(Relation), GetProps(chef)); //used by property name lookup
         }
+        private Property[] GetProps(Chef chef) => new Property[]
+        {
+            chef.Get<Property_Item_Name>(),
+            chef.Get<Property_Item_Summary>(),
+            chef.Get<Property_Item_Description>(),
+
+            chef.Get<Property_Relation_Pairing>(),
+            chef.Get<Property_Relation_IsRequired>(),
+        };
         #endregion
 
         #region IRelationStore  ===============================================

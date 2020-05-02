@@ -5,7 +5,7 @@ namespace ModelGraph.Core
     {
         internal override IdKey ViKey => IdKey.ColumnIsChoiceProperty;
 
-        internal Property_ColumnX_IsChoice(PropertyDomain owner)
+        internal Property_ColumnX_IsChoice(StoreOf_Property owner)
         {
             Owner = owner;
             Value = new BoolValue(this);
@@ -13,7 +13,7 @@ namespace ModelGraph.Core
             owner.Add(this);
         }
 
-        internal override bool GetValue(Chef chef, Item item) => Cast(item).IsChoice;
-        internal override void SetValue(Chef chef, Item item, bool val) => Cast(item).IsChoice = val;
+        internal override bool GetValue(Item item) => Cast(item).IsChoice;
+        internal override void SetValue(Item item, bool val) => Cast(item).IsChoice = val;
     }
 }

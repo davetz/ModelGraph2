@@ -13,7 +13,7 @@
         {
             Owner = owner;
             OldIdKey = IdKey.ItemMoved;
-            Name = name;
+            _name = name;
 
             Item = item;
             Index1 = index1;
