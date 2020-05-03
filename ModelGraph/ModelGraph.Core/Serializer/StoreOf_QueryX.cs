@@ -40,7 +40,7 @@ namespace ModelGraph.Core
             chef.RegisterReferenceItem(new Property_QueryX_ExclusiveKey(sto));
             chef.RegisterReferenceItem(new Property_QueryX_ValueType(sto));
 
-            chef.RegisterStaticProperties(typeof(Node), GetProps(chef)); //used by property name lookup
+            chef.RegisterStaticProperties(typeof(QueryX), GetProps(chef)); //used by property name lookup
         }
         private Property[] GetProps(Chef chef) => new Property[]
         {

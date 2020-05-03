@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace ModelGraph.Core
 {
-    public class RelationOf<T1, T2> : Relation where T1 : Item where T2 : Item
+    public abstract class RelationOf<T1, T2> : Relation where T1 : Item where T2 : Item
     {
         static ArgumentException _invalidPairingException = new ArgumentException("Invalid Pairing");
 
@@ -14,21 +14,6 @@ namespace ModelGraph.Core
         private MapToMany<T2> _children2;
 
         override internal bool IsValidParentChild(Item parentItem, Item childItem) { return (parentItem is T1 && childItem is T2); }
-
-        #region Constructors  =================================================
-        internal RelationOf() { } // dummy parameterless constructor
-
-        internal RelationOf(StoreOf<Relation> owner, IdKey idKe, Pairing pairing = Pairing.OneToMany, int parentCount = 0, int childCount = 0, bool isRequired = false)
-        {
-            Owner = owner;
-            OldIdKey = idKe;
-            Pairing = pairing;
-            IsRequired = isRequired;
-            Initialize(parentCount, childCount);
-
-            owner.Add(this);
-        }
-        #endregion
 
         #region Initialize  ===================================================
         internal void Initialize(int parentCount, int childCount)

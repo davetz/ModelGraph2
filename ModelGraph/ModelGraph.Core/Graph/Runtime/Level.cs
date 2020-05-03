@@ -7,12 +7,12 @@ namespace ModelGraph.Core
     public class Level : Item
     {
         internal List<Path> Paths = new List<Path>();
+        internal override IdKey ViKey => IdKey.Level;
 
         #region Constructor  ==================================================
         internal Level(Graph owner)
         {
             Owner = owner;
-            OldIdKey = IdKey.Level;
 
             owner.Add(this);
         }

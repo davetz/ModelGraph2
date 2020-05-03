@@ -1,9 +1,7 @@
 ﻿using System;
 
 namespace ModelGraph.Core
-{/*
-
- */
+{
     public class ItemLinked : ItemChange
     {
         internal Item Child;
@@ -11,12 +9,12 @@ namespace ModelGraph.Core
         internal Relation Relation;
         internal int ParentIndex;
         internal int ChildIndex;
+        internal override IdKey ViKey =>  IdKey.ItemLinked;
 
         #region Constructor  ==================================================
         internal ItemLinked(ChangeSet owner, Relation relation, Item parent, Item child, int parentIndex, int childIndex, string name)
         {
             Owner = owner;
-            OldIdKey = IdKey.ItemLinked;
             _name = name;
 
             Child = child;

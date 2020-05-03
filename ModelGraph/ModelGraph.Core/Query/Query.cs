@@ -9,12 +9,12 @@ namespace ModelGraph.Core
 
         internal Query Parent;
         internal Query[][] Children;
+        internal override IdKey ViKey => IdKey.Query;
 
         #region Constructor  ==================================================
         internal Query(QueryX qx, Query parent, Item item, Item[] items)
         {
             Owner = qx;
-            OldIdKey = IdKey.Query;
 
             Item = item;
             Items = items;

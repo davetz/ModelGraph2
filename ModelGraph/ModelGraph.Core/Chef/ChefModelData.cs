@@ -7981,7 +7981,7 @@ namespace ModelGraph.Core
 
         //    //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-        //    (string, string) GetKindName(IModel m) => (m.GraphX.OldIdKey.ToString(), m.GraphX.Name);
+        //    (string, string) GetKindName(IModel m) => (m.GraphX.ErrorId.ToString(), m.GraphX.Name);
         //}
 
         //void CreateGraph(IModel m)
@@ -9133,7 +9133,7 @@ namespace ModelGraph.Core
 
         //    //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-        //    (string, string) GetKindName(IModel m) =>  (GetKind(m.Relation.OldIdKey), GetIdentity(m.Relation, IdentityStyle.Single));
+        //    (string, string) GetKindName(IModel m) =>  (GetKind(m.Relation.ErrorId), GetIdentity(m.Relation, IdentityStyle.Single));
 
         //}
         //#endregion
@@ -9183,7 +9183,7 @@ namespace ModelGraph.Core
 
         //    //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
-        //    (string, string) GetKindName(IModel m) => (GetKind(m.Relation.OldIdKey), GetIdentity(m.Relation, IdentityStyle.Single));
+        //    (string, string) GetKindName(IModel m) => (GetKind(m.Relation.ErrorId), GetIdentity(m.Relation, IdentityStyle.Single));
         //}
         //#endregion
 

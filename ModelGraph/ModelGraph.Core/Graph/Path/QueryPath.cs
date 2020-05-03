@@ -9,12 +9,12 @@ namespace ModelGraph.Core
         internal Query TailQuery;
         internal int TailIndex;
         internal override Path[] Paths => null;
+        internal override IdKey ViKey => IdKey.QueryPath;
 
         #region Constructor  ==================================================
         internal QueryPath(Graph owner, Query head, Query tail, int taiIndex = 0, bool isRadial = false, bool isReversed = false)
         {
             Owner = owner;
-            OldIdKey = IdKey.QueryPath;
             HeadQuery = head;
             TailQuery = tail;
             TailIndex = taiIndex;

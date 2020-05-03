@@ -15,7 +15,6 @@ namespace ModelGraph.Core
         internal ColumnX(StoreOf<ColumnX> owner, bool autoExpand = false)
         {
             Owner = owner;
-            OldIdKey = IdKey.ColumnX;
             if (autoExpand) AutoExpandRight = true;
 
             Value = Value.Create(ValType.String);

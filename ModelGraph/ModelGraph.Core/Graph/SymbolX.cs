@@ -17,11 +17,11 @@ namespace ModelGraph.Core
         public Attach Attach;
         public AutoFlip AutoFlip;
         public byte Version;
+        
 
         #region Constructors  =================================================
         public SymbolX(Store owner, bool autoExpand = false)
         {
-            OldIdKey = IdKey.SymbolX;
             Owner = owner;
             if (autoExpand) AutoExpandRight = true;
 

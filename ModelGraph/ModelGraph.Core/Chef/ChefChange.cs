@@ -50,7 +50,7 @@ namespace ModelGraph.Core
             {
                 var item = ChangeSet.Items[ChangeSet.Count - 1];
                 var changeText = $"{_localize(item.KindKey)}  {item._name}";
-                if (_changeRootInfoItem != null && item.OldIdKey == _changeRootInfoItem.OldIdKey)
+                if (_changeRootInfoItem != null && item.ViKey == _changeRootInfoItem.ViKey)
                     _changeRootInfoCount += 1;
                 else
                 {
@@ -58,9 +58,9 @@ namespace ModelGraph.Core
                     _changeRootInfoCount = 1;
                 }
                 if (_changeRootInfoCount > 1)
-                    _changeRootInfoText = $"{GetName(item.OldIdKey)} ({_changeRootInfoCount.ToString()})  {changeText}";
+                    _changeRootInfoText = $"{GetName(item.ViKey)} ({_changeRootInfoCount.ToString()})  {changeText}";
                 else
-                    _changeRootInfoText = $"{GetName(item.OldIdKey)}  {changeText}";
+                    _changeRootInfoText = $"{GetName(item.ViKey)}  {changeText}";
 
                 ChangeRoot.Add(ChangeSet);
                 ChangeSequence += 1;
@@ -93,13 +93,13 @@ namespace ModelGraph.Core
             var items = chng.Items;
             foreach (var item in items)
             {
-                if (item.IsItemUpdated) Undo(item as ItemUpdated);
-                else if (item.IsItemCreated) Undo(item as ItemCreated);
-                else if (item.IsItemRemoved) Undo(item as ItemRemoved);
-                else if (item.IsItemLinked) Undo(item as ItemLinked);
-                else if (item.IsItemUnlinked) Undo(item as ItemUnLinked);
-                else if (item.IsItemMoved) Undo(item as ItemMoved);
-                else if (item.IsItemLinkMoved) Undo(item as ItemChildMoved);
+                if (item is ItemUpdated ic1) Undo(ic1);
+                else if (item is ItemCreated ic2) Undo(ic2);
+                else if (item is ItemRemoved ic3) Undo(ic3);
+                else if (item is ItemLinked ic4) Undo(ic4);
+                else if (item is ItemUnLinked ic5) Undo(ic5);
+                else if (item is ItemMoved ic6) Undo(ic6);
+                else if (item is ItemChildMoved ic7) Undo(ic7);
             }
             chng.IsUndone = true;
         }
@@ -109,13 +109,13 @@ namespace ModelGraph.Core
             var items = chng.Items;
             foreach (var item in items)
             {
-                if (item.IsItemUpdated) Redo(item as ItemUpdated);
-                else if (item.IsItemCreated) Redo(item as ItemCreated);
-                else if (item.IsItemRemoved) Redo(item as ItemRemoved);
-                else if (item.IsItemLinked) Redo(item as ItemLinked);
-                else if (item.IsItemUnlinked) Redo(item as ItemUnLinked);
-                else if (item.IsItemMoved) Redo(item as ItemMoved);
-                else if (item.IsItemLinkMoved) Redo(item as ItemChildMoved);
+                if (item is ItemUpdated ic1) Redo(ic1);
+                else if (item is ItemCreated ic2) Redo(ic2);
+                else if (item is ItemRemoved ic3) Redo(ic3);
+                else if (item is ItemLinked ic4) Redo(ic4);
+                else if (item is ItemUnLinked ic5) Redo(ic5);
+                else if (item is ItemMoved ic6) Redo(ic6);
+                else if (item is ItemChildMoved ic7) Redo(ic7);
             }
             chng.IsUndone = false;
         }
@@ -153,9 +153,8 @@ namespace ModelGraph.Core
             string name = GetIdentity(item, IdentityStyle.ChangeLog);
             var store = item.Owner as Store;
 
-            if (item.IsRowX)
+            if (item is RowX row)
             {
-                var row = item as RowX;
                 var tbl = item.Owner as TableX;
 
                 if (Get<Relation_Store_ColumnX>().TryGetChildren(tbl, out IList<ColumnX> cols))
@@ -175,9 +174,8 @@ namespace ModelGraph.Core
         {
             var item = chng.Item;
 
-            if (item.IsRowX)
+            if (item is RowX rx)
             {
-                var rx = item as RowX;
                 var tx = rx.TableX;
 
                 tx.Remove(rx);
@@ -195,9 +193,9 @@ namespace ModelGraph.Core
             var item = chng.Item;
             var index = chng.AtIndex;
 
-            if (item.IsRowX)
+            if (item is RowX rx)
             {
-                var rx = item as RowX;
+
                 var tx = rx.TableX;
 
                 tx.Insert(rx, index);
@@ -266,7 +264,7 @@ namespace ModelGraph.Core
             var inx = (sto == null) ? -1 : sto.IndexOf(item);
             var name = GetIdentity(item, IdentityStyle.ChangeLog);
 
-            if (item.IsRowX && Get<Relation_Store_ColumnX>().TryGetChildren(sto, out IList<ColumnX> cols))
+            if (item is RowX && Get<Relation_Store_ColumnX>().TryGetChildren(sto, out IList<ColumnX> cols))
             {
                 var vals = new List<string>(cols.Count);
                 foreach (var col in cols)

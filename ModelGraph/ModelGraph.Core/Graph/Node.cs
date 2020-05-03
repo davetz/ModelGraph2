@@ -20,6 +20,7 @@ namespace ModelGraph.Core
         public BarWidth BarWidth;
         public FlipState FlipState;
         public Aspect Aspect;
+        internal override IdKey ViKey => IdKey.Node;
 
         #region Snapshot  =====================================================
         internal (float X, float Y, byte DX, byte DY, byte Color, byte Symbol, Labeling Labeling, Sizing Resizing, BarWidth BarWidth, FlipState FlipRotate, Aspect Orientation)
@@ -47,7 +48,6 @@ namespace ModelGraph.Core
         internal Node()
         {
             Owner = null;
-            OldIdKey = IdKey.Node;
             DX = DY = (byte)GraphDefault.MinNodeSize;
         }
         #endregion

@@ -17,20 +17,9 @@ namespace ModelGraph.Core
         Empty = 0,
 
         //=====================================================================
-        IsExternal = 0x8000, // This item is serialized/deserialize to/from a repository
-        IsReference = 0x4000, // This item can be referenced by an external item                            
-
-        SubMask      = 0x3000,
-        IsReadOnly   = 0x2000, // Property
-        CanMultiline = 0x1000, // Property
-        IsCovert     = 0x3000, // Property - don't include in model change log
-
-        GetStorageFile = 0x1000, // Command
-
-        IsErrorAux1 = 0x1000, // Error, Model looks up errors using its Aux1 item
-        IsErrorAux2 = 0x2000, // Error, Model looks up errors using both its Aux1 and Aux2 items
-        IsErrorAux  = 0x3000, // Error, Model looks up errors using one or both of its Aux items
-
+        IsCovert = 0x8000, // Don't include in model change log
+        IsExternal = 0x4000, // This item is serialized/deserialize to/from a repository
+        IsReference = 0x2000, // This item can be referenced by an external item                            
 
         KeyMask = 0xFFF,
         FlagMask = 0xF000,
@@ -62,9 +51,7 @@ namespace ModelGraph.Core
         #region Command  =============================================(020-07F)
 
         NewCommand = 0x21,
-        OpenCommand = 0x22 | GetStorageFile,
         SaveCommand = 0x23,
-        SaveAsCommand = 0x24 | GetStorageFile,
         ReloadCommand = 0x25,
         CloseCommand = 0x26,
 
@@ -201,20 +188,20 @@ namespace ModelGraph.Core
 
         ComputeProblemRelatedWhereSelectError = 0x210,
         ComputeMissingRelatedSelectError = 0x211,
-        ComputeUnresolvedSelectError = 0x212 | IsErrorAux1,
-        ComputeInvalidSelectError = 0x213 | IsErrorAux1,
+        ComputeUnresolvedSelectError = 0x212,
+        ComputeInvalidSelectError = 0x213,
         ComputeCircularDependanceError = 0x214,
-        ComputeMissingSelectError = 0x215 | IsErrorAux1,
+        ComputeMissingSelectError = 0x215,
 
         ComputeMissingRootQueryError = 0x216,
         ComputeValueOverflowError = 0x217,
 
-        QueryUnresolvedWhereError = 0x220 | IsErrorAux1,
-        QueryInvalidWhereError = 0x221 | IsErrorAux1,
+        QueryUnresolvedWhereError = 0x220,
+        QueryInvalidWhereError = 0x221,
 
-        QueryUnresolvedSelectError = 0x222 | IsErrorAux1,
-        QueryInvalidSelectError = 0x223 | IsErrorAux1,
-        QueryMissingSelectError = 0x224 | IsErrorAux1,
+        QueryUnresolvedSelectError = 0x222,
+        QueryInvalidSelectError = 0x223,
+        QueryMissingSelectError = 0x224,
 
         QueryValueOverflowdWhereError = 0x225,
         QueryValueOverflowSelectError = 0x226,
@@ -312,8 +299,8 @@ namespace ModelGraph.Core
         GraphSymbolSizeProperty = 0x456 | IsReference,
 
         //=========================================
-        QueryXSelectProperty = 0x460 | CanMultiline | IsReference,
-        QueryXWhereProperty = 0x461 | CanMultiline | IsReference,
+        QueryXSelectProperty = 0x460 | IsReference,
+        QueryXWhereProperty = 0x461 | IsReference,
 
         QueryXConnect1Property = 0x462 | IsReference,
         QueryXConnect2Property = 0x463 | IsReference,
@@ -329,10 +316,10 @@ namespace ModelGraph.Core
         QueryXIsFullTableReadProperty = 0x46E | IsReference,
         QueryXFacet1Property = 0x46F | IsReference,
         QueryXFacet2Property = 0x470 | IsReference,
-        ValueXWhereProperty = 0x471 | CanMultiline | IsReference,
-        ValueXSelectProperty = 0x472 | CanMultiline | IsReference,
+        ValueXWhereProperty = 0x471 | IsReference,
+        ValueXSelectProperty = 0x472| IsReference,
         ValueXIsReversedProperty = 0x473 | IsReference,
-        ValueXValueTypeProperty = 0x474 | IsReadOnly,
+        ValueXValueTypeProperty = 0x474 | IsReference,
         QueryXLineStyleProperty = 0x475 | IsReference,
         QueryXDashStyleProperty = 0x476 | IsReference,
         QueryXLineColorProperty = 0x477 | IsReference,
@@ -365,7 +352,7 @@ namespace ModelGraph.Core
         ComputeXWhereProperty = 0x4B4 | IsReference,
         ComputeXSelectProperty = 0x4B5 | IsReference,
         ComputeXSeparatorProperty = 0x4B6 | IsReference,
-        ComputeXValueTypeProperty = 0x4B7 | IsReadOnly,
+        ComputeXValueTypeProperty = 0x4B7 | IsReference,
         ComputeXNumericSetProperty = 0x4B8 | IsReference,
         ComputeXResultsProperty = 0x4B9 | IsReference,
         ComputeXSortingProperty = 0x4BA | IsReference,
@@ -379,9 +366,9 @@ namespace ModelGraph.Core
         ParmDebugListModel = 0x600,
         //=====================================================================
         DataChefModel = 0x612,
-        TextPropertyModel = 0x617 | IsErrorAux1,
-        CheckPropertyModel = 0x618 | IsErrorAux1,
-        ComboPropertyModel = 0x619 | IsErrorAux1,
+        TextPropertyModel = 0x617,
+        CheckPropertyModel = 0x618,
+        ComboPropertyModel = 0x619,
         //=====================================================================
         ParmRootModel = 0x620,
         ErrorRootModel = 0x621,

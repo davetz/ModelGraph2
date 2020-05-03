@@ -8,7 +8,6 @@ namespace ModelGraph.Core
         internal RowX(TableX owner, bool autoExpand = false)
         {
             Owner = owner;
-            OldIdKey = IdKey.RowX;
             if (autoExpand) AutoExpandRight = true;
 
             owner.Add(this);

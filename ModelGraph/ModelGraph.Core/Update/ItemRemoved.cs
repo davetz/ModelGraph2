@@ -2,21 +2,19 @@
 using System.Collections.Generic;
 
 namespace ModelGraph.Core
-{/*
-
- */
+{
     public class ItemRemoved : ItemChange
     {
         internal Item Item;
         internal int AtIndex;  // remember the item's location before it was removed
         internal IList<ColumnX> Columns; // remember the item,s column values (only applies to RowX items) 
         internal List<String> Values;
+        internal override IdKey ViKey => IdKey.ItemRemoved;
 
         #region Constructor  ==================================================
         internal ItemRemoved(ChangeSet owner, Item item, int index, string name, IList<ColumnX> columns = null, List<String> values = null)
         {
-            Owner = owner;
-            OldIdKey = IdKey.ItemRemoved;
+            Owner = owner;            
             _name = name;
 
             Item = item;

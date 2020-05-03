@@ -27,7 +27,7 @@ namespace ModelGraph.Core
 
             chef.RegisterReferenceItem(new Property_SymbolX_Attatch(sto));
 
-            chef.RegisterStaticProperties(typeof(Node), GetProps(chef)); //used by property name lookup
+            chef.RegisterStaticProperties(typeof(SymbolX), GetProps(chef)); //used by property name lookup
         }
         private Property[] GetProps(Chef chef) => new Property[]
         {

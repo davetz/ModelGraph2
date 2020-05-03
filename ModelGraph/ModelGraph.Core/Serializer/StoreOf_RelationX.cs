@@ -110,7 +110,7 @@ namespace ModelGraph.Core
                     var index = r.ReadInt32();
                     if (index < 0 || index >= items.Length) throw new Exception($"RelationXStore ReadData, invalid index {index}");
 
-                    var rx = new RelationXO(this, true);
+                    var rx = new RelationX_RowX_RowX(this, true);
                     items[index] = rx;
 
                     var b = r.ReadByte();

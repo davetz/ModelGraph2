@@ -11,7 +11,7 @@ namespace ModelGraph.Core
         {
             Owner = owner;
             Item = item;
-            OldIdKey = idKe;
+            ErrorId = idKe;
             _text = text;
             owner.Add(this);
 

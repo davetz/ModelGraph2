@@ -27,7 +27,7 @@ namespace ModelGraph.Core
         //{
         //    if (item is null) return BlankName;
         //    //if (item.TraitKey == 0x1AD) item.SetTrait(IdKey.QueryXNodeSymbol);
-        //    return $"Internal {item.OldIdKey.ToString()}";
+        //    return $"Internal {item.ErrorId.ToString()}";
         //}
         //private string Index_Identity(Item item)
         //{
@@ -77,7 +77,7 @@ namespace ModelGraph.Core
         //                return null;
         //        }
         //    }
-        //    return $"{BlankName} {item.OldIdKey}";
+        //    return $"{BlankName} {item.ErrorId}";
         //}
         //#endregion
 
@@ -116,7 +116,7 @@ namespace ModelGraph.Core
         //                return null;
         //        }
         //    }
-        //    return $"{BlankName} {item.OldIdKey.ToString()}";
+        //    return $"{BlankName} {item.ErrorId.ToString()}";
         //}
         //#endregion
 
@@ -148,7 +148,7 @@ namespace ModelGraph.Core
         //                return itm.Description;
         //        }
         //    }
-        //    return $"{BlankName} {item.OldIdKey.ToString()}";
+        //    return $"{BlankName} {item.ErrorId.ToString()}";
         //}
         //#endregion
 
@@ -181,7 +181,7 @@ namespace ModelGraph.Core
         //                return ex.Description;
         //        }
         //    }
-        //    return $"{BlankName} {item.OldIdKey.ToString()}";
+        //    return $"{BlankName} {item.ErrorId.ToString()}";
         //}
         //#endregion
 
@@ -216,7 +216,7 @@ namespace ModelGraph.Core
         //                return tx.Description;
         //        }
         //    }
-        //    return $"{BlankName} {item.OldIdKey.ToString()}";
+        //    return $"{BlankName} {item.ErrorId.ToString()}";
         //}
         //#endregion
 
@@ -248,7 +248,7 @@ namespace ModelGraph.Core
         //                return itm.Description;
         //        }
         //    }
-        //    return $"{BlankName} {item.OldIdKey.ToString()}";
+        //    return $"{BlankName} {item.ErrorId.ToString()}";
         //}
         //#endregion
 
@@ -361,7 +361,7 @@ namespace ModelGraph.Core
         //                return _localize(GetDescriptionKey(idKe));
         //        }
         //    }
-        //    return $"{BlankName} {item.OldIdKey.ToString()}";
+        //    return $"{BlankName} {item.ErrorId.ToString()}";
         //}
         //#endregion
 
@@ -399,7 +399,7 @@ namespace ModelGraph.Core
         //                return null;
         //        }
         //    }
-        //    return $"{BlankName} {item.OldIdKey.ToString()}";
+        //    return $"{BlankName} {item.ErrorId.ToString()}";
         //}
         //#endregion
 
@@ -438,7 +438,7 @@ namespace ModelGraph.Core
         //                return null;
         //        }
         //    }
-        //    return $"{BlankName} {item.OldIdKey.ToString()}";
+        //    return $"{BlankName} {item.ErrorId.ToString()}";
         //}
         //#endregion
 
@@ -477,7 +477,7 @@ namespace ModelGraph.Core
         //                return null;
         //        }
         //    }
-        //    return $"{BlankName} {item.OldIdKey.ToString()}";
+        //    return $"{BlankName} {item.ErrorId.ToString()}";
         //}
         //#endregion
 
@@ -512,7 +512,7 @@ namespace ModelGraph.Core
         //                return null;
         //        }
         //    }
-        //    return $"{BlankName} {item.OldIdKey.ToString()}";
+        //    return $"{BlankName} {item.ErrorId.ToString()}";
         //}
         //#endregion
 
@@ -548,7 +548,7 @@ namespace ModelGraph.Core
         //                return _localize(itm.DescriptionKey);
         //        }
         //    }
-        //    return $"{BlankName} {item.OldIdKey.ToString()}";
+        //    return $"{BlankName} {item.ErrorId.ToString()}";
         //}
         //#endregion
 
@@ -586,7 +586,7 @@ namespace ModelGraph.Core
         //                return _localize(itm.DescriptionKey);
         //        }
         //    }
-        //    return $"{BlankName} {item.OldIdKey.ToString()}";
+        //    return $"{BlankName} {item.ErrorId.ToString()}";
         //}
         //#endregion
 
@@ -616,7 +616,7 @@ namespace ModelGraph.Core
         //                return _localize(itm.DescriptionKey);
         //        }
         //    }
-        //    return $"{BlankName} {item.OldIdKey.ToString()}";
+        //    return $"{BlankName} {item.ErrorId.ToString()}";
         //}
         //#endregion
 

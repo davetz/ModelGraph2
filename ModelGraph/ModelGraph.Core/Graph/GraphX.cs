@@ -32,7 +32,6 @@ namespace ModelGraph.Core
         internal GraphX(Store owner, bool autoExpand = false)
         {
             Owner = owner;
-            OldIdKey = IdKey.GraphX;
             if (autoExpand) AutoExpandRight = true;
 
             owner.Add(this);

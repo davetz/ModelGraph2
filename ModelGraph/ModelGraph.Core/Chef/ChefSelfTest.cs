@@ -128,7 +128,7 @@ namespace ModelGraph.Core
             if (IsInvalidTableIndex(tx1Index)) return false;
             if (IsInvalidTableIndex(tx2Index)) return false;
 
-            var rx = new RelationXO(Get<StoreOf_RelationX>());
+            var rx = new RelationX_RowX_RowX(Get<StoreOf_RelationX>());
             rx.Pairing = pairing;
             rx.Initialize(NR, NR);
 

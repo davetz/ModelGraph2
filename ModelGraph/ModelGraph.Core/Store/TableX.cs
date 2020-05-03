@@ -15,7 +15,6 @@ namespace ModelGraph.Core
         internal TableX(StoreOf<TableX> owner, bool autoExpand = false)
         {
             Owner = owner;
-            OldIdKey = IdKey.TableX;
             if (autoExpand) AutoExpandRight = true;
 
             owner.Add(this);

@@ -10,6 +10,18 @@ namespace ModelGraph.Core
         private readonly Dictionary<ushort, Item> IdKey_ReferenceItem = new Dictionary<ushort, Item>(200); // used to get specific type from its IdKey
         private readonly Dictionary<Type, Property[]> Type_Properties = new Dictionary<Type, Property[]>(100); // used for property name lookup
 
+        private readonly List<(Guid, ISerializer)> ItemSerializers = new List<(Guid, ISerializer)>(20);
+        private readonly List<(Guid, ISerializer)> LinkSerializers = new List<(Guid, ISerializer)>(10);
+
+        public void RegisterItemSerializer((Guid, ISerializer) serializer)
+        {
+            if (ItemSerializers.Count == 0)
+                ItemSerializers.Add((_serilizerGuid, this)); //the internal reference serializer should be first
+
+            ItemSerializers.Add(serializer); //item serializers added according to registration order
+        }
+        public void RegisterLinkSerializer((Guid, ISerializer) serializer) => LinkSerializers.Add(serializer); //link serializers will be called last
+
         internal void RegisterStaticProperties(Type type, Property[] props) => Type_Properties.Add(type, props);
 
         internal void RegisterPrivateItem(Item item) => Type_InstanceOf[item.GetType()] = item;
@@ -99,7 +111,6 @@ namespace ModelGraph.Core
             RegisterReferenceItem(new StoreOf_ViewX(this));
             RegisterReferenceItem(new StoreOf_TableX(this));
             RegisterReferenceItem(new StoreOf_GraphX(this));
-            RegisterReferenceItem(new GraphParams(this));
 
             RegisterReferenceItem(new StoreOf_QueryX(this));
             RegisterReferenceItem(new StoreOf_ColumnX(this));
@@ -116,6 +127,9 @@ namespace ModelGraph.Core
             Type_Properties.Clear();
             Type_InstanceOf.Clear();
             IdKey_ReferenceItem.Clear();
+            ItemSerializers.Clear();
+            LinkSerializers.Clear();
+
             base.Discard();
         }
         #endregion

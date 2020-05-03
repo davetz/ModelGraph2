@@ -7,7 +7,7 @@ namespace ModelGraph.Core
     {
         internal Item Owner;        //each item has an owner, this-> owner-> ... -> dataChef
 
-        internal IdKey OldIdKey;       //identity, static flags, and resource string key
+        //internal IdKey ErrorId;       //identity, static flags, and resource string key
         private State _state;       //bit flags specific to each item type
 
         private byte _flags;        //IsNew, IsDeleted, AutoExpandLeft, AutoExpandRight,..
@@ -19,7 +19,7 @@ namespace ModelGraph.Core
         public const string InvalidItem = "#######";
 
         #region Identity  =====================================================
-        internal virtual IdKey ViKey => OldIdKey;
+        internal virtual IdKey ViKey => IdKey.Empty;
         internal virtual string Name { get => "??"; set => _ = value; }
         internal virtual string Summary { get => ""; set => _ = value; }
         internal virtual string Description { get => ""; set => _ = value; }
@@ -41,47 +41,17 @@ namespace ModelGraph.Core
         #endregion
 
         #region IdKey  ========================================================
-        //internal bool IsExternal => (IdKey & IdKey.IsExternal) != 0;
-        //internal bool IsInternal => (IdKey & IdKey.IsInternal) != 0;
-
-        internal bool IsDataChef => (OldIdKey == IdKey.DataChef);
-        internal bool IsViewX => (OldIdKey == IdKey.ViewX);
-        internal bool IsPairX => (OldIdKey == IdKey.PairX);
-        internal bool IsRowX => (OldIdKey == IdKey.RowX);
-        internal bool IsEnumX => (OldIdKey == IdKey.EnumX);
-        internal bool IsTableX => (OldIdKey == IdKey.TableX);
-        internal bool IsGraphX => (OldIdKey == IdKey.GraphX);
-        internal bool IsQueryX => (OldIdKey == IdKey.QueryX);
-        internal bool IsSymbolX => (OldIdKey == IdKey.SymbolX);
-        internal bool IsColumnX => (OldIdKey == IdKey.ColumnX);
-        internal bool IsComputeX => (OldIdKey == IdKey.ComputeX);
-        //internal bool IsCommandX => (IdKey == IdKey.CommandX);
-        internal bool IsRelationX => (OldIdKey == IdKey.RelationX);
-        internal bool IsGraph => (OldIdKey == IdKey.Graph);
-        internal bool IsNode => (OldIdKey == IdKey.Node);
-        internal bool IsEdge => (OldIdKey == IdKey.Edge);
-
-        internal bool IsItemMoved => OldIdKey == IdKey.ItemMoved;
-        internal bool IsItemCreated => OldIdKey == IdKey.ItemCreated;
-        internal bool IsItemUpdated => OldIdKey == IdKey.ItemUpdated;
-        internal bool IsItemRemoved => OldIdKey == IdKey.ItemRemoved;
-        internal bool IsItemLinked => OldIdKey == IdKey.ItemLinked;
-        internal bool IsItemUnlinked => OldIdKey == IdKey.ItemUnlinked;
-        internal bool IsItemLinkMoved => OldIdKey == IdKey.ItemChildMoved;
-
-
-        internal bool IsExternal => (OldIdKey & IdKey.IsExternal) != 0;
-        internal bool IsReference => (OldIdKey & IdKey.IsReference) != 0;
-        internal bool IsCovert => (OldIdKey & IdKey.SubMask) == IdKey.IsCovert;
+        internal bool IsCovert => (ViKey & IdKey.IsCovert) != 0;
+        internal bool IsExternal => (ViKey & IdKey.IsExternal) != 0;
+        internal bool IsReference => (ViKey & IdKey.IsReference) != 0;
 
         internal ushort ItemKey => GetItemKey(ViKey);
         internal ushort GetItemKey(IdKey idKe) => (ushort)(idKe & IdKey.KeyMask);
-        internal byte TraitIndex => (byte)(OldIdKey & IdKey.IndexMask);
+        internal byte TraitIndex => (byte)(ViKey & IdKey.IndexMask);
         internal byte TraitIndexOf(IdKey idKe) => (byte)(idKe & IdKey.IndexMask);
-        internal bool IsErrorAux => (OldIdKey & IdKey.IsErrorAux) != 0;
-        internal bool IsErrorAux1 => (OldIdKey & IdKey.IsErrorAux1) != 0;
-        internal bool IsErrorAux2 => (OldIdKey & IdKey.IsErrorAux2) != 0;
+
         #endregion
+
 
         #region State  ========================================================
         private bool GetFlag(State flag) => (_state & flag) != 0;
@@ -132,10 +102,10 @@ namespace ModelGraph.Core
         #endregion
 
         #region StringKeys  ===================================================
-        internal string KindKey => GetKindKey(OldIdKey);
-        internal string NameKey => GetNameKey(OldIdKey);
-        internal string SummaryKey => GetSummaryKey(OldIdKey);
-        internal string DescriptionKey => GetDescriptionKey(OldIdKey);
+        internal string KindKey => GetKindKey(ViKey);
+        internal string NameKey => GetNameKey(ViKey);
+        internal string SummaryKey => GetSummaryKey(ViKey);
+        internal string DescriptionKey => GetDescriptionKey(ViKey);
 
         internal string GetKindKey(IdKey idKe) => $"{(int)(idKe & IdKey.KeyMask):X3}K";
         internal string GetNameKey(IdKey idKe) => $"{(int)(idKe & IdKey.KeyMask):X3}N";

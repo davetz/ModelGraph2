@@ -6,12 +6,12 @@ namespace ModelGraph.Core
     {
         internal DateTime DateTime;
         internal int Sequence;
+        internal override IdKey ViKey => IdKey.ChangeSet;
 
         #region Constructor  ==================================================
         internal ChangeSet(StoreOf_ChangeSet owner, int seqno)
         {
             Owner = owner;
-            OldIdKey = IdKey.ChangeSet;
             DateTime = DateTime.Now;
             Sequence = seqno;
             IsVirgin = true;

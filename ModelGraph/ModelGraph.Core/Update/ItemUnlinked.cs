@@ -1,7 +1,5 @@
 ﻿namespace ModelGraph.Core
-{/*
-
- */
+{
     public class ItemUnLinked : ItemChange
     {
         internal Item Child;
@@ -9,12 +7,12 @@
         internal Relation Relation;
         internal int ChildIndex;
         internal int ParentIndex;
+        internal override IdKey ViKey => IdKey.ItemUnlinked;
 
         #region Constructor  ==================================================
         internal ItemUnLinked(ChangeSet owner, Relation relation, Item parent, Item child, int parentIndex, int childIndex, string name)
         {
             Owner = owner;
-            OldIdKey = IdKey.ItemUnlinked;
             _name = name;
 
             Child = child;

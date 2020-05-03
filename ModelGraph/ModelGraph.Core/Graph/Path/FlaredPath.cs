@@ -5,13 +5,13 @@ namespace ModelGraph.Core
     public class FlaredPath : Path
     {
         readonly Path[] _paths;
-        internal override Path[] Paths => _paths; 
+        internal override Path[] Paths => _paths;
+        internal override IdKey ViKey => IdKey.FlaredPath;
 
         #region Constructor  ==================================================
         internal FlaredPath(Graph owner, Path[] paths) 
         {
             Owner = owner;
-            OldIdKey = IdKey.FlaredPath;
             IsRadial = true;
             _paths = paths;
 

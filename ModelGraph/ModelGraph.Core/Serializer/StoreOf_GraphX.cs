@@ -15,6 +15,9 @@ namespace ModelGraph.Core
             Owner = chef;
 
             chef.RegisterItemSerializer((_serializerGuid, this));
+
+            new GraphParams(chef);
+
             CreateProperties(chef);
 
             chef.Add(this);
@@ -30,7 +33,7 @@ namespace ModelGraph.Core
             chef.RegisterReferenceItem(new Property_GraphX_TerminalStretch(sto));
             chef.RegisterReferenceItem(new Property_GraphX_SymbolSize(sto));
 
-            chef.RegisterStaticProperties(typeof(Node), GetProps(chef)); //used by property name lookup
+            chef.RegisterStaticProperties(typeof(GraphX), GetProps(chef)); //used by property name lookup
         }
         private Property[] GetProps(Chef chef) => new Property[]
         {

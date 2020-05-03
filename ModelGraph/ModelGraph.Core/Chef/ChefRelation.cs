@@ -19,7 +19,7 @@ namespace ModelGraph.Core
                 head = null;
                 tail = null;
             }
-            else if (rel.IsRelationX)
+            else if (rel is RelationX_RowX_RowX)
             {
                 relation_Store_ChildRelation.TryGetParent(rel, out Store ch); head = ch;
                 relation_Store_ParentRelation.TryGetParent(rel, out Store pa); tail = pa;
@@ -41,7 +41,7 @@ namespace ModelGraph.Core
             var relation_Store_ChildRelation = Get<Relation_Store_ChildRelation>();
             var relation_Store_ParentRelation = Get<Relation_Store_ParentRelation>();
 
-            var name = (rel is RelationXO rx) ? rx.Name : "Internal";
+            var name = (rel is RelationX_RowX_RowX rx) ? rx.Name : "Internal";
             var id = string.IsNullOrWhiteSpace(name) ? string.Empty : name;
             var identity = $"({id})  ";
             var childName = BlankName;
@@ -55,7 +55,7 @@ namespace ModelGraph.Core
             sb.Append(childName);
             return sb.ToString();
         }
-        internal void SetRelationName(RelationXO rel, string value)
+        internal void SetRelationName(RelationX_RowX_RowX rel, string value)
         {
             var relation_Store_ChildRelation = Get<Relation_Store_ChildRelation>();
             var relation_Store_ParentRelation = Get<Relation_Store_ParentRelation>();

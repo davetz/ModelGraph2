@@ -5,7 +5,7 @@ using Windows.Storage.Streams;
 
 namespace ModelGraph.Core
 {
-    internal abstract class LinkSerializer
+    internal abstract class LinkSerializer 
     {
         static byte _formatVersion = 1;
         protected IRelationStore _relationStore;

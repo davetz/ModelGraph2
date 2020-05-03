@@ -15,7 +15,6 @@ namespace ModelGraph.Core
         internal ViewX(StoreOf_ViewX owner, bool autoExpandRight = false)
         {
             Owner = owner;
-            OldIdKey = IdKey.ViewX;
 
             if (autoExpandRight) AutoExpandRight = true;
             owner.Add(this);
