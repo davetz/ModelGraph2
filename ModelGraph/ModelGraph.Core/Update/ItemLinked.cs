@@ -9,7 +9,7 @@ namespace ModelGraph.Core
         internal Relation Relation;
         internal int ParentIndex;
         internal int ChildIndex;
-        internal override IdKey ViKey =>  IdKey.ItemLinked;
+        internal override IdKey IdKey =>  IdKey.ItemLinked;
 
         #region Constructor  ==================================================
         internal ItemLinked(ChangeSet owner, Relation relation, Item parent, Item child, int parentIndex, int childIndex, string name)

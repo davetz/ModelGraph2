@@ -3,7 +3,7 @@ namespace ModelGraph.Core
 {
     public class Property_QueryX_IsBreakPoint : PropertyOf<QueryX, bool>
     {
-        internal override IdKey ViKey => IdKey.QueryXIsBreakPointProperty;
+        internal override IdKey IdKey => IdKey.QueryXIsBreakPointProperty;
 
         internal Property_QueryX_IsBreakPoint(StoreOf_Property owner)
         {

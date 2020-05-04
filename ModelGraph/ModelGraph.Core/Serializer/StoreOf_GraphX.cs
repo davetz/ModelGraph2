@@ -8,7 +8,7 @@ namespace ModelGraph.Core
     {
         static Guid _serializerGuid = new Guid("48C7FA8C-88F1-4203-8E54-3255C1F8C528");
         static byte _formatVersion = 1;
-        internal override IdKey ViKey => IdKey.GraphXDomain;
+        internal override IdKey IdKey => IdKey.GraphXDomain;
 
         internal StoreOf_GraphX(Chef chef) 
         {
@@ -16,7 +16,7 @@ namespace ModelGraph.Core
 
             chef.RegisterItemSerializer((_serializerGuid, this));
 
-            new GraphParams(chef);
+            new NodeSerializer(chef);
 
             CreateProperties(chef);
 

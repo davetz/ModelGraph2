@@ -2,9 +2,7 @@
 
 namespace ModelGraph.Core
 {
-    /// <summary>
-    /// State bit flags specific to each item type
-    /// </summary>
+    /// <summary>State bit flags specific to each item type</summary>
     [Flags]
     public enum State : ushort
     {

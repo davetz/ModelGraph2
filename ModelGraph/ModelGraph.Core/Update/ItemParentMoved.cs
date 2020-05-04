@@ -9,7 +9,7 @@ namespace ModelGraph.Core
         internal Relation Relation;
         internal int Index1;
         internal int Index2;
-       internal override IdKey ViKey => IdKey.ItemChildMoved;
+       internal override IdKey IdKey => IdKey.ItemChildMoved;
 
     #region Constructor  ==================================================
     internal ItemParentMoved(ChangeSet owner, Relation relation, Item key, Item item, int index1, int index2, string name)

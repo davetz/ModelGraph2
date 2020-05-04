@@ -3,7 +3,7 @@ namespace ModelGraph.Core
 {
     public class Property_QueryX_Facet2 : PropertyOf<QueryX, string>
     {
-        internal override IdKey ViKey => IdKey.QueryXFacet2Property;
+        internal override IdKey IdKey => IdKey.QueryXFacet2Property;
 
         internal Property_QueryX_Facet2(StoreOf_Property owner)
         {

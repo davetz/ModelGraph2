@@ -3,7 +3,7 @@ namespace ModelGraph.Core
 {
     public class Property_QueryX_DashStyle : PropertyOf<QueryX, string>
     {
-        internal override IdKey ViKey => IdKey.QueryXDashStyleProperty;
+        internal override IdKey IdKey => IdKey.QueryXDashStyleProperty;
 
         internal Property_QueryX_DashStyle(StoreOf_Property owner)
         {

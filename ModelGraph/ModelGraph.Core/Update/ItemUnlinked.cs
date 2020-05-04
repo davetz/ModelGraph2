@@ -7,7 +7,7 @@
         internal Relation Relation;
         internal int ChildIndex;
         internal int ParentIndex;
-        internal override IdKey ViKey => IdKey.ItemUnlinked;
+        internal override IdKey IdKey => IdKey.ItemUnlinked;
 
         #region Constructor  ==================================================
         internal ItemUnLinked(ChangeSet owner, Relation relation, Item parent, Item child, int parentIndex, int childIndex, string name)

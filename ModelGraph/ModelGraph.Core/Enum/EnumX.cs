@@ -21,7 +21,7 @@ namespace ModelGraph.Core
         #endregion
 
         #region Identity  =====================================================
-        internal override IdKey ViKey => IdKey.EnumX;
+        internal override IdKey IdKey => IdKey.EnumX;
         public override string GetSingleNameId(Chef chef) => string.IsNullOrWhiteSpace(Name) ? BlankName : Name;
         public override string GetSummaryId(Chef chef) => Summary;
         public override string GetDescriptionId(Chef chef) => Description;

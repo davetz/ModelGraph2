@@ -3,7 +3,7 @@ namespace ModelGraph.Core
 {
     public class Property_QueryX_ExclusiveKey : PropertyOf<QueryX, byte>
     {
-        internal override IdKey ViKey => IdKey.QueryXExclusiveKeyProperty;
+        internal override IdKey IdKey => IdKey.QueryXExclusiveKeyProperty;
 
         internal Property_QueryX_ExclusiveKey(StoreOf_Property owner)
         {

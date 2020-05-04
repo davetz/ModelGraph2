@@ -3,7 +3,7 @@ namespace ModelGraph.Core
 {
     public class Property_SymbolX_Attatch : PropertyOf<SymbolX, string>
     {
-        internal override IdKey ViKey => IdKey.SymbolXAttatchProperty;
+        internal override IdKey IdKey => IdKey.SymbolXAttatchProperty;
 
         internal Property_SymbolX_Attatch(StoreOf_Property owner)
         {

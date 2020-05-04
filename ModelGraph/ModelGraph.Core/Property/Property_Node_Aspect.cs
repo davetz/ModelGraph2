@@ -3,7 +3,7 @@ namespace ModelGraph.Core
 {
     public class Property_Node_Aspect : PropertyOf<Node, string>
     {
-        internal override IdKey ViKey => IdKey.NodeOrientationProperty;
+        internal override IdKey IdKey => IdKey.NodeOrientationProperty;
 
         internal Property_Node_Aspect(StoreOf_Property owner)
         {

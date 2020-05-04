@@ -3,7 +3,7 @@ namespace ModelGraph.Core
 {
     public class Property_Node_Resizing : PropertyOf<Node, string>
     {
-        internal override IdKey ViKey => IdKey.NodeResizingProperty;
+        internal override IdKey IdKey => IdKey.NodeResizingProperty;
 
         internal Property_Node_Resizing(StoreOf_Property owner)
         {

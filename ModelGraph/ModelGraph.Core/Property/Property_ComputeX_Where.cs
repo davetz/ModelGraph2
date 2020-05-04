@@ -3,7 +3,7 @@ namespace ModelGraph.Core
 {
     public class Property_ComputeX_Where : PropertyOf<ComputeX, string>
     {
-        internal override IdKey ViKey => IdKey.ComputeXWhereProperty;
+        internal override IdKey IdKey => IdKey.ComputeXWhereProperty;
 
         internal Property_ComputeX_Where(StoreOf_Property owner)
         {

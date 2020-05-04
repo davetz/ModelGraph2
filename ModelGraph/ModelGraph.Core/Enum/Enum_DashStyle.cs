@@ -3,7 +3,7 @@ namespace ModelGraph.Core
 {
     public class Enum_DashStyle : EnumZ
     {
-        internal override IdKey ViKey => IdKey.DashStyleEnum;
+        internal override IdKey IdKey => IdKey.DashStyleEnum;
 
         #region Constructor  ==================================================
         internal Enum_DashStyle(StoreOf<EnumZ> owner)

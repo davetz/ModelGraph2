@@ -4,7 +4,7 @@ namespace ModelGraph.Core
  */
     public class Enum_Labeling : EnumZ
     {
-        internal override IdKey ViKey => IdKey.LabelingEnum;
+        internal override IdKey IdKey => IdKey.LabelingEnum;
 
         #region Constructor  ==================================================
         internal Enum_Labeling(StoreOf<EnumZ> owner)

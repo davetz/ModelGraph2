@@ -3,7 +3,7 @@ namespace ModelGraph.Core
 {
     public class Property_PairX_Text : PropertyOf<PairX, string>
     {
-        internal override IdKey ViKey => IdKey.EnumTextProperty;
+        internal override IdKey IdKey => IdKey.EnumTextProperty;
 
         internal Property_PairX_Text(StoreOf_Property owner)
         {

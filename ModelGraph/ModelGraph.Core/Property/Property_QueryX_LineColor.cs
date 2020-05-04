@@ -3,7 +3,7 @@ namespace ModelGraph.Core
 {
     public class Property_QueryX_LineColor : PropertyOf<QueryX, string>
     {
-        internal override IdKey ViKey => IdKey.QueryXLineColorProperty;
+        internal override IdKey IdKey => IdKey.QueryXLineColorProperty;
 
         internal Property_QueryX_LineColor(StoreOf_Property owner)
         {

@@ -3,7 +3,7 @@ namespace ModelGraph.Core
 {
     public class Property_GraphX_SymbolSize : PropertyOf<GraphX, int>
     {
-        internal override IdKey ViKey => IdKey.GraphSymbolSizeProperty;
+        internal override IdKey IdKey => IdKey.GraphSymbolSizeProperty;
 
         internal Property_GraphX_SymbolSize(StoreOf_Property owner)
         {

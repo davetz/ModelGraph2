@@ -3,7 +3,7 @@ namespace ModelGraph.Core
 {
     public class Property_QueryX_Where : PropertyOf<QueryX, string>
     {
-        internal override IdKey ViKey => IdKey.QueryXWhereProperty;
+        internal override IdKey IdKey => IdKey.QueryXWhereProperty;
 
         internal Property_QueryX_Where(StoreOf_Property owner)
         {

@@ -3,7 +3,7 @@ namespace ModelGraph.Core
 {
     public class Property_ComputeX_ValueType : PropertyOf<ComputeX, string>
     {
-        internal override IdKey ViKey => IdKey.ComputeXValueTypeProperty;
+        internal override IdKey IdKey => IdKey.ComputeXValueTypeProperty;
         internal override bool IsReadonly => true;
 
         internal Property_ComputeX_ValueType(StoreOf_Property owner)

@@ -3,7 +3,7 @@ namespace ModelGraph.Core
 {
     public class Relation_GraphX_SymbolQueryX : RelationOf<GraphX,QueryX>
     {
-        internal override IdKey ViKey => IdKey.GraphX_SymbolQueryX;
+        internal override IdKey IdKey => IdKey.GraphX_SymbolQueryX;
 
         internal Relation_GraphX_SymbolQueryX(StoreOf_Relation owner)
         {

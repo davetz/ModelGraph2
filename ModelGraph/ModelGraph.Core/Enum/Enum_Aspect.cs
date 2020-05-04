@@ -4,7 +4,7 @@ namespace ModelGraph.Core
  */
     public class Enum_Aspect : EnumZ
     {
-        internal override IdKey ViKey => IdKey.AspectEnum;
+        internal override IdKey IdKey => IdKey.AspectEnum;
 
         #region Constructor  ==================================================
         internal Enum_Aspect(StoreOf<EnumZ> owner)

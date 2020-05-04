@@ -6,7 +6,7 @@ namespace ModelGraph.Core
     {
         readonly Path[] _paths;
         internal override Path[] Paths => _paths;
-        internal override IdKey ViKey => IdKey.ParallelPath;
+        internal override IdKey IdKey => IdKey.ParallelPath;
 
         #region Constructor  ==================================================
         internal ParallelPath(Graph owner, Path[] paths, bool isRadial = false)

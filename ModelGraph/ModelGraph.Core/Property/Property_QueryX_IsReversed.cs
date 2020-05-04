@@ -3,7 +3,7 @@ namespace ModelGraph.Core
 {
     public class Property_QueryX_IsReversed : PropertyOf<QueryX, bool>
     {
-        internal override IdKey ViKey => IdKey.QueryXIsReversedProperty;
+        internal override IdKey IdKey => IdKey.QueryXIsReversedProperty;
 
         internal Property_QueryX_IsReversed(StoreOf_Property owner)
         {

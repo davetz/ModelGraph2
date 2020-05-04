@@ -167,7 +167,7 @@ namespace ModelGraph.Core
         public virtual Error TryGetError(Chef chef) => default;
 
 
-        public virtual string GetModelIdentity() =>  $"{ViKey}  ({ItemKey:X3})";
+        public virtual string GetModelIdentity() =>  $"{IdKey}  ({ItemKey:X3})";
         #endregion
     }
 }

@@ -3,7 +3,7 @@ namespace ModelGraph.Core
 {
     public class Property_Node_Labeling : PropertyOf<Node, string>
     {
-        internal override IdKey ViKey => IdKey.NodeLabelingProperty;
+        internal override IdKey IdKey => IdKey.NodeLabelingProperty;
 
         internal Property_Node_Labeling(StoreOf_Property owner)
         {

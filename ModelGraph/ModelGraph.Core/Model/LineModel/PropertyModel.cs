@@ -43,6 +43,6 @@ namespace ModelGraph.Core
             return (null, Property.HasParentName ? Property.GetParentName(chef, Item) : name);
         }
 
-        public override string GetModelIdentity() => $"{ViKey}  ({ItemKey:X3}){Environment.NewLine}{Property.ViKey}  ({Property.ItemKey:X3})";
+        public override string GetModelIdentity() => $"{IdKey}  ({ItemKey:X3}){Environment.NewLine}{Property.IdKey}  ({Property.ItemKey:X3})";
     }
 }

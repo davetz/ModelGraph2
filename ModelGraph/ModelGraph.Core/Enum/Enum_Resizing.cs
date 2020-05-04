@@ -4,7 +4,7 @@ namespace ModelGraph.Core
  */
     public class Enum_Resizing : EnumZ
     {
-        internal override IdKey ViKey => IdKey.ResizingEnum;
+        internal override IdKey IdKey => IdKey.ResizingEnum;
 
         #region Constructor  ==================================================
         internal Enum_Resizing(StoreOf<EnumZ> owner)

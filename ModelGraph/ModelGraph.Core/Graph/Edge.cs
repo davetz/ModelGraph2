@@ -32,7 +32,7 @@
         internal (sbyte dx, sbyte dy) FP2; // facet point displacment from surface point
         
         public byte LineColor;
-        internal override IdKey ViKey => IdKey.Edge;
+        internal override IdKey IdKey => IdKey.Edge;
 
         #region Constructors  =================================================
         internal Edge(QueryX queryX)

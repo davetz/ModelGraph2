@@ -6,7 +6,7 @@ namespace ModelGraph.Core
     {
         readonly Path[] _paths;
         internal override Path[] Paths => _paths;
-        internal override IdKey ViKey => IdKey.FlaredPath;
+        internal override IdKey IdKey => IdKey.FlaredPath;
 
         #region Constructor  ==================================================
         internal FlaredPath(Graph owner, Path[] paths) 

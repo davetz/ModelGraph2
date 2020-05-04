@@ -3,7 +3,7 @@ namespace ModelGraph.Core
 {
     public class Property_QueryX_Select : PropertyOf<QueryX, string>
     {
-        internal override IdKey ViKey => IdKey.ValueXSelectProperty;
+        internal override IdKey IdKey => IdKey.QueryXSelectProperty;
 
         internal Property_QueryX_Select(StoreOf_Property owner)
         {

@@ -8,6 +8,7 @@ namespace ModelGraph.Core
         internal WhereSelect Select;
         internal PathParm PathParm;
         internal byte ExclusiveKey;
+        internal override State State { get; set; }
         private PFlag _flags;
 
         #region Constructor  ==================================================
@@ -34,7 +35,7 @@ namespace ModelGraph.Core
         #endregion
 
         #region Identity  =====================================================
-        internal override IdKey ViKey => GetIdKey();
+        internal override IdKey IdKey => GetIdKey();
 
         public override string GetSingleNameId(Chef chef)
         {

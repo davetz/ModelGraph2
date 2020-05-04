@@ -11,7 +11,7 @@ namespace ModelGraph.Core
 
 
         #region Override Methodes  ============================================
-        internal override IdKey ViKey => IdKey.DataChefModel;
+        internal override IdKey IdKey => IdKey.DataChefModel;
         public override (string Kind, string Name, int Count, ModelType Type) GetParms(Chef chef)
         {
             var (kind, name) = GetKindNameId(chef);

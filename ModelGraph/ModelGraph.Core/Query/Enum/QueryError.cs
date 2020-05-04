@@ -2,15 +2,9 @@
 
 namespace ModelGraph.Core
 {
-    /*  
-        Keep track of the validation state in a possibly multipass
-        validation of ComputeX, QueryX, and the where/select clauses
-    */
-    /// <summary>
-    /// QueryX validation state
-    /// </summary>
+    /// <summary>QueryX validation error</summary>
     [Flags]
-    public enum QueryState : byte //validation state
+    public enum QueryError : byte //validation state
     {
         None = 0,
 

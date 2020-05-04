@@ -4,7 +4,7 @@ namespace ModelGraph.Core
  */
     public class Enum_ValueType : EnumZ
     {
-        internal override IdKey ViKey => IdKey.ValueTypeEnum;
+        internal override IdKey IdKey => IdKey.ValueTypeEnum;
 
         #region Constructor  ==================================================
         internal Enum_ValueType(StoreOf<EnumZ> owner)

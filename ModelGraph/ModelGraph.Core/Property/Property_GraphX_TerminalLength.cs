@@ -3,7 +3,7 @@ namespace ModelGraph.Core
 {
     public class Property_GraphX_TerminalLength : PropertyOf<GraphX, int>
     {
-        internal override IdKey ViKey => IdKey.GraphTerminalLengthProperty;
+        internal override IdKey IdKey => IdKey.GraphTerminalLengthProperty;
 
         internal Property_GraphX_TerminalLength(StoreOf_Property owner)
         {

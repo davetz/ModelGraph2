@@ -10,7 +10,7 @@ namespace ModelGraph.Core
 
         internal Item Item;
         internal int AtIndex; // remember item's location in the Items list 
-        internal override IdKey ViKey => IdKey.ItemCreated;
+        internal override IdKey IdKey => IdKey.ItemCreated;
 
 
         #region Constructor  ==================================================

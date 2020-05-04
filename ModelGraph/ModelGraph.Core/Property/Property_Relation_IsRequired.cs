@@ -3,7 +3,7 @@ namespace ModelGraph.Core
 {
     public class Property_Relation_IsRequired : PropertyOf<Relation, bool>
     {
-        internal override IdKey ViKey => IdKey.RelationIsRequiredProperty;
+        internal override IdKey IdKey => IdKey.RelationIsRequiredProperty;
 
         internal Property_Relation_IsRequired(StoreOf_Property owner)
         {

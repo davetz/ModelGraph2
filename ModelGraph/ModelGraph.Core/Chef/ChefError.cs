@@ -190,8 +190,8 @@ namespace ModelGraph.Core
                 if (prevError is ErrorNone error && error.ErrorId == idKe)
                     return error; // this error already exists
 
-                if (prevError.TraitIndex > TraitIndexOf(idKe))
-                    return null; // prevError has hight traitIndex and will not be replace
+                //if (prevError.ItemIndex > TraitIndexOf(idKe))
+                //    return null; // prevError has hight traitIndex and will not be replace
 
                 ClearError(item, prevError);
             }
@@ -205,8 +205,8 @@ namespace ModelGraph.Core
                 if (prevError is ErrorNoneAux error && error.ErrorId == idKe)
                     return error; // this error already exists
 
-                if (prevError.TraitIndex > TraitIndexOf(idKe))
-                    return null; // prevError has hight traitIndex and will not be replace
+                //if (prevError.ItemIndex > TraitIndexOf(idKe))
+                //    return null; // prevError has hight traitIndex and will not be replace
 
                 ClearError(item, aux1, prevError);
             }
@@ -220,8 +220,8 @@ namespace ModelGraph.Core
                 if (prevError is ErrorNoneAux2 error && error.ErrorId == idKe)
                     return error; // this error already exists
 
-                if (prevError.TraitIndex > TraitIndexOf(idKe))
-                    return null; // prevError has hight traitIndex and will not be replace
+                //if (prevError.ItemIndex > TraitIndexOf(idKe))
+                //    return null; // prevError has hight traitIndex and will not be replace
 
                 ClearError(item, aux1, aux2, prevError);
             }
@@ -236,8 +236,8 @@ namespace ModelGraph.Core
                 if (prevError is ErrorOne error && error.ErrorId == idKe)
                     return error; // this error already exists
 
-                if (prevError.TraitIndex > TraitIndexOf(idKe))
-                    return null; // prevError has hight traitIndex and will not be replace
+                //if (prevError.ItemIndex > TraitIndexOf(idKe))
+                //    return null; // prevError has hight traitIndex and will not be replace
 
                 ClearError(item, prevError);
             }
@@ -251,8 +251,8 @@ namespace ModelGraph.Core
                 if (prevError is ErrorOneAux error && error.ErrorId == idKe)
                     return error; // this error already exists
 
-                if (prevError.TraitIndex > TraitIndexOf(idKe))
-                    return null; // prevError has hight traitIndex and will not be replace
+                //if (prevError.ItemIndex > TraitIndexOf(idKe))
+                //    return null; // prevError has hight traitIndex and will not be replace
 
                 ClearError(item, aux1, prevError);
             }
@@ -266,8 +266,8 @@ namespace ModelGraph.Core
                 if (prevError is ErrorOneAux2 error && error.ErrorId == idKe)
                     return error; // this error already exists
 
-                if (prevError.TraitIndex > TraitIndexOf(idKe))
-                    return null; // prevError has hight traitIndex and will not be replace
+                //if (prevError.ItemIndex > TraitIndexOf(idKe))
+                //    return null; // prevError has hight traitIndex and will not be replace
 
                 ClearError(item, aux1, aux2, prevError);
             }
@@ -282,8 +282,8 @@ namespace ModelGraph.Core
                 if (prevError is ErrorMany error && error.ErrorId == idKe)
                     return error; // this error already exists
 
-                if (prevError.TraitIndex > TraitIndexOf(idKe))
-                    return null; // prevError has hight traitIndex and will not be replace
+                //if (prevError.ItemIndex > TraitIndexOf(idKe))
+                //    return null; // prevError has hight traitIndex and will not be replace
 
                 ClearError(item, prevError);
             }
@@ -297,8 +297,8 @@ namespace ModelGraph.Core
                 if (prevError is ErrorManyAux error && error.ErrorId == idKe)
                     return error; // this error already exists
 
-                if (prevError.TraitIndex > TraitIndexOf(idKe))
-                    return null; // prevError has hight traitIndex and will not be replace
+                //if (prevError.ItemIndex > TraitIndexOf(idKe))
+                //    return null; // prevError has hight traitIndex and will not be replace
 
                 ClearError(item, aux1, prevError);
             }
@@ -312,8 +312,8 @@ namespace ModelGraph.Core
                 if (prevError is ErrorManyAux2 error && error.ErrorId == idKe)
                     return error; // this error already exists
 
-                if (prevError.TraitIndex > TraitIndexOf(idKe))
-                    return null; // prevError has hight traitIndex and will not be replace
+                //if (prevError.ItemIndex > TraitIndexOf(idKe))
+                //    return null; // prevError has hight traitIndex and will not be replace
 
                 ClearError(item, aux1, aux2, prevError);
             }

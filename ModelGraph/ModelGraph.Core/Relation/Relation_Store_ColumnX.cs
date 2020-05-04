@@ -3,7 +3,7 @@ namespace ModelGraph.Core
 {
     public class Relation_Store_ColumnX : RelationOf<Store,ColumnX>
     {
-        internal override IdKey ViKey => IdKey.Store_ColumnX;
+        internal override IdKey IdKey => IdKey.Store_ColumnX;
 
         internal Relation_Store_ColumnX(StoreOf_Relation owner)
         {

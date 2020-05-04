@@ -9,7 +9,7 @@ namespace ModelGraph.Core
         internal int AtIndex;  // remember the item's location before it was removed
         internal IList<ColumnX> Columns; // remember the item,s column values (only applies to RowX items) 
         internal List<String> Values;
-        internal override IdKey ViKey => IdKey.ItemRemoved;
+        internal override IdKey IdKey => IdKey.ItemRemoved;
 
         #region Constructor  ==================================================
         internal ItemRemoved(ChangeSet owner, Item item, int index, string name, IList<ColumnX> columns = null, List<String> values = null)

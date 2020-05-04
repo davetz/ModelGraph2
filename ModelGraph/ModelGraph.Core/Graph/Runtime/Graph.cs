@@ -27,7 +27,7 @@ namespace ModelGraph.Core
 
         public Extent Extent;  // current x,y extent of this graph
 
-        internal override IdKey ViKey => IdKey.Graph;
+        internal override IdKey IdKey => IdKey.Graph;
 
         #region Constructor  ==================================================
         internal Graph(GraphX owner, Item seedItem = null)

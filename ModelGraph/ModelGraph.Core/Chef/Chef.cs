@@ -7,7 +7,7 @@ namespace ModelGraph.Core
     {
         public IRepository Repository { get; set; }
         public static LineModel DragDropSource;
-        internal override IdKey ViKey => IdKey.DataChef;
+        internal override IdKey IdKey => IdKey.DataChef;
 
         internal Chef(bool createTestModel = false)
         {

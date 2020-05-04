@@ -13,5 +13,6 @@ namespace ModelGraph.Core
         internal int Count => (Paths == null) ? 0 : Paths.Length;
         internal void Reverse() { IsReversed = !IsReversed; }
         protected int Last => Count - 1;
+        internal override State State { get; set; }
     }
 }

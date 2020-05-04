@@ -4,12 +4,12 @@ using Windows.Storage.Streams;
 
 namespace ModelGraph.Core
 {
-    public class GraphParams : ISerializer
+    public class NodeSerializer : ISerializer
     {
         static Guid _serializerGuid = new Guid("88223880-DC1E-40DD-BFB2-711372B7BA2D");
         static byte _formatVersion = 1;
         private Chef DataChef;
-        internal GraphParams(Chef chef)
+        internal NodeSerializer(Chef chef)
         {
             DataChef = chef;
 

@@ -3,7 +3,7 @@ namespace ModelGraph.Core
 {
     public class Property_Node_SizeWH : PropertyOf<Node, int[]>
     {
-        internal override IdKey ViKey => IdKey.NodeSizeWHProperty;
+        internal override IdKey IdKey => IdKey.NodeSizeWHProperty;
 
         internal Property_Node_SizeWH(StoreOf_Property owner)
         {

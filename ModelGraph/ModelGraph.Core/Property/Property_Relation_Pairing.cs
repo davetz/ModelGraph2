@@ -3,7 +3,7 @@ namespace ModelGraph.Core
 {
     public class Property_Relation_Pairing : PropertyOf<Relation, string>
     {
-        internal override IdKey ViKey => IdKey.ColumnValueTypeProperty;
+        internal override IdKey IdKey => IdKey.RelationPairingProperty;
 
         internal Property_Relation_Pairing(StoreOf_Property owner)
         {

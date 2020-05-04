@@ -23,7 +23,7 @@ namespace ModelGraph.Core
         #endregion
 
         #region Identity  =====================================================
-        internal override IdKey ViKey => IdKey.PropertyDomain;
+        internal override IdKey IdKey => IdKey.PropertyDomain;
         public override string GetParentNameId(Chef chef) => GetKindId(chef);
         #endregion
 

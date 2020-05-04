@@ -5,22 +5,8 @@ namespace ModelGraph.Core
 {
     public abstract class Relation : Item // used by undo/redo changes and StoreOf<Relation> _relationStore
     {
-        private State _state;
+        internal override State State { get; set; }
         internal Pairing Pairing;
-
-        #region State  ========================================================
-        private bool GetFlag(State flag) => (_state & flag) != 0;
-        private void SetFlag(State flag, bool value = true) { if (value) _state |= flag; else _state &= ~flag; }
-        private enum State : ushort
-        {
-            IsRequired = 0x2, // Relation
-        }
-
-        internal bool IsRequired { get { return GetFlag(State.IsRequired); } set { SetFlag(State.IsRequired, value); } }
-
-        internal override ushort GetState() => (ushort)_state;
-        internal override void SetState(ushort val) => _state = (State)val;
-        #endregion
 
         #region Serializer  ===================================================
         internal abstract (int, int)[] GetChildren1Items(Dictionary<Item, int> itemIndex);

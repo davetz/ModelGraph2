@@ -3,7 +3,7 @@ namespace ModelGraph.Core
 {
     public class Property_ColumnX_IsChoice : PropertyOf<ColumnX, bool>
     {
-        internal override IdKey ViKey => IdKey.ColumnIsChoiceProperty;
+        internal override IdKey IdKey => IdKey.ColumnIsChoiceProperty;
 
         internal Property_ColumnX_IsChoice(StoreOf_Property owner)
         {

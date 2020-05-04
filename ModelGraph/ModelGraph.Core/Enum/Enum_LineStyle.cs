@@ -3,7 +3,7 @@ namespace ModelGraph.Core
 {
     public class Enum_LineStyle : EnumZ
     {
-        internal override IdKey ViKey => IdKey.LineStyleEnum;
+        internal override IdKey IdKey => IdKey.LineStyleEnum;
 
         #region Constructor  ==================================================
         internal Enum_LineStyle(StoreOf<EnumZ> owner)

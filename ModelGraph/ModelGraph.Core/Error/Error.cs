@@ -9,7 +9,7 @@ namespace ModelGraph.Core
         internal string _name;
 
         internal IdKey ErrorId;
-        internal override IdKey ViKey => ErrorId;
+        internal override IdKey IdKey => ErrorId;
 
         internal abstract void Add(string text);
         internal abstract void Clear();

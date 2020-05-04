@@ -4,7 +4,7 @@ namespace ModelGraph.Core
  */
     public class Enum_CompuType : EnumZ
     {
-        internal override IdKey ViKey => IdKey.CompuTypeEnum;
+        internal override IdKey IdKey => IdKey.CompuTypeEnum;
 
         #region Constructor  ==================================================
         internal Enum_CompuType(StoreOf<EnumZ> owner)

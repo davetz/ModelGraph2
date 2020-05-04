@@ -3,7 +3,7 @@ namespace ModelGraph.Core
 {
     public class Property_Node_CenterXY : PropertyOf<Node, int[]>
     {
-        internal override IdKey ViKey => IdKey.NodeCenterXYProperty;
+        internal override IdKey IdKey => IdKey.NodeCenterXYProperty;
 
         internal Property_Node_CenterXY(StoreOf_Property owner)
         {

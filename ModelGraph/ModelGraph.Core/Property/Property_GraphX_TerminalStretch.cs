@@ -3,7 +3,7 @@ namespace ModelGraph.Core
 {
     public class Property_GraphX_TerminalStretch : PropertyOf<GraphX, int>
     {
-        internal override IdKey ViKey => IdKey.GraphTerminalStretchProperty;
+        internal override IdKey IdKey => IdKey.GraphTerminalStretchProperty;
 
         internal Property_GraphX_TerminalStretch(StoreOf_Property owner)
         {

@@ -8,7 +8,7 @@ namespace ModelGraph.Core
         internal Property Property;
         internal string OldValue;
         internal string NewValue;
-        internal override IdKey ViKey =>  IdKey.ItemUpdated;
+        internal override IdKey IdKey =>  IdKey.ItemUpdated;
 
         #region Constructor  ==================================================
         internal ItemUpdated(ChangeSet owner, Item item, Property property, string oldValue, string newValue, string name)

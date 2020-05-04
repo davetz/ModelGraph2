@@ -4,7 +4,7 @@ namespace ModelGraph.Core
  */
     public class Enum_SideType : EnumZ
     {
-        internal override IdKey ViKey => IdKey.SideEnum;
+        internal override IdKey IdKey => IdKey.SideEnum;
 
         #region Constructor  ==================================================
         internal Enum_SideType(StoreOf<EnumZ> owner)

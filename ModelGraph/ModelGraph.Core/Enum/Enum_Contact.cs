@@ -3,7 +3,7 @@ namespace ModelGraph.Core
 {
     public class Enum_Contact : EnumZ
     {
-        internal override IdKey ViKey => IdKey.ContactEnum;
+        internal override IdKey IdKey => IdKey.ContactEnum;
 
         #region Constructor  ==================================================
         internal Enum_Contact(StoreOf<EnumZ> owner)

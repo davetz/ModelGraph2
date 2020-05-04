@@ -8,7 +8,7 @@ namespace ModelGraph.Core
     {
         static Guid _serializerGuid = new Guid("3E7097FE-22D5-43B2-964A-9DB843F6D55B");
         static byte _formatVersion = 1;
-        internal override IdKey ViKey => IdKey.ColumnXDomain;
+        internal override IdKey IdKey => IdKey.ColumnXDomain;
 
         internal StoreOf_ColumnX(Chef chef)
         {

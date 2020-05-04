@@ -3,7 +3,7 @@ namespace ModelGraph.Core
 {
     public class Relation_QueryX_ViewX : RelationOf<QueryX,ViewX>
     {
-        internal override IdKey ViKey => IdKey.QueryX_ViewX;
+        internal override IdKey IdKey => IdKey.QueryX_ViewX;
 
         internal Relation_QueryX_ViewX(StoreOf_Relation owner)
         {

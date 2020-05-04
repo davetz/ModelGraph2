@@ -3,7 +3,7 @@ namespace ModelGraph.Core
 {
     public class Property_ComputeX_Select : PropertyOf<ComputeX, string>
     {
-        internal override IdKey ViKey => IdKey.ComputeXSelectProperty;
+        internal override IdKey IdKey => IdKey.ComputeXSelectProperty;
 
         internal Property_ComputeX_Select(StoreOf_Property owner)
         {

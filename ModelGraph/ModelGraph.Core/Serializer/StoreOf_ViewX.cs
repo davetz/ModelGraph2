@@ -9,7 +9,7 @@ namespace ModelGraph.Core
     {
         static Guid _serializerGuid = new Guid("396EC955-832E-4BEA-9E5C-C2A203ADAD23");
         static byte _formatVersion = 1;
-        internal override IdKey ViKey => IdKey.ViewXDomain;
+        internal override IdKey IdKey => IdKey.ViewXDomain;
 
         internal StoreOf_ViewX(Chef chef)
         {

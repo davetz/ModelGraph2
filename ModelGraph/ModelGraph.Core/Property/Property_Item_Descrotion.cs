@@ -3,7 +3,7 @@ namespace ModelGraph.Core
 {
     public class Property_Item_Description : PropertyOf<Item, string>
     {
-        internal override IdKey ViKey => IdKey.ItemDescriptionProperty;
+        internal override IdKey IdKey => IdKey.ItemDescriptionProperty;
 
         internal Property_Item_Description(StoreOf_Property owner)
         {

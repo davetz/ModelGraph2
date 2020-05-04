@@ -80,7 +80,11 @@ namespace ModelGraph.Core
         public void ReadData(DataReader r, Item[] items)
         {
             var relation_Store_ChildRelation = Get<Relation_Store_ChildRelation>();
-            var relation_Stoer_ParentRelation = Get<Relation_Store_ParentRelation>();
+            var relation_Store_ParentRelation = Get<Relation_Store_ParentRelation>();
+            var property_Item_Name = Get<Property_Item_Name>();
+            var property_Item_Summary = Get<Property_Item_Summary>();
+            var property_QueryX_Select = Get<Property_QueryX_Select>();
+            var property_QueryX_Where = Get<Property_QueryX_Where>();
 
             var count = r.ReadUInt16();
             if (count > items.Length)
@@ -100,7 +104,37 @@ namespace ModelGraph.Core
                         if (key == (ushort)(IdKey.TableX_ChildRelationX & IdKey.KeyMask))
                             items[i] = relation_Store_ChildRelation;
                         else if (key == (ushort)(IdKey.TableX_ParentRelationX & IdKey.KeyMask))
-                            items[i] = relation_Stoer_ParentRelation;
+                            items[i] = relation_Store_ParentRelation;
+                        else if (key == (ushort)(IdKey.EnumNameProperty & IdKey.KeyMask))
+                            items[i] = property_Item_Name;
+                        else if (key == (ushort)(IdKey.TableNameProperty & IdKey.KeyMask))
+                            items[i] = property_Item_Name;
+                        else if (key == (ushort)(IdKey.ColumnNameProperty & IdKey.KeyMask))
+                            items[i] = property_Item_Name;
+                        else if (key == (ushort)(IdKey.RelationNameProperty & IdKey.KeyMask))
+                            items[i] = property_Item_Name;
+                        else if (key == (ushort)(IdKey.GraphNameProperty & IdKey.KeyMask))
+                            items[i] = property_Item_Name;
+                        else if (key == (ushort)(IdKey.SymbolXNameProperty & IdKey.KeyMask))
+                            items[i] = property_Item_Name;
+                        else if (key == (ushort)(IdKey.ComputeXNameProperty & IdKey.KeyMask))
+                            items[i] = property_Item_Name;
+                        else if (key == (ushort)(IdKey.EnumSummaryProperty & IdKey.KeyMask))
+                            items[i] = property_Item_Summary;
+                        else if (key == (ushort)(IdKey.TableSummaryProperty & IdKey.KeyMask))
+                            items[i] = property_Item_Summary;
+                        else if (key == (ushort)(IdKey.ColumnSummaryProperty & IdKey.KeyMask))
+                            items[i] = property_Item_Summary;
+                        else if (key == (ushort)(IdKey.RelationSummaryProperty & IdKey.KeyMask))
+                            items[i] = property_Item_Summary;
+                        else if (key == (ushort)(IdKey.GraphSummaryProperty & IdKey.KeyMask))
+                            items[i] = property_Item_Summary;
+                        else if (key == (ushort)(IdKey.ComputeXSummaryProperty & IdKey.KeyMask))
+                            items[i] = property_Item_Summary;
+                        else if (key == (ushort)(IdKey.ValueXSelectProperty & IdKey.KeyMask))
+                            items[i] = property_QueryX_Select;
+                        else if (key == (ushort)(IdKey.ValueXWhereProperty & IdKey.KeyMask))
+                            items[i] = property_QueryX_Where;
                         else
                             throw new Exception("Unkown key reference");
                     }

@@ -4,7 +4,7 @@ namespace ModelGraph.Core
  */
     public class Enum_Connect : EnumZ
     {
-        internal override IdKey ViKey => IdKey.ConnectEnum;
+        internal override IdKey IdKey => IdKey.ConnectEnum;
 
         #region Constructor  ==================================================
         internal Enum_Connect(StoreOf<EnumZ> owner)

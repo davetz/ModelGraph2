@@ -3,7 +3,7 @@
     public class StoreOf_ChangeSet : StoreOf<ChangeSet>
     {
         internal static int ChangeSequence = 0;
-        internal override IdKey ViKey => IdKey.ChangeRoot;
+        internal override IdKey IdKey => IdKey.ChangeRoot;
 
         #region Constructor  ==================================================
         internal StoreOf_ChangeSet(Chef chef)

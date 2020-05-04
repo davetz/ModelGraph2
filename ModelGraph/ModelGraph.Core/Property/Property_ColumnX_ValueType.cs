@@ -3,7 +3,7 @@ namespace ModelGraph.Core
 {
     public class Property_ColumnX_ValueType : PropertyOf<ColumnX, string>
     {
-        internal override IdKey ViKey => IdKey.ColumnValueTypeProperty;
+        internal override IdKey IdKey => IdKey.ColumnValueTypeProperty;
 
         internal Property_ColumnX_ValueType(StoreOf_Property owner)
         {

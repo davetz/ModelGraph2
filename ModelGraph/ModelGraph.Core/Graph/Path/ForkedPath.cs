@@ -9,7 +9,7 @@ namespace ModelGraph.Core
         readonly Path Path1;
         readonly Path[] _paths;
         internal override Path[] Paths => _paths;
-        internal override IdKey ViKey => IdKey.ForkedPath;
+        internal override IdKey IdKey => IdKey.ForkedPath;
 
         #region Constructor  ==================================================
         internal ForkedPath(Graph owner, Path path1, Path[] paths)

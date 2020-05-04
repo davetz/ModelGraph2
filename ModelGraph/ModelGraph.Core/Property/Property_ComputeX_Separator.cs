@@ -3,7 +3,7 @@ namespace ModelGraph.Core
 {
     public class Property_ComputeX_Separator : PropertyOf<ComputeX, string>
     {
-        internal override IdKey ViKey => IdKey.ComputeXSeparatorProperty;
+        internal override IdKey IdKey => IdKey.ComputeXSeparatorProperty;
 
         internal Property_ComputeX_Separator(StoreOf_Property owner)
         {

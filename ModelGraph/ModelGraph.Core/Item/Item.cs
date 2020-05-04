@@ -3,36 +3,34 @@ using System.Diagnostics;
 
 namespace ModelGraph.Core
 {
-    public class Item
+    public abstract class Item
     {
         internal Item Owner;        //each item has an owner, this-> owner-> ... -> dataChef
 
-        //internal IdKey ErrorId;       //identity, static flags, and resource string key
-        private State _state;       //bit flags specific to each item type
-
-        private byte _flags;        //IsNew, IsDeleted, AutoExpandLeft, AutoExpandRight,..
+        private byte _flags;        //IsNew, IsDeleted, IsDiscarded, AutoExpandLeft, AutoExpandRight,..
         internal byte ModelDelta;   //incremented when a property or relation is changed
         internal byte ChildDelta;   //incremented when list of child items is changed 
         internal byte ErrorDelta;   //incremented when item's error state has changed
 
-        public const string BlankName = "???";
-        public const string InvalidItem = "#######";
+        internal const string BlankName = "???";
+        internal const string InvalidItem = "######";
 
         #region Identity  =====================================================
-        internal virtual IdKey ViKey => IdKey.Empty;
-        internal virtual string Name { get => "??"; set => _ = value; }
-        internal virtual string Summary { get => ""; set => _ = value; }
-        internal virtual string Description { get => ""; set => _ = value; }
+        internal virtual IdKey IdKey => IdKey.Empty;                            //all items should have an IdKey
 
-        public virtual string GetKindId(Chef chef) => chef.GetKindId(ViKey);
-        public virtual string GetSingleNameId(Chef chef) => DataChef.GetSingleNameId(ViKey);
+        internal virtual string Name { get => "??"; set => _ = value; }         //most external items have a name string
+        internal virtual string Summary { get => ""; set => _ = value; }        //most external items have a summary string
+        internal virtual string Description { get => ""; set => _ = value; }    //most external items may have a discription
+
+        public virtual string GetKindId(Chef chef) => chef.GetKindId(IdKey);
+        public virtual string GetSingleNameId(Chef chef) => DataChef.GetSingleNameId(IdKey);
         public virtual string GetParentNameId(Chef chef) => Owner.GetSingleNameId(chef);
         public virtual string GetDoubleNameId(Chef chef) => $"{GetParentNameId(chef)} : {GetSingleNameId(chef)}";
         public virtual string GetChangeLogId(Chef chef) => GetDoubleNameId(chef);
         public virtual (string, string) GetKindNameId(Chef chef) => (GetKindId(chef), GetSingleNameId(chef));
-        public virtual string GetSummaryId(Chef chef) => chef.GetSummaryId(ViKey);
-        public virtual string GetDescriptionId(Chef chef) => chef.GetDescriptionId(ViKey);
-        public virtual string GetAcceleratorId(Chef chef) => chef.GetAcceleratorId(ViKey);
+        public virtual string GetSummaryId(Chef chef) => chef.GetSummaryId(IdKey);
+        public virtual string GetDescriptionId(Chef chef) => chef.GetDescriptionId(IdKey);
+        public virtual string GetAcceleratorId(Chef chef) => chef.GetAcceleratorId(IdKey);
         internal string GetIndexId()
         {
             var inx = Index;
@@ -41,39 +39,34 @@ namespace ModelGraph.Core
         #endregion
 
         #region IdKey  ========================================================
-        internal bool IsCovert => (ViKey & IdKey.IsCovert) != 0;
-        internal bool IsExternal => (ViKey & IdKey.IsExternal) != 0;
-        internal bool IsReference => (ViKey & IdKey.IsReference) != 0;
+        internal bool IsCovert => (IdKey & IdKey.IsCovert) != 0;
+        internal bool IsExternal => (IdKey & IdKey.IsExternal) != 0;
+        internal bool IsReference => (IdKey & IdKey.IsReference) != 0;
 
-        internal ushort ItemKey => GetItemKey(ViKey);
-        internal ushort GetItemKey(IdKey idKe) => (ushort)(idKe & IdKey.KeyMask);
-        internal byte TraitIndex => (byte)(ViKey & IdKey.IndexMask);
-        internal byte TraitIndexOf(IdKey idKe) => (byte)(idKe & IdKey.IndexMask);
-
+        internal ushort ItemKey => (ushort)(IdKey & IdKey.KeyMask);
         #endregion
 
-
         #region State  ========================================================
-        private bool GetFlag(State flag) => (_state & flag) != 0;
-        private void SetFlag(State flag, bool value = true) { if (value) _state |= flag; else _state &= ~flag; }
+        // not all items need state bits, but if they do, they share a common definition.
+        // and since they only make sense to for the specific class the exact bit identities can overlap
+        virtual internal State State { get => State.Empty; set => _ = value; }  //not all items need state bits      
 
-        internal bool HasState() => GetState() != 0;
-        internal virtual ushort GetState() => 0;
-        internal virtual void SetState(ushort state) { }
+        private bool GetFlag(State flag) => (State & flag) != 0;
+        private void SetFlag(State flag, bool value = true) { if (value) State |= flag; else State &= ~flag; }
 
-        internal QueryType QueryKind { get { return (QueryType)(_state & State.Index); } set { _state = ((_state & ~State.Index) | (State)(value)); } }
+        internal bool HasState() => State != State.Empty;
+        internal ushort GetState() => (ushort) State;
+        internal void SetState(ushort value) => State = (State)value;
+
+        internal QueryType QueryKind { get { return (QueryType)(State & State.Index); } set { State = ((State & ~State.Index) | (State)(value)); } }
 
         internal bool IsHead { get { return GetFlag(State.IsHead); } set { SetFlag(State.IsHead, value); } }
         internal bool IsTail { get { return GetFlag(State.IsTail); } set { SetFlag(State.IsTail, value); } }
         internal bool IsRoot { get { return GetFlag(State.IsRoot); } set { SetFlag(State.IsRoot, value); } }
-        internal bool IsPath => (QueryKind == QueryType.Path);
-        internal bool IsGroup => (QueryKind == QueryType.Group);
-        internal bool IsSegue => (QueryKind == QueryType.Egress);
         internal bool IsReversed { get { return GetFlag(State.IsReversed); } set { SetFlag(State.IsReversed, value); } }
         internal bool IsRadial { get { return GetFlag(State.IsRadial); } set { SetFlag(State.IsRadial, value); } }
 
         internal bool IsBreakPoint { get { return GetFlag(State.IsBreakPoint); } set { SetFlag(State.IsBreakPoint, value); } }
-        internal bool IsPersistent { get { return GetFlag(State.IsPersistent); } set { SetFlag(State.IsPersistent, value); } }
 
 
         internal bool IsUndone { get { return GetFlag(State.IsUndone); } set { SetFlag(State.IsUndone, value); } }
@@ -82,13 +75,8 @@ namespace ModelGraph.Core
 
         internal bool IsChoice { get { return GetFlag(State.IsChoice); } set { SetFlag(State.IsChoice, value); } }
 
-        internal bool IsQueryGraphLink => !IsRoot && QueryKind == QueryType.Graph;
-        internal bool IsQueryGraphRoot => IsRoot && QueryKind == QueryType.Graph;
-
-        internal bool IsGraphLink => (!IsRoot && QueryKind == QueryType.Graph);
-        internal bool IsPathHead => IsHead && QueryKind == QueryType.Path;
-        internal bool IsGroupHead => IsHead && QueryKind == QueryType.Group;
-        internal bool IsSegueHead => IsHead && QueryKind == QueryType.Egress;
+        internal bool IsPersistent { get { return GetFlag(State.IsPersistent); } set { SetFlag(State.IsPersistent, value); } }
+        internal bool IsRequired { get { return GetFlag(State.IsRequired); } set { SetFlag(State.IsRequired, value); } }
 
         // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
         // deleted items can be restored, but discarded items are gone forever
@@ -102,10 +90,10 @@ namespace ModelGraph.Core
         #endregion
 
         #region StringKeys  ===================================================
-        internal string KindKey => GetKindKey(ViKey);
-        internal string NameKey => GetNameKey(ViKey);
-        internal string SummaryKey => GetSummaryKey(ViKey);
-        internal string DescriptionKey => GetDescriptionKey(ViKey);
+        internal string KindKey => GetKindKey(IdKey);
+        internal string NameKey => GetNameKey(IdKey);
+        internal string SummaryKey => GetSummaryKey(IdKey);
+        internal string DescriptionKey => GetDescriptionKey(IdKey);
 
         internal string GetKindKey(IdKey idKe) => $"{(int)(idKe & IdKey.KeyMask):X3}K";
         internal string GetNameKey(IdKey idKe) => $"{(int)(idKe & IdKey.KeyMask):X3}N";
@@ -151,7 +139,6 @@ namespace ModelGraph.Core
             return false;
         }
         #endregion
-
 
         #region Flags  ========================================================
         // don't read/write missing or default-value propties

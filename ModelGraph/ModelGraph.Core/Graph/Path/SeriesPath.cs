@@ -7,7 +7,7 @@ namespace ModelGraph.Core
     {
         readonly Path[] _paths;
         internal override Path[] Paths => _paths;
-        internal override IdKey ViKey => IdKey.SeriesPath;
+        internal override IdKey IdKey => IdKey.SeriesPath;
 
         #region Constructor  ==================================================
         internal SeriesPath(Graph owner, Path[] paths, bool isRadial = false)

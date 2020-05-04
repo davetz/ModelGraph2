@@ -14,7 +14,7 @@ namespace ModelGraph.Core
         #endregion
 
         #region Identity  =====================================================
-        internal override IdKey ViKey => IdKey.PropertyZStore;
+        internal override IdKey IdKey => IdKey.PropertyZStore;
         #endregion
     }
 }

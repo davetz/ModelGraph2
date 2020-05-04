@@ -3,7 +3,7 @@ namespace ModelGraph.Core
 {
     public class Property_Node_BarWidth : PropertyOf<Node, string>
     {
-        internal override IdKey ViKey => IdKey.NodeBarWidthProperty;
+        internal override IdKey IdKey => IdKey.NodeBarWidthProperty;
 
         internal Property_Node_BarWidth(StoreOf_Property owner)
         {

@@ -3,7 +3,7 @@ namespace ModelGraph.Core
 {
     public class RelationX<T1,T2> : RelationOf<T1, T2> where T1 : Item where T2 : Item
     {
-        internal override IdKey ViKey => IdKey.RelationX;
+        internal override IdKey IdKey => IdKey.RelationX;
 
         internal override string Name { get => _name; set => _name = value; }
         private string _name;

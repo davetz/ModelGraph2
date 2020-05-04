@@ -3,7 +3,7 @@ namespace ModelGraph.Core
 {
     public class Relation_GraphX_ColorColumnX : RelationOf<GraphX,ColumnX>
     {
-        internal override IdKey ViKey => IdKey.GraphX_ColorColumnX;
+        internal override IdKey IdKey => IdKey.GraphX_ColorColumnX;
 
         internal Relation_GraphX_ColorColumnX(StoreOf_Relation owner)
         {

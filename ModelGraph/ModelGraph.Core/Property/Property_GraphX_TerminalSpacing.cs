@@ -3,7 +3,7 @@ namespace ModelGraph.Core
 {
     public class Property_GraphX_TerminalSpacing : PropertyOf<GraphX, int>
     {
-        internal override IdKey ViKey => IdKey.GraphTerminalSpacingProperty;
+        internal override IdKey IdKey => IdKey.GraphTerminalSpacingProperty;
 
         internal Property_GraphX_TerminalSpacing(StoreOf_Property owner)
         {
