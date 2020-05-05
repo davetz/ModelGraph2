@@ -13,12 +13,13 @@ namespace ModelGraph.Core
             Property = prop;
         }
 
+        public bool IsReadOnly => Property.IsReadonly;
+        public bool IsMultiline => Property.IsMultiline;
+
         public virtual bool IsTextModel => false;
         public virtual bool IsCheckModel => false;
         public virtual bool IsComboModel => false;
 
-        public virtual bool IsReadOnly => false;
-        public virtual bool IsMultiline => false;
 
         public virtual int GetIndexValue(Chef chef) => default;
         public virtual bool GetBoolValue(Chef chef) => default;
@@ -29,11 +30,12 @@ namespace ModelGraph.Core
         public virtual void PostSetValue(Chef chef, bool val) { }
         public virtual void PostSetValue(Chef chef, string val) { }
 
+        internal override (bool anyChange, int flatCount) Validate() => (false, 0);
 
-        public override (string Kind, string Name, int Count, ModelType Type) GetParms(Chef chef)
+        public override (string kind, string name, int count) GetLineParms(Chef chef)
         {
             var (kind, name) = GetKindNameId(chef);
-            return (kind, name, 0, ModelType.Default);// <== THIS NEEDS TO BE FIXED
+            return (kind, name, 0);
         }
 
         public override (string, string) GetKindNameId(Chef chef)

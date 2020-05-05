@@ -14,7 +14,7 @@ namespace ModelGraph.Controls
     public sealed partial class ModelTreeControl : Page, IPageControl, IModelPageControl
     {
         public ModelTreeControl(TreeModel root)
-        {
+        {             
             _root = root;
             _chef = root.DataChef;
 

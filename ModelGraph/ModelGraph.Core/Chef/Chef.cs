@@ -15,5 +15,9 @@ namespace ModelGraph.Core
 
             if (createTestModel) CreateTestModel();
         }
+
+        internal string TitleName => Repository.Name;
+        internal string TitleSummary => Repository.FullName;
+
     }
 }

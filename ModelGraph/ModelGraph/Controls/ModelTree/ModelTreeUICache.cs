@@ -886,7 +886,7 @@ namespace ModelGraph.Controls
             sp.DataContext = m;
             _modelDeltaCache[index] = m.ItemDelta;
 
-            var (kind, name, count, type) = m.GetParms(_chef);
+            var (kind, name, count) = m.GetLineParms(_chef);
 
             AddModelIdentity(index, m);
             AddTreeIndent(index, m);

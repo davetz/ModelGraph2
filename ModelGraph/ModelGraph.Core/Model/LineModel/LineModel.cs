@@ -139,6 +139,11 @@ namespace ModelGraph.Core
         }
         #endregion
 
+        #region RequiredMethods  ==============================================
+        internal abstract (bool anyChange, int flatCount) Validate();
+        public abstract (string kind, string name, int count) GetLineParms(Chef chef);
+        #endregion
+
         #region Virtual Functions  ============================================
         public byte ItemDelta => (byte)(Item.ChildDelta + Item.ModelDelta);
         public virtual bool CanDrag => false;
@@ -150,8 +155,6 @@ namespace ModelGraph.Core
 
         public virtual string GetModelInfo(Chef chef) => default;
 
-        internal virtual (bool, bool) Validate(Chef chef) => (false, false);
-
         public virtual void GetMenuCommands(Chef chef, List<LineCommand> list) { }
         public virtual void GetButtonCommands(Chef chef, List<LineCommand> list) { }
 
@@ -161,8 +164,6 @@ namespace ModelGraph.Core
 
         public virtual DropAction DragDrop(Chef chef) => DropAction.None;
         public virtual DropAction ReorderItems(Chef chef, LineModel target, bool doDrop) => DropAction.None;
-
-        public virtual (string Kind, string Name, int Count, ModelType Type) GetParms(Chef chef) => (null, BlankName, 0, ModelType.Default);
 
         public virtual Error TryGetError(Chef chef) => default;
 

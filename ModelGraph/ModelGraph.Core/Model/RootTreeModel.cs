@@ -10,10 +10,7 @@ namespace ModelGraph.Core
     {
 
         #region Constructor  ==================================================
-        internal RootTreeModel() : base (new Chef()) 
-        {
-            new X612_DataChefModel(this, Item);
-        }
+        internal RootTreeModel() : base (new Chef(), IdKey.DataChefModel) { }
         internal override void Add(Item item)
         {
             if (item is X612_DataChefModel) //I can only have this one special child model
