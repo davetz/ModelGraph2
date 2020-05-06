@@ -11,6 +11,8 @@ namespace ModelGraph.Core
 
         internal Chef(bool createTestModel = false)
         {
+            ModelDelta = ChildDelta = 1;
+
             InitializeDomains(); 
 
             if (createTestModel) CreateTestModel();

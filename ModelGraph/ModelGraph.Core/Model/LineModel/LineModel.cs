@@ -6,7 +6,7 @@ namespace ModelGraph.Core
     public abstract class LineModel : StoreOf<LineModel>
     {
         public Item Item { get; protected set; }
-        private State _state;
+        private ModelState _modelState;
         public byte Depth;      // depth of tree hierarchy
 
         public LineModel ParentModel => Owner as LineModel;
@@ -23,28 +23,29 @@ namespace ModelGraph.Core
         }
         #endregion
 
-        #region State  ========================================================
+        #region ModelState  ===================================================
         [Flags]
-        private enum State : ushort
+        private enum ModelState : ushort
         {
             None = 0,
-            HasFailedValueFilter = 0x2000,
-            HasFailedUsageFilter = 0x1000,
 
-            IsUsedFilter = 0x800,
-            IsNotUsedFilter = 0x400,
-            IsAscendingSort = 0x200,
-            IsDescendingSort = 0x100,
+            IsChanged = S1,
+            HasNoError = S2,
+            ChangedSort = S3,
+            ChangedFilter = S4,
 
-            IsExpandLeft = 0x80,
-            IsExpandRight = 0x40,
-            IsFilterFocus = 0x20,
-            IsFilterVisible = 0x10,
+            IsExpandLeft = S5,
+            IsExpandRight = S6,
+            IsFilterFocus = S7,
+            IsFilterVisible = S8,
 
-            HasNoError = 0x8,
-            ChangedSort = 0x4,
-            ChangedFilter = 0x2,
-            IsChanged = 0x1,
+            IsUsedFilter = S9,
+            IsNotUsedFilter = S10,
+            IsAscendingSort = S11,
+            IsDescendingSort = S12,
+
+            HasFailedValueFilter = S13,
+            HasFailedUsageFilter = S14,
 
             IsExpanded = IsExpandLeft | IsExpandRight,
             IsSorted = IsAscendingSort | IsDescendingSort,
@@ -53,40 +54,52 @@ namespace ModelGraph.Core
             AnyFilterSortChanged = ChangedSort | ChangedFilter,
             SortUsageMode = IsUsageFiltered | IsSorted | ChangedSort | ChangedFilter,
         }
-        private bool GetState(State state) => (_state & state) != 0;
-        private void SetState(State state, bool value) { if (value) _state |= state; else _state &= ~state; }
-        private void SetState(State state, State changedState, bool value) { var prev = GetState(state); if (value) _state |= state; else _state &= ~state; if (prev != value) _state |= changedState; }
+        private bool GetState(ModelState state) => (_modelState & state) != 0;
+        private void SetState(ModelState state, bool value) { if (value) _modelState |= state; else _modelState &= ~state; }
+        private void SetState(ModelState state, ModelState changedState, bool value) { var prev = GetState(state); if (value) _modelState |= state; else _modelState &= ~state; if (prev != value) _modelState |= changedState; }
 
-        public bool IsChanged { get { return GetState(State.IsChanged); } set { SetState(State.IsChanged, value); } }
-        public bool IsFilterFocus { get { return GetState(State.IsFilterFocus); } set { SetState(State.IsFilterFocus, value); } }
-        internal bool HasNoError { get { return GetState(State.HasNoError); } set { SetState(State.HasNoError, value); } }
+        public bool IsChanged { get { return GetState(ModelState.IsChanged); } set { SetState(ModelState.IsChanged, value); } }
+        public bool IsFilterFocus { get { return GetState(ModelState.IsFilterFocus); } set { SetState(ModelState.IsFilterFocus, value); } }
+        internal bool HasNoError { get { return GetState(ModelState.HasNoError); } set { SetState(ModelState.HasNoError, value); } }
 
-        internal bool HasFailedValueFilter { get { return GetState(State.HasFailedValueFilter); } set { SetState(State.HasFailedValueFilter, value); } }
-        internal bool HasFailedUsageFilter { get { return GetState(State.HasFailedUsageFilter); } set { SetState(State.HasFailedUsageFilter, value); } }
+        internal bool HasFailedValueFilter { get { return GetState(ModelState.HasFailedValueFilter); } set { SetState(ModelState.HasFailedValueFilter, value); } }
+        internal bool HasFailedUsageFilter { get { return GetState(ModelState.HasFailedUsageFilter); } set { SetState(ModelState.HasFailedUsageFilter, value); } }
         internal bool IsFilteredOut => HasFailedValueFilter || HasFailedUsageFilter;
 
 
-        public bool IsUsedFilter { get { return GetState(State.IsUsedFilter); } set { SetState(State.IsUsedFilter, State.ChangedFilter, value); } }
-        public bool IsNotUsedFilter { get { return GetState(State.IsNotUsedFilter); } set { SetState(State.IsNotUsedFilter, State.ChangedFilter, value); } }
+        public bool IsUsedFilter { get { return GetState(ModelState.IsUsedFilter); } set { SetState(ModelState.IsUsedFilter, ModelState.ChangedFilter, value); } }
+        public bool IsNotUsedFilter { get { return GetState(ModelState.IsNotUsedFilter); } set { SetState(ModelState.IsNotUsedFilter, ModelState.ChangedFilter, value); } }
 
 
-        public bool IsSortAscending { get { return GetState(State.IsAscendingSort); } set { SetState(State.IsAscendingSort, State.ChangedSort, value); } }
-        public bool IsSortDescending { get { return GetState(State.IsDescendingSort); } set { SetState(State.IsDescendingSort, State.ChangedSort, value); } }
+        public bool IsSortAscending { get { return GetState(ModelState.IsAscendingSort); } set { SetState(ModelState.IsAscendingSort, ModelState.ChangedSort, value); } }
+        public bool IsSortDescending { get { return GetState(ModelState.IsDescendingSort); } set { SetState(ModelState.IsDescendingSort, ModelState.ChangedSort, value); } }
 
-        public bool IsExpandedLeft { get { return GetState(State.IsExpandLeft); } set { SetState(State.IsExpandLeft, value); if (!value) SetState(State.IsExpandRight, false); } }
-        public bool IsExpandedRight { get { return GetState(State.IsExpandRight); } set { SetState(State.IsExpandRight, value); } }
+        public bool IsExpandedLeft { get { return GetState(ModelState.IsExpandLeft); } set { SetState(ModelState.IsExpandLeft, value); if (!value) SetState(ModelState.IsExpandRight, false); } }
+        public bool IsExpandedRight { get { return GetState(ModelState.IsExpandRight); } set { SetState(ModelState.IsExpandRight, value); } }
 
-        public bool IsFilterVisible { get { return GetState(State.IsFilterVisible); } set { SetState(State.IsFilterVisible, value); if (value) IsFilterFocus = true; else { ClearViewFilter(); _state |= State.ChangedFilter; } } }
+        public bool IsFilterVisible { get { return GetState(ModelState.IsFilterVisible); } set { SetState(ModelState.IsFilterVisible, value); if (value) IsFilterFocus = true; else { ClearViewFilter(); _modelState |= ModelState.ChangedFilter; } } }
 
-        internal bool IsSorted => GetState(State.IsSorted);
+        internal bool IsSorted => GetState(ModelState.IsSorted);
         internal bool IsFiltered => IsUsageFiltered || (IsFilterVisible && HasFilterText);
-        internal bool IsExpanded => GetState(State.IsExpanded);
-        internal bool IsUsageFiltered => GetState(State.IsUsageFiltered);
-        internal bool ChangedSort => GetState(State.ChangedSort);
-        internal bool ChangedFilter => GetState(State.ChangedFilter);
-        internal bool AnyFilterSortChanged => GetState(State.AnyFilterSortChanged);
-        internal void ClearChangedFlags() => _state &= ~State.AnyFilterSortChanged;
-        internal void ClearSortUsageMode() => _state &= ~State.SortUsageMode;
+        internal bool IsExpanded => GetState(ModelState.IsExpanded);
+        internal bool IsUsageFiltered => GetState(ModelState.IsUsageFiltered);
+        internal bool ChangedSort => GetState(ModelState.ChangedSort);
+        internal bool ChangedFilter => GetState(ModelState.ChangedFilter);
+        internal bool AnyFilterSortChanged => GetState(ModelState.AnyFilterSortChanged);
+        internal void ClearChangedFlags() => _modelState &= ~ModelState.AnyFilterSortChanged;
+        internal void ClearSortUsageMode() => _modelState &= ~ModelState.SortUsageMode;
+        #endregion
+
+        #region Traverse  =====================================================
+        internal bool Traverse(CircularBuffer<LineModel> buffer, int endCount)
+        {
+            foreach (var child in Items)
+            {
+                if (buffer.Add(child) >= endCount) return true; // abort, we are done
+                if (child.Traverse(buffer, endCount)) return true; // abort, we are done;
+            }
+            return false; //finished all items with no aborts
+        }
         #endregion
 
         #region CommonMethods   ===============================================

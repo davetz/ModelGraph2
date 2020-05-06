@@ -15,37 +15,44 @@ namespace ModelGraph.Core
 
         public string TitleName => DataChef.TitleName;
         public string TitleSummary => DataChef.TitleSummary;
-       
-        public List<LineModel> ViewList = new List<LineModel>(100); //flat list view buffer, 3 x number of visible lines (function of UI-Window height)
-        public int IndexOfSelectedModel;
 
         internal Dictionary<LineModel, FilterSort> LineModel_FilterSort = new Dictionary<LineModel, FilterSort>();
 
         #region Constructor  ==================================================
-        internal TreeModel(Chef chef, IdKey childId) // invoked within RootTreeModel constructor
+        internal TreeModel(Chef chef) // invoked within RootTreeModel constructor
         {
             Owner = Item = chef;
             ControlType = ControlType.PrimaryTree;
- 
+
             chef.Add(this);
 
-            switch (childId)
-            {
-                case IdKey.DataChefModel:
-                    ControlType = ControlType.PrimaryTree;
-                    new X612_DataChefModel(this, chef);
-                    break;
-                default:
-                    throw new ArgumentException($"TreeModel constructor, Invalid IdKey child: {childId}");
-            }
+            Add(new X612_DataChefModel(this, chef));
+            RefreshViewList(null, 5, 0, ChangeType.NoChange);
         }
-        internal TreeModel(RootTreeModel rootModel, Chef chef) // created by the TreeRootModel
+        internal TreeModel(RootTreeModel rootModel, Chef chef, IdKey childId) // created by the TreeRootModel
         {
             Owner = rootModel;
             Item = chef;
             ControlType = ControlType.PartialTree;
 
             chef.Add(this);
+            switch (childId)
+            {
+                case IdKey.MetadataRootModel:
+                    new X623_MetadataRootModel(this, chef);
+                    break;
+                case IdKey.ModelingRootModel:
+                    new X623_MetadataRootModel(this, chef);
+                    break;
+                case IdKey.ChangeRootModel:
+                    new X622_ChangeRootModel(this, chef);
+                    break;
+                case IdKey.ErrorRootModel:
+                    new X621_ErrorRootModel(this, chef);
+                    break;
+                default:
+                    throw new ArgumentException($"TreeModel constructor, Invalid IdKey child: {childId}");
+            }
         }
         #endregion
 
@@ -66,19 +73,26 @@ namespace ModelGraph.Core
 
         #region RefreshViewList  ==============================================
         // Runs on a background thread invoked by the ModelTreeControl 
-        private int _viewListIndex; // index into the flattend model tree hierarchy corresponding to where the ViewList buffer starts
-        private int _fullFlatSize; // flattened tree hierachy length (from the last full traversal)
-        internal void RefreshViewList(LineModel select, int viewSize, int scroll = 0, ChangeType change = ChangeType.NoChange)
+        private int _fullyFlattenedSize; // flattened tree hierachy length (from the last full traversal)
+        private int _bufferStartIndex; // start index into the fully flattend model tree hierarchy
+        private List<LineModel> _bufferList = new List<LineModel>(100); //flat list view buffer, 3 x number of visible lines (function of UI-Window height)
+        private int _viewStartIndex; // start index into the bufferList
+        private int _viewSize; // number of viewable lines in UI window
+        private LineModel _selectModel; //the UI is now or will be forced to be focused on this model
+        public (List<LineModel>, LineModel) GetCurrentView() => (_bufferList.GetRange(_viewStartIndex, _viewSize), _selectModel);
+
+        public void RefreshViewList(LineModel select, int viewSize, int scroll = 0, ChangeType change = ChangeType.NoChange)
         {
-            var cap = viewSize * 3; // my buffer size = 3 x number of visible lines (function of UI-Window height)
-            if (cap > ViewList.Capacity) ViewList.Capacity = cap;
+            _selectModel = select;
+            _viewSize = viewSize;
+
+            var cap = viewSize * 3; // my buffer size = 3 x number of visible lines (from UI window height)
+            if (cap > _bufferList.Capacity) _bufferList.Capacity = cap;
 
             if (ChildDelta != DataChef.ChildDelta) //anything added/moved/removed/linked/unlinked in dataChef
             {
-
+                ChildDelta = DataChef.ChildDelta;
             }
-
-            var offset = ViewList.IndexOf(select); // want to keep the selected model stationary
 
             //    if (capacity > 0)
             //    {
@@ -147,6 +161,16 @@ namespace ModelGraph.Core
             //                    first = (i > 0) ? p.ViewModels[i - 1] : p;
             //                }
             //            }
+
+        }
+        #endregion
+
+        #region TraverseModelHierarchy  =======================================
+        private void TraverseModelHierarchy()
+        {
+            var bufferCap = _bufferList.Capacity;
+            var startIndex = _bufferStartIndex;
+
 
         }
         #endregion

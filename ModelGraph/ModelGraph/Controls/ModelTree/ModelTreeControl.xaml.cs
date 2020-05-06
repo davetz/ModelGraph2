@@ -20,7 +20,22 @@ namespace ModelGraph.Controls
 
             InitializeComponent();
             Initialize();
+            Loaded += ModelTreeControl_Loaded;
         }
+
+        private void ModelTreeControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            Refresh();
+        }
+
+        #region PostRefreshViewList  ==========================================
+        async System.Threading.Tasks.Task PostRefreshViewListAsync(LineModel m, int s = 0, ChangeType c = ChangeType.NoChange)
+        {
+            ResetCacheDelta(m);
+            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => { _root.RefreshViewList(m, ViewSize, s, c); });
+            Refresh();
+        }
+        #endregion
 
         #region SetSize  ======================================================
         public void SetSize(double width, double height)
@@ -30,19 +45,16 @@ namespace ModelGraph.Controls
             {
                 TreeCanvas.Width = Width = width;
                 TreeCanvas.Height = Height = height;
-                //_root.ViewCapacity = (int)(Height / _elementHieght);
-                _viewIsReady = true;
-                //_root.PostRefreshViewList(_selectModel);
+
+                _ = PostRefreshViewListAsync(_selectModel);
             }
         }
-        bool ViewIsNotReady() => !_viewIsReady;
-        bool _viewIsReady;
-
+        int ViewSize => (int)(Height / _elementHieght);
         #endregion
 
         #region Fields  =======================================================
         Chef _chef;
-        IModel _root;
+        TreeModel _root;
         LineModel _selectModel;
         List<LineModel> _viewList = new List<LineModel>();
         List<LineCommand> _menuCommands = new List<LineCommand>();
@@ -209,8 +221,6 @@ namespace ModelGraph.Controls
                 _menuItemTips[i] = tip;
                 ToolTipService.SetToolTip(_menuItems[i], tip);
             }
-
-            RefreshRoot();
         }
         #endregion
 
@@ -232,14 +242,6 @@ namespace ModelGraph.Controls
             _buttonCommands.Clear();
             _itemIdentityTip = null;
             _modelIdentityTip = null;
-        }
-        #endregion
-
-        #region PostRefreshViewList  ==========================================
-        void PostRefreshViewList(LineModel m, int s = 0, ChangeType c = ChangeType.NoChange)
-        {
-            ResetCacheDelta(m);
-            //_root.PostRefreshViewList(m, s, c);
         }
         #endregion
 
@@ -268,12 +270,12 @@ namespace ModelGraph.Controls
 
         private void KeyEnd_Invoked(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
         {
-            PostRefreshViewList(_selectModel, 0, ChangeType.GoToEnd);
+            PostRefreshViewListAsync(_selectModel, 0, ChangeType.GoToEnd);
             args.Handled = true;
         }
         private void KeyHome_Invoked(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
         {
-            PostRefreshViewList(_selectModel, 0, ChangeType.GoToHome);
+            PostRefreshViewListAsync(_selectModel, 0, ChangeType.GoToHome);
             args.Handled = true;
         }
 
@@ -281,7 +283,7 @@ namespace ModelGraph.Controls
         {
             if (_selectModel.CanExpandLeft)
             {
-                PostRefreshViewList(_selectModel, 0, ChangeType.ToggleLeft);
+                PostRefreshViewListAsync(_selectModel, 0, ChangeType.ToggleLeft);
             }
             args.Handled = true;
         }
@@ -289,7 +291,7 @@ namespace ModelGraph.Controls
         {
             if (_selectModel.CanExpandRight)
             {
-                PostRefreshViewList(_selectModel, 0, ChangeType.ToggleRight);
+                PostRefreshViewListAsync(_selectModel, 0, ChangeType.ToggleRight);
             }
             args.Handled = true;
         }
@@ -306,7 +308,7 @@ namespace ModelGraph.Controls
             {
                 _selectModel.IsFilterVisible = false;
                 _selectModel.IsExpandedLeft = false;
-                PostRefreshViewList(_selectModel, 0, ChangeType.FilterSortChanged);
+                PostRefreshViewListAsync(_selectModel, 0, ChangeType.FilterSortChanged);
             }
             args.Handled = true;
         }
@@ -396,7 +398,7 @@ namespace ModelGraph.Controls
         }
         void ChangeScroll(int delta)
         {
-            PostRefreshViewList(_selectModel, delta);
+            PostRefreshViewListAsync(_selectModel, delta);
         }
         #endregion
 
@@ -449,13 +451,13 @@ namespace ModelGraph.Controls
         #region Refresh  ======================================================
         public void Refresh()
         {
-            if (ViewIsNotReady()) return;
-            if (_viewList is null) return;
+            //if (ViewIsNotReady()) return;
+            //if (_viewList is null) return;
             //if (_root.IsChanged) RefreshRoot();
-
+            (viewList, select) = _root.GetCurrentView();
             _viewList.Clear();
-            //_viewList.AddRange(_root.ViewFlatList);
-           // _selectModel = _root.SelectModel;
+            _viewList.AddRange(viewList);
+            _selectModel = select;
 
             _pointWheelEnabled = false;
 
@@ -686,7 +688,7 @@ namespace ModelGraph.Controls
                 else
                 {
                     _tryAfterRefresh = true;
-                    PostRefreshViewList(_selectModel, 0, ChangeType.ToggleFilter);
+                    PostRefreshViewListAsync(_selectModel, 0, ChangeType.ToggleFilter);
                 }
             }
             else if (_selectModel is PropertyModel pm)
@@ -924,7 +926,7 @@ namespace ModelGraph.Controls
             {
                 var obj = sender as TextBlock;
                 _selectModel = obj.DataContext as LineModel;
-                PostRefreshViewList(_selectModel, 0, ChangeType.ToggleLeft);
+                PostRefreshViewListAsync(_selectModel, 0, ChangeType.ToggleLeft);
             }
         }
         #endregion
@@ -936,7 +938,7 @@ namespace ModelGraph.Controls
             {
                 var obj = sender as TextBlock;
                 _selectModel = obj.DataContext as LineModel;
-                PostRefreshViewList(_selectModel, 0, ChangeType.ToggleRight);
+                PostRefreshViewListAsync(_selectModel, 0, ChangeType.ToggleRight);
             }
         }
         #endregion
@@ -986,7 +988,7 @@ namespace ModelGraph.Controls
                 obj.Text = _sortAscending;
             }
 
-            PostRefreshViewList(_selectModel, 0, ChangeType.FilterSortChanged);
+            PostRefreshViewListAsync(_selectModel, 0, ChangeType.FilterSortChanged);
         }
         #endregion
 
@@ -1025,7 +1027,7 @@ namespace ModelGraph.Controls
                 mdl.IsUsedFilter = true;
                 obj.Text = _usageIsUsed;
             }
-            PostRefreshViewList(_selectModel, 0, ChangeType.FilterSortChanged);
+            PostRefreshViewListAsync(_selectModel, 0, ChangeType.FilterSortChanged);
         }
         #endregion
 
@@ -1045,7 +1047,7 @@ namespace ModelGraph.Controls
 
             var mdl = obj.DataContext as LineModel;
 
-            PostRefreshViewList(_selectModel, 0, ChangeType.ToggleFilter);
+            PostRefreshViewListAsync(_selectModel, 0, ChangeType.ToggleFilter);
         }
         #endregion
 
@@ -1071,7 +1073,7 @@ namespace ModelGraph.Controls
                 mdl.IsExpandedLeft = true;
                 
                 _tryAfterRefresh = true;
-                PostRefreshViewList(_selectModel, 0, ChangeType.FilterSortChanged);
+                PostRefreshViewListAsync(_selectModel, 0, ChangeType.FilterSortChanged);
             }
             if (e.Key == Windows.System.VirtualKey.Escape)
             {
@@ -1080,7 +1082,7 @@ namespace ModelGraph.Controls
                 mdl.IsFilterVisible = false;
                 mdl.IsExpandedLeft = false;
                 SetDefaultFocus();
-                PostRefreshViewList(_selectModel, 0, ChangeType.FilterSortChanged);
+                PostRefreshViewListAsync(_selectModel, 0, ChangeType.FilterSortChanged);
             }
         }
         #endregion
