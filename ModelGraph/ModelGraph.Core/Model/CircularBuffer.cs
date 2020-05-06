@@ -8,22 +8,51 @@ namespace ModelGraph.Core
     /// <summary>Single use circular buffer</summary>
     internal class CircularBuffer<T>
     {
+        T _target;
         T[] _buffer;
         private int _len;
+        private int _delay;
+        private bool _haveTarget;
+        private bool _checkTarget;
         private int _count;
         internal int Count => _count;
+        internal bool HaveTarget => _haveTarget;
 
+        #region Constructor  ==================================================
         internal CircularBuffer(int size)
         {
             _buffer = new T[size];
             _len = size;
         }
 
-        internal int Add(T item)
+        internal CircularBuffer(int size, T target)
+        {
+            _buffer = new T[size];
+            _len = size;
+
+            _target = target;
+            _checkTarget = true;
+        }
+        #endregion
+
+        internal (int, bool) Add(T item)
         {
             var index = _count++ % _len;
             _buffer[index] = item;
-            return _count;
+            if (_haveTarget)
+            {
+                if (_delay-- < 0) return (_count, true);
+            }
+            else if (_checkTarget)
+            {
+                if (_target.Equals(item))
+                {
+                    _haveTarget = true;
+                    _checkTarget = false;
+                    _delay = _len / 2;
+                }
+            }
+            return (_count, false);
         }
 
         internal List<T> GetList()

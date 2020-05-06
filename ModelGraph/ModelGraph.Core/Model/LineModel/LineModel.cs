@@ -90,13 +90,15 @@ namespace ModelGraph.Core
         internal void ClearSortUsageMode() => _modelState &= ~ModelState.SortUsageMode;
         #endregion
 
-        #region Traverse  =====================================================
-        internal bool Traverse(CircularBuffer<LineModel> buffer, int endCount)
+        #region CompleteBufferFillTraverse  ===================================
+        /// <summary>Fill the circular buffer with flattened lineModels, return true if hit end of list</summary>
+        internal bool CompleteBufferFillTraverse(CircularBuffer<LineModel> buffer, int endCount)
         {
             foreach (var child in Items)
             {
-                if (buffer.Add(child) >= endCount) return true; // abort, we are done
-                if (child.Traverse(buffer, endCount)) return true; // abort, we are done;
+                var (count, done) = buffer.Add(child);
+                if ( done || count >= endCount) return true; // abort, we are done
+                if (child.CompleteBufferFillTraverse(buffer, endCount)) return true; // abort, we are done;
             }
             return false; //finished all items with no aborts
         }

@@ -73,26 +73,34 @@ namespace ModelGraph.Core
 
         #region RefreshViewList  ==============================================
         // Runs on a background thread invoked by the ModelTreeControl 
+        private int _viewSize = 20; // number of viewable lines in UI window
+        private int _bufferEndCount; // specify how deep should we go into the fully flattend model tree hierarchy
+        private CircularBuffer<LineModel> _buffer = new CircularBuffer<LineModel>(1);
         private int _fullyFlattenedSize; // flattened tree hierachy length (from the last full traversal)
-        private int _bufferStartIndex; // start index into the fully flattend model tree hierarchy
-        private List<LineModel> _bufferList = new List<LineModel>(100); //flat list view buffer, 3 x number of visible lines (function of UI-Window height)
-        private int _viewStartIndex; // start index into the bufferList
-        private int _viewSize; // number of viewable lines in UI window
         private LineModel _selectModel; //the UI is now or will be forced to be focused on this model
-        public (List<LineModel>, LineModel) GetCurrentView() => (_bufferList.GetRange(_viewStartIndex, _viewSize), _selectModel);
+        public (List<LineModel>, LineModel) GetCurrentView(LineModel startingModel)
+        {
+            var list = _buffer.GetList();
+            var index = list.IndexOf(startingModel);
+            if (index < 0)
+                index = 0;
+            else if (index + _viewSize > list.Count)
+                index = list.Count - _viewSize;
+            if (!list.Contains(_selectModel))
+                _selectModel = list[index];
+            return (list.GetRange(index, _viewSize), _selectModel);
+        }
 
         public void RefreshViewList(LineModel select, int viewSize, int scroll = 0, ChangeType change = ChangeType.NoChange)
         {
             _selectModel = select;
             _viewSize = viewSize;
 
-            var cap = viewSize * 3; // my buffer size = 3 x number of visible lines (from UI window height)
-            if (cap > _bufferList.Capacity) _bufferList.Capacity = cap;
-
             if (ChildDelta != DataChef.ChildDelta) //anything added/moved/removed/linked/unlinked in dataChef
             {
                 ChildDelta = DataChef.ChildDelta;
             }
+            _buffer = new CircularBuffer<LineModel>(_viewSize * 3)
 
             //    if (capacity > 0)
             //    {
