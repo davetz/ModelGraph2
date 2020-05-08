@@ -14,7 +14,24 @@ namespace ModelGraph.Core
 
         internal override (bool anyChange, int flatCount) Validate()
         {
-            return (false, 0);
+            bool anyChange = Count != 5;
+            if (Count == 5) return (true, 5);
+            {
+                new X623_MetaViewXViewListModel(this, Item);
+                new X642_MetaEnumListModel(this, Item);
+                new X643_MetaTableListModel(this, Item);
+                new X644_MetaGraphListModel(this, Item);
+                new X740_InternalStoreListModel(this, Item);
+            }
+
+            var flatCount = Count;
+            foreach (var child in Items)
+            {
+                var (childChanged, childFlatCount) = child.Validate();
+                anyChange |= childChanged;
+                flatCount += childFlatCount;
+            }
+            return (anyChange, flatCount);
         }
     }
 }
