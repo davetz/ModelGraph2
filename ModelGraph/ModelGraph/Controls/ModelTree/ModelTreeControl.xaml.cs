@@ -32,7 +32,7 @@ namespace ModelGraph.Controls
         async System.Threading.Tasks.Task PostRefreshViewListAsync(LineModel m, int s = 0, ChangeType c = ChangeType.NoChange)
         {
             ResetCacheDelta(m);
-            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => { _root.RefreshViewList(m, ViewSize, s, c); });
+            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => { _root.RefreshViewList(m, c); });
             Refresh();
         }
         #endregion
@@ -454,9 +454,8 @@ namespace ModelGraph.Controls
             //if (ViewIsNotReady()) return;
             //if (_viewList is null) return;
             //if (_root.IsChanged) RefreshRoot();
-            (viewList, select) = _root.GetCurrentView();
-            _viewList.Clear();
-            _viewList.AddRange(viewList);
+            var (viewList, select) = _root.GetCurrentView(ViewSize, null, null, null, 0);
+            _viewList = viewList;
             _selectModel = select;
 
             _pointWheelEnabled = false;

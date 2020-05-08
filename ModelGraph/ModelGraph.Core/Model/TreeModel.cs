@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Shapes;
 
 namespace ModelGraph.Core
@@ -16,10 +14,11 @@ namespace ModelGraph.Core
         public string TitleName => DataChef.TitleName;
         public string TitleSummary => DataChef.TitleSummary;
 
-        internal Dictionary<LineModel, FilterSort> LineModel_FilterSort = new Dictionary<LineModel, FilterSort>();
+        internal LineModel ModelTreeRoot => Items[0];
+        internal Dictionary<LineModel, string> LineModel_FilterSort = new Dictionary<LineModel, string>();
 
         #region Constructor  ==================================================
-        internal TreeModel(Chef chef) // invoked within RootTreeModel constructor
+        internal TreeModel(Chef chef) //==================================== invoked in the RootTreeModel constructor
         {
             Owner = Item = chef;
             ControlType = ControlType.PrimaryTree;
@@ -27,9 +26,9 @@ namespace ModelGraph.Core
             chef.Add(this);
 
             Add(new X612_DataChefModel(this, chef));
-            RefreshViewList(null, 5, 0, ChangeType.NoChange);
+            RefreshViewList(null, ChangeType.NoChange);
         }
-        internal TreeModel(RootTreeModel rootModel, Chef chef, IdKey childId) // created by the TreeRootModel
+        internal TreeModel(RootTreeModel rootModel, Chef chef, IdKey childId) //======== created by the TreeRootModel
         {
             Owner = rootModel;
             Item = chef;
@@ -71,37 +70,90 @@ namespace ModelGraph.Core
         }
         #endregion
 
+        #region GetCurrentView  ===============================================
+        private int _bufferSize;
+        private CircularBuffer<LineModel> _buffer;
+        private bool _bufferIsNotAtEndOfList;
+        /// <summary>We are scrolling back and forth in the flattened model hierarchy</summary>
+        public (List<LineModel>, LineModel) GetCurrentView(int viewSize, LineModel selectModel, LineModel topModel, LineModel endModel, int scroll)
+        {
+            bool invalidTopModel = (topModel is null) || topModel.IsInvalid;
+            bool invalidEndModel = (endModel is null) || endModel.IsInvalid;
+            bool invalidSelectModel = (selectModel is null) || selectModel.IsInvalid;
+
+            var size = viewSize * 3;
+            if (_buffer is null || size > _bufferSize)
+            {
+                _bufferSize = size;
+                if (invalidTopModel)
+                    _buffer = new CircularBuffer<LineModel>(size, size);
+                else
+                    _buffer = new CircularBuffer<LineModel>(size, topModel);
+
+                _bufferIsNotAtEndOfList = ModelTreeRoot.BufferFillingTraversal(_buffer);
+            }
+
+            var list = _buffer.GetList();
+
+            if (list.Count == 0) 
+                return (list, null);
+
+            if (invalidTopModel || invalidEndModel) 
+                return (list.Count < viewSize) ? (list, list[0]) : (list.GetRange(0, viewSize), list[0]);
+
+            var index = list.IndexOf(topModel);
+            if (index < 0)
+                return (list.Count < viewSize) ? (list, list[0]) : (list.GetRange(0, viewSize), list[0]);
+
+            index += scroll;
+
+            if (index < 0)
+            {
+                var top = list[0];
+                _buffer.SetTargetItem(top);
+                _bufferIsNotAtEndOfList = ModelTreeRoot.BufferFillingTraversal(_buffer);
+
+                list = _buffer.GetList();
+                index = list.IndexOf(topModel) + scroll;
+                if (index < 0)
+                    return (list.Count < viewSize) ? (list, list[0]) : (list.GetRange(0, viewSize), list[0]);
+
+                var temp1 = list.GetRange(index, viewSize);
+                if (!invalidSelectModel && temp1.Contains(selectModel))
+                    return (temp1, selectModel);
+                return (temp1, temp1[0]);
+            }
+            else if (index > list.Count && _bufferIsNotAtEndOfList)
+            {
+                var end = list[list.Count - 1];
+                _buffer.SetTargetItem(end);
+                _bufferIsNotAtEndOfList = ModelTreeRoot.BufferFillingTraversal(_buffer);
+
+                list = _buffer.GetList();
+                var temp2 = list.GetRange(index, viewSize);
+                if (!invalidSelectModel && temp2.Contains(selectModel))
+                    return (temp2, selectModel);
+                return (temp2, temp2[0]);
+            }
+
+            index = list.IndexOf(topModel) + scroll;
+            if (index < 0)
+                return (list.Count < viewSize) ? (list, list[0]) : (list.GetRange(0, viewSize), list[0]);
+
+            var temp3 = list.GetRange(index, viewSize);
+            if (!invalidSelectModel && temp3.Contains(selectModel))
+                return (temp3, selectModel);
+            return (temp3, temp3[0]);
+        }
+        #endregion
+
         #region RefreshViewList  ==============================================
         // Runs on a background thread invoked by the ModelTreeControl 
-        private int _viewSize = 20; // number of viewable lines in UI window
-        private int _bufferEndCount; // specify how deep should we go into the fully flattend model tree hierarchy
-        private CircularBuffer<LineModel> _buffer = new CircularBuffer<LineModel>(1);
         private int _fullyFlattenedSize; // flattened tree hierachy length (from the last full traversal)
         private LineModel _selectModel; //the UI is now or will be forced to be focused on this model
-        public (List<LineModel>, LineModel) GetCurrentView(LineModel startingModel)
+
+        public void RefreshViewList(LineModel select, ChangeType change = ChangeType.NoChange)
         {
-            var list = _buffer.GetList();
-            var index = list.IndexOf(startingModel);
-            if (index < 0)
-                index = 0;
-            else if (index + _viewSize > list.Count)
-                index = list.Count - _viewSize;
-            if (!list.Contains(_selectModel))
-                _selectModel = list[index];
-            return (list.GetRange(index, _viewSize), _selectModel);
-        }
-
-        public void RefreshViewList(LineModel select, int viewSize, int scroll = 0, ChangeType change = ChangeType.NoChange)
-        {
-            _selectModel = select;
-            _viewSize = viewSize;
-
-            if (ChildDelta != DataChef.ChildDelta) //anything added/moved/removed/linked/unlinked in dataChef
-            {
-                ChildDelta = DataChef.ChildDelta;
-            }
-            _buffer = new CircularBuffer<LineModel>(_viewSize * 3)
-
             //    if (capacity > 0)
             //    {
             //        var first = IModel.FirstValidModel(viewList);
@@ -173,34 +225,9 @@ namespace ModelGraph.Core
         }
         #endregion
 
-        #region TraverseModelHierarchy  =======================================
-        private void TraverseModelHierarchy()
-        {
-            var bufferCap = _bufferList.Capacity;
-            var startIndex = _bufferStartIndex;
-
-
-        }
-        #endregion
-
-
         #region RequieredMethods  =============================================
         internal override (bool anyChange, int flatCount) Validate() => (false, 0);
         public override (string kind, string name, int count) GetLineParms(Chef chef) => (null, BlankName, 0);
         #endregion
     }
-
-    #region FilterSort  ===================================================
-    internal class FilterSort
-    {
-        internal string FilterSting;
-        internal LineModel Model;
-        internal List<LineModel> ViewModels;
-
-        internal FilterSort(LineModel m)
-        {
-            Model = m;
-        }
-    }
-    #endregion
 }

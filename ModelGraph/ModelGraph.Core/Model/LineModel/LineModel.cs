@@ -90,21 +90,22 @@ namespace ModelGraph.Core
         internal void ClearSortUsageMode() => _modelState &= ~ModelState.SortUsageMode;
         #endregion
 
-        #region CompleteBufferFillTraverse  ===================================
+        #region BufferFillingTraversal  =======================================
         /// <summary>Fill the circular buffer with flattened lineModels, return true if hit end of list</summary>
-        internal bool CompleteBufferFillTraverse(CircularBuffer<LineModel> buffer, int endCount)
+        internal bool BufferFillingTraversal(CircularBuffer<LineModel> buffer)
         {
             foreach (var child in Items)
             {
-                var (count, done) = buffer.Add(child);
-                if ( done || count >= endCount) return true; // abort, we are done
-                if (child.CompleteBufferFillTraverse(buffer, endCount)) return true; // abort, we are done;
+                if (child.IsFilteredOut) continue;
+                if (buffer.Add(child)) return true; // abort, we are done
+                if (child.BufferFillingTraversal(buffer)) return true; // abort, we are done;
             }
             return false; //finished all items with no aborts
         }
         #endregion
 
         #region CommonMethods   ===============================================
+        internal bool IsValidModel => IsValid && Item.IsValid;
         public int FilterCount => GetFilterCount();
         private int GetFilterCount()
         {
@@ -141,16 +142,14 @@ namespace ModelGraph.Core
             }
             throw new Exception("LineModel GetTreeModel() - Encountered a corrupt model hierarchy");
         }
-        public bool HasFilterText => GetTreeModel().LineModel_FilterSort.TryGetValue(this, out FilterSort fs) && !string.IsNullOrWhiteSpace(fs.FilterSting);
-        public string ViewFilter => GetTreeModel().LineModel_FilterSort.TryGetValue(this, out FilterSort fs) ? fs.FilterSting : string.Empty;
+        public bool HasFilterText => GetTreeModel().LineModel_FilterSort.TryGetValue(this, out string fs) && !string.IsNullOrWhiteSpace(fs);
+        public string ViewFilter => GetTreeModel().LineModel_FilterSort.TryGetValue(this, out string fs) ? fs : string.Empty;
         public virtual void ClearViewFilter() => GetTreeModel().LineModel_FilterSort.Remove(this);
-        public void UpdateViewFilter(string text) 
+        public void UpdateViewFilter(string text)
         {
             var lineModel_FilterSort = GetTreeModel().LineModel_FilterSort;
-            FilterSort fs;
-            if (!lineModel_FilterSort.TryGetValue(this, out fs))
-                fs = new FilterSort(this);
-            fs.FilterSting = text;
+            
+            lineModel_FilterSort[this] = text;
         }
         #endregion
 
