@@ -55,6 +55,8 @@ namespace ModelGraph.Controls
         #region Fields  =======================================================
         Chef _chef;
         TreeModel _root;
+        LineModel _topModel;
+        LineModel _endModel;
         LineModel _selectModel;
         List<LineModel> _viewList = new List<LineModel>();
         List<LineCommand> _menuCommands = new List<LineCommand>();
@@ -454,14 +456,23 @@ namespace ModelGraph.Controls
             //if (ViewIsNotReady()) return;
             //if (_viewList is null) return;
             //if (_root.IsChanged) RefreshRoot();
-            var (viewList, select) = _root.GetCurrentView(ViewSize, null, null, null, 0);
+            
+            var (viewList, select) = _root.GetCurrentView(ViewSize, _selectModel, _topModel, _endModel, 0);
             _viewList = viewList;
             _selectModel = select;
 
             _pointWheelEnabled = false;
 
             var N = _viewList.Count;
+            _topModel = (N > 0) ? _viewList[0] : null;
+            _endModel = (N > 0) ? _viewList[N - 1] : null;
+
             ValidateCache(N);
+
+            if (N > 0)
+            {
+                _topModel = _viewList[0];
+            }
 
             for (int i = 0; i < N; i++)
             {

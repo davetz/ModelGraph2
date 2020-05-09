@@ -40,7 +40,7 @@ namespace ModelGraph.Controls
         #region ValidateCache  ================================================
         void ValidateCache(int M) // M == _viewList.Count
         {
-            if (M == 0 || M > _viewList.Count) return;
+            if (M == 0) return;
 
             ValidateCacheSize();
 
@@ -230,7 +230,7 @@ namespace ModelGraph.Controls
             obj.Text = kind;
             obj.CanDrag = model.CanDrag;
             obj.AllowDrop = true;
-            obj.DataContext = model;
+            //obj.DataContext = model;
 
             _stackPanelCache[index].Children.Add(obj);
         }
@@ -243,7 +243,7 @@ namespace ModelGraph.Controls
                 obj.DragOver -= ItemName_DragOver;
                 obj.Drop -= ItemName_Drop;
                 obj.PointerEntered -= ItemName_PointerEntered;
-                obj.DataContext = null;
+                //obj.DataContext = null;
 
                 _itemKindCache[index] = null;
             }
@@ -268,7 +268,7 @@ namespace ModelGraph.Controls
             obj.Text = name;
             obj.CanDrag = model.CanDrag;
             obj.AllowDrop = true;
-            obj.DataContext = model;
+            //obj.DataContext = model;
 
             _stackPanelCache[index].Children.Add(obj);
         }
@@ -281,7 +281,7 @@ namespace ModelGraph.Controls
                 obj.DragOver -= ItemName_DragOver;
                 obj.Drop -= ItemName_Drop;
                 obj.PointerEntered -= ItemName_PointerEntered;
-                obj.DataContext = null;
+                //obj.DataContext = null;
 
                 _itemNameCache[index] = null;
             }
@@ -300,7 +300,7 @@ namespace ModelGraph.Controls
             }
 
             obj.Text = "";//_root.ModelInfo;
-            obj.DataContext = model;
+            //obj.DataContext = model;
 
             _stackPanelCache[index].Children.Add(obj);
         }
@@ -309,7 +309,7 @@ namespace ModelGraph.Controls
             var obj = _itemInfoCache[index];
             if (obj != null)
             {
-                obj.DataContext = null;
+                //obj.DataContext = null;
 
                 _itemInfoCache[index] = null;
             }
@@ -353,7 +353,7 @@ namespace ModelGraph.Controls
             }
 
             obj.Text = " ";
-            obj.DataContext = model;
+            //obj.DataContext = model;
             obj.MinWidth = model.Depth * _levelIndent;
 
             _stackPanelCache[index].Children.Add(obj);
@@ -363,7 +363,7 @@ namespace ModelGraph.Controls
             var obj = _indentTreeCache[index];
             if (obj != null)
             {
-                obj.DataContext = null;
+                //obj.DataContext = null;
 
                 _indentTreeCache[index] = null;
             }
@@ -394,7 +394,7 @@ namespace ModelGraph.Controls
                 obj.Text = " ";
             }
 
-            obj.DataContext = model;
+            //obj.DataContext = model;
 
             _stackPanelCache[index].Children.Add(obj);
         }
@@ -406,7 +406,7 @@ namespace ModelGraph.Controls
                 obj.PointerExited -= TextBlockHightlight_PointerExited;
                 obj.PointerEntered -= TextBlockHighlight_PointerEntered;
                 obj.PointerReleased -= ExpandTree_PointerReleased;
-                obj.DataContext = null;
+                //obj.DataContext = null;
 
                 _expandLeftCache[index] = null;
             }
@@ -429,7 +429,7 @@ namespace ModelGraph.Controls
             }
 
             obj.Text = model.IsExpandedRight ? _rightIsExtended : _rightCanExtend;
-            obj.DataContext = model;
+            //obj.DataContext = model;
 
             _stackPanelCache[index].Children.Add(obj);
         }
@@ -441,7 +441,7 @@ namespace ModelGraph.Controls
                 obj.PointerExited -= TextBlockHightlight_PointerExited;
                 obj.PointerEntered -= TextBlockHighlight_PointerEntered;
                 obj.PointerReleased -= ExpandChoice_PointerReleased;
-                obj.DataContext = null;
+                //obj.DataContext = null;
 
                 _expandRightCache[index] = null;
             }
@@ -465,7 +465,7 @@ namespace ModelGraph.Controls
                     obj.PointerReleased += SortMode_PointerReleased;
                     ToolTipService.SetToolTip(obj, _sortModeTip);
                 }
-                obj.DataContext = model;
+                //obj.DataContext = model;
                 obj.Text = model.IsSortAscending ?
                     _sortAscending : (model.IsSortDescending ? _sortDescending : _sortNone);
 
@@ -473,7 +473,7 @@ namespace ModelGraph.Controls
             }
             else if (obj != null)
             {
-                obj.DataContext = null; // needed for "S" keyboard shortcut (TailButton)
+                //obj.DataContext = null; // needed for "S" keyboard shortcut (TailButton)
             }
         }
         private void ClearSortMode(int index)
@@ -484,7 +484,7 @@ namespace ModelGraph.Controls
                 obj.PointerExited -= TextBlockHightlight_PointerExited;
                 obj.PointerEntered -= TextBlockHighlight_PointerEntered;
                 obj.PointerReleased -= SortMode_PointerReleased;
-                obj.DataContext = null;
+                //obj.DataContext = null;
 
                 obj = _sortModeCache[index] = null;
             }
@@ -507,7 +507,7 @@ namespace ModelGraph.Controls
                     obj.PointerReleased += UsageMode_PointerReleased;
                     ToolTipService.SetToolTip(obj, _usageModeTip);
                 }
-                obj.DataContext = model;
+                //obj.DataContext = model;
                 obj.Text = model.IsUsedFilter ?
                     _usageIsUsed : (model.IsNotUsedFilter ? _usageIsNotUsed : _usageAll);
 
@@ -515,7 +515,7 @@ namespace ModelGraph.Controls
             }
             else if (obj != null)
             {
-                obj.DataContext = null; // needed for "U" keyboard shortcut (TailButton)
+                //obj.DataContext = null; // needed for "U" keyboard shortcut (TailButton)
             }
         }
         private void ClearUsageMode(int index)
@@ -526,7 +526,7 @@ namespace ModelGraph.Controls
                 obj.PointerExited -= TextBlockHightlight_PointerExited;
                 obj.PointerEntered -= TextBlockHighlight_PointerEntered;
                 obj.PointerReleased -= UsageMode_PointerReleased;
-                obj.DataContext = null;
+                //obj.DataContext = null;
 
                 _usageModeCache[index] = null;
             }
@@ -550,14 +550,14 @@ namespace ModelGraph.Controls
                     ToolTipService.SetToolTip(obj, _filterExpandTip);
                 }
 
-                obj.DataContext = model;
+                //obj.DataContext = model;
                 obj.Text = model.IsFilterVisible ? _filterIsShowing : _filterCanShow;
 
                 _stackPanelCache[index].Children.Add(obj);
             }
             else if (obj != null)
             {
-                obj.DataContext = null; // needed for "F" keyboard shortcut (TailButton)
+                //obj.DataContext = null; // needed for "F" keyboard shortcut (TailButton)
             }
         }
         private void ClearFilterMode(int index)
@@ -568,7 +568,7 @@ namespace ModelGraph.Controls
                 obj.PointerExited -= TextBlockHightlight_PointerExited;
                 obj.PointerEntered -= TextBlockHighlight_PointerEntered;
                 obj.PointerReleased -= FilterMode_PointerReleased;
-                obj.DataContext = null;
+                //obj.DataContext = null;
 
                 _filterModeCache[index] = null;
             }
@@ -588,7 +588,7 @@ namespace ModelGraph.Controls
                 ToolTipService.SetToolTip(obj, _filterTextTip);
             }
 
-            obj.DataContext = model;
+            //obj.DataContext = model;
             var str = string.IsNullOrWhiteSpace(model.ViewFilter) ? string.Empty : model.ViewFilter;
             obj.Text = str;
             obj.Tag = str; //save an initial (unmodified) version of the view filter text
@@ -602,7 +602,7 @@ namespace ModelGraph.Controls
             {
                 obj.KeyDown -= FilterText_KeyDown;
                 obj.Tag = null;
-                obj.DataContext = null;
+                //obj.DataContext = null;
 
                 _filterTextCache[index] = null;
             }
@@ -657,8 +657,8 @@ namespace ModelGraph.Controls
                 bdr.Child = obj;
             }
 
-            bdr.DataContext = model;
-            obj.DataContext = model;
+            //bdr.DataContext = model;
+            //obj.DataContext = model;
             obj.Text = name;
 
             _stackPanelCache[index].Children.Add(bdr);
@@ -671,8 +671,8 @@ namespace ModelGraph.Controls
             {
                 bdr.PointerEntered -= PropertyBorder_PointerEntered;
                 obj.PointerEntered -= ItemName_PointerEntered;
-                bdr.DataContext = null;
-                obj.DataContext = null;
+                //bdr.DataContext = null;
+                //obj.DataContext = null;
 
                 _propertyNameCache[index] = null;
                 _propertyBorderCache[index] = null;
@@ -694,7 +694,7 @@ namespace ModelGraph.Controls
                 obj.GotFocus += TextProperty_GotFocus;
             }
 
-            obj.DataContext = model;
+            //obj.DataContext = model;
             var txt = model.GetTextValue(_chef);
             obj.Text = txt ?? string.Empty;
             obj.Tag = obj.Text;
@@ -712,7 +712,7 @@ namespace ModelGraph.Controls
                 obj.GotFocus -= TextProperty_GotFocus;
                 obj.LostFocus -= TextProperty_LostFocus;
                 obj.Tag = null;
-                obj.DataContext = null;
+                //obj.DataContext = null;
 
                 _textPropertyCache[index] = null;
             }
@@ -734,7 +734,7 @@ namespace ModelGraph.Controls
                 obj.KeyDown += Check_KeyDown;
             }
 
-            obj.DataContext = model;
+            //obj.DataContext = model;
             obj.IsChecked = model.GetBoolValue(_chef);
 
             _stackPanelCache[index].Children.Add(obj);
@@ -748,7 +748,7 @@ namespace ModelGraph.Controls
                 obj.Checked -= CheckProperty_Checked;
                 obj.Unchecked -= CheckProperty_Checked;
                 obj.KeyDown -= Check_KeyDown;
-                obj.DataContext = null;
+                //obj.DataContext = null;
 
                 _checkPropertyCache[index] = null;
             }
@@ -769,7 +769,7 @@ namespace ModelGraph.Controls
                 obj.KeyDown += ComboProperty_KeyDown;
             }
 
-            obj.DataContext = model;
+            //obj.DataContext = model;
             obj.ItemsSource = model.GetlListValue(_chef);
             obj.SelectedIndex = model.GetIndexValue(_chef);
 
@@ -783,7 +783,7 @@ namespace ModelGraph.Controls
                 obj.SelectionChanged -= ComboProperty_SelectionChanged;
                 obj.GotFocus -= ComboProperty_GotFocus;
                 obj.KeyDown -= ComboProperty_KeyDown;
-                obj.DataContext = null;
+                //obj.DataContext = null;
                 obj.ItemsSource = null;
 
                 _comboPropertyCache[index] = null;
@@ -811,7 +811,7 @@ namespace ModelGraph.Controls
             }
 
             obj.Tag = error;
-            obj.DataContext = model;
+            //obj.DataContext = model;
 
             _stackPanelCache[index].Children.Add(obj);
         }
@@ -823,7 +823,7 @@ namespace ModelGraph.Controls
                 obj.PointerExited -= TextBlockHightlight_PointerExited;
                 obj.PointerEntered -= TextBlockHighlight_PointerEntered;
                 obj.PointerReleased -= ExpandChoice_PointerReleased;
-                obj.DataContext = null;
+                //obj.DataContext = null;
 
                 _itemHasErrorCache[index] = null;
             }
@@ -843,7 +843,7 @@ namespace ModelGraph.Controls
                 obj.PointerEntered += ModelIdentity_PointerEntered;
             }
 
-            obj.DataContext = model;
+            //obj.DataContext = model;
 
             _stackPanelCache[index].Children.Add(obj);
         }
@@ -853,7 +853,7 @@ namespace ModelGraph.Controls
             if (obj != null)
             {
                 obj.PointerEntered -= ModelIdentity_PointerEntered;
-                obj.DataContext = null;
+                //obj.DataContext = null;
 
                 _modelIdentityCache[index] = null;
             }

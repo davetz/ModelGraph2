@@ -19,7 +19,7 @@ namespace ModelGraph.Core
             Owner = owner;
             Depth = (byte)(owner.Depth + 1);
 
-            owner.Add(this);
+            owner.CovertAdd(this);
         }
         #endregion
 
@@ -153,12 +153,12 @@ namespace ModelGraph.Core
         }
         #endregion
 
-        #region RequiredMethods  ==============================================
-        internal abstract (bool anyChange, int flatCount) Validate();
-        public abstract (string kind, string name, int count) GetLineParms(Chef chef);
-        #endregion
-
         #region Virtual Functions  ============================================
+        public virtual (string kind, string name, int count) GetLineParms(Chef chef)
+        {
+            var (kind, name) = GetKindNameId(chef);
+            return (kind, name, Count);
+        }
         public byte ItemDelta => (byte)(Item.ChildDelta + Item.ModelDelta);
         public virtual bool CanDrag => false;
         public virtual bool CanSort => false;
@@ -181,8 +181,20 @@ namespace ModelGraph.Core
 
         public virtual Error TryGetError(Chef chef) => default;
 
-
         public virtual string GetModelIdentity() =>  $"{IdKey}  ({ItemKey:X3})";
+
+
+        internal virtual bool ToggleLeft() => false;
+        internal virtual bool ToggleRight() => false;
+        internal virtual bool Validate(Dictionary<Item, LineModel> prev)
+        {
+            var anyChange = false;
+            foreach (var child in Items)
+            {
+                anyChange |= child.Validate(prev);
+            }
+            return anyChange;
+        }
         #endregion
     }
 }

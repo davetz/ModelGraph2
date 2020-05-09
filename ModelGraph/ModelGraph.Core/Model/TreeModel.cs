@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Windows.UI.Xaml.Shapes;
+using Windows.Media.Devices.Core;
 
 namespace ModelGraph.Core
 {
@@ -21,8 +21,8 @@ namespace ModelGraph.Core
         internal TreeModel(Chef chef) //==================================== invoked in the RootTreeModel constructor
         {
             Owner = Item = chef;
+            Depth = 254;
             ControlType = ControlType.PrimaryTree;
-
             chef.Add(this);
 
             Add(new X612_DataChefModel(this, chef));
@@ -30,18 +30,19 @@ namespace ModelGraph.Core
         }
         internal TreeModel(RootTreeModel rootModel, Chef chef, IdKey childId) //======== created by the TreeRootModel
         {
-            Owner = rootModel;
             Item = chef;
+            Owner = rootModel;
+            Depth = 255;
             ControlType = ControlType.PartialTree;
 
             chef.Add(this);
             switch (childId)
             {
                 case IdKey.MetadataRootModel:
-                    new X623_MetadataRootModel(this, chef);
+                    new X623_MetaRootModel(this, chef);
                     break;
                 case IdKey.ModelingRootModel:
-                    new X623_MetadataRootModel(this, chef);
+                    new X623_MetaRootModel(this, chef);
                     break;
                 case IdKey.ChangeRootModel:
                     new X622_ChangeRootModel(this, chef);
@@ -74,6 +75,7 @@ namespace ModelGraph.Core
         private int _bufferSize;
         private CircularBuffer<LineModel> _buffer;
         private bool _bufferIsNotAtEndOfList;
+        private bool _modelTreeChanged;
         /// <summary>We are scrolling back and forth in the flattened model hierarchy</summary>
         public (List<LineModel>, LineModel) GetCurrentView(int viewSize, LineModel selectModel, LineModel topModel, LineModel endModel, int scroll)
         {
@@ -82,8 +84,10 @@ namespace ModelGraph.Core
             bool invalidSelectModel = (selectModel is null) || selectModel.IsInvalid;
 
             var size = viewSize * 3;
-            if (_buffer is null || size > _bufferSize)
+            if (_modelTreeChanged || _buffer is null || size > _bufferSize)
             {
+                _modelTreeChanged = false;
+
                 _bufferSize = size;
                 if (invalidTopModel)
                     _buffer = new CircularBuffer<LineModel>(size, size);
@@ -94,6 +98,8 @@ namespace ModelGraph.Core
             }
 
             var list = _buffer.GetList();
+            if (list.Count < viewSize)
+                return (list, selectModel);
 
             if (list.Count == 0) 
                 return (list, null);
@@ -149,84 +155,40 @@ namespace ModelGraph.Core
 
         #region RefreshViewList  ==============================================
         // Runs on a background thread invoked by the ModelTreeControl 
-        private int _fullyFlattenedSize; // flattened tree hierachy length (from the last full traversal)
-        private LineModel _selectModel; //the UI is now or will be forced to be focused on this model
-
         public void RefreshViewList(LineModel select, ChangeType change = ChangeType.NoChange)
         {
-            //    if (capacity > 0)
-            //    {
-            //        var first = IModel.FirstValidModel(viewList);
-            //        var start = (first == null);
-            //        var previous = new List<IModel>();
-            //        var modelStack = new TreeModelStack();
+            var invalidSelect = select is null || select.IsInvalid;
 
-            //        UpdateSelectModel(select, change);
+            if (!invalidSelect)
+            {
+                switch (change)
+                {
+                    case ChangeType.NoChange:
+                        break;
+                    case ChangeType.GoToEnd:
+                        break;
+                    case ChangeType.GoToHome:
+                        break;
+                    case ChangeType.ToggleLeft:
+                        _modelTreeChanged |= select.ToggleLeft();
+                        break;
+                    case ChangeType.ToggleRight:
+                        _modelTreeChanged |= select.ToggleRight();
+                        break;
+                    case ChangeType.ToggleFilter:
+                        break;
+                    case ChangeType.FilterSortChanged:
+                        break;
+                }
+            }
+            var prev = new Dictionary<Item, LineModel>();
+            _modelTreeChanged |= ModelTreeRoot.Validate(prev);
 
-            //        if (root.IsForcedRefresh)
-            //        {
-            //            modelStack.PushRoot(root);
-            //        }
-            //        else
-            //        {
-            //            if (root.ChildModelCount == 0)
-            //            {
-            //                root.Validate(previous);
-            //                root.ViewModels = root.ChildModels;
-            //            }
-            //            modelStack.PushChildren(root);
-            //        }
-
-            //        var S = (scroll < 0) ? -scroll : scroll;
-            //        var N = capacity;
-            //        var buffer = new CircularBuffer(N, S);
-
-            //        #region GoTo<End,Home>  =======================================
-            //        if ((change == ChangeType.GoToEnd || change == ChangeType.GoToHome) && offset >= 0 && first != null)
-            //        {
-            //            var pm = select.ParentModel;
-            //            var ix = pm.GetChildlIndex(select);
-            //            var last = pm.ChildModelCount - 1;
-
-            //            if (change == ChangeType.GoToEnd)
-            //            {
-            //                if (ix < last)
-            //                {
-            //                    select = pm.ViewModels[last];
-            //                    if (!viewList.Contains(select)) FindFirst();
-            //                }
-            //            }
-            //            else
-            //            {
-            //                if (ix > 0)
-            //                {
-            //                    select = pm.ViewModels[0];
-            //                    if (!viewList.Contains(select)) FindFirst();
-            //                }
-            //            }
-            //            root.SelectModel = select;
-
-            //            void FindFirst()
-            //            {
-            //                first = select;
-            //                var absoluteFirst = root.ViewModels[0];
-
-            //                for (; offset > 0; offset--)
-            //                {
-            //                    if (first == absoluteFirst) break;
-
-            //                    var p = first.ParentModel;
-            //                    var i = p.GetChildlIndex(first);
-
-            //                    first = (i > 0) ? p.ViewModels[i - 1] : p;
-            //                }
-            //            }
-
+            if (_modelTreeChanged) PageControl?.Refresh();
         }
         #endregion
 
-        #region RequieredMethods  =============================================
-        internal override (bool anyChange, int flatCount) Validate() => (false, 0);
+        #region OverrideMethods  ==============================================
         public override (string kind, string name, int count) GetLineParms(Chef chef) => (null, BlankName, 0);
         #endregion
     }

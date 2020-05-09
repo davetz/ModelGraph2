@@ -30,14 +30,6 @@ namespace ModelGraph.Core
         public virtual void PostSetValue(Chef chef, bool val) { }
         public virtual void PostSetValue(Chef chef, string val) { }
 
-        internal override (bool anyChange, int flatCount) Validate() => (false, 0);
-
-        public override (string kind, string name, int count) GetLineParms(Chef chef)
-        {
-            var (kind, name) = GetKindNameId(chef);
-            return (kind, name, 0);
-        }
-
         public override (string, string) GetKindNameId(Chef chef)
         {
             var name = Property.GetSingleNameId(chef);

@@ -30,10 +30,13 @@ namespace ModelGraph.Core
             }
         }
 
+        // Covert  ============================================================
+        internal void CovertAdd(T item) => _items.Add(item);
+        internal void CovertClear() => _items.Clear();
+
         // Add  =============================================================
         internal void Add(T item)
         {
-            if (_items is null) return;
             _items.Add(item);
             UpdateDelta();
         }
@@ -42,7 +45,6 @@ namespace ModelGraph.Core
         // Remove  ==========================================================
         internal void Remove(T item)
         {
-            if (_items is null) return;
             _items.Remove(item);
             UpdateDelta();
         }
@@ -52,32 +54,23 @@ namespace ModelGraph.Core
         {
             IsDiscarded = true;
             DiscardChildren();
-            _items = null;
-            UpdateDelta();
         }
         // DiscardChildren  ===================================================
         /// <summary>Recursivly discard all child Items</summary>
         internal override void DiscardChildren()
         {
-            if (_items is null) return;
-
             foreach (var item in _items)
             {
-                if (item is Store sto) 
-                    sto.Discard();
-                else
-                    item.IsDiscarded = true;
+                item.IsDiscarded = true;
+                if (item is Store sto) sto.DiscardChildren();
             }
             _items.Clear();
-            UpdateDelta();
         }
         public override void Remove(Item item) => Remove(Cast(item));
 
         // Insert  ============================================================
         internal void Insert(T item, int index)
         {
-            if (_items is null) return;
-
             var i = (index < 0) ? 0 : index;
 
             UpdateDelta();
@@ -95,8 +88,6 @@ namespace ModelGraph.Core
         // Move  ==============================================================
         internal void Move(T item, int index)
         {
-            if (_items is null) return;
-
             if (_items.Remove(item))
             {
                 UpdateDelta();
