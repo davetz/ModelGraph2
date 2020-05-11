@@ -1189,7 +1189,7 @@ namespace ModelGraph.Controls
         {
             var obj = sender as ComboBox;
             var mdl = obj.DataContext as PropertyModel;
-            mdl.PostSetValue(_chef, obj.SelectedIndex);
+            //mdl.PostSetValue(_chef, obj.SelectedIndex);
         }
         void ComboProperty_KeyDown(object sender, Windows.UI.Xaml.Input.KeyRoutedEventArgs e)
         {

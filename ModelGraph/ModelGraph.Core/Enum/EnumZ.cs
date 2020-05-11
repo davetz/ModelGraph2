@@ -17,12 +17,21 @@ namespace ModelGraph.Core
         #endregion
 
         #region GetEnumIndex  ================================================
-        int GetEnumIndex(Chef chef, string name)
+        internal int GetEnumIndex(Chef chef, string name)
         {
             for (int i = 0; i < Count; i++)
             {
                 var pz = Items[i];
                 if (name == pz.GetSingleNameId(chef)) return i;
+            }
+            return 0;
+        }
+        internal int GetEnumIndex(Chef chef, int key)
+        {
+            for (int i = 0; i < Count; i++)
+            {
+                var pz = Items[i];
+                if (key == (int)(pz.IdKey & IdKey.EnumMask)) return i;
             }
             return 0;
         }
@@ -40,7 +49,7 @@ namespace ModelGraph.Core
         #endregion
 
         #region GetEnumNames  ================================================
-        string[] GetEnumNames(Chef chef)
+        internal string[] GetEnumNames(Chef chef)
         {
             var s = new string[Count];
 
