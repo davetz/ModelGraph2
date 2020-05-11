@@ -14,6 +14,8 @@ namespace ModelGraph.Core
 
         internal string Separator = DefaultSeparator;
 
+        internal override State State { get; set; }
+
         internal CompuType CompuType; // type of computation
 
         #region Constructors  =================================================

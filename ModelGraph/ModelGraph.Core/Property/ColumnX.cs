@@ -10,6 +10,7 @@ namespace ModelGraph.Core
         private string _summary;
         internal override string Description { get => _description; set => _description = value; }
         private string _description;
+        internal override State State { get; set; }
 
         #region Constructors  =================================================
         internal ColumnX(StoreOf<ColumnX> owner, bool autoExpand = false)

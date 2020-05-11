@@ -694,7 +694,7 @@ namespace ModelGraph.Controls
                 obj.GotFocus += TextProperty_GotFocus;
             }
 
-            //obj.DataContext = model;
+            obj.DataContext = model;
             var txt = model.GetTextValue(_chef);
             obj.Text = txt ?? string.Empty;
             obj.Tag = obj.Text;
@@ -712,7 +712,7 @@ namespace ModelGraph.Controls
                 obj.GotFocus -= TextProperty_GotFocus;
                 obj.LostFocus -= TextProperty_LostFocus;
                 obj.Tag = null;
-                //obj.DataContext = null;
+                obj.DataContext = null;
 
                 _textPropertyCache[index] = null;
             }
@@ -734,7 +734,7 @@ namespace ModelGraph.Controls
                 obj.KeyDown += Check_KeyDown;
             }
 
-            //obj.DataContext = model;
+            obj.DataContext = model;
             obj.IsChecked = model.GetBoolValue(_chef);
 
             _stackPanelCache[index].Children.Add(obj);
@@ -748,7 +748,7 @@ namespace ModelGraph.Controls
                 obj.Checked -= CheckProperty_Checked;
                 obj.Unchecked -= CheckProperty_Checked;
                 obj.KeyDown -= Check_KeyDown;
-                //obj.DataContext = null;
+                obj.DataContext = null;
 
                 _checkPropertyCache[index] = null;
             }
@@ -783,7 +783,7 @@ namespace ModelGraph.Controls
                 obj.SelectionChanged -= ComboProperty_SelectionChanged;
                 obj.GotFocus -= ComboProperty_GotFocus;
                 obj.KeyDown -= ComboProperty_KeyDown;
-                //obj.DataContext = null;
+                obj.DataContext = null;
                 obj.ItemsSource = null;
 
                 _comboPropertyCache[index] = null;
@@ -811,7 +811,7 @@ namespace ModelGraph.Controls
             }
 
             obj.Tag = error;
-            //obj.DataContext = model;
+            obj.DataContext = model;
 
             _stackPanelCache[index].Children.Add(obj);
         }
@@ -823,7 +823,7 @@ namespace ModelGraph.Controls
                 obj.PointerExited -= TextBlockHightlight_PointerExited;
                 obj.PointerEntered -= TextBlockHighlight_PointerEntered;
                 obj.PointerReleased -= ExpandChoice_PointerReleased;
-                //obj.DataContext = null;
+                obj.DataContext = null;
 
                 _itemHasErrorCache[index] = null;
             }
@@ -843,7 +843,7 @@ namespace ModelGraph.Controls
                 obj.PointerEntered += ModelIdentity_PointerEntered;
             }
 
-            //obj.DataContext = model;
+            obj.DataContext = model;
 
             _stackPanelCache[index].Children.Add(obj);
         }
@@ -853,7 +853,7 @@ namespace ModelGraph.Controls
             if (obj != null)
             {
                 obj.PointerEntered -= ModelIdentity_PointerEntered;
-                //obj.DataContext = null;
+                obj.DataContext = null;
 
                 _modelIdentityCache[index] = null;
             }

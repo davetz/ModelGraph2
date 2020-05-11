@@ -11,7 +11,7 @@ namespace ModelGraph.Core
         internal virtual bool IsReadonly => false;
         internal virtual bool IsMultiline => false;
 
-        internal virtual string[] GetlListValue(Chef chef, Item item) => new string[0];
+        internal virtual string[] GetlListValue(Chef chef) => new string[0];
         internal virtual int GetIndexValue(Chef chef, Item item) => 0;
 
     }

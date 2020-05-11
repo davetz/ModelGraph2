@@ -21,6 +21,7 @@ namespace ModelGraph.Core
             if (IsExpandedRight) return false;
             var chef = DataChef;
 
+            new X618_CheckPropertyModel(this, Item, chef.Get<Property_ColumnX_IsChoice>());
             new X619_ComboPropertyModel(this, Item, chef.Get<Property_ColumnX_ValueType>());
             new X617_TextPropertyModel(this, Item, chef.Get<Property_Item_Summary>());
             new X617_TextPropertyModel(this, Item, chef.Get<Property_Item_Name>());
