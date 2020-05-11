@@ -3,17 +3,20 @@
  */
     public enum ChangeType
     {
-        NoChange,
-
-        GoToEnd,
-        GoToHome,
-
+        None,
+        OneUp,
+        TwoUp,
+        PageUp,
+        GoToTop,
+        OneDown,
+        TwoDown,
+        PageDown,
+        LastChild,
+        FirstChild,
+        GoToBottom,
         ToggleLeft,
-
         ToggleRight,
-
         ToggleFilter,
-
         FilterSortChanged,
     }
 }

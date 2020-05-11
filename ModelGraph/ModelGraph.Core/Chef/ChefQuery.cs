@@ -454,7 +454,7 @@ namespace ModelGraph.Core
         {
             qx.WhereString = val;
             ValidateQueryDependants(qx);
-            return qx.IsValid;
+            return IsValid(qx);
         }
 
         //= = = = = = = = = = = = = = = = = = = = = = = = = = = =
@@ -463,7 +463,7 @@ namespace ModelGraph.Core
         {
             qx.SelectString = val;
             ValidateQueryDependants(qx);
-            return qx.IsValid;
+            return IsValid(qx);
         }
 
         //= = = = = = = = = = = = = = = = = = = = = = = = = = = =

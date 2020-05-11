@@ -8,8 +8,14 @@ namespace ModelGraph.Core
     {
         internal Property Property;
 
-        internal PropertyModel(LineModel owner, Item item, Property prop) : base(owner, item)
-        {            
+        internal PropertyModel(LineModel owner, Item item, Property prop)
+        {
+            Item = item;
+            Owner = owner;
+            Depth = (byte)(owner.Depth + 1);
+
+            owner.CovertInsert(this);
+
             Property = prop;
         }
 

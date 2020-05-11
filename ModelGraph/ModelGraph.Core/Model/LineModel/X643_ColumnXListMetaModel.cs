@@ -17,15 +17,9 @@ namespace ModelGraph.Core
             return (kind, name, count);
         }
 
-        internal override bool ToggleLeft()
+        internal override bool ExpandLeft()
         {
-            if (IsExpandedLeft)
-            {
-                IsExpandedLeft = false;
-
-                DiscardChildren();
-            }
-            else
+            if (IsExpandedLeft) return false;
             {
                 IsExpandedLeft = true;
 

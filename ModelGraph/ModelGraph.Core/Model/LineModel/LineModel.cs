@@ -105,7 +105,43 @@ namespace ModelGraph.Core
         #endregion
 
         #region CommonMethods   ===============================================
-        internal bool IsValidModel => IsValid && Item.IsValid;
+        internal bool IsValidModel(LineModel m) => !IsInvalidModel(m);
+        internal bool IsInvalidModel(LineModel m) => IsInvalid(m) || IsInvalid(m.Item);
+        internal bool ToggleLeft() => IsExpandedLeft ? CollapseLeft() : ExpandLeft();
+        internal bool ToggleRight() => IsExpandedRight ? CollapseRight() : ExpandRight();
+
+        protected bool CollapseLeft()
+        {
+            IsExpandedLeft = false;
+            IsExpandedRight = false;
+            if (Count == 0) return false;
+
+            DiscardChildren();
+            return true;
+        }
+        protected bool CollapseRight()
+        {
+            var anyChange = false;
+            if (IsExpandedRight)
+            {
+                int N = Count;
+                for (int i = 0; i < N; i++)
+                {
+                    var item = Items[0];
+                    if (item is PropertyModel)
+                    {
+                        anyChange = true;
+                        CovertRemove(item);
+                        item.Discard();
+                    }
+                    else
+                        break;
+                }
+                IsExpandedRight = false;
+            }
+            return anyChange;
+        }
+
         public int FilterCount => GetFilterCount();
         private int GetFilterCount()
         {
@@ -154,6 +190,9 @@ namespace ModelGraph.Core
         #endregion
 
         #region Virtual Functions  ============================================
+        internal virtual bool ExpandLeft() => false;
+        internal virtual bool ExpandRight() => false;
+
         public virtual (string kind, string name, int count) GetLineParms(Chef chef)
         {
             var (kind, name) = GetKindNameId(chef);
@@ -183,9 +222,6 @@ namespace ModelGraph.Core
 
         public virtual string GetModelIdentity() =>  $"{IdKey}  ({ItemKey:X3})";
 
-
-        internal virtual bool ToggleLeft() => false;
-        internal virtual bool ToggleRight() => false;
         internal virtual bool Validate(Dictionary<Item, LineModel> prev)
         {
             var anyChange = false;

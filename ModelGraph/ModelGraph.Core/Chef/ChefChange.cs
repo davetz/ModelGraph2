@@ -239,7 +239,7 @@ namespace ModelGraph.Core
         }
         internal void Undo(ItemUpdated chng)
         {
-            if (chng.Item.IsValid && chng.CanUndo && chng.Property.Value.SetString(chng.Item, chng.OldValue))
+            if (IsValid(chng.Item) && chng.CanUndo && chng.Property.Value.SetString(chng.Item, chng.OldValue))
             {
                 chng.Item.ModelDelta++;
                 chng.IsUndone = true;
@@ -248,7 +248,7 @@ namespace ModelGraph.Core
 
         internal void Redo(ItemUpdated chng)
         {
-            if (chng.Item.IsValid && chng.CanRedo && chng.Property.Value.SetString(chng.Item, chng.NewValue))
+            if (IsValid(chng.Item) && chng.CanRedo && chng.Property.Value.SetString(chng.Item, chng.NewValue))
             {
                 chng.Item.ModelDelta++;
                 chng.IsUndone = false;

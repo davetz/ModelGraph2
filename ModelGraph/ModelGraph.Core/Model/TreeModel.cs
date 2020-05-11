@@ -26,7 +26,6 @@ namespace ModelGraph.Core
             chef.Add(this);
 
             Add(new X612_DataChefModel(this, chef));
-            RefreshViewList(null, ChangeType.NoChange);
         }
         internal TreeModel(RootTreeModel rootModel, Chef chef, IdKey childId) //======== created by the TreeRootModel
         {
@@ -71,109 +70,71 @@ namespace ModelGraph.Core
         }
         #endregion
 
-        #region GetCurrentView  ===============================================
-        private int _bufferSize;
+
+        #region ValidateBuffer  ===============================================
         private CircularBuffer<LineModel> _buffer;
-        private bool _bufferIsNotAtEndOfList;
-        private bool _modelTreeChanged;
-        /// <summary>We are scrolling back and forth in the flattened model hierarchy</summary>
-        public (List<LineModel>, LineModel) GetCurrentView(int viewSize, LineModel selectModel, LineModel topModel, LineModel endModel, int scroll)
+        /// <summary>Ensure buffer is not null and large enough, return false if is a new buffer</summary>
+        private bool ValidateBuffer(int viewSize)
         {
-            bool invalidTopModel = (topModel is null) || topModel.IsInvalid;
-            bool invalidEndModel = (endModel is null) || endModel.IsInvalid;
-            bool invalidSelectModel = (selectModel is null) || selectModel.IsInvalid;
-
             var size = viewSize * 3;
-            if (_modelTreeChanged || _buffer is null || size > _bufferSize)
+            if (_buffer is null || size > _buffer.Size)
             {
-                _modelTreeChanged = false;
-
-                _bufferSize = size;
-                if (invalidTopModel)
-                    _buffer = new CircularBuffer<LineModel>(size, size);
-                else
-                    _buffer = new CircularBuffer<LineModel>(size, topModel);
-
-                _bufferIsNotAtEndOfList = ModelTreeRoot.BufferFillingTraversal(_buffer);
+                _buffer = new CircularBuffer<LineModel>(size, size);
+                return false;
             }
+            return _buffer.Count > 0;
+        }
+        #endregion
+
+        #region GetCurrentView  ===============================================
+        private int GetScaledSize(int viewSize) => viewSize * 3;
+        /// <summary>We are scrolling back and forth in the flattened model hierarchy</summary>
+        public (List<LineModel>, LineModel) GetCurrentView(int viewSize, LineModel selected)
+        {
+            if (!ValidateBuffer(viewSize))
+                ModelTreeRoot.BufferFillingTraversal(_buffer);
 
             var list = _buffer.GetList();
-            if (list.Count < viewSize)
-                return (list, selectModel);
-
-            if (list.Count == 0) 
+            if (list.Count == 0)
                 return (list, null);
 
-            if (invalidTopModel || invalidEndModel) 
-                return (list.Count < viewSize) ? (list, list[0]) : (list.GetRange(0, viewSize), list[0]);
+            if (list.Count > viewSize)
+                list = list.GetRange(0, viewSize);
 
-            var index = list.IndexOf(topModel);
-            if (index < 0)
-                return (list.Count < viewSize) ? (list, list[0]) : (list.GetRange(0, viewSize), list[0]);
+            if (IsInvalidModel(selected) || !list.Contains(selected))
+                selected = list[0];
 
-            index += scroll;
-
-            if (index < 0)
-            {
-                var top = list[0];
-                _buffer.SetTargetItem(top);
-                _bufferIsNotAtEndOfList = ModelTreeRoot.BufferFillingTraversal(_buffer);
-
-                list = _buffer.GetList();
-                index = list.IndexOf(topModel) + scroll;
-                if (index < 0)
-                    return (list.Count < viewSize) ? (list, list[0]) : (list.GetRange(0, viewSize), list[0]);
-
-                var temp1 = list.GetRange(index, viewSize);
-                if (!invalidSelectModel && temp1.Contains(selectModel))
-                    return (temp1, selectModel);
-                return (temp1, temp1[0]);
-            }
-            else if (index > list.Count && _bufferIsNotAtEndOfList)
-            {
-                var end = list[list.Count - 1];
-                _buffer.SetTargetItem(end);
-                _bufferIsNotAtEndOfList = ModelTreeRoot.BufferFillingTraversal(_buffer);
-
-                list = _buffer.GetList();
-                var temp2 = list.GetRange(index, viewSize);
-                if (!invalidSelectModel && temp2.Contains(selectModel))
-                    return (temp2, selectModel);
-                return (temp2, temp2[0]);
-            }
-
-            index = list.IndexOf(topModel) + scroll;
-            if (index < 0)
-                return (list.Count < viewSize) ? (list, list[0]) : (list.GetRange(0, viewSize), list[0]);
-
-            var temp3 = list.GetRange(index, viewSize);
-            if (!invalidSelectModel && temp3.Contains(selectModel))
-                return (temp3, selectModel);
-            return (temp3, temp3[0]);
+            return (list, selected);
         }
         #endregion
 
         #region RefreshViewList  ==============================================
         // Runs on a background thread invoked by the ModelTreeControl 
-        public void RefreshViewList(LineModel select, ChangeType change = ChangeType.NoChange)
+        public void RefreshViewList(int viewSize, LineModel leading, LineModel selected, ChangeType change = ChangeType.None)
         {
-            var invalidSelect = select is null || select.IsInvalid;
+            var chef = DataChef;
+            var anyChange = false;
+            var isNewBuffer = ValidateBuffer(viewSize);
+            bool isValidLead = IsValidModel(leading);
+            bool isValidSelect = IsValidModel(selected);
 
-            if (!invalidSelect)
+            if (isValidSelect)
             {
                 switch (change)
                 {
-                    case ChangeType.NoChange:
-                        break;
-                    case ChangeType.GoToEnd:
-                        break;
-                    case ChangeType.GoToHome:
+                    case ChangeType.OneDown:
+                        if (isValidLead) _buffer.SetTargetItem(leading);
+                        ModelTreeRoot.BufferFillingTraversal(_buffer);
                         break;
                     case ChangeType.ToggleLeft:
-                        _modelTreeChanged |= select.ToggleLeft();
+                        anyChange |= selected.ToggleLeft();
+                        if (isValidLead) _buffer.SetTargetItem(leading);
+                        ModelTreeRoot.BufferFillingTraversal(_buffer);
                         break;
                     case ChangeType.ToggleRight:
-                        _modelTreeChanged |= select.ToggleRight();
+                        anyChange |= selected.ToggleRight();
+                        if (isValidLead) _buffer.SetTargetItem(leading);
+                        ModelTreeRoot.BufferFillingTraversal(_buffer);
                         break;
                     case ChangeType.ToggleFilter:
                         break;
@@ -181,10 +142,15 @@ namespace ModelGraph.Core
                         break;
                 }
             }
-            var prev = new Dictionary<Item, LineModel>();
-            _modelTreeChanged |= ModelTreeRoot.Validate(prev);
 
-            if (_modelTreeChanged) PageControl?.Refresh();
+            if (ChildDelta != chef.ChildDelta)
+            {
+                ChildDelta = chef.ChildDelta;
+
+                var prev = new Dictionary<Item, LineModel>();
+                anyChange |= ModelTreeRoot.Validate(prev);
+            }
+            if (anyChange) PageControl?.Refresh();
         }
         #endregion
 

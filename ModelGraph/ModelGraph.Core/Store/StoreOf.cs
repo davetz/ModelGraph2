@@ -32,6 +32,8 @@ namespace ModelGraph.Core
 
         // Covert  ============================================================
         internal void CovertAdd(T item) => _items.Add(item);
+        internal void CovertRemove(T item) => _items.Remove(item);
+        internal void CovertInsert(T item) => _items.Insert(0,item);
         internal void CovertClear() => _items.Clear();
 
         // Add  =============================================================

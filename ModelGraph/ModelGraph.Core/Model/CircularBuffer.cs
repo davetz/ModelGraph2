@@ -10,20 +10,21 @@ namespace ModelGraph.Core
     {
         private T _targetItem;
         private readonly T[] _buffer;
-        private readonly int _len;
-        private int _delay;
+        internal int _overshoot;
         private bool _checkItem;
 
+        internal int Size { get; }
         internal int Count { get; private set; }
         internal int EndCount { get; set; }
         internal bool HitItem { get; private set; }
-        internal bool HasRolledOver => Count > _len;
+        internal bool HasRolledOver => Count > Size;
+
 
         #region Constructor  ==================================================
         internal CircularBuffer(int size, int endCount)
         {
             _buffer = new T[size];
-            _len = size;
+            Size = size;
 
             SetEndCount(endCount);
         }
@@ -31,7 +32,7 @@ namespace ModelGraph.Core
         internal CircularBuffer(int size, T targetItem) //= report finding the target
         {
             _buffer = new T[size];
-            _len = size;
+            Size = size;
 
             SetTargetItem(targetItem);
         }
@@ -39,17 +40,17 @@ namespace ModelGraph.Core
 
         internal void SetEndCount(int endCount) { Count = 0; EndCount = endCount; _checkItem = false; }
         internal void SetEndCount(int count, int endCount) { Count = count; EndCount = endCount; _checkItem = false; }
-        internal void SetTargetItem(T item) { Count = 0;  _targetItem = item; _checkItem = true; }
+        internal void SetTargetItem(T item, int overshoot = -1) { Count = 0; _targetItem = item; _overshoot = (overshoot < 0) ? Size / 2 : overshoot; _checkItem = true; HitItem = false; }
 
         /// <summary>Add item to  buffer, return true: if hit target; false: if hit the end of list</summary>
         internal bool Add(T item)
         {
-            var index = Count++ % _len;
+            var index = Count++ % Size;
             _buffer[index] = item;
 
             if (HitItem)
             {
-                if (_delay-- < 0) return true;
+                if (_overshoot-- < 0) return true;
             }
             else if (_checkItem)
             {
@@ -57,7 +58,7 @@ namespace ModelGraph.Core
                 {
                     HitItem = true;
                     _checkItem = false;
-                    _delay = _len / 2;
+                    _overshoot = Size / 2;
                 }
             }
             else if (Count >= EndCount) return true;
@@ -67,8 +68,8 @@ namespace ModelGraph.Core
 
         internal List<T> GetList()
         {
-            var list = new List<T>(_len);
-            if (Count < _len)
+            var list = new List<T>(Size);
+            if (Count < Size)
             {
                 for (int i = 0; i < Count; i++)
                 {
@@ -77,9 +78,9 @@ namespace ModelGraph.Core
             }
             else
             {
-                for (int index = Count; index < Count + _len; index++)
+                for (int index = Count; index < Count + Size; index++)
                 {
-                    list.Add(_buffer[index % _len]);
+                    list.Add(_buffer[index % Size]);
                 }
             }
             return list;

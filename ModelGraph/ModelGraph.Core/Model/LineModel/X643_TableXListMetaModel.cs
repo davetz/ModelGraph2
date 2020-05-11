@@ -10,23 +10,16 @@ namespace ModelGraph.Core
         internal override IdKey IdKey => IdKey.TableXListMetaModel;
         public override bool CanExpandLeft => true;
 
-        internal override bool ToggleLeft()
+        internal override bool ExpandLeft()
         {
-            if (IsExpandedLeft)
-            {
-                IsExpandedLeft = false;
+            if (IsExpandedLeft) return false;
 
-                DiscardChildren();
-            }
-            else
-            {
-                IsExpandedLeft = true;
+            IsExpandedLeft = true;
 
-                var st = Item as StoreOf_TableX;
-                foreach (var tx in st.Items)
-                {
-                    new X654_TableXMetaModel(this, tx);
-                }
+            var st = Item as StoreOf_TableX;
+            foreach (var tx in st.Items)
+            {
+                new X654_TableXMetaModel(this, tx);
             }
 
             return true;

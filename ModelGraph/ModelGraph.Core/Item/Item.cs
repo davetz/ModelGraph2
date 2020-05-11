@@ -123,20 +123,17 @@ namespace ModelGraph.Core
         }
 
 
-        internal bool IsInvalid => !HasValidLinkToChef();
-        internal bool IsValid => HasValidLinkToChef();
-        private bool HasValidLinkToChef()
+        internal bool IsValid(Item itm) => !IsInvalid(itm);
+        internal bool IsInvalid(Item itm)
         {
-            var itm = this;
-            for (int i = 0; i < 100; i++)// avoid an infinite loop
+            for (int i = 0; i < 20; i++)// avoid an infinite loop
             {
-                if (itm is null) return false;
-                if (itm.IsUnsable) return false;
-                if (itm is Chef) return true;
-                if (itm is LineModel m && m.Item.IsInvalid) return false; 
+                if (itm is null) return true;
+                if (itm.IsUnsable) return true;
+                if (itm is Chef) return false;
                 itm = itm.Owner;
             }
-            return false;
+            return true;
         }
         #endregion
 

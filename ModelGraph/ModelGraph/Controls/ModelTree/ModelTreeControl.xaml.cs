@@ -29,10 +29,11 @@ namespace ModelGraph.Controls
         }
 
         #region PostRefreshViewList  ==========================================
-        async System.Threading.Tasks.Task PostRefreshViewListAsync(LineModel m, int s = 0, ChangeType c = ChangeType.NoChange)
+        private async System.Threading.Tasks.Task PostRefreshViewListAsync(ChangeType change = ChangeType.None)
         {
-            ResetCacheDelta(m);
-            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => { _root.RefreshViewList(m, c); });
+            LineModel leading = (_viewList is null || _viewList.Count == 0) ? null : _viewList[0];
+            ResetCacheDelta(_selected);
+            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => { _root.RefreshViewList(ViewSize, leading, _selected, change); });
             Refresh();
         }
         #endregion
@@ -46,7 +47,7 @@ namespace ModelGraph.Controls
                 TreeCanvas.Width = Width = width;
                 TreeCanvas.Height = Height = height;
 
-                _ = PostRefreshViewListAsync(_selectModel);
+                _ = PostRefreshViewListAsync();
             }
         }
         int ViewSize => (int)(Height / _elementHieght);
@@ -55,9 +56,7 @@ namespace ModelGraph.Controls
         #region Fields  =======================================================
         Chef _chef;
         TreeModel _root;
-        LineModel _topModel;
-        LineModel _endModel;
-        LineModel _selectModel;
+        LineModel _selected;
         List<LineModel> _viewList = new List<LineModel>();
         List<LineCommand> _menuCommands = new List<LineCommand>();
         List<LineCommand> _buttonCommands = new List<LineCommand>();
@@ -238,7 +237,7 @@ namespace ModelGraph.Controls
             _modelIdentityTip.Opened -= ModelIdentityTip_Opened;
 
             _root = null;
-            _selectModel = null;
+            _selected = null;
             _viewList.Clear();
             _menuCommands.Clear();
             _buttonCommands.Clear();
@@ -250,12 +249,12 @@ namespace ModelGraph.Controls
         #region KeyboardAccelerators  =========================================
         private void KeyPageUp_Invoked(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
         {
-            ChangeScroll(2 - Count);
+            _ = PostRefreshViewListAsync(ChangeType.PageUp);
             args.Handled = true;
         }
         private void KeyPageDown_Invoked(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
         {
-            ChangeScroll(Count - 2);
+            _ = PostRefreshViewListAsync(ChangeType.PageDown);
             args.Handled = true;
         }
 
@@ -272,28 +271,28 @@ namespace ModelGraph.Controls
 
         private void KeyEnd_Invoked(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
         {
-            PostRefreshViewListAsync(_selectModel, 0, ChangeType.GoToEnd);
+            _ = PostRefreshViewListAsync(ChangeType.GoToBottom);
             args.Handled = true;
         }
         private void KeyHome_Invoked(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
         {
-            PostRefreshViewListAsync(_selectModel, 0, ChangeType.GoToHome);
+            _ = PostRefreshViewListAsync(ChangeType.GoToTop);
             args.Handled = true;
         }
 
         private void KeyLeft_Invoked(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
         {
-            if (_selectModel.CanExpandLeft)
+            if (_selected.CanExpandLeft)
             {
-                PostRefreshViewListAsync(_selectModel, 0, ChangeType.ToggleLeft);
+                _ = PostRefreshViewListAsync(ChangeType.ToggleLeft);
             }
             args.Handled = true;
         }
         private void KeyRight_Invoked(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
         {
-            if (_selectModel.CanExpandRight)
+            if (_selected.CanExpandRight)
             {
-                PostRefreshViewListAsync(_selectModel, 0, ChangeType.ToggleRight);
+                _ = PostRefreshViewListAsync(ChangeType.ToggleRight);
             }
             args.Handled = true;
         }
@@ -306,11 +305,11 @@ namespace ModelGraph.Controls
         private void KeyEscape_Invoked(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
         {
             SetDefaultFocus();
-            if (_selectModel != null)
+            if (_selected != null)
             {
-                _selectModel.IsFilterVisible = false;
-                _selectModel.IsExpandedLeft = false;
-                PostRefreshViewListAsync(_selectModel, 0, ChangeType.FilterSortChanged);
+                _selected.IsFilterVisible = false;
+                _selected.IsExpandedLeft = false;
+                _ = PostRefreshViewListAsync(ChangeType.FilterSortChanged);
             }
             args.Handled = true;
         }
@@ -321,43 +320,43 @@ namespace ModelGraph.Controls
         void TryGetPrevModel()
         {
             SetDefaultFocus();
-            if (_selectModel is null)
+            if (_selected is null)
             {
                 if (_viewList is null || _viewList.Count == 0) return;
-                _selectModel = _viewList[0];
+                _selected = _viewList[0];
                 RefreshSelect();
             }
             else
             {
-                var i = _viewList.IndexOf(_selectModel) - 1;
+                var i = _viewList.IndexOf(_selected) - 1;
                 if (i >= 0 && i < _viewList.Count)
                 {
-                    _selectModel = _viewList[i];
+                    _selected = _viewList[i];
                     RefreshSelect();
                 }
                 else
-                    ChangeScroll(-1);
+                    _ = PostRefreshViewListAsync(ChangeType.OneUp);
             }
         }
         void TryGetNextModel()
         {
             SetDefaultFocus();
-            if (_selectModel is null)
+            if (_selected is null)
             {
                 if (_viewList is null || _viewList.Count == 0) return;
-                _selectModel = _viewList[0];
+                _selected = _viewList[0];
                 RefreshSelect();
             }
             else
             {
-                var i = _viewList.IndexOf(_selectModel) + 1;
+                var i = _viewList.IndexOf(_selected) + 1;
                 if (i > 0 && i < _viewList.Count)
                 {
-                    _selectModel = _viewList[i];
+                    _selected = _viewList[i];
                     RefreshSelect();
                 }
                 else
-                    ChangeScroll(1);
+                    _ = PostRefreshViewListAsync(ChangeType.OneDown);
             }
         }
         #endregion
@@ -394,13 +393,11 @@ namespace ModelGraph.Controls
             if (_pointWheelEnabled)
             {
                 var cp = e.GetCurrentPoint(TreeCanvas);
-                var delta = (cp.Properties.MouseWheelDelta < 0) ? 3 : -3;
-                ChangeScroll(delta);
+                if (cp.Properties.MouseWheelDelta < 0)
+                    _ = PostRefreshViewListAsync(ChangeType.TwoUp);
+                else
+                    _ = PostRefreshViewListAsync(ChangeType.TwoDown);
             }
-        }
-        void ChangeScroll(int delta)
-        {
-            PostRefreshViewListAsync(_selectModel, delta);
         }
         #endregion
 
@@ -436,7 +433,7 @@ namespace ModelGraph.Controls
         #region PointerPressed  ===============================================
         void TreeGrid_PointerPressed(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
         {
-            _selectModel = PointerModel(e);
+            _selected = PointerModel(e);
             SetDefaultFocus();
             RefreshSelect();
             e.Handled = true;
@@ -453,26 +450,14 @@ namespace ModelGraph.Controls
         #region Refresh  ======================================================
         public void Refresh()
         {
-            //if (ViewIsNotReady()) return;
-            //if (_viewList is null) return;
-            //if (_root.IsChanged) RefreshRoot();
-            
-            var (viewList, select) = _root.GetCurrentView(ViewSize, _selectModel, _topModel, _endModel, 0);
+            var (viewList, selected) = _root.GetCurrentView(ViewSize, _selected);
             _viewList = viewList;
-            _selectModel = select;
+            _selected = selected;
+            var N = _viewList.Count;
 
             _pointWheelEnabled = false;
 
-            var N = _viewList.Count;
-            _topModel = (N > 0) ? _viewList[0] : null;
-            _endModel = (N > 0) ? _viewList[N - 1] : null;
-
             ValidateCache(N);
-
-            if (N > 0)
-            {
-                _topModel = _viewList[0];
-            }
 
             for (int i = 0; i < N; i++)
             {
@@ -525,7 +510,7 @@ namespace ModelGraph.Controls
 
             _sortControl = _filterControl = null;
 
-            if (Count == 0 || _selectModel == null)
+            if (Count == 0 || _selected == null)
             {
                 foreach (var btn in _itemButtons) { btn.Visibility = Visibility.Collapsed; }
 
@@ -551,14 +536,14 @@ namespace ModelGraph.Controls
                 TreeCanvas.KeyboardAccelerators.Add(acc);
             }
 
-            if (_selectModel.CanDrag)
+            if (_selected.CanDrag)
             {
                 var acc = new KeyboardAccelerator { Key = VirtualKey.C, Modifiers = VirtualKeyModifiers.Control };
                 acc.Invoked += Accelerator_ModelCopy_Invoked;
                 TreeCanvas.KeyboardAccelerators.Add(acc);
             }
 
-            if (_selectModel.DragEnter(_chef) != DropAction.None)
+            if (_selected.DragEnter(_chef) != DropAction.None)
             {
                 var acc = new KeyboardAccelerator { Key = VirtualKey.V, Modifiers = VirtualKeyModifiers.Control };
                 acc.Invoked += Accelerator_ModelPaste_Invoked;
@@ -571,18 +556,18 @@ namespace ModelGraph.Controls
             }
 
 
-            if (_selectModel.GetDescriptionId(_chef) != null)
+            if (_selected.GetDescriptionId(_chef) != null)
             {
                 HelpButton.Visibility = Visibility.Visible;
-                PopulateItemHelp(_selectModel.GetDescriptionId(_chef));
+                PopulateItemHelp(_selected.GetDescriptionId(_chef));
             }
             else
             {
                 HelpButton.Visibility = Visibility.Collapsed;
             }
 
-            _selectModel.GetMenuCommands(_chef, _menuCommands);
-            _selectModel.GetButtonCommands(_chef, _buttonCommands);
+            _selected.GetMenuCommands(_chef, _menuCommands);
+            _selected.GetButtonCommands(_chef, _buttonCommands);
 
             var cmds = _buttonCommands;
             var len1 = cmds.Count;
@@ -661,10 +646,10 @@ namespace ModelGraph.Controls
         {
             if (Count < 0) return -1;
 
-            var viewIndex = _viewList.IndexOf(_selectModel);
+            var viewIndex = _viewList.IndexOf(_selected);
             if (viewIndex < 0)
             {
-                _selectModel = _viewList[0];
+                _selected = _viewList[0];
                 viewIndex = 0;
             }
            // _root.SelectModel = _selectModel;
@@ -683,25 +668,25 @@ namespace ModelGraph.Controls
         // otherwise set focus to our reliable dummy FocusButton
         private void TrySetControlFocus(LineModel focusModel = null)
         {
-            if (focusModel != null) _selectModel = focusModel;
+            if (focusModel != null) _selected = focusModel;
 
             var cacheIndex = TryGetCacheIndex();
             if (cacheIndex < 0) return;
 
-            if (_selectModel.CanFilter)
+            if (_selected.CanFilter)
             {
-                if (_selectModel.IsFilterVisible)
+                if (_selected.IsFilterVisible)
                 {
-                    _selectModel.IsFilterFocus = false;
+                    _selected.IsFilterFocus = false;
                     SetFocus(_filterTextCache[cacheIndex]);
                 }
                 else
                 {
                     _tryAfterRefresh = true;
-                    PostRefreshViewListAsync(_selectModel, 0, ChangeType.ToggleFilter);
+                    _ = PostRefreshViewListAsync(ChangeType.ToggleFilter);
                 }
             }
-            else if (_selectModel is PropertyModel pm)
+            else if (_selected is PropertyModel pm)
             {
                 if (pm.IsTextModel) SetFocus(_textPropertyCache[cacheIndex]);
                 else if (pm.IsCheckModel) SetFocus(_checkPropertyCache[cacheIndex]);
@@ -738,14 +723,14 @@ namespace ModelGraph.Controls
         #region AcceleratorKeyCommands  =======================================
         private void Accelerator_ModelCopy_Invoked(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
         {
-            if (_selectModel.CanDrag)
-                _selectModel.DragStart(_chef);
+            if (_selected.CanDrag)
+                _selected.DragStart(_chef);
             args.Handled = true;
         }
         private void Accelerator_ModelPaste_Invoked(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
         {
-            if (_selectModel.DragEnter(_chef) != DropAction.None)
-            _selectModel.DragDrop(_chef);
+            if (_selected.DragEnter(_chef) != DropAction.None)
+            _selected.DragDrop(_chef);
             args.Handled = true;
         }
         private void Accelerator_SortMode_Invoked(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
@@ -932,11 +917,11 @@ namespace ModelGraph.Controls
         }
         void ExpandTree_PointerReleased(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
         {
-            if (_selectModel == PointerModel(e))
+            if (_selected == PointerModel(e))
             {
                 var obj = sender as TextBlock;
-                _selectModel = obj.DataContext as LineModel;
-                PostRefreshViewListAsync(_selectModel, 0, ChangeType.ToggleLeft);
+                _selected = obj.DataContext as LineModel;
+                _ = PostRefreshViewListAsync(ChangeType.ToggleLeft);
             }
         }
         #endregion
@@ -944,11 +929,11 @@ namespace ModelGraph.Controls
         #region ExpandRight  ==================================================
         void ExpandChoice_PointerReleased(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
         {
-            if (_selectModel == PointerModel(e))
+            if (_selected == PointerModel(e))
             {
                 var obj = sender as TextBlock;
-                _selectModel = obj.DataContext as LineModel;
-                PostRefreshViewListAsync(_selectModel, 0, ChangeType.ToggleRight);
+                _selected = obj.DataContext as LineModel;
+                _ = PostRefreshViewListAsync(ChangeType.ToggleRight);
             }
         }
         #endregion
@@ -966,7 +951,7 @@ namespace ModelGraph.Controls
         TextBlock _sortControl;
         void SortMode_PointerReleased(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
         {
-            if (_selectModel == PointerModel(e))
+            if (_selected == PointerModel(e))
             {
                 var obj = sender as TextBlock;
                 ExecuteSort(obj);
@@ -998,7 +983,7 @@ namespace ModelGraph.Controls
                 obj.Text = _sortAscending;
             }
 
-            PostRefreshViewListAsync(_selectModel, 0, ChangeType.FilterSortChanged);
+            _ = PostRefreshViewListAsync(ChangeType.FilterSortChanged);
         }
         #endregion
 
@@ -1006,7 +991,7 @@ namespace ModelGraph.Controls
         TextBlock _usageControl;
         void UsageMode_PointerReleased(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
         {
-            if (_selectModel == PointerModel(e))
+            if (_selected == PointerModel(e))
             {
                 var obj = sender as TextBlock;
                 ExecuteUsage(obj);
@@ -1037,7 +1022,7 @@ namespace ModelGraph.Controls
                 mdl.IsUsedFilter = true;
                 obj.Text = _usageIsUsed;
             }
-            PostRefreshViewListAsync(_selectModel, 0, ChangeType.FilterSortChanged);
+            _ = PostRefreshViewListAsync(ChangeType.FilterSortChanged);
         }
         #endregion
 
@@ -1045,7 +1030,7 @@ namespace ModelGraph.Controls
         TextBlock _filterControl;
         void FilterMode_PointerReleased(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
         {
-            if (_selectModel == PointerModel(e))
+            if (_selected == PointerModel(e))
             {
                 var obj = sender as TextBlock;
                 ExecuteFilterMode(obj);
@@ -1057,7 +1042,7 @@ namespace ModelGraph.Controls
 
             var mdl = obj.DataContext as LineModel;
 
-            PostRefreshViewListAsync(_selectModel, 0, ChangeType.ToggleFilter);
+            _ = PostRefreshViewListAsync(ChangeType.ToggleFilter);
         }
         #endregion
 
@@ -1083,7 +1068,7 @@ namespace ModelGraph.Controls
                 mdl.IsExpandedLeft = true;
                 
                 _tryAfterRefresh = true;
-                PostRefreshViewListAsync(_selectModel, 0, ChangeType.FilterSortChanged);
+                _ = PostRefreshViewListAsync(ChangeType.FilterSortChanged);
             }
             if (e.Key == Windows.System.VirtualKey.Escape)
             {
@@ -1092,7 +1077,7 @@ namespace ModelGraph.Controls
                 mdl.IsFilterVisible = false;
                 mdl.IsExpandedLeft = false;
                 SetDefaultFocus();
-                PostRefreshViewListAsync(_selectModel, 0, ChangeType.FilterSortChanged);
+                _ = PostRefreshViewListAsync(ChangeType.FilterSortChanged);
             }
         }
         #endregion
@@ -1102,7 +1087,7 @@ namespace ModelGraph.Controls
         {
             var obj = sender as TextBox;
             _focusControl = obj;
-            _selectModel = obj.DataContext as LineModel;
+            _selected = obj.DataContext as LineModel;
             RefreshSelect(false);
         }
         void TextProperty_LostFocus(object sender, RoutedEventArgs e)
@@ -1149,7 +1134,7 @@ namespace ModelGraph.Controls
         {
             var obj = sender as CheckBox;
             _focusControl = obj;
-            _selectModel = obj.DataContext as LineModel;
+            _selected = obj.DataContext as LineModel;
             RefreshSelect(false);
         }
         void Check_KeyDown(object sender, Windows.UI.Xaml.Input.KeyRoutedEventArgs e)
@@ -1197,7 +1182,7 @@ namespace ModelGraph.Controls
         {
             var obj = sender as ComboBox;
             _focusControl = obj;
-            _selectModel = obj.DataContext as LineModel;
+            _selected = obj.DataContext as LineModel;
             RefreshSelect(false);
         }
         void ComboProperty_SelectionChanged(object sender, SelectionChangedEventArgs e)

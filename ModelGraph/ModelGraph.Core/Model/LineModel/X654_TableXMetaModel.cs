@@ -6,6 +6,7 @@ namespace ModelGraph.Core
         internal X654_TableXMetaModel(LineModel owner, Item item) : base(owner, item) { }
         internal override IdKey IdKey => IdKey.TableXMetaModel;
         public override bool CanExpandLeft => true;
+        public override bool CanExpandRight => true;
 
         public override (string kind, string name, int count) GetLineParms(Chef chef)
         {
@@ -13,28 +14,25 @@ namespace ModelGraph.Core
             return (kind, name, 0);
         }
 
-        internal override bool ToggleLeft()
+        internal override bool ExpandLeft()
         {
-            var chef = DataChef;
+            if (IsExpandedLeft) return false;
 
-            if (IsExpandedLeft)
-            {
-                IsExpandedLeft = false;
+            new X661_ColumnXListMetaModel(this, Item);
 
-                DiscardChildren();
-            }
-            else
-            {
-                IsExpandedLeft = true;
-
-                new X661_ColumnXListMetaModel(this, Item);
-            }
-
+            IsExpandedLeft = true;
             return true;
         }
+        internal override bool ExpandRight()
+        {
+            if (IsExpandedRight) return false;
+            var chef = DataChef;
 
+            new X617_TextPropertyModel(this, Item, chef.Get<Property_Item_Summary>());
+            new X617_TextPropertyModel(this, Item, chef.Get<Property_Item_Name>());
 
-        //
-
+            IsExpandedRight = true;
+            return true;
+        }
     }
 }

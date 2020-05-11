@@ -637,7 +637,7 @@ namespace ModelGraph.Controls
 
 
         #region AddPropertyName  ==============================================
-        private void AddPropertyName(int index, string name, LineModel model)
+        private void AddPropertyName(int index, string name)
         {
             var obj = _propertyNameCache[index];
             var bdr = _propertyBorderCache[index];
@@ -896,21 +896,21 @@ namespace ModelGraph.Controls
             {
                 if (pm.IsTextModel)
                 {
-                    AddPropertyName(index, name, pm);
+                    AddPropertyName(index, name);
                     AddTextProperty(index, pm);
                     CheckItemHasError(index, pm);
                     return;
                 }
                 else if (pm.IsCheckModel)
                 {
-                    AddPropertyName(index, name, pm);
+                    AddPropertyName(index, name);
                     AddCheckProperty(index, pm);
                     CheckItemHasError(index, pm);
                     return;
                 }
                 else if (pm.IsComboModel)
                 {
-                    AddPropertyName(index, name, pm);
+                    AddPropertyName(index, name);
                     AddComboProperty(index, pm);
                     CheckItemHasError(index, pm);
                     return;
