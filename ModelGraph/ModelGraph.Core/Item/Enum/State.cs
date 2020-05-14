@@ -16,6 +16,7 @@ namespace ModelGraph.Core
 
         IsVirgin = 0x2, // ChangeSet
         IsRequired = 0x2, // Relation
+        HasEnumXRef = 0x2, // ColumnX
 
         IsCongealed = 0x4, // ChangeSet
 

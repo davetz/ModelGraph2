@@ -182,13 +182,14 @@ namespace ModelGraph.Core
         #region CreateAllValTypeColumns  ======================================
         internal void CreateAllValTypeColumns(TableX tx)
         {
+            var prop = Get<Property_ColumnX_ValueType>();
             var storeOf_ColumnX = Get<StoreOf_ColumnX>();
             var relation_Store_ColumnX = Get<Relation_Store_ColumnX>();
             for (int i = 0; i < (int)ValType.MaximumType; i++)
             {
                 var cx = new ColumnX(storeOf_ColumnX);
                 relation_Store_ColumnX.SetLink(tx, cx);
-                SetColumnValueType(cx, i);
+                prop.SetItemPropertyValue(cx, i);
             }
         }
         #endregion

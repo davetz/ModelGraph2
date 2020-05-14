@@ -208,8 +208,8 @@ namespace ModelGraph.Core
 
         public virtual string GetModelInfo(Chef chef) => default;
 
-        public virtual void GetMenuCommands(Chef chef, List<LineCommand> list) { }
-        public virtual void GetButtonCommands(Chef chef, List<LineCommand> list) { }
+        public virtual void GetMenuCommands(Chef chef, List<LineCommand> list) { list.Clear(); }
+        public virtual void GetButtonCommands(Chef chef, List<LineCommand> list) { list.Clear(); }
 
 
         public void DragStart(Chef chef) => Chef.DragDropSource = this;

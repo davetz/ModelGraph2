@@ -12,7 +12,7 @@ namespace ModelGraph.Core
             var name = Property.GetSingleNameId(chef);
             return (null, name, 0);
         }
-        public override int GetIndexValue(Chef chef) => Property.GetIndexValue(chef, Item);
+        public override int GetIndexValue(Chef chef) => Property.GetIndexValue(Item);
         public override string[] GetlListValue(Chef chef) => Property.GetlListValue(chef);
     }
 }

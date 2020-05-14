@@ -23,7 +23,7 @@ namespace ModelGraph.Core
         internal virtual string Description { get => ""; set => _ = value; }    //most external items may have a discription
 
         public virtual string GetKindId(Chef chef) => chef.GetKindId(IdKey);
-        public virtual string GetSingleNameId(Chef chef) => DataChef.GetSingleNameId(IdKey);
+        public virtual string GetSingleNameId(Chef chef) => chef.GetSingleNameId(IdKey);
         public virtual string GetParentNameId(Chef chef) => Owner.GetSingleNameId(chef);
         public virtual string GetDoubleNameId(Chef chef) => $"{GetParentNameId(chef)} : {GetSingleNameId(chef)}";
         public virtual string GetChangeLogId(Chef chef) => GetDoubleNameId(chef);

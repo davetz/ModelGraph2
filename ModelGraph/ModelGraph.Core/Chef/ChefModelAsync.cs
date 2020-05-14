@@ -6,20 +6,9 @@ namespace ModelGraph.Core
 {
     public partial class Chef
     {
-        internal IList<IModel> GetChildModels(RootTreeModel root)
-        {
-            var list = new List<IModel>(10);
-            foreach (var item in Items)
-            {
-                if (item == root) continue;
-                if (item is IModel m) list.Add(m);
-            }
-            return list;
-        }
-
-        #region PostRequest  ==================================================
+        #region PostUIRequest  ================================================
         // These methods are called from the ui thread and typically they invoke 
-        // some type of change to the dataChefs objects (create, remove, update)
+        // some change to the dataChefs objects (create, remove, update, link, unlink)
         internal void PostAction(IModel model, Action action)
         {
         }
@@ -28,32 +17,44 @@ namespace ModelGraph.Core
         }
         internal void PostCommand(LineCommand command)
         {
+            PostModelRequest(command.Action);
         }
-        internal void PostSetValue(IModel model, bool value)
+        internal void PostSetBoolValue(Item item, Property prop, bool value)
         {
+            PostSetStringValue(item, prop, value.ToString());
         }
-        internal void PostSetValue(IModel model, string value)
+        internal void PostSetStringValue(Item item, Property prop, string value)
         {
+            var oldValue = prop.Value.GetString(item);
+            if (IsSameValue(value, oldValue)) return;
+
+            PostModelRequest(() => { SetValue(item, prop, value); });
         }
-        internal void PostSetValue(IModel model, int index)
+        internal void PostSetIndexValue(Item item, Property prop, int index)
         {
+
         }
         #endregion
 
         #region ExecuteRequest ================================================
-        private async void PostModelRequest(IModel model, Action action)
+        private async void PostModelRequest(Action action)
         {
-            await Task.Run(() => { ExecuteRequest(model, action); }); // runs on worker thread 
+            await Task.Run(() => { ExecuteRequest(action); }); // runs on worker thread 
             //<=== control immediatley returns to the ui thread
             //(some time later the worker task completes and signals the ui thread)
             //===> the ui thread returns here and continues executing the following code
+            foreach (var item in Items)
+            {
+                if (item is TreeModel tm) tm.Validate();
+            }
         }
-        private void ExecuteRequest(IModel model, Action action)
+        private void ExecuteRequest(Action action)
         {
             // the action will likey modify objects, 
             // and we can't have multiple threads stepping on each other
             lock (this)
             {
+                action();
             }
         }
         #endregion

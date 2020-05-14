@@ -70,7 +70,6 @@ namespace ModelGraph.Core
         }
         #endregion
 
-
         #region ValidateBuffer  ===============================================
         private CircularBuffer<LineModel> _buffer;
         /// <summary>Ensure buffer is not null and large enough, return false if is a new buffer</summary>
@@ -143,19 +142,20 @@ namespace ModelGraph.Core
                 }
             }
 
-            if (ChildDelta != chef.ChildDelta)
-            {
-                ChildDelta = chef.ChildDelta;
-
-                var prev = new Dictionary<Item, LineModel>();
-                anyChange |= ModelTreeRoot.Validate(prev);
-            }
             if (anyChange) PageControl?.Refresh();
         }
         #endregion
 
-        #region OverrideMethods  ==============================================
-        public override (string kind, string name, int count) GetLineParms(Chef chef) => (null, BlankName, 0);
+        #region Validate  =====================================================
+        internal void Validate()
+        {
+            if (ModelTreeRoot.Validate(new Dictionary<Item, LineModel>())) 
+                PageControl?.Refresh();
+        }        
+        #endregion
+
+    #region OverrideMethods  ==============================================
+    public override (string kind, string name, int count) GetLineParms(Chef chef) => (null, BlankName, 0);
         #endregion
     }
 }

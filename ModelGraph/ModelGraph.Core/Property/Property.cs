@@ -12,7 +12,8 @@ namespace ModelGraph.Core
         internal virtual bool IsMultiline => false;
 
         internal virtual string[] GetlListValue(Chef chef) => new string[0];
-        internal virtual int GetIndexValue(Chef chef, Item item) => 0;
+        internal virtual int GetIndexValue(Item item) => 0;
+        internal virtual void SetIndexValue(Item item, int val) { }
 
     }
 }

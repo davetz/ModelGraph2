@@ -84,7 +84,7 @@ namespace ModelGraph.Core
         internal override void Insert(Item item, int index) => Insert(Cast(item), index); 
 
         // IndexOf  ===========================================================
-        internal int IndexOf(T item) => (_items is null) ? -1 : IndexOf(item);
+        internal int IndexOf(T item) => (_items is null) ? -1 : _items.IndexOf(item);
         internal override int IndexOf(Item item) => IndexOf(Cast(item));
 
         // Move  ==============================================================

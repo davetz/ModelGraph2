@@ -14,6 +14,7 @@ namespace ModelGraph.Core
             }
             return 0;
         }
+        internal int GetActualValueAt(int index) => (index < 0 || index >= Count) ? 0 : Items[index].EnumKey;
         #endregion
 
         #region GetEnumIndex  ================================================
@@ -26,7 +27,7 @@ namespace ModelGraph.Core
             }
             return 0;
         }
-        internal int GetEnumIndex(Chef chef, int key)
+        internal int GetEnumIndex(int key)
         {
             for (int i = 0; i < Count; i++)
             {

@@ -10,6 +10,8 @@ namespace ModelGraph.Core
         internal override string Description { get => _description; set => _description = value; }
         private string _description;
 
+        internal string GetActualValueAt(int index) => (index < 0 || index >= Count) ? InvalidItem : Items[index].ActualValue;
+
         #region Constructors  =================================================
         internal EnumX(StoreOf_EnumX owner, bool autoExpandRight = false)
         {

@@ -32,9 +32,9 @@ namespace ModelGraph.Core
         public virtual string GetTextValue(Chef chef) => default;
         public virtual string[] GetlListValue(Chef chef) => default;
 
-        public virtual void PostSetValue(Chef chef, int val) { }
-        public virtual void PostSetValue(Chef chef, bool val) { }
-        public virtual void PostSetValue(Chef chef, string val) { }
+        public  void PostSetValue(Chef chef, int val) => chef.PostSetIndexValue(Item, Property, val);
+        public  void PostSetValue(Chef chef, bool val) => chef.PostSetBoolValue(Item, Property, val);
+        public void PostSetValue(Chef chef, string val) => chef.PostSetStringValue(Item, Property, val);
 
         public override (string, string) GetKindNameId(Chef chef)
         {
