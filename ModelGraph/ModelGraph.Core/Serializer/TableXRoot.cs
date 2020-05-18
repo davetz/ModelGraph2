@@ -5,13 +5,13 @@ using Windows.Storage.Streams;
 
 namespace ModelGraph.Core
 {
-    public class StoreOf_TableX : StoreOf_External<TableX>, ISerializer
+    public class TableXRoot : ExternalRoot<TableX>, ISerializer
     {
         static Guid _serializerGuid = new Guid("93EC136C-6C38-474D-844B-6B8326526CB5");
         static byte _formatVersion = 1;
         internal override IdKey IdKey => IdKey.TableXDomain;
 
-        internal StoreOf_TableX(Chef chef)
+        internal TableXRoot(Chef chef)
         {
             Owner = chef;
 

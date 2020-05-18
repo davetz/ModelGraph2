@@ -25,10 +25,9 @@ namespace ModelGraph.Core
         }
         internal void PostSetStringValue(Item item, Property prop, string value)
         {
-            var oldValue = prop.Value.GetString(item);
-            if (IsSameValue(value, oldValue)) return;
+            if (ItemUpdated.IsNotRequired(item, prop, value)) return;
 
-            PostModelRequest(() => { SetValue(item, prop, value); });
+            PostModelRequest(() => { ItemUpdated.Record(this, item, prop, value); });
         }
         internal void PostSetIndexValue(Item item, Property prop, int index)
         {

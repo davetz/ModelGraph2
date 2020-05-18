@@ -1,7 +1,7 @@
 ﻿
 namespace ModelGraph.Core
 {
-    public class EnumZ : StoreOf<PairZ>
+    public abstract class EnumZ : StoreOf<PairZ>
     {
         internal EnumZ() { }
 

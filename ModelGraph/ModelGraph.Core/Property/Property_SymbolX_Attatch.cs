@@ -5,7 +5,7 @@ namespace ModelGraph.Core
     {
         internal override IdKey IdKey => IdKey.SymbolXAttatchProperty;
 
-        internal Property_SymbolX_Attatch(StoreOf_Property owner)
+        internal Property_SymbolX_Attatch(PropertyRoot owner)
         {
             Owner = owner;
             Value = new StringValue(this);

@@ -5,7 +5,7 @@ namespace ModelGraph.Core
     {
         internal override IdKey IdKey => IdKey.RelationPairingProperty;
 
-        internal Property_Relation_Pairing(StoreOf_Property owner)
+        internal Property_Relation_Pairing(PropertyRoot owner)
         {
             Owner = owner;
             Value = new StringValue(this);

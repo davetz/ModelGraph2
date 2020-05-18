@@ -3,11 +3,11 @@ using System;
 
 namespace ModelGraph.Core
 {
-    public abstract class EnumZProperty : PropertyOf<ColumnX, string>
+    public abstract class EnumProperty : PropertyOf<ColumnX, string>
     {
         internal EnumZ EnumZ { get; }
 
-        internal EnumZProperty(StoreOf_Property owner, EnumZ enumZ)
+        internal EnumProperty(PropertyRoot owner, EnumZ enumZ)
         {
             Owner = owner;
             EnumZ = enumZ;

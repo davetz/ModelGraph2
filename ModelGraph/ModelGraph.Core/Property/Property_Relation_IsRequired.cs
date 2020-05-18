@@ -5,7 +5,7 @@ namespace ModelGraph.Core
     {
         internal override IdKey IdKey => IdKey.RelationIsRequiredProperty;
 
-        internal Property_Relation_IsRequired(StoreOf_Property owner)
+        internal Property_Relation_IsRequired(PropertyRoot owner)
         {
             Owner = owner;
             Value = new BoolValue(this);

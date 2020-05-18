@@ -20,7 +20,7 @@ namespace ModelGraph.Core
         #region CreateProperties  =============================================
         private void CreateProperties(Chef chef)
         {
-            var sto = chef.Get<StoreOf_Property>();
+            var sto = chef.Get<PropertyRoot>();
 
             chef.RegisterReferenceItem(new Property_Node_CenterXY(sto));
             chef.RegisterReferenceItem(new Property_Node_SizeWH(sto));
@@ -56,7 +56,7 @@ namespace ModelGraph.Core
         {
 
             var chef = DataChef;
-            var graphXDomain = chef.Get<StoreOf_GraphX>();
+            var graphXDomain = chef.Get<GraphXRoot>();
             var dummyQueryXRef = chef.Get<DummyQueryX>();
 
 
@@ -250,7 +250,7 @@ namespace ModelGraph.Core
         {
             var chef = DataChef;
             var dummyQueryXRef = chef.Get<DummyQueryX>();
-            var graphXDomain = chef.Get<StoreOf_GraphX>();
+            var graphXDomain = chef.Get<GraphXRoot>();
 
             #region RemoveInvalidItems  =======================================
             // hit list of items that no longer exists

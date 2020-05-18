@@ -5,7 +5,7 @@ namespace ModelGraph.Core
     {
         internal override IdKey IdKey => IdKey.ColumnIsChoiceProperty;
 
-        internal Property_ColumnX_IsChoice(StoreOf_Property owner)
+        internal Property_ColumnX_IsChoice(PropertyRoot owner)
         {
             Owner = owner;
             Value = new BoolValue(this);

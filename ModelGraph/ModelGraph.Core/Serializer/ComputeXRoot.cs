@@ -4,13 +4,13 @@ using Windows.Storage.Streams;
 
 namespace ModelGraph.Core
 {
-    public class StoreOf_ComputeX : StoreOf_External<ComputeX>, ISerializer
+    public class ComputeXRoot : ExternalRoot<ComputeX>, ISerializer
     {
         static Guid _serializerGuid = new Guid("35522B27-A925-4CE0-8D65-EDEF451097F2");
         static byte _formatVersion = 1;
         internal override IdKey IdKey => IdKey.ComputeXDomain;
 
-        internal StoreOf_ComputeX(Chef chef)
+        internal ComputeXRoot(Chef chef)
         {
             Owner = chef;
 
@@ -23,7 +23,7 @@ namespace ModelGraph.Core
         #region CreateProperties  =============================================
         private void CreateProperties(Chef chef)
         {
-            var sto = chef.Get<StoreOf_Property>();
+            var sto = chef.Get<PropertyRoot>();
 
             chef.RegisterReferenceItem(new Property_ComputeX_CompuType(sto));
             chef.RegisterReferenceItem(new Property_ComputeX_Where(sto));

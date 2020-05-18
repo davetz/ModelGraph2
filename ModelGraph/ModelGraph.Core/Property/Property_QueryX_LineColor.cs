@@ -5,7 +5,7 @@ namespace ModelGraph.Core
     {
         internal override IdKey IdKey => IdKey.QueryXLineColorProperty;
 
-        internal Property_QueryX_LineColor(StoreOf_Property owner)
+        internal Property_QueryX_LineColor(PropertyRoot owner)
         {
             Owner = owner;
             Value = new StringValue(this);

@@ -5,7 +5,7 @@ namespace ModelGraph.Core
     {
         internal override IdKey IdKey => IdKey.QueryXLineStyleProperty;
 
-        internal Property_QueryX_LineStyle(StoreOf_Property owner)
+        internal Property_QueryX_LineStyle(PropertyRoot owner)
         {
             Owner = owner;
             Value = new StringValue(this);

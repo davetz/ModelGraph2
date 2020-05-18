@@ -12,7 +12,7 @@ namespace ModelGraph.Core
         private string _description;
 
         #region Constructor  ======================================================
-        internal ViewX(StoreOf_ViewX owner, bool autoExpandRight = false)
+        internal ViewX(ViewXRoot owner, bool autoExpandRight = false)
         {
             Owner = owner;
 

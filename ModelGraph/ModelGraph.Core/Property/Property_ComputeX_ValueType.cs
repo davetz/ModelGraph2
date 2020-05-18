@@ -6,7 +6,7 @@ namespace ModelGraph.Core
         internal override IdKey IdKey => IdKey.ComputeXValueTypeProperty;
         internal override bool IsReadonly => true;
 
-        internal Property_ComputeX_ValueType(StoreOf_Property owner)
+        internal Property_ComputeX_ValueType(PropertyRoot owner)
         {
             Owner = owner;
             Value = new StringValue(this);

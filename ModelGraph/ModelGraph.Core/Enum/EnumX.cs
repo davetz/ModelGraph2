@@ -13,7 +13,7 @@ namespace ModelGraph.Core
         internal string GetActualValueAt(int index) => (index < 0 || index >= Count) ? InvalidItem : Items[index].ActualValue;
 
         #region Constructors  =================================================
-        internal EnumX(StoreOf_EnumX owner, bool autoExpandRight = false)
+        internal EnumX(EnumXRoot owner, bool autoExpandRight = false)
         {
             Owner = owner;
 

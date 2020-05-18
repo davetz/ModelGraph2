@@ -80,7 +80,7 @@ namespace ModelGraph.Core
         internal void RemoveLink(Relation rel, Item parent, Item child)
         {
             MarkItemUnlinked(rel, parent, child);
-            Redo(Get<ChangeSet>());
+            Redo(Get<Change>());
         }
 
         internal void AppendLink(Relation rel, Item parent, Item child)

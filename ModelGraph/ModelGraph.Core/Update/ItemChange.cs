@@ -5,17 +5,20 @@ namespace ModelGraph.Core
     {
         internal string _name;
         internal override string Name { get => _name; }
+        internal override State State { get; set; }
 
-        #region Properties/Methods  ===========================================
-        internal ChangeSet ChangeSet => Owner as ChangeSet;
+
+        internal Change ChangeSet => Owner as Change;
         internal bool CanUndo => !IsUndone;
         internal bool CanRedo => IsUndone;
+
+        abstract internal void Undo();
+        abstract internal void Redo();
 
         protected void UpdateDelta()
         {
             Owner.ModelDelta++;
             Owner.Owner.ModelDelta++;
         }
-        #endregion
     }
 }

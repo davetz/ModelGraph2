@@ -5,7 +5,7 @@ namespace ModelGraph.Core
     {
         internal override IdKey IdKey => IdKey.Store_SummaryProperty;
 
-        internal Relation_Store_SummaryProperty(StoreOf_Relation owner)
+        internal Relation_Store_SummaryProperty(RelationRoot owner)
         {
             Owner = owner;
             Pairing = Pairing.OneToOne;

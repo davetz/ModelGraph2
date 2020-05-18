@@ -4,7 +4,7 @@ using Windows.Storage.Streams;
 
 namespace ModelGraph.Core
 {
-    public abstract class StoreOf_Internal<T> : StoreOf<T>, ISerializer where T : Item
+    public abstract class InternalRoot<T> : StoreOf<T>, ISerializer where T : Item
     {
         public int GetSerializerItemCount()
         {

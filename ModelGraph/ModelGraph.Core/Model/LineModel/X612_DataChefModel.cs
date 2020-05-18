@@ -7,11 +7,12 @@ namespace ModelGraph.Core
         internal override IdKey IdKey => IdKey.DataChefModel;
         public override bool CanExpandLeft => true;
 
-        internal X612_DataChefModel(LineModel owner, Item item) : base(owner, item) 
+        internal X612_DataChefModel(LineModel owner, Chef item) : base(owner, item) 
         {
+            var chef = Item as Chef;
             new X620_ParmRootModel(this, Item);
             new X621_ErrorRootModel(this, Item);
-            new X622_ChangeRootModel(this, Item);
+            new X622_ChangeRootModel(this, chef.Get<ChangeRoot>());
             new X623_MetaRootModel(this, Item);
             new X624_ModelRootModel(this, Item);
 

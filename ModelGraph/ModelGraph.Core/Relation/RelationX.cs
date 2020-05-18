@@ -14,7 +14,7 @@ namespace ModelGraph.Core
 
         #region Constructors  =================================================
         internal RelationX() { }
-        internal RelationX(StoreOf_RelationX owner, IdKey idKe, bool autoExpandRight = false)
+        internal RelationX(RelationXRoot owner, IdKey idKe, bool autoExpandRight = false)
         {
             Owner = owner;
             Pairing = Pairing.OneToMany;

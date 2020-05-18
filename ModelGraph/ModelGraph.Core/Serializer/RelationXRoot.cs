@@ -5,7 +5,7 @@ using Windows.Storage.Streams;
 
 namespace ModelGraph.Core
 {
-    public class StoreOf_RelationX : StoreOf_External<Relation>, ISerializer, IRelationStore
+    public class RelationXRoot : ExternalRoot<Relation>, ISerializer, IRelationStore
     {
         static Guid _serializerGuid = new Guid("D950F508-B774-4838-B81A-757EFDC40518");
         static byte _formatVersion = 1;
@@ -18,7 +18,7 @@ namespace ModelGraph.Core
 
 
         #region Constructor  ==================================================
-        internal StoreOf_RelationX(Chef chef)
+        internal RelationXRoot(Chef chef)
         {
             Owner = chef;
 
@@ -35,7 +35,7 @@ namespace ModelGraph.Core
         #region CreateProperties  =============================================
         private void CreateProperties(Chef chef)
         {
-            var sto = chef.Get<StoreOf_Property>();
+            var sto = chef.Get<PropertyRoot>();
 
             chef.RegisterReferenceItem(new Property_Relation_Pairing(sto));
             chef.RegisterReferenceItem(new Property_Relation_IsRequired(sto));

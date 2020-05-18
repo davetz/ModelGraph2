@@ -5,7 +5,7 @@ namespace ModelGraph.Core
     {
         internal override IdKey IdKey => IdKey.ItemNameProperty;
 
-        internal Property_Item_Name(StoreOf_Property owner)
+        internal Property_Item_Name(PropertyRoot owner)
         {
             Owner = owner;
             Value = new StringValue(this);

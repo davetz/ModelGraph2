@@ -21,7 +21,7 @@ namespace ModelGraph.Core
             }
             CovertClear();
 
-            var st = Item as StoreOf_GraphX;
+            var st = Item as GraphXRoot;
             foreach (var gx in st.Items)
             {
                 if (prev.TryGetValue(gx, out LineModel m))

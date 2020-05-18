@@ -44,7 +44,7 @@ namespace ModelGraph.Core
                     new X623_MetaRootModel(this, chef);
                     break;
                 case IdKey.ChangeRootModel:
-                    new X622_ChangeRootModel(this, chef);
+                    new X622_ChangeRootModel(this, chef.Get<ChangeRoot>());
                     break;
                 case IdKey.ErrorRootModel:
                     new X621_ErrorRootModel(this, chef);

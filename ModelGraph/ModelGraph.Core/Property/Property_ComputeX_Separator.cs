@@ -5,7 +5,7 @@ namespace ModelGraph.Core
     {
         internal override IdKey IdKey => IdKey.ComputeXSeparatorProperty;
 
-        internal Property_ComputeX_Separator(StoreOf_Property owner)
+        internal Property_ComputeX_Separator(PropertyRoot owner)
         {
             Owner = owner;
             Value = new StringValue(this);

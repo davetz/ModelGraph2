@@ -5,7 +5,7 @@ namespace ModelGraph.Core
     {
         internal override IdKey IdKey => IdKey.ComputeXSelectProperty;
 
-        internal Property_ComputeX_Select(StoreOf_Property owner)
+        internal Property_ComputeX_Select(PropertyRoot owner)
         {
             Owner = owner;
             Value = new StringValue(this);

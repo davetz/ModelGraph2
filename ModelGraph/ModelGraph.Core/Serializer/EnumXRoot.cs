@@ -4,13 +4,13 @@ using Windows.Storage.Streams;
 
 namespace ModelGraph.Core
 {
-    public class StoreOf_EnumX : StoreOf_External<EnumX>, ISerializer
+    public class EnumXRoot : ExternalRoot<EnumX>, ISerializer
     {
         static Guid _serializerGuid = new Guid("8D4CEAD8-E3C5-4342-88AC-1B4B625A9A4C");
         static byte _formatVersion = 1;
         internal override IdKey IdKey => IdKey.EnumXDomain;
 
-        internal StoreOf_EnumX(Chef chef)
+        internal EnumXRoot(Chef chef)
         {
             Owner = chef;
 
@@ -23,7 +23,7 @@ namespace ModelGraph.Core
         #region CreateProperties  =============================================
         private void CreateProperties(Chef chef)
         {
-            var sto = chef.Get<StoreOf_Property>();
+            var sto = chef.Get<PropertyRoot>();
 
             chef.RegisterReferenceItem(new Property_PairX_Text(sto));
             chef.RegisterReferenceItem(new Property_PairX_Value(sto));

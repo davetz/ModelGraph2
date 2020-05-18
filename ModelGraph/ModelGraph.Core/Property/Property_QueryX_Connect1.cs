@@ -5,7 +5,7 @@ namespace ModelGraph.Core
     {
         internal override IdKey IdKey => IdKey.QueryXConnect1Property;
 
-        internal Property_QueryX_Connect1(StoreOf_Property owner)
+        internal Property_QueryX_Connect1(PropertyRoot owner)
         {
             Owner = owner;
             Value = new StringValue(this);

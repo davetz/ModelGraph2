@@ -12,7 +12,7 @@ namespace ModelGraph.Core
         internal override IdKey IdKey =>  IdKey.ItemLinked;
 
         #region Constructor  ==================================================
-        internal ItemLinked(ChangeSet owner, Relation relation, Item parent, Item child, int parentIndex, int childIndex, string name)
+        internal ItemLinked(Change owner, Relation relation, Item parent, Item child, int parentIndex, int childIndex, string name)
         {
             Owner = owner;
             _name = name;

@@ -5,7 +5,7 @@ namespace ModelGraph.Core
     {
         internal override IdKey IdKey => IdKey.QueryXDashStyleProperty;
 
-        internal Property_QueryX_DashStyle(StoreOf_Property owner)
+        internal Property_QueryX_DashStyle(PropertyRoot owner)
         {
             Owner = owner;
             Value = new StringValue(this);

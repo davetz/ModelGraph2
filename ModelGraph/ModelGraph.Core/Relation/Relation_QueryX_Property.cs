@@ -5,7 +5,7 @@ namespace ModelGraph.Core
     {
         internal override IdKey IdKey => IdKey.QueryX_Property;
 
-        internal Relation_QueryX_Property(StoreOf_Relation owner)
+        internal Relation_QueryX_Property(RelationRoot owner)
         {
             Owner = owner;
             Pairing = Pairing.OneToMany;

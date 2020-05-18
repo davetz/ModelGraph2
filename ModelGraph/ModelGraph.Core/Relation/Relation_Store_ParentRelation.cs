@@ -5,10 +5,10 @@ namespace ModelGraph.Core
     {
         internal override IdKey IdKey => IdKey.Store_ParentRelation;
 
-        internal Relation_Store_ParentRelation(StoreOf_Relation owner)
+        internal Relation_Store_ParentRelation(RelationRoot owner)
         {
             Owner = owner;
-            Pairing = Pairing.OneToMany;
+            Pairing = Pairing.ManyToMany;
             IsRequired = true;
             Initialize(25, 25);
 

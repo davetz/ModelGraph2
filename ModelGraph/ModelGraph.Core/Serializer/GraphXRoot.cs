@@ -4,13 +4,13 @@ using Windows.Storage.Streams;
 
 namespace ModelGraph.Core
 {
-    public class StoreOf_GraphX : StoreOf_External<GraphX>, ISerializer
+    public class GraphXRoot : ExternalRoot<GraphX>, ISerializer
     {
         static Guid _serializerGuid = new Guid("48C7FA8C-88F1-4203-8E54-3255C1F8C528");
         static byte _formatVersion = 1;
         internal override IdKey IdKey => IdKey.GraphXDomain;
 
-        internal StoreOf_GraphX(Chef chef) 
+        internal GraphXRoot(Chef chef) 
         {
             Owner = chef;
 
@@ -26,7 +26,7 @@ namespace ModelGraph.Core
         #region CreateProperties  =============================================
         private void CreateProperties(Chef chef)
         {
-            var sto = chef.Get<StoreOf_Property>();
+            var sto = chef.Get<PropertyRoot>();
 
             chef.RegisterReferenceItem(new Property_GraphX_TerminalLength(sto));
             chef.RegisterReferenceItem(new Property_GraphX_TerminalSpacing(sto));

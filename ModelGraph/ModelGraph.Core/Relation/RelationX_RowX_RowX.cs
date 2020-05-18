@@ -5,7 +5,7 @@ namespace ModelGraph.Core
     {
         internal override IdKey IdKey => IdKey.RowX_RowX;
 
-        internal RelationX_RowX_RowX(StoreOf_RelationX owner, bool autoExpandRight = false)
+        internal RelationX_RowX_RowX(RelationXRoot owner, bool autoExpandRight = false)
         {
             Owner = owner;
             Pairing = Pairing.OneToMany;

@@ -5,13 +5,13 @@ using Windows.Storage.Streams;
 
 namespace ModelGraph.Core
 {
-    public class StoreOf_ViewX : StoreOf_External<ViewX>, ISerializer
+    public class ViewXRoot : ExternalRoot<ViewX>, ISerializer
     {
         static Guid _serializerGuid = new Guid("396EC955-832E-4BEA-9E5C-C2A203ADAD23");
         static byte _formatVersion = 1;
         internal override IdKey IdKey => IdKey.ViewXDomain;
 
-        internal StoreOf_ViewX(Chef chef)
+        internal ViewXRoot(Chef chef)
         {
             Owner = chef;
 

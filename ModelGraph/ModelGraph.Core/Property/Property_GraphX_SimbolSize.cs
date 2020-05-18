@@ -5,7 +5,7 @@ namespace ModelGraph.Core
     {
         internal override IdKey IdKey => IdKey.GraphSymbolSizeProperty;
 
-        internal Property_GraphX_SymbolSize(StoreOf_Property owner)
+        internal Property_GraphX_SymbolSize(PropertyRoot owner)
         {
             Owner = owner;
             Value = new Int32Value(this);

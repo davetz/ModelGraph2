@@ -37,15 +37,17 @@ namespace ModelGraph.Core
         public override void GetButtonCommands(Chef chef, List<LineCommand> list)
         {
             list.Clear();
-            list.Add(new X035_InsertCommand(this, AddNewColumnX));
+            list.Add(new InsertCommand(this, AddNewColumnX));
         }
         private void AddNewColumnX()
         {
             var chef = DataChef;
+            var cx = new ColumnX(chef.Get<ColumnXRoot>(), true);
             var sto = Item as Store;
-            var cx = new ColumnX(chef.Get<StoreOf_ColumnX>(), true);
+
+            // the data chef implements undo/redo functionality
             chef.ItemCreated(cx);
-            chef.Get<Relation_Store_ColumnX>().AppendLink(sto, cx);
+            chef.ItemLinked(chef.Get<Relation_Store_ColumnX>(), sto, cx);
         }
 
         internal override bool Validate(Dictionary<Item, LineModel> prev)

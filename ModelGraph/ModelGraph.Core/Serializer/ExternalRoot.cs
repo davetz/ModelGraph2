@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ModelGraph.Core
 {
-    public abstract class StoreOf_External<T> : StoreOf<T> where T : Item
+    public abstract class ExternalRoot<T> : StoreOf<T> where T : Item
     {
         public bool HasData() => Count > 0;
 

@@ -5,7 +5,7 @@ namespace ModelGraph.Core
     {
         internal override IdKey IdKey => IdKey.NodeLabelingProperty;
 
-        internal Property_Node_Labeling(StoreOf_Property owner)
+        internal Property_Node_Labeling(PropertyRoot owner)
         {
             Owner = owner;
             Value = new StringValue(this);

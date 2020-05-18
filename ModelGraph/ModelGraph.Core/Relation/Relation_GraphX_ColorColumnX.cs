@@ -5,7 +5,7 @@ namespace ModelGraph.Core
     {
         internal override IdKey IdKey => IdKey.GraphX_ColorColumnX;
 
-        internal Relation_GraphX_ColorColumnX(StoreOf_Relation owner)
+        internal Relation_GraphX_ColorColumnX(RelationRoot owner)
         {
             Owner = owner;
             Pairing = Pairing.OneToOne;

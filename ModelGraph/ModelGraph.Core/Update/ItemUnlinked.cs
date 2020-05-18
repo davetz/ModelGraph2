@@ -10,7 +10,7 @@
         internal override IdKey IdKey => IdKey.ItemUnlinked;
 
         #region Constructor  ==================================================
-        internal ItemUnLinked(ChangeSet owner, Relation relation, Item parent, Item child, int parentIndex, int childIndex, string name)
+        internal ItemUnLinked(Change owner, Relation relation, Item parent, Item child, int parentIndex, int childIndex, string name)
         {
             Owner = owner;
             _name = name;

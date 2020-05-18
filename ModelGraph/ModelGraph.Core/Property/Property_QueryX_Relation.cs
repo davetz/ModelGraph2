@@ -6,7 +6,7 @@ namespace ModelGraph.Core
         internal override IdKey IdKey => IdKey.QueryXRelationProperty;
         internal override bool IsReadonly => true;
 
-        internal Property_QueryX_Relation(StoreOf_Property owner)
+        internal Property_QueryX_Relation(PropertyRoot owner)
         {
             Owner = owner;
             Value = new StringValue(this);

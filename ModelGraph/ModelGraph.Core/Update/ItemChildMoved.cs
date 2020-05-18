@@ -15,7 +15,7 @@ namespace ModelGraph.Core
         internal override IdKey IdKey => IdKey.ItemChildMoved;
 
         #region Constructor  ==================================================
-        internal ItemChildMoved(ChangeSet owner, Relation relation, Item key, Item item, int index1, int index2, string name)
+        private ItemChildMoved(Change owner, Relation relation, Item key, Item item, int index1, int index2, string name)
         {
             Owner = owner;
             _name = name;
@@ -30,5 +30,6 @@ namespace ModelGraph.Core
             UpdateDelta();
         }
         #endregion
+
     }
 }

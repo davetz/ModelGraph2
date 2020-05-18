@@ -5,9 +5,9 @@ using Windows.Storage.Streams;
 
 namespace ModelGraph.Core
 {
-    public class StoreOf_Relation : StoreOf_Internal<Relation>, IRelationStore
+    public class RelationRoot : InternalRoot<Relation>, IRelationStore
     {
-        internal StoreOf_Relation(Chef chef)
+        internal RelationRoot(Chef chef)
         {
             Owner = chef;
 

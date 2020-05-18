@@ -5,7 +5,7 @@ namespace ModelGraph.Core
     {
         internal override IdKey IdKey => IdKey.NodeCenterXYProperty;
 
-        internal Property_Node_CenterXY(StoreOf_Property owner)
+        internal Property_Node_CenterXY(PropertyRoot owner)
         {
             Owner = owner;
             Value = new Int32ArrayValue(this);

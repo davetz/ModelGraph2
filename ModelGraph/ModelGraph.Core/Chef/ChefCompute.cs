@@ -16,7 +16,7 @@ namespace ModelGraph.Core
         #region ResetCacheValues  =============================================
         private void ResetCacheValues()
         {
-            var items = Get<StoreOf_ComputeX>().Items;
+            var items = Get<ComputeXRoot>().Items;
             foreach (var cx in items) { cx.Value.Clear(); }
         }
         #endregion 

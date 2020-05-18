@@ -74,17 +74,17 @@ namespace ModelGraph.Core
         #region PrimeStores  ==================================================
         internal Store[] PrimeStores => new Store[]
         {
-            Get<StoreOf_EnumX>(),
-            Get<StoreOf_ViewX>(),
-            Get<StoreOf_TableX>(),
-            Get<StoreOf_GraphX>(),
-            Get<StoreOf_QueryX>(),
-            Get<StoreOf_ColumnX>(),
-            Get<StoreOf_SymbolX>(),
-            Get<StoreOf_ComputeX>(),
-            Get<StoreOf_RelationX>(),
-            Get<StoreOf_Relation>(),
-            Get<StoreOf_Property>(),
+            Get<EnumXRoot>(),
+            Get<ViewXRoot>(),
+            Get<TableXRoot>(),
+            Get<GraphXRoot>(),
+            Get<QueryXRoot>(),
+            Get<ColumnXRoot>(),
+            Get<SymbolXRoot>(),
+            Get<ComputeXRoot>(),
+            Get<RelationXRoot>(),
+            Get<RelationRoot>(),
+            Get<PropertyRoot>(),
         };
         #endregion
 
@@ -94,29 +94,22 @@ namespace ModelGraph.Core
             RegisterReferenceItem(new DummyItem(this));
             RegisterReferenceItem(new DummyQueryX(this));
 
-            RegisterPrivateItem(new StoreOf_ChangeSet(this));
+            RegisterReferenceItem(new RelationRoot(this));
+            RegisterReferenceItem(new PropertyRoot(this));
+            RegisterPrivateItem(new ChangeRoot(this));
+            RegisterPrivateItem(new ErrorRoot(this));
+            RegisterPrivateItem(new EnumRoot(this));
 
-            RegisterPrivateItem(new ChangeSet(Get<StoreOf_ChangeSet>(), ChangeSequence));
+            RegisterReferenceItem(new EnumXRoot(this));
+            RegisterReferenceItem(new ViewXRoot(this));
+            RegisterReferenceItem(new TableXRoot(this));
+            RegisterReferenceItem(new GraphXRoot(this));
 
-            RegisterPrivateItem(new StoreOf_Error(this));
-            RegisterPrivateItem(new StoreOf_EnumZ(this));
-
-            RegisterPrivateItem(new StoreOf_PropertyZ(this));
-            RegisterPrivateItem(new StoreOf_RelationZ(this));
-
-            RegisterReferenceItem(new StoreOf_Property(this));
-            RegisterReferenceItem(new StoreOf_Relation(this));
-
-            RegisterReferenceItem(new StoreOf_EnumX(this));
-            RegisterReferenceItem(new StoreOf_ViewX(this));
-            RegisterReferenceItem(new StoreOf_TableX(this));
-            RegisterReferenceItem(new StoreOf_GraphX(this));
-
-            RegisterReferenceItem(new StoreOf_QueryX(this));
-            RegisterReferenceItem(new StoreOf_ColumnX(this));
-            RegisterReferenceItem(new StoreOf_SymbolX(this));
-            RegisterReferenceItem(new StoreOf_ComputeX(this));
-            RegisterReferenceItem(new StoreOf_RelationX(this));
+            RegisterReferenceItem(new QueryXRoot(this));
+            RegisterReferenceItem(new ColumnXRoot(this));
+            RegisterReferenceItem(new SymbolXRoot(this));
+            RegisterReferenceItem(new ComputeXRoot(this));
+            RegisterReferenceItem(new RelationXRoot(this));
         }
         #endregion
 

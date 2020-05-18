@@ -5,7 +5,7 @@ namespace ModelGraph.Core
     {
         internal override IdKey IdKey => IdKey.NodeResizingProperty;
 
-        internal Property_Node_Resizing(StoreOf_Property owner)
+        internal Property_Node_Resizing(PropertyRoot owner)
         {
             Owner = owner;
             Value = new StringValue(this);

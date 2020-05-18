@@ -9,7 +9,8 @@ namespace ModelGraph.Core
         internal abstract void Add(Item item);
         internal abstract void Move(Item item, int index);
         internal abstract void Insert(Item item, int index);
-        public abstract void Remove(Item item);
+        public abstract bool Remove(Item item);
+        internal abstract bool IsValidOwnerOf(Item item);
         internal abstract void RemoveAll();
         internal abstract void Discard();
         internal abstract void DiscardChildren();

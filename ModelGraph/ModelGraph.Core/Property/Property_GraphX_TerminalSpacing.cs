@@ -5,7 +5,7 @@ namespace ModelGraph.Core
     {
         internal override IdKey IdKey => IdKey.GraphTerminalSpacingProperty;
 
-        internal Property_GraphX_TerminalSpacing(StoreOf_Property owner)
+        internal Property_GraphX_TerminalSpacing(PropertyRoot owner)
         {
             Owner = owner;
             Value = new Int32Value(this);

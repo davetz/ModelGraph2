@@ -16,6 +16,7 @@ namespace ModelGraph.Core
         #endregion
 
         #region Methods  ======================================================
+        internal override bool IsValidOwnerOf(Item item) => item is T;
         private T Cast(Item item) => (item is T child) ? child : throw new InvalidCastException("StoreOf");
         private void UpdateDelta() { ModelDelta++; ChildDelta++; }
 
@@ -45,10 +46,10 @@ namespace ModelGraph.Core
         internal override void Add(Item item) => Add(Cast(item));
 
         // Remove  ==========================================================
-        internal void Remove(T item)
+        internal bool Remove(T item)
         {
-            _items.Remove(item);
             UpdateDelta();
+            return _items.Remove(item);
         }
         // Discard  ===========================================================
         /// <summary>Discard my self and recursivly discard all child Items</summary>
@@ -68,7 +69,7 @@ namespace ModelGraph.Core
             }
             _items.Clear();
         }
-        public override void Remove(Item item) => Remove(Cast(item));
+        public override bool Remove(Item item) => Remove(Cast(item));
 
         // Insert  ============================================================
         internal void Insert(T item, int index)

@@ -5,7 +5,7 @@ namespace ModelGraph.Core
     {
         internal override IdKey IdKey => IdKey.GraphTerminalLengthProperty;
 
-        internal Property_GraphX_TerminalLength(StoreOf_Property owner)
+        internal Property_GraphX_TerminalLength(PropertyRoot owner)
         {
             Owner = owner;
             Value = new Int32Value(this);

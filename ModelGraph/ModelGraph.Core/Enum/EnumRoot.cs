@@ -2,10 +2,10 @@
 
 namespace ModelGraph.Core
 {
-    public class StoreOf_EnumZ : StoreOf<EnumZ>
+    public class EnumRoot : StoreOf<EnumZ>
     {
         #region Constructors  =================================================
-        internal StoreOf_EnumZ(Chef chef)
+        internal EnumRoot(Chef chef)
         {
             Owner = chef;
             SetCapacity(20);
@@ -19,7 +19,6 @@ namespace ModelGraph.Core
         void AddChildren(Chef chef)
         {
             chef.RegisterPrivateItem(new Enum_ValueType(this));
-
         }
         #endregion
 

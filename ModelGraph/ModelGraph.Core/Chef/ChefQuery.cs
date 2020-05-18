@@ -8,8 +8,8 @@ namespace ModelGraph.Core
         #region ValidateQueryXStore  ==========================================
         private void ValidateQueryXStore()
         {
-            var ComputeXDomain = Get<StoreOf_ComputeX>();
-            var GraphXDomain = Get<StoreOf_GraphX>();
+            var ComputeXDomain = Get<ComputeXRoot>();
+            var GraphXDomain = Get<GraphXRoot>();
 
             foreach (var cx in ComputeXDomain.Items)
             {
@@ -28,7 +28,7 @@ namespace ModelGraph.Core
             var ComputeX_QueryX = Get<Relation_ComputeX_QueryX>();
             var GraphX_QueryX = Get<Relation_GraphX_QueryX>();
             var SymbolX_QueryX = Get<Relation_SymbolX_QueryX>();
-            var QueryXDomain = Get<StoreOf_QueryX>();
+            var QueryXDomain = Get<QueryXRoot>();
 
             while (QueryX_QueryX.TryGetParent(qx, out QueryX qp)) { qx = qp; }
 
@@ -95,7 +95,7 @@ namespace ModelGraph.Core
             {
                 var anyUnresolved = false;
 
-                foreach (var cx in Get<StoreOf_ComputeX>().Items)
+                foreach (var cx in Get<ComputeXRoot>().Items)
                 {
                     if (cx.Value.ValType == ValType.IsUnresolved)
                     {
@@ -320,24 +320,24 @@ namespace ModelGraph.Core
         #region CreateQueryX  =================================================
         private QueryX CreateQueryX(ViewX vx, Store st)
         {
-            var qxNew = new QueryX(Get<StoreOf_QueryX>(), QueryType.View, true);
-            ItemCreated(qxNew);
+            var qxNew = new QueryX(Get<QueryXRoot>(), QueryType.View, true);
+            ItemCreated.Record(this, qxNew);
             AppendLink(Get<Relation_ViewX_QueryX>(), vx, qxNew);
             AppendLink(Get<Relation_Store_QueryX>(), st, qxNew);
             return qxNew;
         }
         private QueryX CreateQueryX(GraphX gx, Store st)
         {
-            var qxNew = new QueryX(Get<StoreOf_QueryX>(), QueryType.Graph, true);
-            ItemCreated(qxNew);
+            var qxNew = new QueryX(Get<QueryXRoot>(), QueryType.Graph, true);
+            ItemCreated.Record(this, qxNew);
             AppendLink(Get<Relation_GraphX_QueryX>(), gx, qxNew);
             AppendLink(Get<Relation_Store_QueryX>(), st, qxNew);
             return qxNew;
         }
         private QueryX CreateQueryX(ComputeX cx, Store st)
         {
-            var qxNew = new QueryX(Get<StoreOf_QueryX>(), QueryType.Value, true);
-            ItemCreated(qxNew);
+            var qxNew = new QueryX(Get<QueryXRoot>(), QueryType.Value, true);
+            ItemCreated.Record(this, qxNew);
             AppendLink(Get<Relation_ComputeX_QueryX>(), cx, qxNew);
             AppendLink(Get<Relation_Store_QueryX>(), st, qxNew);
             return qxNew;
@@ -345,8 +345,8 @@ namespace ModelGraph.Core
 
         private QueryX CreateQueryX(GraphX gx, SymbolX sx, Store st)
         {
-            var qxNew = new QueryX(Get<StoreOf_QueryX>(), QueryType.Symbol, true);
-            ItemCreated(qxNew);
+            var qxNew = new QueryX(Get<QueryXRoot>(), QueryType.Symbol, true);
+            ItemCreated.Record(this, qxNew);
             AppendLink(Get<Relation_GraphX_SymbolQueryX>(), gx, qxNew);
             AppendLink(Get<Relation_SymbolX_QueryX>(), sx, qxNew);
             AppendLink(Get<Relation_Store_QueryX>(), st, qxNew);
@@ -355,8 +355,8 @@ namespace ModelGraph.Core
 
         private QueryX CreateQueryX(ViewX vx, Relation re)
         {
-            var qxNew = new QueryX(Get<StoreOf_QueryX>(), QueryType.View);
-            ItemCreated(qxNew);
+            var qxNew = new QueryX(Get<QueryXRoot>(), QueryType.View);
+            ItemCreated.Record(this, qxNew);
             AppendLink(Get<Relation_ViewX_QueryX>(), vx, qxNew);
             AppendLink(Get<Relation_Relation_QueryX>(), re, qxNew);
             ClearParentTailFlags(qxNew);
@@ -365,8 +365,8 @@ namespace ModelGraph.Core
         private QueryX CreateQueryX(QueryX qx, Relation re, QueryType kind)
         {
             qx.IsTail = false;
-            var qxNew = new QueryX(Get<StoreOf_QueryX>(), kind);
-            ItemCreated(qx);
+            var qxNew = new QueryX(Get<QueryXRoot>(), kind);
+            ItemCreated.Record(this, qx);
             AppendLink(Get<Relation_QueryX_QueryX>(), qx, qxNew);
             AppendLink(Get<Relation_Relation_QueryX>(), re, qxNew);
             ClearParentTailFlags(qxNew);

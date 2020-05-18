@@ -105,6 +105,25 @@ namespace ModelGraph.Core
         #region Property/Methods ==============================================
         internal int Index => (Owner is Store st) ? st.IndexOf(this) : -1;
 
+        internal void Reparent(Store newOwner, bool insert = false)
+        {
+            if (newOwner.IsValidOwnerOf(this))
+            {
+                if (Owner is Store st && st.Remove(this))
+                {
+                    if (insert)
+                        newOwner.Insert(this, 0);
+                    else
+                        newOwner.Add(this);
+                    Owner = newOwner;
+                }
+                else
+                    throw new ArgumentException($"Item.Reparent() - old Owner does not contain {this}");
+            }
+            else
+                throw new ArgumentException($"Item.Reparent() - Attempted repairented of invalid child type {this}");
+        }
+
         internal Store Store => Owner as Store;
 
 

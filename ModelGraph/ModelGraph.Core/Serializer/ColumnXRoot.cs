@@ -4,13 +4,13 @@ using Windows.Storage.Streams;
 
 namespace ModelGraph.Core
 {
-    public class StoreOf_ColumnX : StoreOf_External<ColumnX>, ISerializer
+    public class ColumnXRoot : ExternalRoot<ColumnX>, ISerializer
     {
         static Guid _serializerGuid = new Guid("3E7097FE-22D5-43B2-964A-9DB843F6D55B");
         static byte _formatVersion = 1;
         internal override IdKey IdKey => IdKey.ColumnXDomain;
 
-        internal StoreOf_ColumnX(Chef chef)
+        internal ColumnXRoot(Chef chef)
         {
             Owner = chef;
 
@@ -23,7 +23,7 @@ namespace ModelGraph.Core
         #region CreateProperties  =============================================
         private void CreateProperties(Chef chef)
         {
-            var sto = chef.Get<StoreOf_Property>();
+            var sto = chef.Get<PropertyRoot>();
 
             chef.RegisterReferenceItem(new Property_ColumnX_ValueType(sto));
             chef.RegisterReferenceItem(new Property_ColumnX_IsChoice(sto));

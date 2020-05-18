@@ -13,10 +13,10 @@ namespace ModelGraph.Core
             if (IsExpandedLeft) return false;
             var chef = DataChef;
 
-            new X623_ViewXListMetaModel(this, chef.Get<StoreOf_ViewX>());
-            new X642_EnumXListMetaModel(this, chef.Get<StoreOf_EnumX>());
-            new X643_TableXListMetaModel(this, chef.Get<StoreOf_TableX>());
-            new X644_GraphXListMetaModel(this, chef.Get<StoreOf_GraphX>());
+            new X623_ViewXListMetaModel(this, chef.Get<ViewXRoot>());
+            new X642_EnumXListMetaModel(this, chef.Get<EnumXRoot>());
+            new X643_TableXListMetaModel(this, chef.Get<TableXRoot>());
+            new X644_GraphXListMetaModel(this, chef.Get<GraphXRoot>());
             new X740_InternalStoreListModel(this, Item);// TODO: FIX THIS***************
 
             IsExpandedLeft = true;

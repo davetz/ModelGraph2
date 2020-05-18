@@ -58,7 +58,7 @@ namespace ModelGraph.Core
         public bool CheckTestModel()
         {
             var NC = (int)ValType.MaximumType; // expected number of columns
-            var storeOf_TableX = Get<StoreOf_TableX>();
+            var storeOf_TableX = Get<TableXRoot>();
             var relation_Store_ColumnX = Get<Relation_Store_ColumnX>();
 
 
@@ -107,7 +107,7 @@ namespace ModelGraph.Core
         #region CreateTestTables  =============================================
         internal void CreateTestTables()
         {
-            var storeOf_TableX = Get<StoreOf_TableX>();
+            var storeOf_TableX = Get<TableXRoot>();
             for (int i = 0; i < NR; i++)
             {
                 var tx = new TableX(storeOf_TableX);
@@ -128,12 +128,12 @@ namespace ModelGraph.Core
             if (IsInvalidTableIndex(tx1Index)) return false;
             if (IsInvalidTableIndex(tx2Index)) return false;
 
-            var rx = new RelationX_RowX_RowX(Get<StoreOf_RelationX>());
+            var rx = new RelationX_RowX_RowX(Get<RelationXRoot>());
             rx.Pairing = pairing;
             rx.Initialize(NR, NR);
 
-            var tx1 = Get<StoreOf_TableX>().Items[tx1Index];
-            var tx2 = Get<StoreOf_TableX>().Items[tx2Index];
+            var tx1 = Get<TableXRoot>().Items[tx1Index];
+            var tx2 = Get<TableXRoot>().Items[tx2Index];
 
             Get<Relation_Store_ChildRelation>().SetLink(tx1, rx);
             Get<Relation_Store_ParentRelation>().SetLink(tx2, rx);
@@ -144,7 +144,7 @@ namespace ModelGraph.Core
             }
             return true;
 
-            bool IsInvalidTableIndex(int txI) => (txI < 0) ? true : (txI < Get<StoreOf_TableX>().Count) ? false : true;
+            bool IsInvalidTableIndex(int txI) => (txI < 0) ? true : (txI < Get<TableXRoot>().Count) ? false : true;
         }
         #endregion
 
@@ -152,7 +152,7 @@ namespace ModelGraph.Core
         #region CheckTableTestRelation  =======================================
         internal bool CheckTestRelation(int tx1Index, int tx2Index, Pairing pairing)
         {
-            var storeOf_TableX = Get<StoreOf_TableX>();
+            var storeOf_TableX = Get<TableXRoot>();
             var relation_Store_ChildRelation = Get<Relation_Store_ChildRelation>();
             var relation_Store_ParentRelation = Get<Relation_Store_ParentRelation>();
 
@@ -183,7 +183,7 @@ namespace ModelGraph.Core
         internal void CreateAllValTypeColumns(TableX tx)
         {
             var prop = Get<Property_ColumnX_ValueType>();
-            var storeOf_ColumnX = Get<StoreOf_ColumnX>();
+            var storeOf_ColumnX = Get<ColumnXRoot>();
             var relation_Store_ColumnX = Get<Relation_Store_ColumnX>();
             for (int i = 0; i < (int)ValType.MaximumType; i++)
             {

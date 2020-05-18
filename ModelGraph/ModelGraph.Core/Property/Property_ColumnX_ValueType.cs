@@ -3,11 +3,11 @@ using System;
 
 namespace ModelGraph.Core
 {
-    public class Property_ColumnX_ValueType : EnumZProperty
+    public class Property_ColumnX_ValueType : EnumProperty
     {
         internal override IdKey IdKey => IdKey.ColumnValueTypeProperty;
 
-        internal Property_ColumnX_ValueType(StoreOf_Property owner) : base(owner, owner.DataChef.Get<Enum_ValueType>()) { }
+        internal Property_ColumnX_ValueType(PropertyRoot owner) : base(owner, owner.DataChef.Get<Enum_ValueType>()) { }
 
         internal override int GetItemPropertyValue(Item item) => (int)Cast(item).Value.ValType;
 

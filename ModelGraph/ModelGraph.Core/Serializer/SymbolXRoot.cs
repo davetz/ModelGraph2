@@ -4,13 +4,13 @@ using Windows.Storage.Streams;
 
 namespace ModelGraph.Core
 {
-    public class StoreOf_SymbolX : StoreOf_External<SymbolX>, ISerializer
+    public class SymbolXRoot : ExternalRoot<SymbolX>, ISerializer
     {
         static Guid _serializerGuid = new Guid("D3956312-BEC7-4988-8228-DCA95CF23781");
         static byte _formatVersion = 1;
         internal override IdKey IdKey => IdKey.SymbolXDomain;
 
-        internal StoreOf_SymbolX(Chef chef)
+        internal SymbolXRoot(Chef chef)
         {
             Owner = chef;
 
@@ -23,7 +23,7 @@ namespace ModelGraph.Core
         #region CreateProperties  =============================================
         private void CreateProperties(Chef chef)
         {
-            var sto = chef.Get<StoreOf_Property>();
+            var sto = chef.Get<PropertyRoot>();
 
             chef.RegisterReferenceItem(new Property_SymbolX_Attatch(sto));
 

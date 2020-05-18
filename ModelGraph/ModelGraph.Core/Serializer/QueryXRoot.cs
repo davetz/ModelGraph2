@@ -4,13 +4,13 @@ using Windows.Storage.Streams;
 
 namespace ModelGraph.Core
 {
-    public class StoreOf_QueryX : StoreOf_External<QueryX>, ISerializer
+    public class QueryXRoot : ExternalRoot<QueryX>, ISerializer
     {
         static Guid _serializerGuid = new Guid("33B9B8A4-9332-4902-A3C1-37C5F971B6FF");
         static byte _formatVersion = 1;
         internal override IdKey IdKey => IdKey.QueryXDomain;
 
-        internal StoreOf_QueryX(Chef chef)
+        internal QueryXRoot(Chef chef)
         {
             Owner = chef;
 
@@ -23,7 +23,7 @@ namespace ModelGraph.Core
         #region CreateProperties  =============================================
         private void CreateProperties(Chef chef)
         {
-            var sto = chef.Get<StoreOf_Property>();
+            var sto = chef.Get<PropertyRoot>();
 
             chef.RegisterReferenceItem(new Property_QueryX_Where(sto));
             chef.RegisterReferenceItem(new Property_QueryX_Select(sto));

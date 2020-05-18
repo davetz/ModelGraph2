@@ -2,14 +2,14 @@
 
 namespace ModelGraph.Core
 {
-    public class ChangeSet : StoreOf<ItemChange>
+    public class Change : StoreOf<ItemChange>
     {
         internal DateTime DateTime;
         internal int Sequence;
         internal override IdKey IdKey => IdKey.ChangeSet;
 
         #region Constructor  ==================================================
-        internal ChangeSet(StoreOf_ChangeSet owner, int seqno)
+        internal Change(ChangeRoot owner, int seqno)
         {
             Owner = owner;
             DateTime = DateTime.Now;
@@ -20,12 +20,30 @@ namespace ModelGraph.Core
         #endregion
 
         #region Properties/Methods  ===========================================
-        internal StoreOf_ChangeSet ChangeRoot => Owner as StoreOf_ChangeSet;
+        internal ChangeRoot ChangeRoot => Owner as ChangeRoot;
         internal bool CanUndo => (!IsCongealed && !IsUndone);
         internal bool CanRedo => (!IsCongealed && IsUndone);
         internal bool CanMerge => ChangeRoot.CanMerge(this); 
         internal void Merge() { ChangeRoot.Mege(this); }
         internal override string Name { get => Sequence.ToString(); }
+
+        internal void Undo()
+        {
+            foreach (var item in Items)
+            {
+                item.Undo();
+            }
+            IsUndone = true;
+        }
+
+        internal void Redo()
+        {
+            foreach (var item in Items)
+            {
+                item.Redo();
+            }
+            IsUndone = false;
+        }
         #endregion
     }
 }

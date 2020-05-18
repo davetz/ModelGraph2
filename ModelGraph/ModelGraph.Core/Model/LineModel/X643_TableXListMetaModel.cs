@@ -6,7 +6,7 @@ namespace ModelGraph.Core
 {
     public class X643_TableXListMetaModel : LineModel
     {
-        internal X643_TableXListMetaModel(LineModel owner, StoreOf_TableX item) : base(owner, item) { }
+        internal X643_TableXListMetaModel(LineModel owner, TableXRoot item) : base(owner, item) { }
         internal override IdKey IdKey => IdKey.TableXListMetaModel;
         public override bool CanExpandLeft => true;
 
@@ -14,7 +14,7 @@ namespace ModelGraph.Core
         public override (string kind, string name, int count) GetLineParms(Chef chef)
         {
             var (kind, name) = GetKindNameId(chef);
-            var st = Item as StoreOf_TableX;
+            var st = Item as TableXRoot;
 
             return (kind, name, st.Count);
         }
@@ -25,7 +25,7 @@ namespace ModelGraph.Core
 
             IsExpandedLeft = true;
 
-            var st = Item as StoreOf_TableX;
+            var st = Item as TableXRoot;
             foreach (var tx in st.Items)
             {
                 new X654_TableXMetaModel(this, tx);
@@ -37,7 +37,7 @@ namespace ModelGraph.Core
         public override void GetButtonCommands(Chef chef, List<LineCommand> list)
         {
             list.Clear();
-            list.Add(new X035_InsertCommand(this, () => chef.ItemCreated(new TableX(Item as StoreOf_TableX, true))));
+            list.Add(new InsertCommand(this, () => chef.ItemCreated(new TableX(Item as TableXRoot, true))));
         }
 
         internal override bool Validate(Dictionary<Item, LineModel> prev)
@@ -56,7 +56,7 @@ namespace ModelGraph.Core
                     }
                     CovertClear();
 
-                    var st = Item as StoreOf_TableX;
+                    var st = Item as TableXRoot;
                     foreach (var tx in st.Items)
                     {
                         if (prev.TryGetValue(tx, out LineModel m))

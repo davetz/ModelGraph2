@@ -5,7 +5,7 @@ namespace ModelGraph.Core
     {
         internal override IdKey IdKey => IdKey.EdgeFace1Property;
 
-        internal Property_Edge_Facet2(StoreOf_Property owner)
+        internal Property_Edge_Facet2(PropertyRoot owner)
         {
             Owner = owner;
             Value = new StringValue(this);

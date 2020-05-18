@@ -1,9 +1,9 @@
 ﻿
 namespace ModelGraph.Core
 {
-    public class StoreOf_Property : StoreOf_Internal<Property>
+    public class PropertyRoot : InternalRoot<Property>
     {
-        internal StoreOf_Property(Chef chef)
+        internal PropertyRoot(Chef chef)
         {
             Owner = chef;
 

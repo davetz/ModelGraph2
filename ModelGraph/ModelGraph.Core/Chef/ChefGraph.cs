@@ -365,7 +365,7 @@ namespace ModelGraph.Core
 
         private void RefreshAllGraphs()
         {
-            var GraphXDomain = Get<StoreOf_GraphX>();
+            var GraphXDomain = Get<GraphXRoot>();
 
             foreach (var gx in GraphXDomain.Items)
             {

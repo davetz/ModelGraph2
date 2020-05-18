@@ -5,7 +5,7 @@ namespace ModelGraph.Core
     {
         internal override IdKey IdKey => IdKey.QueryXExclusiveKeyProperty;
 
-        internal Property_QueryX_ExclusiveKey(StoreOf_Property owner)
+        internal Property_QueryX_ExclusiveKey(PropertyRoot owner)
         {
             Owner = owner;
             Value = new ByteValue(this);

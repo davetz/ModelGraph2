@@ -2,19 +2,19 @@
 
 namespace ModelGraph.Core
 {
-    public class StoreOf_PropertyZ : StoreOf<Property>
+    public class ErrorRoot : StoreOf<Error>
     {
         #region Constructors  =================================================
-        internal StoreOf_PropertyZ(Chef owner)
+        internal ErrorRoot(Chef owner)
         {
             Owner = owner;
-            SetCapacity(10);
+            SetCapacity(20);
             owner.Add(this);
         }
         #endregion
 
         #region Identity  =====================================================
-        internal override IdKey IdKey => IdKey.PropertyZStore;
+        internal override IdKey IdKey => IdKey.ErrorStore;
         #endregion
     }
 }

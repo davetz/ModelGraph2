@@ -12,7 +12,7 @@ namespace ModelGraph.Core
        internal override IdKey IdKey => IdKey.ItemChildMoved;
 
     #region Constructor  ==================================================
-    internal ItemParentMoved(ChangeSet owner, Relation relation, Item key, Item item, int index1, int index2, string name)
+    internal ItemParentMoved(Change owner, Relation relation, Item key, Item item, int index1, int index2, string name)
         {
             Owner = owner;
             _name = name;
