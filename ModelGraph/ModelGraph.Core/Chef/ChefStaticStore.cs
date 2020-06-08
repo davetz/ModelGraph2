@@ -5,7 +5,6 @@ namespace ModelGraph.Core
 {
     public partial class Chef
     {
-        private int ChangeSequence = 1;
         private readonly Dictionary<Type, Item> Type_InstanceOf = new Dictionary<Type, Item>(200);  // used to get a specific type instance
         private readonly Dictionary<ushort, Item> IdKey_ReferenceItem = new Dictionary<ushort, Item>(200); // used to get specific type from its IdKey
         private readonly Dictionary<Type, Property[]> Type_Properties = new Dictionary<Type, Property[]>(100); // used for property name lookup

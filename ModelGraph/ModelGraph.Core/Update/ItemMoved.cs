@@ -22,20 +22,24 @@
         }
         #endregion
 
+        #region Record  =======================================================
         internal static void Record(Chef chef, Item item, int index1, int index2)
         {
             var n1 = index1 + 1;
             var n2 = index2 + 1;
             var name = $"{item.GetDoubleNameId(chef)}     {n1}->{n2}";
             var chg = new ItemMoved(chef.Get<ChangeRoot>().Change, item, index1, index2, name);
-            chg.Redo();
+            chg.DoNow();
         }
+        #endregion
 
+        #region Undo/Redo  ====================================================
         internal override void Undo()
         {
             var item = Item;
             var store = item.Owner as Store;
             store.Move(item, Index1);
+            IsUndone = true;
         }
 
         internal override void Redo()
@@ -43,6 +47,8 @@
             var item = Item;
             var store = item.Owner as Store;
             store.Move(item, Index2);
+            IsUndone = false;
         }
+        #endregion
     }
 }

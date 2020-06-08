@@ -229,9 +229,9 @@ namespace ModelGraph.Core
         #endregion
 
         #region CanDropQueryXRelation  ========================================
-        private bool CanDropQueryXRelation(QueryX sx, Relation re)
+        private bool CanDropQueryXRelation(QueryX qx, Relation re)
         {
-            GetHeadTail(sx, out Store p1, out Store c1);
+            GetHeadTail(qx, out Store p1, out Store c1);
             GetHeadTail(re, out Store p2, out Store c2);
 
             return (p1 == p2 || c1 == c2 || p1 == c2 || c1 == p2);
@@ -322,24 +322,24 @@ namespace ModelGraph.Core
         {
             var qxNew = new QueryX(Get<QueryXRoot>(), QueryType.View, true);
             ItemCreated.Record(this, qxNew);
-            AppendLink(Get<Relation_ViewX_QueryX>(), vx, qxNew);
-            AppendLink(Get<Relation_Store_QueryX>(), st, qxNew);
+            ItemLinked.Record(this, Get<Relation_ViewX_QueryX>(), vx, qxNew);
+            ItemLinked.Record(this, Get<Relation_Store_QueryX>(), st, qxNew);
             return qxNew;
         }
         private QueryX CreateQueryX(GraphX gx, Store st)
         {
             var qxNew = new QueryX(Get<QueryXRoot>(), QueryType.Graph, true);
             ItemCreated.Record(this, qxNew);
-            AppendLink(Get<Relation_GraphX_QueryX>(), gx, qxNew);
-            AppendLink(Get<Relation_Store_QueryX>(), st, qxNew);
+            ItemLinked.Record(this, Get<Relation_GraphX_QueryX>(), gx, qxNew);
+            ItemLinked.Record(this, Get<Relation_Store_QueryX>(), st, qxNew);
             return qxNew;
         }
         private QueryX CreateQueryX(ComputeX cx, Store st)
         {
             var qxNew = new QueryX(Get<QueryXRoot>(), QueryType.Value, true);
             ItemCreated.Record(this, qxNew);
-            AppendLink(Get<Relation_ComputeX_QueryX>(), cx, qxNew);
-            AppendLink(Get<Relation_Store_QueryX>(), st, qxNew);
+            ItemLinked.Record(this, Get<Relation_ComputeX_QueryX>(), cx, qxNew);
+            ItemLinked.Record(this, Get<Relation_Store_QueryX>(), st, qxNew);
             return qxNew;
         }
 
@@ -347,9 +347,9 @@ namespace ModelGraph.Core
         {
             var qxNew = new QueryX(Get<QueryXRoot>(), QueryType.Symbol, true);
             ItemCreated.Record(this, qxNew);
-            AppendLink(Get<Relation_GraphX_SymbolQueryX>(), gx, qxNew);
-            AppendLink(Get<Relation_SymbolX_QueryX>(), sx, qxNew);
-            AppendLink(Get<Relation_Store_QueryX>(), st, qxNew);
+            ItemLinked.Record(this, Get<Relation_GraphX_SymbolQueryX>(), gx, qxNew);
+            ItemLinked.Record(this, Get<Relation_SymbolX_QueryX>(), sx, qxNew);
+            ItemLinked.Record(this, Get<Relation_Store_QueryX>(), st, qxNew);
             return qxNew;
         }
 
@@ -357,8 +357,8 @@ namespace ModelGraph.Core
         {
             var qxNew = new QueryX(Get<QueryXRoot>(), QueryType.View);
             ItemCreated.Record(this, qxNew);
-            AppendLink(Get<Relation_ViewX_QueryX>(), vx, qxNew);
-            AppendLink(Get<Relation_Relation_QueryX>(), re, qxNew);
+            ItemLinked.Record(this, Get<Relation_ViewX_QueryX>(), vx, qxNew);
+            ItemLinked.Record(this, Get<Relation_Relation_QueryX>(), re, qxNew);
             ClearParentTailFlags(qxNew);
             return qxNew;
         }
@@ -367,8 +367,8 @@ namespace ModelGraph.Core
             qx.IsTail = false;
             var qxNew = new QueryX(Get<QueryXRoot>(), kind);
             ItemCreated.Record(this, qx);
-            AppendLink(Get<Relation_QueryX_QueryX>(), qx, qxNew);
-            AppendLink(Get<Relation_Relation_QueryX>(), re, qxNew);
+            ItemLinked.Record(this, Get<Relation_QueryX_QueryX>(), qx, qxNew);
+            ItemLinked.Record(this, Get<Relation_Relation_QueryX>(), re, qxNew);
             ClearParentTailFlags(qxNew);
             return qxNew;
         }

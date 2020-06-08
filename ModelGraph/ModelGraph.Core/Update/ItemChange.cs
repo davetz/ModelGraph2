@@ -8,12 +8,14 @@ namespace ModelGraph.Core
         internal override State State { get; set; }
 
 
-        internal Change ChangeSet => Owner as Change;
+        internal Change Change => Owner as Change;
         internal bool CanUndo => !IsUndone;
         internal bool CanRedo => IsUndone;
 
         abstract internal void Undo();
         abstract internal void Redo();
+
+        protected void DoNow() => Redo(); //Initial act of doing the requested change, it's the same as Redo
 
         protected void UpdateDelta()
         {

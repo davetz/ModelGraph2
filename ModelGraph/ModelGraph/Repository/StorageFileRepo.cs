@@ -77,9 +77,6 @@ namespace ModelGraph.Repository
                 return false;
 
             bool success = await WriteAsync(chef).ConfigureAwait(true); ;
-            if (success)
-                chef.CongealChanges();
-
             return success;
         }
         #endregion

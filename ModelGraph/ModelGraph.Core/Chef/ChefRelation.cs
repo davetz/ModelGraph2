@@ -75,46 +75,5 @@ namespace ModelGraph.Core
             return (Get<Relation_Relation_QueryX>().TryGetParent(sd, out Relation rel) ? GetRelationName(rel) : null);
         }
         #endregion
-
-        #region <Remove,Append>Link  ==========================================
-        internal void RemoveLink(Relation rel, Item parent, Item child)
-        {
-            MarkItemUnlinked(rel, parent, child);
-            Redo(Get<Change>());
-        }
-
-        internal void AppendLink(Relation rel, Item parent, Item child)
-        {
-            AddLinkCheck(rel, parent, child);
-            ItemLinked(rel, parent, child);
-        }
-        private void AddLinkCheck(Relation rel, Item parent, Item child)
-        {
-            //Item prevParent;
-            //List<Item> prevParents;
-            //RemoveMutuallyExclusiveLinks(rel, parent, child);
-            //switch (rel.Pairing)
-            //{
-            //    case Pairing.OneToOne:
-            //    case Pairing.OneToMany:
-            //        if (rel.Parents.TryGetVal(child, out prevParent) && rel.Children.TryGetIndex(prevParent, child, out childIndex) && rel.Parents.TryGetIndex(child, prevParent, out parentIndex))
-            //        {
-            //            if (prevParent == parent) return; // the link already exists
-            //            RemoveLink(rel, prevParent, child);
-            //        }
-            //        break;
-            //    case Pairing.ManyToMany:
-            //        if (rel.Parents.TryGetVals(child, out prevParents))
-            //        {
-            //            foreach (var testParent in prevParents)
-            //            {
-            //                if (testParent == parent) return; // the link already exists
-            //            }
-            //        }
-            //        break;
-            //}
-        }
-        #endregion
-
     }
 }

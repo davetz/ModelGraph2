@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ModelGraph.Core
 {
-    public abstract class Relation : Item // used by undo/redo changes and StoreOf<Relation> _relationStore
+    public abstract class Relation : Item 
     {
         internal override State State { get; set; }
         internal Pairing Pairing;
@@ -18,6 +18,30 @@ namespace ModelGraph.Core
         internal abstract void SetChildren2((int, int[])[] items, Item[] itemArray);
         internal abstract void SetParents2((int, int[])[] items, Item[] itemArray);
         internal abstract bool HasLinks { get; }
+        #endregion
+
+        #region GetHeadTail  ==================================================
+        static internal void GetHeadTail(Chef chef, Relation rel, out Store head, out Store tail)
+        {
+            var relation_Store_ChildRelation = chef.Get<Relation_Store_ChildRelation>();
+            var relation_Store_ParentRelation = chef.Get<Relation_Store_ParentRelation>();
+
+            if (rel == null)
+            {
+                head = null;
+                tail = null;
+            }
+            else if (rel is RelationX_RowX_RowX)
+            {
+                relation_Store_ChildRelation.TryGetParent(rel, out Store ch); head = ch;
+                relation_Store_ParentRelation.TryGetParent(rel, out Store pa); tail = pa;
+            }
+            else
+            {
+                relation_Store_ChildRelation.TryGetParent(rel, out head);
+                relation_Store_ParentRelation.TryGetParent(rel, out tail);
+            }
+        }
         #endregion
 
         #region RequiredMethods  ==============================================

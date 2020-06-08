@@ -4,11 +4,11 @@ namespace ModelGraph.Core
 {
     public class ItemLinked : ItemChange
     {
-        internal Item Child;
-        internal Item Parent;
-        internal Relation Relation;
-        internal int ParentIndex;
-        internal int ChildIndex;
+        private Item _child;
+        private Item _parent;
+        private Relation _relation;
+        private int _parentIndex;
+        private int _childIndex;
         internal override IdKey IdKey =>  IdKey.ItemLinked;
 
         #region Constructor  ==================================================
@@ -17,13 +17,41 @@ namespace ModelGraph.Core
             Owner = owner;
             _name = name;
 
-            Child = child;
-            Parent = parent;
-            Relation = relation;
-            ChildIndex = parentIndex;
-            ParentIndex = parentIndex;
+            _child = child;
+            _parent = parent;
+            _relation = relation;
+            _childIndex = parentIndex;
+            _parentIndex = parentIndex;
 
             owner.Add(this);
+        }
+        #endregion
+
+        #region Record  =======================================================
+        static internal void Record(Chef chef, Relation rel, Item item1, Item item2)
+        {
+            var nam1 = item1.GetDoubleNameId(chef);
+            var nam2 = item2.GetDoubleNameId(chef);
+            var rnam = rel.GetSingleNameId(chef);
+
+            var name = $" [{rnam}]   ({nam1}) --> ({nam2})";
+            (int parentIndex, int chilldIndex) = rel.AppendLink(item1, item2);
+            var chg = new ItemLinked(chef.Get<ChangeRoot>().Change, rel, item1, item2, parentIndex, chilldIndex, name);
+            chg.DoNow();
+        }
+        #endregion
+
+        #region Undo/Redo  ====================================================
+        override internal void Undo()
+        {
+            _relation.RemoveLink(_parent, _child);
+            IsUndone = true;
+        }
+
+        override internal void Redo()
+        {
+            _relation.InsertLink(_parent, _child, _parentIndex, _childIndex);
+            IsUndone = false;
         }
         #endregion
     }

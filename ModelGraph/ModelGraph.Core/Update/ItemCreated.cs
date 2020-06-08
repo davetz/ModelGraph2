@@ -35,17 +35,15 @@ namespace ModelGraph.Core
         }
         #endregion
 
-        #region Undo  =========================================================
+        #region Undo/Redo  ====================================================
         internal override void Undo()
         {
             var item = Item;
 
             var store = item.Owner as Store;
             store.Remove(item);
+            IsUndone = true;
         }
-        #endregion
-
-        #region Redo  =========================================================
         internal override void Redo()
         {
             var item = Item;
@@ -53,6 +51,7 @@ namespace ModelGraph.Core
 
             var store = item.Owner as Store;
             store.Insert(item, index);
+            IsUndone = false;
         }
         #endregion
     }

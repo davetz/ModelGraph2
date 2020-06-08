@@ -21,9 +21,7 @@ namespace ModelGraph.Core
         #region CreateRelations  ==============================================
         private void CreateRelations(Chef chef)
         {
-            var priv = chef.Get<StoreOf_RelationZ>();
-
-            chef.RegisterPrivateItem(new Relation_Item_Error(priv));
+            chef.RegisterPrivateItem(new Relation_Item_Error(this));
 
             chef.RegisterReferenceItem(new Relation_ComputeX_QueryX(this));
             chef.RegisterReferenceItem(new Relation_EnumX_ColumnX(this));

@@ -56,7 +56,7 @@ namespace ModelGraph.Core
         }
         #endregion
 
-        #region Undo  =========================================================
+        #region Undo/Redo  ====================================================
         internal override void Undo()
         {
             if (IsValid(Item) && CanUndo && Property.Value.SetString(Item, OldValue))
@@ -65,9 +65,7 @@ namespace ModelGraph.Core
                 IsUndone = true;
             }
         }
-        #endregion
 
-        #region Undo  =========================================================
         internal override void Redo()
         {
             if (IsValid(Item) && CanRedo && Property.Value.SetString(Item, NewValue))

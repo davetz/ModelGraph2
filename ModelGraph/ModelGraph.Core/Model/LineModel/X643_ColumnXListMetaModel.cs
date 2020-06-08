@@ -46,8 +46,8 @@ namespace ModelGraph.Core
             var sto = Item as Store;
 
             // the data chef implements undo/redo functionality
-            chef.ItemCreated(cx);
-            chef.ItemLinked(chef.Get<Relation_Store_ColumnX>(), sto, cx);
+            ItemCreated.Record(chef, cx);
+            ItemLinked.Record(chef, chef.Get<Relation_Store_ColumnX>(), sto, cx);
         }
 
         internal override bool Validate(Dictionary<Item, LineModel> prev)

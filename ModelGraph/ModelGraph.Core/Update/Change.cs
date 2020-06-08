@@ -4,18 +4,22 @@ namespace ModelGraph.Core
 {
     public class Change : StoreOf<ItemChange>
     {
+        private static int SequenceCount;
         internal DateTime DateTime;
-        internal int Sequence;
+        internal ushort Sequence { get; private set; }
+        internal override State State { get; set; }
+
         internal override IdKey IdKey => IdKey.ChangeSet;
+        internal override string Name { get => Sequence.ToString(); }
 
         #region Constructor  ==================================================
-        internal Change(ChangeRoot owner, int seqno)
+        internal Change(ChangeRoot owner)
         {
             Owner = owner;
             DateTime = DateTime.Now;
-            Sequence = seqno;
+            Sequence = (ushort)++SequenceCount;
             IsVirgin = true;
-            SetCapacity(11);
+            SetCapacity(7);
         }
         #endregion
 
@@ -25,7 +29,6 @@ namespace ModelGraph.Core
         internal bool CanRedo => (!IsCongealed && IsUndone);
         internal bool CanMerge => ChangeRoot.CanMerge(this); 
         internal void Merge() { ChangeRoot.Mege(this); }
-        internal override string Name { get => Sequence.ToString(); }
 
         internal void Undo()
         {

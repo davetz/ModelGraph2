@@ -31,5 +31,30 @@ namespace ModelGraph.Core
         }
         #endregion
 
+        #region ItemChildMoved  ===============================================
+        static internal void Record(Chef chef, Relation relation, Item key, Item item, int index1, int index2)
+        {
+            var n1 = index1 + 1;
+            var n2 = index2 + 1;
+
+            var name = $" [{relation.GetSingleNameId(chef)}]     {item.GetDoubleNameId(chef)}     {n1}->{n2}";
+            var chg = new ItemChildMoved(chef.Get<ChangeRoot>().Change, relation, key, item, index1, index2, name);
+            chg.Redo();
+        }
+        #endregion
+
+        #region Undo/Redo  ====================================================
+        override internal void Undo()
+        {
+            Relation.MoveChild(Key, Item, Index1);
+            IsUndone = true;
+        }
+
+        override internal void Redo()
+        {
+            Relation.MoveChild(Key, Item, Index2);
+            IsUndone = false;
+        }
+        #endregion
     }
 }
