@@ -22,15 +22,15 @@ namespace ModelGraph.Core
         internal virtual string Summary { get => ""; set => _ = value; }        //most external items have a summary string
         internal virtual string Description { get => ""; set => _ = value; }    //most external items may have a discription
 
-        public virtual string GetKindId(Chef chef) => chef.GetKindId(IdKey);
-        public virtual string GetSingleNameId(Chef chef) => chef.GetSingleNameId(IdKey);
-        public virtual string GetParentNameId(Chef chef) => Owner.GetSingleNameId(chef);
-        public virtual string GetDoubleNameId(Chef chef) => $"{GetParentNameId(chef)} : {GetSingleNameId(chef)}";
-        public virtual string GetChangeLogId(Chef chef) => GetDoubleNameId(chef);
-        public virtual (string, string) GetKindNameId(Chef chef) => (GetKindId(chef), GetSingleNameId(chef));
-        public virtual string GetSummaryId(Chef chef) => chef.GetSummaryId(IdKey);
-        public virtual string GetDescriptionId(Chef chef) => chef.GetDescriptionId(IdKey);
-        public virtual string GetAcceleratorId(Chef chef) => chef.GetAcceleratorId(IdKey);
+        public virtual string GetKindId(Root root) => root.GetKindId(IdKey);
+        public virtual string GetSingleNameId(Root root) => root.GetSingleNameId(IdKey);
+        public virtual string GetParentNameId(Root root) => Owner.GetSingleNameId(root);
+        public virtual string GetDoubleNameId(Root root) => $"{GetParentNameId(root)} : {GetSingleNameId(root)}";
+        public virtual string GetChangeLogId(Root root) => GetDoubleNameId(root);
+        public virtual (string, string) GetKindNameId(Root root) => (GetKindId(root), GetSingleNameId(root));
+        public virtual string GetSummaryId(Root root) => root.GetSummaryId(IdKey);
+        public virtual string GetDescriptionId(Root root) => root.GetDescriptionId(IdKey);
+        public virtual string GetAcceleratorId(Root root) => root.GetAcceleratorId(IdKey);
         internal string GetIndexId()
         {
             var inx = Index;
@@ -128,14 +128,14 @@ namespace ModelGraph.Core
 
 
         /// <summary>Walk up item tree hierachy to find the parent DataChef</summary>
-        public Chef DataChef => GetDataChef();
-        private Chef GetDataChef()
+        public Root DataChef => GetDataChef();
+        private Root GetDataChef()
         {
             var itm = this;
             for (int i = 0; i < 100; i++)
             {
                 if (itm is null) break;
-                if (itm is Chef chef) return chef;
+                if (itm is Root root) return root;
                 itm = itm.Owner;
             }
             throw new Exception("GetChef: Corrupted item hierarchy"); // I seriously hope this never happens
@@ -149,12 +149,16 @@ namespace ModelGraph.Core
             {
                 if (itm is null) return true;
                 if (itm.IsUnsable) return true;
-                if (itm is Chef) return false;
+                if (itm is Root) return false;
                 itm = itm.Owner;
             }
             return true;
         }
+
+        
         #endregion
+
+
 
         #region Flags  ========================================================
         // don't read/write missing or default-value propties

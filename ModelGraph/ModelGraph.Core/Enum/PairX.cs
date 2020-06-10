@@ -21,7 +21,7 @@ namespace ModelGraph.Core
 
         #region Identity  =====================================================
         internal override IdKey IdKey => IdKey.PairX;
-        public override string GetSingleNameId(Chef chef) => string.IsNullOrWhiteSpace(DisplayValue) ? BlankName : DisplayValue;
+        public override string GetSingleNameId(Root root) => string.IsNullOrWhiteSpace(DisplayValue) ? BlankName : DisplayValue;
         #endregion
     }
 }

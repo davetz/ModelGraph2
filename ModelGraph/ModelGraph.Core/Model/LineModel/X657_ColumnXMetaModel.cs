@@ -10,21 +10,21 @@ namespace ModelGraph.Core
         internal override IdKey IdKey => IdKey.ColumnXMetaModel;
         public override bool CanExpandRight => true;
 
-        public override (string kind, string name, int count) GetLineParms(Chef chef)
+        public override (string kind, string name, int count) GetLineParms(Root root)
         {
-            var (kind, name) = Item.GetKindNameId(chef);
+            var (kind, name) = Item.GetKindNameId(root);
             return (kind, name, 0);
         }
 
         internal override bool ExpandRight()
         {
             if (IsExpandedRight) return false;
-            var chef = DataChef;
+            var root = DataChef;
 
-            new X618_CheckPropertyModel(this, Item, chef.Get<Property_ColumnX_IsChoice>());
-            new X619_ComboPropertyModel(this, Item, chef.Get<Property_ColumnX_ValueType>());
-            new X617_TextPropertyModel(this, Item, chef.Get<Property_Item_Summary>());
-            new X617_TextPropertyModel(this, Item, chef.Get<Property_Item_Name>());
+            new X618_CheckPropertyModel(this, Item, root.Get<Property_ColumnX_IsChoice>());
+            new X619_ComboPropertyModel(this, Item, root.Get<Property_ColumnX_ValueType>());
+            new X617_TextPropertyModel(this, Item, root.Get<Property_Item_Summary>());
+            new X617_TextPropertyModel(this, Item, root.Get<Property_Item_Name>());
 
             IsExpandedRight = true;
             return true;

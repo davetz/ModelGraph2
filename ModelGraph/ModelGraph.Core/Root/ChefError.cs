@@ -2,7 +2,7 @@
 
 namespace ModelGraph.Core
 {
-    public partial class Chef
+    public partial class Root
     {
         private readonly Dictionary<Item, Error> _itemError = new Dictionary<Item, Error>(); //the most serious item error
         private readonly Dictionary<(Item, Item), Error> _itemErrorAux1 = new Dictionary<(Item, Item), Error>(); //the most serious item error

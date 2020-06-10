@@ -4,7 +4,7 @@ using Windows.Storage.Streams;
 
 namespace ModelGraph.Core
 {
-    public partial class Chef : ISerializer
+    public partial class Root : ISerializer
     {
         Guid _formatGuid = new Guid("3DB85BFF-F448-465C-996D-367E6284E913");
         Guid _serilizerGuid = new Guid("DE976A9D-0C50-4B4E-9B46-74404A64A703");

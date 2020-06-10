@@ -193,9 +193,9 @@ namespace ModelGraph.Core
         internal virtual bool ExpandLeft() => false;
         internal virtual bool ExpandRight() => false;
 
-        public virtual (string kind, string name, int count) GetLineParms(Chef chef)
+        public virtual (string kind, string name, int count) GetLineParms(Root root)
         {
-            var (kind, name) = GetKindNameId(chef);
+            var (kind, name) = GetKindNameId(root);
             return (kind, name, Count);
         }
         public byte ItemDelta => (byte)(Item.ChildDelta + Item.ModelDelta);
@@ -206,19 +206,19 @@ namespace ModelGraph.Core
         public virtual bool CanExpandRight => false;
         public virtual bool CanFilterUsage => false;
 
-        public virtual string GetModelInfo(Chef chef) => default;
+        public virtual string GetModelInfo(Root root) => default;
 
-        public virtual void GetMenuCommands(Chef chef, List<LineCommand> list) { list.Clear(); }
-        public virtual void GetButtonCommands(Chef chef, List<LineCommand> list) { list.Clear(); }
+        public virtual void GetMenuCommands(Root root, List<LineCommand> list) { list.Clear(); }
+        public virtual void GetButtonCommands(Root root, List<LineCommand> list) { list.Clear(); }
 
 
-        public void DragStart(Chef chef) => Chef.DragDropSource = this;
-        public virtual DropAction DragEnter(Chef chef) => DropAction.None;
+        public void DragStart(Root root) => Root.DragDropSource = this;
+        public virtual DropAction DragEnter(Root root) => DropAction.None;
 
-        public virtual DropAction DragDrop(Chef chef) => DropAction.None;
-        public virtual DropAction ReorderItems(Chef chef, LineModel target, bool doDrop) => DropAction.None;
+        public virtual DropAction DragDrop(Root root) => DropAction.None;
+        public virtual DropAction ReorderItems(Root root, LineModel target, bool doDrop) => DropAction.None;
 
-        public virtual Error TryGetError(Chef chef) => default;
+        public virtual Error TryGetError(Root root) => default;
 
         public virtual string GetModelIdentity() =>  $"{IdKey}  ({ItemKey:X3})";
 

@@ -10,37 +10,37 @@ namespace ModelGraph.Core
         static byte _formatVersion = 1;
         internal override IdKey IdKey => IdKey.EnumXDomain;
 
-        internal EnumXRoot(Chef chef)
+        internal EnumXRoot(Root root)
         {
-            Owner = chef;
+            Owner = root;
 
-            chef.RegisterItemSerializer((_serializerGuid, this));
-            CreateProperties(chef);
+            root.RegisterItemSerializer((_serializerGuid, this));
+            CreateProperties(root);
 
-            chef.Add(this);
+            root.Add(this);
         }
 
         #region CreateProperties  =============================================
-        private void CreateProperties(Chef chef)
+        private void CreateProperties(Root root)
         {
-            var sto = chef.Get<PropertyRoot>();
+            var sto = root.Get<PropertyRoot>();
 
-            chef.RegisterReferenceItem(new Property_PairX_Text(sto));
-            chef.RegisterReferenceItem(new Property_PairX_Value(sto));
+            root.RegisterReferenceItem(new Property_PairX_Text(sto));
+            root.RegisterReferenceItem(new Property_PairX_Value(sto));
 
-            chef.RegisterStaticProperties(typeof(EnumX), GetProps1(chef)); //used by property name lookup
-            chef.RegisterStaticProperties(typeof(PairX), GetProps2(chef)); //used by property name lookup
+            root.RegisterStaticProperties(typeof(EnumX), GetProps1(root)); //used by property name lookup
+            root.RegisterStaticProperties(typeof(PairX), GetProps2(root)); //used by property name lookup
         }
-        private Property[] GetProps1(Chef chef) => new Property[]
+        private Property[] GetProps1(Root root) => new Property[]
         {
-            chef.Get<Property_Item_Name>(),
-            chef.Get<Property_Item_Summary>(),
-            chef.Get<Property_Item_Description>(),
+            root.Get<Property_Item_Name>(),
+            root.Get<Property_Item_Summary>(),
+            root.Get<Property_Item_Description>(),
         };
-        private Property[] GetProps2(Chef chef) => new Property[]
+        private Property[] GetProps2(Root root) => new Property[]
         {
-            chef.Get<Property_PairX_Text>(),
-            chef.Get<Property_PairX_Value>(),
+            root.Get<Property_PairX_Text>(),
+            root.Get<Property_PairX_Value>(),
         };
         #endregion
 

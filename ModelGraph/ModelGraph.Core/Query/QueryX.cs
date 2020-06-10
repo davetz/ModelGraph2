@@ -37,22 +37,22 @@ namespace ModelGraph.Core
         #region Identity  =====================================================
         internal override IdKey IdKey => GetIdKey();
 
-        public override string GetSingleNameId(Chef chef)
+        public override string GetSingleNameId(Root root)
         {
             string name;
             if (IsRoot)
             {
-                if (chef.Get<Relation_Store_QueryX>().TryGetParent(this, out Store st))
-                    name = st.GetDoubleNameId(chef);
+                if (root.Get<Relation_Store_QueryX>().TryGetParent(this, out Store st))
+                    name = st.GetDoubleNameId(root);
                 else
                     name = InvalidItem;
             }
             else
             {
-                if (chef.Get<Relation_Relation_QueryX>().TryGetParent(this, out Relation re))
+                if (root.Get<Relation_Relation_QueryX>().TryGetParent(this, out Relation re))
                 {
-                    chef.GetHeadTail(this, out Store head, out Store tail);
-                    name = $"{head.GetSingleNameId(chef)} --> {tail.GetSingleNameId(chef)}";
+                    root.GetHeadTail(this, out Store head, out Store tail);
+                    name = $"{head.GetSingleNameId(root)} --> {tail.GetSingleNameId(root)}";
                 }
                 else
                     name = InvalidItem;
@@ -61,8 +61,8 @@ namespace ModelGraph.Core
             if (HasSelect || HasWhere || IsRoot || IsHead || IsTail)
             {
                 name = $"{name}      [";
-                if (HasWhere) name = $"{name}{chef.GetName(IdKey.QueryWhere)}( {WhereString} )";
-                if (HasSelect) name = $"{name} {chef.GetName(IdKey.QuerySelect)}( {SelectString} )";
+                if (HasWhere) name = $"{name}{root.GetName(IdKey.QueryWhere)}( {WhereString} )";
+                if (HasSelect) name = $"{name} {root.GetName(IdKey.QuerySelect)}( {SelectString} )";
 
                 if (IsRoot || IsHead || IsTail)
                 {

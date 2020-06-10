@@ -28,15 +28,15 @@ namespace ModelGraph.Core
         #endregion
 
         #region Record  =======================================================
-        static internal void Record(Chef chef, Relation rel, Item item1, Item item2)
+        static internal void Record(Root root, Relation rel, Item item1, Item item2)
         {
-            var nam1 = item1.GetDoubleNameId(chef);
-            var nam2 = item2.GetDoubleNameId(chef);
-            var rnam = rel.GetSingleNameId(chef);
+            var nam1 = item1.GetDoubleNameId(root);
+            var nam2 = item2.GetDoubleNameId(root);
+            var rnam = rel.GetSingleNameId(root);
 
             var name = $" [{rnam}]   ({nam1}) --> ({nam2})";
             (int parentIndex, int chilldIndex) = rel.AppendLink(item1, item2);
-            var chg = new ItemLinked(chef.Get<ChangeRoot>().Change, rel, item1, item2, parentIndex, chilldIndex, name);
+            var chg = new ItemLinked(root.Get<ChangeRoot>().Change, rel, item1, item2, parentIndex, chilldIndex, name);
             chg.DoNow();
         }
         #endregion

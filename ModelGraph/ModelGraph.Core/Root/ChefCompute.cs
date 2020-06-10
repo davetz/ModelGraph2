@@ -5,7 +5,7 @@ namespace ModelGraph.Core
 {/*
 
  */
-    public partial class Chef
+    public partial class Root
     {
         static internal ValueUnknown ValuesUnknown = new ValueUnknown();
         static internal ValueInvalid ValuesInvalid = new ValueInvalid();

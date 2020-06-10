@@ -28,12 +28,12 @@ namespace ModelGraph.Core
         #endregion
 
         #region Record  =======================================================
-        internal static void Record(Change owner, Chef chef, Item item, Relation_Store_ColumnX stoCols = null)
+        internal static void Record(Change owner, Root root, Item item, Relation_Store_ColumnX stoCols = null)
         {
             if (!(item.Owner is Store sto)) return;
 
             var inx = (sto == null) ? -1 : sto.IndexOf(item);
-            var name = item.GetChangeLogId(chef);
+            var name = item.GetChangeLogId(root);
 
             if (stoCols.TryGetChildren(sto, out IList<ColumnX> cols))
             {

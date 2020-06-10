@@ -37,7 +37,7 @@ namespace ModelGraph.Core
             bool E(string p, string q) => (string.Compare(p, q) == 0); //are EQUAL
         }
 
-        internal static void Record(Chef chef, Item itm, Property prop, string newValue)
+        internal static void Record(Root root, Item itm, Property prop, string newValue)
         {
             itm.ModelDelta++;
             if (prop.IsCovert)
@@ -47,10 +47,10 @@ namespace ModelGraph.Core
             else
             {
                 var oldValue = prop.Value.GetString(itm);
-                var name = $"{itm.GetChangeLogId(chef)}    {prop.GetSingleNameId(chef)}:  old<{oldValue}>  new<{newValue}>";
+                var name = $"{itm.GetChangeLogId(root)}    {prop.GetSingleNameId(root)}:  old<{oldValue}>  new<{newValue}>";
                 if (prop.Value.SetString(itm, newValue))
                 {
-                    new ItemUpdated(chef.Get<ChangeRoot>().Change, itm, prop, oldValue, newValue, name);
+                    new ItemUpdated(root.Get<ChangeRoot>().Change, itm, prop, oldValue, newValue, name);
                 }
             }
         }

@@ -55,9 +55,9 @@
 
         public override string ToString()
         {
-            var chef = DataChef;
-            var headName = chef.GetIdentity(Node1.Item, IdentityStyle.Double);
-            var tailName = chef.GetIdentity(Node2.Item, IdentityStyle.Double);
+            var root = DataChef;
+            var headName = root.GetIdentity(Node1.Item, IdentityStyle.Double);
+            var tailName = root.GetIdentity(Node2.Item, IdentityStyle.Double);
             return $"{headName} --> {tailName}  ({LineColor})";
         }
         #endregion

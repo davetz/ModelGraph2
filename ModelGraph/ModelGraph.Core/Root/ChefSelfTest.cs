@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ModelGraph.Core
 {
-    public partial class Chef
+    public partial class Root
     {
         const int NT = 10; //number of test tables (must be 10 or more)
         const int NR = 10; //number of test rows/table (1 or more)

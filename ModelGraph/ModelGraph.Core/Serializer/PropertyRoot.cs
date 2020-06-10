@@ -3,28 +3,28 @@ namespace ModelGraph.Core
 {
     public class PropertyRoot : InternalRoot<Property>
     {
-        internal PropertyRoot(Chef chef)
+        internal PropertyRoot(Root root)
         {
-            Owner = chef;
+            Owner = root;
 
             SetCapacity(100);
-            CreateProperties(chef);
+            CreateProperties(root);
 
-            chef.Add(this);
+            root.Add(this);
         }
 
         #region CreateProperties  =============================================
-        private void CreateProperties(Chef chef)
+        private void CreateProperties(Root root)
         {
-            chef.RegisterReferenceItem(new Property_Item_Name(this)); 
-            chef.RegisterReferenceItem(new Property_Item_Summary(this));
-            chef.RegisterReferenceItem(new Property_Item_Description(this));
+            root.RegisterReferenceItem(new Property_Item_Name(this)); 
+            root.RegisterReferenceItem(new Property_Item_Summary(this));
+            root.RegisterReferenceItem(new Property_Item_Description(this));
         }
         #endregion
 
         #region Identity  =====================================================
         internal override IdKey IdKey => IdKey.PropertyDomain;
-        public override string GetParentNameId(Chef chef) => GetKindId(chef);
+        public override string GetParentNameId(Root root) => GetKindId(root);
         #endregion
 
     }

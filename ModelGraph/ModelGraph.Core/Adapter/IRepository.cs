@@ -9,10 +9,10 @@ namespace ModelGraph.Core
         string FullName { get; }
         bool HasNoStorage { get; }
 
-        void New(Chef chef);
-        Task<bool> OpenAsync(Chef chef);
-        Task<bool> SaveAsync(Chef chef);
-        Task<bool> ReloadAsync(Chef chef);
-        void SaveAS(Chef chef);
+        void New(Root root);
+        Task<bool> OpenAsync(Root root);
+        Task<bool> SaveAsync(Root root);
+        Task<bool> ReloadAsync(Root root);
+        void SaveAS(Root root);
     }
 }

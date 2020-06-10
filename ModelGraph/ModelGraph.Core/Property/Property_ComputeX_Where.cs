@@ -13,7 +13,7 @@ namespace ModelGraph.Core
             owner.Add(this);
         }
 
-        internal override string GetValue(Item item) { var chef = DataChef; return chef.GetWhereProperty(Cast(item)); }
-        internal override void SetValue(Item item, string val) { var chef = DataChef; chef.TrySetWhereProperty(Cast(item), val); }
+        internal override string GetValue(Item item) { var root = DataChef; return root.GetWhereProperty(Cast(item)); }
+        internal override void SetValue(Item item, string val) { var root = DataChef; root.TrySetWhereProperty(Cast(item), val); }
     }
 }

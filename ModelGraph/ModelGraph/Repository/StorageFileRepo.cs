@@ -38,7 +38,7 @@ namespace ModelGraph.Repository
         #endregion
 
         #region New  ==========================================================
-        public void New(Chef chef)
+        public void New(Root chef)
         {
             if (chef is null) throw new ArgumentNullException(nameof(chef));
             chef.Repository = this;
@@ -48,7 +48,7 @@ namespace ModelGraph.Repository
         #endregion
 
         #region Open  =========================================================
-        public async Task<bool> OpenAsync(Chef chef)
+        public async Task<bool> OpenAsync(Root chef)
         {
             if (chef is null) throw new ArgumentNullException(nameof(chef));
             chef.Repository = this;
@@ -70,7 +70,7 @@ namespace ModelGraph.Repository
         #endregion
 
         #region Save  =========================================================
-        public async Task<bool> SaveAsync(Chef chef)
+        public async Task<bool> SaveAsync(Root chef)
         {
             if (chef is null) throw new ArgumentNullException(nameof(chef));
             if (_storageFile is null)
@@ -82,7 +82,7 @@ namespace ModelGraph.Repository
         #endregion
 
         #region Reload  =======================================================
-        public async Task<bool> ReloadAsync(Chef newChef)
+        public async Task<bool> ReloadAsync(Root newChef)
         {
             if (newChef is null) throw new ArgumentNullException(nameof(newChef));
             newChef.Repository = this;
@@ -92,12 +92,12 @@ namespace ModelGraph.Repository
         #endregion
 
         #region SaveAs  =======================================================
-        public void SaveAS(Chef chef)
+        public void SaveAS(Root chef)
         {
             SaveAsAsync(chef).ConfigureAwait(false);
         }
 
-        private async Task<bool> SaveAsAsync(Chef chef)
+        private async Task<bool> SaveAsAsync(Root chef)
         {
             var savePicker = new FileSavePicker
             {
@@ -117,7 +117,7 @@ namespace ModelGraph.Repository
         #endregion
 
         #region Read  =========================================================
-        private async Task<bool> ReadAsync(Chef chef)
+        private async Task<bool> ReadAsync(Root chef)
         {
             if (chef is null) throw new ArgumentNullException(nameof(chef));
             try
@@ -146,7 +146,7 @@ namespace ModelGraph.Repository
         #endregion
 
         #region Write  ========================================================
-        private async Task<bool> WriteAsync(Chef chef)
+        private async Task<bool> WriteAsync(Root chef)
         {
             if (chef is null) throw new ArgumentNullException(nameof(chef));
             try

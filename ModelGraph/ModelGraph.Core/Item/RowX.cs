@@ -16,8 +16,8 @@ namespace ModelGraph.Core
 
         #region Identity  =====================================================
         internal override IdKey IdKey => IdKey.RowX;
-        public override string GetSingleNameId(Chef chef) => chef.Get<Relation_Store_NameProperty>().TryGetChild(Owner, out Property p) ? p.Value.GetString(this) : GetIndexId();
-        public override string GetSummaryId(Chef chef) => chef.Get<Relation_Store_SummaryProperty>().TryGetChild(Owner, out Property p) ? p.Value.GetString(this) : GetSingleNameId(chef);
+        public override string GetSingleNameId(Root root) => root.Get<Relation_Store_NameProperty>().TryGetChild(Owner, out Property p) ? p.Value.GetString(this) : GetIndexId();
+        public override string GetSummaryId(Root root) => root.Get<Relation_Store_SummaryProperty>().TryGetChild(Owner, out Property p) ? p.Value.GetString(this) : GetSingleNameId(root);
         #endregion
 
         #region Properies/Methods  ============================================

@@ -18,36 +18,36 @@ namespace ModelGraph.Core
         internal Dictionary<LineModel, string> LineModel_FilterSort = new Dictionary<LineModel, string>();
 
         #region Constructor  ==================================================
-        internal TreeModel(Chef chef) //==================================== invoked in the RootTreeModel constructor
+        internal TreeModel(Root root) //==================================== invoked in the RootTreeModel constructor
         {
-            Owner = Item = chef;
+            Owner = Item = root;
             Depth = 254;
             ControlType = ControlType.PrimaryTree;
-            chef.Add(this);
+            root.Add(this);
 
-            Add(new X612_DataChefModel(this, chef));
+            Add(new X612_DataChefModel(this, root));
         }
-        internal TreeModel(RootTreeModel rootModel, Chef chef, IdKey childId) //======== created by the TreeRootModel
+        internal TreeModel(RootTreeModel rootModel, Root root, IdKey childId) //======== created by the TreeRootModel
         {
-            Item = chef;
+            Item = root;
             Owner = rootModel;
             Depth = 255;
             ControlType = ControlType.PartialTree;
 
-            chef.Add(this);
+            root.Add(this);
             switch (childId)
             {
                 case IdKey.MetadataRootModel:
-                    new X623_MetaRootModel(this, chef);
+                    new X623_MetaRootModel(this, root);
                     break;
                 case IdKey.ModelingRootModel:
-                    new X623_MetaRootModel(this, chef);
+                    new X623_MetaRootModel(this, root);
                     break;
                 case IdKey.ChangeRootModel:
-                    new X622_ChangeRootModel(this, chef.Get<ChangeRoot>());
+                    new X622_ChangeRootModel(this, root.Get<ChangeRoot>());
                     break;
                 case IdKey.ErrorRootModel:
-                    new X621_ErrorRootModel(this, chef);
+                    new X621_ErrorRootModel(this, root);
                     break;
                 default:
                     throw new ArgumentException($"TreeModel constructor, Invalid IdKey child: {childId}");
@@ -111,7 +111,7 @@ namespace ModelGraph.Core
         // Runs on a background thread invoked by the ModelTreeControl 
         public void RefreshViewList(int viewSize, LineModel leading, LineModel selected, ChangeType change = ChangeType.None)
         {
-            var chef = DataChef;
+            var root = DataChef;
             var anyChange = false;
             var isNewBuffer = ValidateBuffer(viewSize);
             bool isValidLead = IsValidModel(leading);
@@ -155,7 +155,7 @@ namespace ModelGraph.Core
         #endregion
 
     #region OverrideMethods  ==============================================
-    public override (string kind, string name, int count) GetLineParms(Chef chef) => (null, BlankName, 0);
+    public override (string kind, string name, int count) GetLineParms(Root root) => (null, BlankName, 0);
         #endregion
     }
 }

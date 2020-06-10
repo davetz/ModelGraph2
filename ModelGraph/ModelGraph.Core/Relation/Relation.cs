@@ -21,10 +21,10 @@ namespace ModelGraph.Core
         #endregion
 
         #region GetHeadTail  ==================================================
-        static internal void GetHeadTail(Chef chef, Relation rel, out Store head, out Store tail)
+        static internal void GetHeadTail(Root root, Relation rel, out Store head, out Store tail)
         {
-            var relation_Store_ChildRelation = chef.Get<Relation_Store_ChildRelation>();
-            var relation_Store_ParentRelation = chef.Get<Relation_Store_ParentRelation>();
+            var relation_Store_ChildRelation = root.Get<Relation_Store_ChildRelation>();
+            var relation_Store_ParentRelation = root.Get<Relation_Store_ParentRelation>();
 
             if (rel == null)
             {

@@ -7,12 +7,12 @@ namespace ModelGraph.Core
         internal override IdKey IdKey => IdKey.ComboPropertyModel;
         public override bool IsComboModel => true;
 
-        public override (string kind, string name, int count) GetLineParms(Chef chef)
+        public override (string kind, string name, int count) GetLineParms(Root root)
         {
-            var name = Property.GetSingleNameId(chef);
+            var name = Property.GetSingleNameId(root);
             return (null, name, 0);
         }
-        public override int GetIndexValue(Chef chef) => Property.GetIndexValue(Item);
-        public override string[] GetlListValue(Chef chef) => Property.GetlListValue(chef);
+        public override int GetIndexValue(Root root) => Property.GetIndexValue(Item);
+        public override string[] GetlListValue(Root root) => Property.GetlListValue(root);
     }
 }

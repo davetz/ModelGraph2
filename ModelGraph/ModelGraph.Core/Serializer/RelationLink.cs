@@ -9,9 +9,9 @@ namespace ModelGraph.Core
     {
         static Guid _serializerGuid => new Guid("6E4E6626-98BC-483E-AC9B-C7799511ECF2");
 
-        internal RelationLink(Chef chef, RelationRoot relationStore) : base(relationStore)
+        internal RelationLink(Root root, RelationRoot relationStore) : base(relationStore)
         {
-            chef.RegisterLinkSerializer((_serializerGuid, this));
+            root.RegisterLinkSerializer((_serializerGuid, this));
         }
 
         public void PopulateItemIndex(Dictionary<Item, int> itemIndex)

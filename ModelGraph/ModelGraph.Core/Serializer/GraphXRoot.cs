@@ -10,41 +10,41 @@ namespace ModelGraph.Core
         static byte _formatVersion = 1;
         internal override IdKey IdKey => IdKey.GraphXDomain;
 
-        internal GraphXRoot(Chef chef) 
+        internal GraphXRoot(Root root) 
         {
-            Owner = chef;
+            Owner = root;
 
-            chef.RegisterItemSerializer((_serializerGuid, this));
+            root.RegisterItemSerializer((_serializerGuid, this));
 
-            new NodeSerializer(chef);
+            new NodeSerializer(root);
 
-            CreateProperties(chef);
+            CreateProperties(root);
 
-            chef.Add(this);
+            root.Add(this);
         }
 
         #region CreateProperties  =============================================
-        private void CreateProperties(Chef chef)
+        private void CreateProperties(Root root)
         {
-            var sto = chef.Get<PropertyRoot>();
+            var sto = root.Get<PropertyRoot>();
 
-            chef.RegisterReferenceItem(new Property_GraphX_TerminalLength(sto));
-            chef.RegisterReferenceItem(new Property_GraphX_TerminalSpacing(sto));
-            chef.RegisterReferenceItem(new Property_GraphX_TerminalStretch(sto));
-            chef.RegisterReferenceItem(new Property_GraphX_SymbolSize(sto));
+            root.RegisterReferenceItem(new Property_GraphX_TerminalLength(sto));
+            root.RegisterReferenceItem(new Property_GraphX_TerminalSpacing(sto));
+            root.RegisterReferenceItem(new Property_GraphX_TerminalStretch(sto));
+            root.RegisterReferenceItem(new Property_GraphX_SymbolSize(sto));
 
-            chef.RegisterStaticProperties(typeof(GraphX), GetProps(chef)); //used by property name lookup
+            root.RegisterStaticProperties(typeof(GraphX), GetProps(root)); //used by property name lookup
         }
-        private Property[] GetProps(Chef chef) => new Property[]
+        private Property[] GetProps(Root root) => new Property[]
         {
-            chef.Get<Property_Item_Name>(),
-            chef.Get<Property_Item_Summary>(),
-            chef.Get<Property_Item_Description>(),
+            root.Get<Property_Item_Name>(),
+            root.Get<Property_Item_Summary>(),
+            root.Get<Property_Item_Description>(),
 
-            chef.Get<Property_GraphX_TerminalLength>(),
-            chef.Get<Property_GraphX_TerminalSpacing>(),
-            chef.Get<Property_GraphX_TerminalStretch>(),
-            chef.Get<Property_GraphX_SymbolSize>(),
+            root.Get<Property_GraphX_TerminalLength>(),
+            root.Get<Property_GraphX_TerminalSpacing>(),
+            root.Get<Property_GraphX_TerminalStretch>(),
+            root.Get<Property_GraphX_SymbolSize>(),
         };
         #endregion
 

@@ -29,7 +29,7 @@ namespace ModelGraph.Core
         #endregion
 
         #region Record  =======================================================
-        internal static bool Record(Change owner, Chef chef, Relation rel, Item item1, Item item2, Dictionary<Relation, Dictionary<Item, List<Item>>> history)
+        internal static bool Record(Change owner, Root root, Relation rel, Item item1, Item item2, Dictionary<Relation, Dictionary<Item, List<Item>>> history)
         {
             #region track/check the history  ==================================
             // Avoid attempts to unlink the same relationship multiple times,
@@ -61,9 +61,9 @@ namespace ModelGraph.Core
             (int parentIndex, int childIndex) = rel.GetIndex(item1, item2);
             if (parentIndex < 0 || childIndex < 0) return false; //appearently the relationship doesn't exists
 
-            var nam1 = item1.GetDoubleNameId(chef);
-            var nam2 = item2.GetDoubleNameId(chef);
-            var rnam = rel.GetSingleNameId(chef);
+            var nam1 = item1.GetDoubleNameId(root);
+            var nam2 = item2.GetDoubleNameId(root);
+            var rnam = rel.GetSingleNameId(root);
 
             var name = $" [{rnam}]   ({nam1}) --> ({nam2})";
             new ItemUnLinked(owner, rel, item1, item2, parentIndex, childIndex, name);

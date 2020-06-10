@@ -27,20 +27,20 @@ namespace ModelGraph.Core
         public virtual bool IsComboModel => false;
 
 
-        public virtual int GetIndexValue(Chef chef) => default;
-        public virtual bool GetBoolValue(Chef chef) => default;
-        public virtual string GetTextValue(Chef chef) => default;
-        public virtual string[] GetlListValue(Chef chef) => default;
+        public virtual int GetIndexValue(Root root) => default;
+        public virtual bool GetBoolValue(Root root) => default;
+        public virtual string GetTextValue(Root root) => default;
+        public virtual string[] GetlListValue(Root root) => default;
 
-        public  void PostSetValue(Chef chef, int val) => chef.PostSetIndexValue(Item, Property, val);
-        public  void PostSetValue(Chef chef, bool val) => chef.PostSetBoolValue(Item, Property, val);
-        public void PostSetValue(Chef chef, string val) => chef.PostSetStringValue(Item, Property, val);
+        public  void PostSetValue(Root root, int val) => root.PostSetIndexValue(Item, Property, val);
+        public  void PostSetValue(Root root, bool val) => root.PostSetBoolValue(Item, Property, val);
+        public void PostSetValue(Root root, string val) => root.PostSetStringValue(Item, Property, val);
 
-        public override (string, string) GetKindNameId(Chef chef)
+        public override (string, string) GetKindNameId(Root root)
         {
-            var name = Property.GetSingleNameId(chef);
+            var name = Property.GetSingleNameId(root);
 
-            return (null, Property.HasParentName ? Property.GetParentName(chef, Item) : name);
+            return (null, Property.HasParentName ? Property.GetParentName(root, Item) : name);
         }
 
         public override string GetModelIdentity() => $"{IdKey}  ({ItemKey:X3}){Environment.NewLine}{Property.IdKey}  ({Property.ItemKey:X3})";

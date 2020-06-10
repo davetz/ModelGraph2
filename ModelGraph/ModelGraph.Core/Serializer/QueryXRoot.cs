@@ -10,54 +10,54 @@ namespace ModelGraph.Core
         static byte _formatVersion = 1;
         internal override IdKey IdKey => IdKey.QueryXDomain;
 
-        internal QueryXRoot(Chef chef)
+        internal QueryXRoot(Root root)
         {
-            Owner = chef;
+            Owner = root;
 
-            chef.RegisterItemSerializer((_serializerGuid, this));
-            CreateProperties(chef);
+            root.RegisterItemSerializer((_serializerGuid, this));
+            CreateProperties(root);
 
-            chef.Add(this);
+            root.Add(this);
         }
 
         #region CreateProperties  =============================================
-        private void CreateProperties(Chef chef)
+        private void CreateProperties(Root root)
         {
-            var sto = chef.Get<PropertyRoot>();
+            var sto = root.Get<PropertyRoot>();
 
-            chef.RegisterReferenceItem(new Property_QueryX_Where(sto));
-            chef.RegisterReferenceItem(new Property_QueryX_Select(sto));
-            chef.RegisterReferenceItem(new Property_QueryX_Facet1(sto));
-            chef.RegisterReferenceItem(new Property_QueryX_Facet2(sto));
-            chef.RegisterReferenceItem(new Property_QueryX_Connect1(sto));
-            chef.RegisterReferenceItem(new Property_QueryX_Connect2(sto));
-            chef.RegisterReferenceItem(new Property_QueryX_LineStyle(sto));
-            chef.RegisterReferenceItem(new Property_QueryX_DashStyle(sto));
-            chef.RegisterReferenceItem(new Property_QueryX_LineColor(sto));
-            chef.RegisterReferenceItem(new Property_QueryX_Relation(sto));
-            chef.RegisterReferenceItem(new Property_QueryX_IsReversed(sto));
-            chef.RegisterReferenceItem(new Property_QueryX_IsBreakPoint(sto));
-            chef.RegisterReferenceItem(new Property_QueryX_ExclusiveKey(sto));
-            chef.RegisterReferenceItem(new Property_QueryX_ValueType(sto));
+            root.RegisterReferenceItem(new Property_QueryX_Where(sto));
+            root.RegisterReferenceItem(new Property_QueryX_Select(sto));
+            root.RegisterReferenceItem(new Property_QueryX_Facet1(sto));
+            root.RegisterReferenceItem(new Property_QueryX_Facet2(sto));
+            root.RegisterReferenceItem(new Property_QueryX_Connect1(sto));
+            root.RegisterReferenceItem(new Property_QueryX_Connect2(sto));
+            root.RegisterReferenceItem(new Property_QueryX_LineStyle(sto));
+            root.RegisterReferenceItem(new Property_QueryX_DashStyle(sto));
+            root.RegisterReferenceItem(new Property_QueryX_LineColor(sto));
+            root.RegisterReferenceItem(new Property_QueryX_Relation(sto));
+            root.RegisterReferenceItem(new Property_QueryX_IsReversed(sto));
+            root.RegisterReferenceItem(new Property_QueryX_IsBreakPoint(sto));
+            root.RegisterReferenceItem(new Property_QueryX_ExclusiveKey(sto));
+            root.RegisterReferenceItem(new Property_QueryX_ValueType(sto));
 
-            chef.RegisterStaticProperties(typeof(QueryX), GetProps(chef)); //used by property name lookup
+            root.RegisterStaticProperties(typeof(QueryX), GetProps(root)); //used by property name lookup
         }
-        private Property[] GetProps(Chef chef) => new Property[]
+        private Property[] GetProps(Root root) => new Property[]
         {
-            chef.Get<Property_QueryX_Where>(),
-            chef.Get<Property_QueryX_Select>(),
-            chef.Get<Property_QueryX_Facet1>(),
-            chef.Get<Property_QueryX_Facet2>(),
-            chef.Get<Property_QueryX_Connect1>(),
-            chef.Get<Property_QueryX_Connect2>(),
-            chef.Get<Property_QueryX_LineStyle>(),
-            chef.Get<Property_QueryX_DashStyle>(),
-            chef.Get<Property_QueryX_LineColor>(),
-            chef.Get<Property_QueryX_Relation>(),
-            chef.Get<Property_QueryX_IsReversed>(),
-            chef.Get<Property_QueryX_IsBreakPoint>(),
-            chef.Get<Property_QueryX_ExclusiveKey>(),
-            chef.Get<Property_QueryX_ValueType>(),
+            root.Get<Property_QueryX_Where>(),
+            root.Get<Property_QueryX_Select>(),
+            root.Get<Property_QueryX_Facet1>(),
+            root.Get<Property_QueryX_Facet2>(),
+            root.Get<Property_QueryX_Connect1>(),
+            root.Get<Property_QueryX_Connect2>(),
+            root.Get<Property_QueryX_LineStyle>(),
+            root.Get<Property_QueryX_DashStyle>(),
+            root.Get<Property_QueryX_LineColor>(),
+            root.Get<Property_QueryX_Relation>(),
+            root.Get<Property_QueryX_IsReversed>(),
+            root.Get<Property_QueryX_IsBreakPoint>(),
+            root.Get<Property_QueryX_ExclusiveKey>(),
+            root.Get<Property_QueryX_ValueType>(),
         };
         #endregion
 

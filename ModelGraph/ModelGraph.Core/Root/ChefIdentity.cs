@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ModelGraph.Core
 {
-    public partial class Chef
+    public partial class Root
     {
         private Func<string, string> _localize = (s) => s; //dummy default localizer
         public void SetLocalizer(Func<string, string> localizer) => _localize = localizer;

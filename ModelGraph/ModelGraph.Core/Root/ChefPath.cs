@@ -6,7 +6,7 @@ namespace ModelGraph.Core
 {/*
 
  */
-    public partial class Chef
+    public partial class Root
     {
         #region CreateQueryPaths  =============================================
         internal bool TryCreateQueryPaths(Graph g)

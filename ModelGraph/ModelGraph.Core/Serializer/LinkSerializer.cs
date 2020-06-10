@@ -8,9 +8,9 @@ namespace ModelGraph.Core
     internal abstract class LinkSerializer 
     {
         static byte _formatVersion = 1;
-        protected IRelationStore _relationStore;
+        protected IRelationRoot _relationStore;
 
-        internal LinkSerializer(IRelationStore relStore)
+        internal LinkSerializer(IRelationRoot relStore)
         {
             _relationStore = relStore;
         }
@@ -286,7 +286,7 @@ namespace ModelGraph.Core
                         throw new Exception($"LinkSerializer ReadData, null relation for index: {irel}");
 
                     var pairing = (Pairing)r.ReadByte();//==== read pairing type
-                    if (rel.Pairing != pairing)
+                    if (pairing > rel.Pairing)
                         throw new Exception($"LinkSerializer ReadData, invalid relation pairing type");
 
                     var sizeCode = r.ReadByte();//============ read list size code        

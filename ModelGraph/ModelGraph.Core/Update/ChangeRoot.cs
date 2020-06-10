@@ -12,12 +12,12 @@ namespace ModelGraph.Core
         internal override IdKey IdKey => IdKey.ChangeRoot;
 
         #region Constructor  ==================================================
-        internal ChangeRoot(Chef chef)
+        internal ChangeRoot(Root root)
         {
-            Owner = chef;
+            Owner = root;
             Change = new Change(this);
 
-            chef.Add(this); // add myself to the dataChef's item tree hierarchy
+            root.Add(this); // add myself to the dataChef's item tree hierarchy
         }
         #endregion
 
@@ -130,11 +130,11 @@ namespace ModelGraph.Core
         #region RemoveItem  ===================================================
         private void RemoveItem(Item target)
         {
-            var chef = DataChef;// big daddy
+            var root = DataChef;// big daddy
             var hitList = new List<Item>();//======================== dependant items that also need to be killed off
-            var stoCRels = chef.Get<Relation_Store_ChildRelation>();//==== souce1 of relational integrity
-            var stoPRels = chef.Get<Relation_Store_ParentRelation>();//==== souce2 of relational integrity
-            var stoCols = chef.Get<Relation_Store_ColumnX>(); //======= reference to user created columns
+            var stoCRels = root.Get<Relation_Store_ChildRelation>();//==== souce1 of relational integrity
+            var stoPRels = root.Get<Relation_Store_ParentRelation>();//==== souce2 of relational integrity
+            var stoCols = root.Get<Relation_Store_ColumnX>(); //======= reference to user created columns
             var history = new Dictionary<Relation, Dictionary<Item, List<Item>>>(); //history of unlinked relationships
 
             FindDependents(target, hitList, stoCRels);
@@ -146,7 +146,7 @@ namespace ModelGraph.Core
                 {
                     var N = r.GetLinks(out List<Item> parents, out List<Item> children);
 
-                    for (int i = 0; i < N; i++) { ItemUnLinked.Record(Change, chef, r, parents[i], children[i], history); }
+                    for (int i = 0; i < N; i++) { ItemUnLinked.Record(Change, root, r, parents[i], children[i], history); }
                 }
                 if (TryGetParentRelations(item, out IList<Relation> relations, stoPRels))
                 {
@@ -154,7 +154,7 @@ namespace ModelGraph.Core
                     {
                         if (!rel.TryGetParents(item, out List<Item> parents)) continue;
 
-                        foreach (var parent in parents) { ItemUnLinked.Record(Change, chef, rel, parent, item, history); }
+                        foreach (var parent in parents) { ItemUnLinked.Record(Change, root, rel, parent, item, history); }
                     }
                 }
                 if (TryGetChildRelations(item, out relations, stoCRels))
@@ -163,12 +163,12 @@ namespace ModelGraph.Core
                     {
                         if (!rel.TryGetChildren(item, out List<Item> children)) continue;
 
-                        foreach (var child in children) { ItemUnLinked.Record(Change, chef, rel, item, child, history); }
+                        foreach (var child in children) { ItemUnLinked.Record(Change, root, rel, item, child, history); }
                     }
                 }
             }
 
-            foreach (var item in hitList) { ItemRemoved.Record(Change, chef, item); }
+            foreach (var item in hitList) { ItemRemoved.Record(Change, root, item); }
 
             Change.Redo(); //now finally do all changes in the correct order
         }

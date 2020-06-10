@@ -10,32 +10,32 @@ namespace ModelGraph.Core
         static byte _formatVersion = 1;
         internal override IdKey IdKey => IdKey.SymbolXDomain;
 
-        internal SymbolXRoot(Chef chef)
+        internal SymbolXRoot(Root root)
         {
-            Owner = chef;
+            Owner = root;
 
-            chef.RegisterItemSerializer((_serializerGuid, this));
-            CreateProperties(chef);
+            root.RegisterItemSerializer((_serializerGuid, this));
+            CreateProperties(root);
 
-            chef.Add(this);
+            root.Add(this);
         }
 
         #region CreateProperties  =============================================
-        private void CreateProperties(Chef chef)
+        private void CreateProperties(Root root)
         {
-            var sto = chef.Get<PropertyRoot>();
+            var sto = root.Get<PropertyRoot>();
 
-            chef.RegisterReferenceItem(new Property_SymbolX_Attatch(sto));
+            root.RegisterReferenceItem(new Property_SymbolX_Attatch(sto));
 
-            chef.RegisterStaticProperties(typeof(SymbolX), GetProps(chef)); //used by property name lookup
+            root.RegisterStaticProperties(typeof(SymbolX), GetProps(root)); //used by property name lookup
         }
-        private Property[] GetProps(Chef chef) => new Property[]
+        private Property[] GetProps(Root root) => new Property[]
         {
-            chef.Get<Property_Item_Name>(),
-            chef.Get<Property_Item_Summary>(),
-            chef.Get<Property_Item_Description>(),
+            root.Get<Property_Item_Name>(),
+            root.Get<Property_Item_Summary>(),
+            root.Get<Property_Item_Description>(),
 
-            chef.Get<Property_SymbolX_Attatch>(),
+            root.Get<Property_SymbolX_Attatch>(),
         };
         #endregion
 

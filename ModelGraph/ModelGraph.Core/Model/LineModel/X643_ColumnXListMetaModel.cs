@@ -10,10 +10,10 @@ namespace ModelGraph.Core
         internal override IdKey IdKey => IdKey.ColumnXListMetaModel;
         public override bool CanExpandLeft => DataChef.Get<Relation_Store_ColumnX>().ChildCount(Item) > 0;
 
-        public override (string kind, string name, int count) GetLineParms(Chef chef)
+        public override (string kind, string name, int count) GetLineParms(Root root)
         {
             var count = DataChef.Get<Relation_Store_ColumnX>().ChildCount(Item);
-            var (kind, name) = GetKindNameId(chef);
+            var (kind, name) = GetKindNameId(root);
             return (kind, name, count);
         }
 
@@ -34,20 +34,20 @@ namespace ModelGraph.Core
 
             return true;
         }
-        public override void GetButtonCommands(Chef chef, List<LineCommand> list)
+        public override void GetButtonCommands(Root root, List<LineCommand> list)
         {
             list.Clear();
             list.Add(new InsertCommand(this, AddNewColumnX));
         }
         private void AddNewColumnX()
         {
-            var chef = DataChef;
-            var cx = new ColumnX(chef.Get<ColumnXRoot>(), true);
+            var root = DataChef;
+            var cx = new ColumnX(root.Get<ColumnXRoot>(), true);
             var sto = Item as Store;
 
-            // the data chef implements undo/redo functionality
-            ItemCreated.Record(chef, cx);
-            ItemLinked.Record(chef, chef.Get<Relation_Store_ColumnX>(), sto, cx);
+            // the data root implements undo/redo functionality
+            ItemCreated.Record(root, cx);
+            ItemLinked.Record(root, root.Get<Relation_Store_ColumnX>(), sto, cx);
         }
 
         internal override bool Validate(Dictionary<Item, LineModel> prev)

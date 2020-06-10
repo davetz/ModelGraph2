@@ -13,8 +13,8 @@ namespace ModelGraph.Core
             owner.Add(this);
         }
 
-        internal override string GetValue(Item item) { var chef = DataChef; return chef.Get<Enum_CompuType>().GetEnumName(chef, (int)Cast(item).CompuType); }
-        internal override void SetValue(Item item, string val) { var chef = DataChef; Cast(item).CompuType = (CompuType)chef.Get<Enum_CompuType>().GetKey(chef, val); }
-        internal override string GetParentName(Chef chef, Item item) => chef.Get<Relation_Store_ComputeX>().TryGetParent(item, out Store p) ? p.GetSingleNameId(chef) : InvalidItem;
+        internal override string GetValue(Item item) { var root = DataChef; return root.Get<Enum_CompuType>().GetEnumName(root, (int)Cast(item).CompuType); }
+        internal override void SetValue(Item item, string val) { var root = DataChef; Cast(item).CompuType = (CompuType)root.Get<Enum_CompuType>().GetKey(root, val); }
+        internal override string GetParentName(Root root, Item item) => root.Get<Relation_Store_ComputeX>().TryGetParent(item, out Store p) ? p.GetSingleNameId(root) : InvalidItem;
     }
 }

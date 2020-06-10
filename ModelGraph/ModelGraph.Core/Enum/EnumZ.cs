@@ -6,11 +6,11 @@ namespace ModelGraph.Core
         internal EnumZ() { }
 
         #region GetEnumKey  ==================================================
-        internal int GetKey(Chef chef, string name)
+        internal int GetKey(Root root, string name)
         {
             foreach (var pz in Items)
             {
-                if (name == pz.GetSingleNameId(chef)) return pz.EnumKey;
+                if (name == pz.GetSingleNameId(root)) return pz.EnumKey;
             }
             return 0;
         }
@@ -18,12 +18,12 @@ namespace ModelGraph.Core
         #endregion
 
         #region GetEnumIndex  ================================================
-        internal int GetEnumIndex(Chef chef, string name)
+        internal int GetEnumIndex(Root root, string name)
         {
             for (int i = 0; i < Count; i++)
             {
                 var pz = Items[i];
-                if (name == pz.GetSingleNameId(chef)) return i;
+                if (name == pz.GetSingleNameId(root)) return i;
             }
             return 0;
         }
@@ -39,24 +39,24 @@ namespace ModelGraph.Core
         #endregion
 
         #region GetEnumName  =================================================
-        internal string GetEnumName(Chef chef, int key)
+        internal string GetEnumName(Root root, int key)
         {
             foreach (var pz in Items)
             {
-                if (pz.EnumKey == key) return pz.GetSingleNameId(chef);
+                if (pz.EnumKey == key) return pz.GetSingleNameId(root);
             }
             return InvalidItem;
         }
         #endregion
 
         #region GetEnumNames  ================================================
-        internal string[] GetEnumNames(Chef chef)
+        internal string[] GetEnumNames(Root root)
         {
             var s = new string[Count];
 
             for (int i = 0; i < Count; i++)
             {
-                s[i] = Items[i].GetSingleNameId(chef);
+                s[i] = Items[i].GetSingleNameId(root);
             }
             return s;
         }

@@ -1,7 +1,7 @@
 ﻿
 namespace ModelGraph.Core
 {
-    internal interface IRelationStore
+    internal interface IRelationRoot
     {
         Relation[] GetRelationArray();
     }

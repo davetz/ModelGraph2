@@ -5,7 +5,7 @@ namespace ModelGraph.Core
     public class ErrorRoot : StoreOf<Error>
     {
         #region Constructors  =================================================
-        internal ErrorRoot(Chef owner)
+        internal ErrorRoot(Root owner)
         {
             Owner = owner;
             SetCapacity(20);

@@ -54,7 +54,7 @@ namespace ModelGraph.Controls
         #endregion
 
         #region Fields  =======================================================
-        Chef _chef;
+        Root _chef;
         TreeModel _root;
         LineModel _selected;
         List<LineModel> _viewList = new List<LineModel>();

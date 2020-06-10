@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace ModelGraph.Core
 {
-    public partial class Chef
+    public partial class Root
     {
         #region PostUIRequest  ================================================
         // These methods are called from the ui thread and typically they invoke 

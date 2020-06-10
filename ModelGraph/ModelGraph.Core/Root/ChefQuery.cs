@@ -3,7 +3,7 @@ using System.Text;
 
 namespace ModelGraph.Core
 {
-    public partial class Chef
+    public partial class Root
     {
         #region ValidateQueryXStore  ==========================================
         private void ValidateQueryXStore()

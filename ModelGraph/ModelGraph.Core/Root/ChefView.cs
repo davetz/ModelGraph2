@@ -2,7 +2,7 @@
 
 namespace ModelGraph.Core
 {
-    public partial class Chef
+    public partial class Root
     {
         private bool TryGetQueryItems(QueryX query, out List<Item> items, Item key = null)
         {

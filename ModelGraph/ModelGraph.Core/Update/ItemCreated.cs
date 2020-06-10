@@ -24,11 +24,11 @@ namespace ModelGraph.Core
 
         #region Record  =======================================================
         /// <summary>Record the new Item created event</summary>
-        internal static void Record(Chef chef, Item item)
+        internal static void Record(Root root, Item item)
         {
-            var cs = chef.Get<ChangeRoot>().Change;
+            var cs = root.Get<ChangeRoot>().Change;
 
-            string name = item.GetChangeLogId(chef);
+            string name = item.GetChangeLogId(root);
             var store = item.Owner as Store;
 
             new ItemCreated(cs, item, store.IndexOf(item), name);

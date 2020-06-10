@@ -3,7 +3,7 @@
 namespace ModelGraph.Core
 {/*
  */
-    public partial class Chef
+    public partial class Root
     {
         #region GetForest  ====================================================
         /// <summary>

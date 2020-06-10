@@ -11,12 +11,12 @@ namespace ModelGraph.Core
         internal override bool ExpandLeft()
         {
             if (IsExpandedLeft) return false;
-            var chef = DataChef;
+            var root = DataChef;
 
-            new X623_ViewXListMetaModel(this, chef.Get<ViewXRoot>());
-            new X642_EnumXListMetaModel(this, chef.Get<EnumXRoot>());
-            new X643_TableXListMetaModel(this, chef.Get<TableXRoot>());
-            new X644_GraphXListMetaModel(this, chef.Get<GraphXRoot>());
+            new X623_ViewXListMetaModel(this, root.Get<ViewXRoot>());
+            new X642_EnumXListMetaModel(this, root.Get<EnumXRoot>());
+            new X643_TableXListMetaModel(this, root.Get<TableXRoot>());
+            new X644_GraphXListMetaModel(this, root.Get<GraphXRoot>());
             new X740_InternalStoreListModel(this, Item);// TODO: FIX THIS***************
 
             IsExpandedLeft = true;

@@ -11,9 +11,9 @@ namespace ModelGraph.Core
         public override bool CanExpandLeft => true;
 
 
-        public override (string kind, string name, int count) GetLineParms(Chef chef)
+        public override (string kind, string name, int count) GetLineParms(Root root)
         {
-            var (kind, name) = GetKindNameId(chef);
+            var (kind, name) = GetKindNameId(root);
             var st = Item as TableXRoot;
 
             return (kind, name, st.Count);
@@ -34,10 +34,10 @@ namespace ModelGraph.Core
             return true;
         }
 
-        public override void GetButtonCommands(Chef chef, List<LineCommand> list)
+        public override void GetButtonCommands(Root root, List<LineCommand> list)
         {
             list.Clear();
-            list.Add(new InsertCommand(this, () => ItemCreated.Record(chef, new TableX(Item as TableXRoot, true))));
+            list.Add(new InsertCommand(this, () => ItemCreated.Record(root, new TableX(Item as TableXRoot, true))));
         }
 
         internal override bool Validate(Dictionary<Item, LineModel> prev)

@@ -8,9 +8,9 @@ namespace ModelGraph.Core
         public override bool CanExpandLeft => true;
         public override bool CanExpandRight => true;
 
-        public override (string kind, string name, int count) GetLineParms(Chef chef)
+        public override (string kind, string name, int count) GetLineParms(Root root)
         {
-            var (kind, name) = Item.GetKindNameId(chef);
+            var (kind, name) = Item.GetKindNameId(root);
             return (kind, name, 0);
         }
 
@@ -26,10 +26,10 @@ namespace ModelGraph.Core
         internal override bool ExpandRight()
         {
             if (IsExpandedRight) return false;
-            var chef = DataChef;
+            var root = DataChef;
 
-            new X617_TextPropertyModel(this, Item, chef.Get<Property_Item_Summary>());
-            new X617_TextPropertyModel(this, Item, chef.Get<Property_Item_Name>());
+            new X617_TextPropertyModel(this, Item, root.Get<Property_Item_Summary>());
+            new X617_TextPropertyModel(this, Item, root.Get<Property_Item_Name>());
 
             IsExpandedRight = true;
             return true;

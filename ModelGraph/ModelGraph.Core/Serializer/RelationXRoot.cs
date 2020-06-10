@@ -5,7 +5,7 @@ using Windows.Storage.Streams;
 
 namespace ModelGraph.Core
 {
-    public class RelationXRoot : ExternalRoot<Relation>, ISerializer, IRelationStore
+    public class RelationXRoot : ExternalRoot<Relation>, ISerializer, IRelationRoot
     {
         static Guid _serializerGuid = new Guid("D950F508-B774-4838-B81A-757EFDC40518");
         static byte _formatVersion = 1;
@@ -18,38 +18,38 @@ namespace ModelGraph.Core
 
 
         #region Constructor  ==================================================
-        internal RelationXRoot(Chef chef)
+        internal RelationXRoot(Root root)
         {
-            Owner = chef;
+            Owner = root;
 
-            chef.RegisterItemSerializer((_serializerGuid, this));
-            CreateProperties(chef);
+            root.RegisterItemSerializer((_serializerGuid, this));
+            CreateProperties(root);
 
-            new RelationXLink(chef, this);
+            new RelationXLink(root, this);
 
-            chef.Add(this);
+            root.Add(this);
         }
         #endregion
 
 
         #region CreateProperties  =============================================
-        private void CreateProperties(Chef chef)
+        private void CreateProperties(Root root)
         {
-            var sto = chef.Get<PropertyRoot>();
+            var sto = root.Get<PropertyRoot>();
 
-            chef.RegisterReferenceItem(new Property_Relation_Pairing(sto));
-            chef.RegisterReferenceItem(new Property_Relation_IsRequired(sto));
+            root.RegisterReferenceItem(new Property_Relation_Pairing(sto));
+            root.RegisterReferenceItem(new Property_Relation_IsRequired(sto));
 
-            chef.RegisterStaticProperties(typeof(Relation), GetProps(chef)); //used by property name lookup
+            root.RegisterStaticProperties(typeof(Relation), GetProps(root)); //used by property name lookup
         }
-        private Property[] GetProps(Chef chef) => new Property[]
+        private Property[] GetProps(Root root) => new Property[]
         {
-            chef.Get<Property_Item_Name>(),
-            chef.Get<Property_Item_Summary>(),
-            chef.Get<Property_Item_Description>(),
+            root.Get<Property_Item_Name>(),
+            root.Get<Property_Item_Summary>(),
+            root.Get<Property_Item_Description>(),
 
-            chef.Get<Property_Relation_Pairing>(),
-            chef.Get<Property_Relation_IsRequired>(),
+            root.Get<Property_Relation_Pairing>(),
+            root.Get<Property_Relation_IsRequired>(),
         };
         #endregion
 

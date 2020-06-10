@@ -57,7 +57,7 @@ namespace ModelGraph.Core
         #region ResolveFails  =================================================
         static void ResolveFails(ComputeStep step)
         {
-            step.Evaluate = Chef.LiteralUnresolved;
+            step.Evaluate = Root.LiteralUnresolved;
         }
         #endregion
 

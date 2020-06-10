@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace ModelGraph.Core
 {
-    public partial class Chef
+    public partial class Root
     {
         private readonly Dictionary<Type, Item> Type_InstanceOf = new Dictionary<Type, Item>(200);  // used to get a specific type instance
         private readonly Dictionary<ushort, Item> IdKey_ReferenceItem = new Dictionary<ushort, Item>(200); // used to get specific type from its IdKey
-        private readonly Dictionary<Type, Property[]> Type_Properties = new Dictionary<Type, Property[]>(100); // used for property name lookup
+        private readonly Dictionary<Type, Property[]> Type_StaticProperties = new Dictionary<Type, Property[]>(100); // used for property name lookup
 
         private readonly List<(Guid, ISerializer)> ItemSerializers = new List<(Guid, ISerializer)>(20);
         private readonly List<(Guid, ISerializer)> LinkSerializers = new List<(Guid, ISerializer)>(10);
@@ -21,7 +21,7 @@ namespace ModelGraph.Core
         }
         public void RegisterLinkSerializer((Guid, ISerializer) serializer) => LinkSerializers.Add(serializer); //link serializers will be called last
 
-        internal void RegisterStaticProperties(Type type, Property[] props) => Type_Properties.Add(type, props);
+        internal void RegisterStaticProperties(Type type, Property[] props) => Type_StaticProperties.Add(type, props);
 
         internal void RegisterPrivateItem(Item item) => Type_InstanceOf[item.GetType()] = item;
 
@@ -31,9 +31,8 @@ namespace ModelGraph.Core
         {
             if (Type_InstanceOf.TryGetValue(typeof(T), out Item itm) && itm is T val)
                 return val;
-            throw new InvalidOperationException($"Chef GetItem<T>() : could not find type {typeof(T)}");
+            throw new InvalidOperationException($"Chef GetInstanceOf<T>() : could not find type {typeof(T)}");
         }
-
 
         #region LookUpProperty  ===============================================
         internal bool TryLookUpProperty(Store store, string name, out Property prop)
@@ -59,7 +58,7 @@ namespace ModelGraph.Core
                     if (string.Compare(n, name, true) == 0) { prop = cd; return true; }
                 }
             }
-            if (Type_Properties.TryGetValue(store.GetChildType(), out Property[] arr))
+            if (Type_StaticProperties.TryGetValue(store.GetChildType(), out Property[] arr))
             {
                 foreach (var pr in arr)
                 {
@@ -87,8 +86,8 @@ namespace ModelGraph.Core
         };
         #endregion
 
-        #region InitializeDomains  ============================================
-        private void InitializeDomains()
+        #region InitializeDataRoots  ==========================================
+        private void InitializeDataRoots()
         {
             RegisterReferenceItem(new DummyItem(this));
             RegisterReferenceItem(new DummyQueryX(this));
@@ -116,7 +115,7 @@ namespace ModelGraph.Core
         /// <summary>Remove references that were created by this dataChef</summary>
         internal override void Discard()
         {
-            Type_Properties.Clear();
+            Type_StaticProperties.Clear();
             Type_InstanceOf.Clear();
             IdKey_ReferenceItem.Clear();
             ItemSerializers.Clear();

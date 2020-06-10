@@ -10,40 +10,40 @@ namespace ModelGraph.Core
         static byte _formatVersion = 1;
         internal override IdKey IdKey => IdKey.ComputeXDomain;
 
-        internal ComputeXRoot(Chef chef)
+        internal ComputeXRoot(Root root)
         {
-            Owner = chef;
+            Owner = root;
 
-            chef.RegisterItemSerializer((_serializerGuid, this));
-            CreateProperties(chef);
+            root.RegisterItemSerializer((_serializerGuid, this));
+            CreateProperties(root);
 
-            chef.Add(this);
+            root.Add(this);
         }
 
         #region CreateProperties  =============================================
-        private void CreateProperties(Chef chef)
+        private void CreateProperties(Root root)
         {
-            var sto = chef.Get<PropertyRoot>();
+            var sto = root.Get<PropertyRoot>();
 
-            chef.RegisterReferenceItem(new Property_ComputeX_CompuType(sto));
-            chef.RegisterReferenceItem(new Property_ComputeX_Where(sto));
-            chef.RegisterReferenceItem(new Property_ComputeX_Select(sto));
-            chef.RegisterReferenceItem(new Property_ComputeX_Separator(sto));
-            chef.RegisterReferenceItem(new Property_ComputeX_ValueType(sto));
+            root.RegisterReferenceItem(new Property_ComputeX_CompuType(sto));
+            root.RegisterReferenceItem(new Property_ComputeX_Where(sto));
+            root.RegisterReferenceItem(new Property_ComputeX_Select(sto));
+            root.RegisterReferenceItem(new Property_ComputeX_Separator(sto));
+            root.RegisterReferenceItem(new Property_ComputeX_ValueType(sto));
 
-            chef.RegisterStaticProperties(typeof(ComputeX), GetProps(chef)); //used by property name lookup
+            root.RegisterStaticProperties(typeof(ComputeX), GetProps(root)); //used by property name lookup
         }
-        private Property[] GetProps(Chef chef) => new Property[]
+        private Property[] GetProps(Root root) => new Property[]
         {
-            chef.Get<Property_Item_Name>(),
-            chef.Get<Property_Item_Summary>(),
-            chef.Get<Property_Item_Description>(),
+            root.Get<Property_Item_Name>(),
+            root.Get<Property_Item_Summary>(),
+            root.Get<Property_Item_Description>(),
 
-            chef.Get<Property_ComputeX_CompuType>(),
-            chef.Get<Property_ComputeX_Where>(),
-            chef.Get<Property_ComputeX_Select>(),
-            chef.Get<Property_ComputeX_Separator>(),
-            chef.Get<Property_ColumnX_ValueType>(),
+            root.Get<Property_ComputeX_CompuType>(),
+            root.Get<Property_ComputeX_Where>(),
+            root.Get<Property_ComputeX_Select>(),
+            root.Get<Property_ComputeX_Separator>(),
+            root.Get<Property_ColumnX_ValueType>(),
         };
         #endregion
 

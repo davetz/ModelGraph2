@@ -6,7 +6,7 @@ namespace ModelGraph.Core
 {/*
 
  */
-    public partial class Chef
+    public partial class Root
     {
         #region GetHeadTail  ==================================================
         internal void GetHeadTail(Relation rel, out Store head, out Store tail)

@@ -14,7 +14,7 @@ namespace ModelGraph.Core
         internal override void SetItemPropertyValue(Item item, int val)
         {
             var col = Cast(item);
-            var chef = DataChef;
+            var root = DataChef;
 
             if (val < 0 || val >= (int)ValType.MaximumType) return;
 
@@ -24,7 +24,7 @@ namespace ModelGraph.Core
             var newGroup = Value.GetValGroup(type);
             var preGroup = Value.GetValGroup(col.Value.ValType);
 
-            if (!chef.Get<Relation_Store_ColumnX>().TryGetParent(col, out Store tbl)) return;
+            if (!root.Get<Relation_Store_ColumnX>().TryGetParent(col, out Store tbl)) return;
 
             var N = tbl.Count;
 

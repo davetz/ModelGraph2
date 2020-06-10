@@ -13,7 +13,7 @@ namespace ModelGraph.Controls
 {
     public sealed partial class ModelGraphControl : Page, IPageControl, IModelPageControl
     {
-        private Chef _chef;
+        private Root _chef;
         private Graph _graph;
         private readonly Size _desiredSize = new Size { Height = 800, Width = 800 };
         public IModel Model { get; }

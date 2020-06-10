@@ -8,46 +8,46 @@ namespace ModelGraph.Core
     {
         static Guid _serializerGuid = new Guid("88223880-DC1E-40DD-BFB2-711372B7BA2D");
         static byte _formatVersion = 1;
-        private Chef DataChef;
-        internal NodeSerializer(Chef chef)
+        private Root DataChef;
+        internal NodeSerializer(Root root)
         {
-            DataChef = chef;
+            DataChef = root;
 
-            CreateProperties(chef);
-            chef.RegisterLinkSerializer((_serializerGuid, this));
+            CreateProperties(root);
+            root.RegisterLinkSerializer((_serializerGuid, this));
         }
 
         #region CreateProperties  =============================================
-        private void CreateProperties(Chef chef)
+        private void CreateProperties(Root root)
         {
-            var sto = chef.Get<PropertyRoot>();
+            var sto = root.Get<PropertyRoot>();
 
-            chef.RegisterReferenceItem(new Property_Node_CenterXY(sto));
-            chef.RegisterReferenceItem(new Property_Node_SizeWH(sto));
-            chef.RegisterReferenceItem(new Property_Node_Aspect(sto));
-            chef.RegisterReferenceItem(new Property_Node_Labeling(sto));
-            chef.RegisterReferenceItem(new Property_Node_Resizing(sto));
-            chef.RegisterReferenceItem(new Property_Node_BarWidth(sto));
+            root.RegisterReferenceItem(new Property_Node_CenterXY(sto));
+            root.RegisterReferenceItem(new Property_Node_SizeWH(sto));
+            root.RegisterReferenceItem(new Property_Node_Aspect(sto));
+            root.RegisterReferenceItem(new Property_Node_Labeling(sto));
+            root.RegisterReferenceItem(new Property_Node_Resizing(sto));
+            root.RegisterReferenceItem(new Property_Node_BarWidth(sto));
 
-            chef.RegisterReferenceItem(new Property_Edge_Facet1(sto));
-            chef.RegisterReferenceItem(new Property_Edge_Facet2(sto));
+            root.RegisterReferenceItem(new Property_Edge_Facet1(sto));
+            root.RegisterReferenceItem(new Property_Edge_Facet2(sto));
 
-            chef.RegisterStaticProperties(typeof(Node), GetProps1(chef)); //used by property name lookup
-            chef.RegisterStaticProperties(typeof(Edge), GetProps2(chef)); //used by property name lookup
+            root.RegisterStaticProperties(typeof(Node), GetProps1(root)); //used by property name lookup
+            root.RegisterStaticProperties(typeof(Edge), GetProps2(root)); //used by property name lookup
         }
-        private Property[] GetProps1(Chef chef) => new Property[]
+        private Property[] GetProps1(Root root) => new Property[]
         {
-            chef.Get<Property_Node_CenterXY>(),
-            chef.Get<Property_Node_SizeWH>(),
-            chef.Get<Property_Node_Aspect>(),
-            chef.Get<Property_Node_Labeling>(),
-            chef.Get<Property_Node_Resizing>(),
-            chef.Get<Property_Node_BarWidth>(),
+            root.Get<Property_Node_CenterXY>(),
+            root.Get<Property_Node_SizeWH>(),
+            root.Get<Property_Node_Aspect>(),
+            root.Get<Property_Node_Labeling>(),
+            root.Get<Property_Node_Resizing>(),
+            root.Get<Property_Node_BarWidth>(),
         };
-        private Property[] GetProps2(Chef chef) => new Property[]
+        private Property[] GetProps2(Root root) => new Property[]
         {
-            chef.Get<Property_Edge_Facet1>(),
-            chef.Get<Property_Edge_Facet2>(),
+            root.Get<Property_Edge_Facet1>(),
+            root.Get<Property_Edge_Facet2>(),
         };
         #endregion
 
@@ -55,9 +55,9 @@ namespace ModelGraph.Core
         public bool HasData()
         {
 
-            var chef = DataChef;
-            var graphXDomain = chef.Get<GraphXRoot>();
-            var dummyQueryXRef = chef.Get<DummyQueryX>();
+            var root = DataChef;
+            var graphXDomain = root.Get<GraphXRoot>();
+            var dummyQueryXRef = root.Get<DummyQueryX>();
 
 
             var gxList = graphXDomain.Items;
@@ -111,8 +111,8 @@ namespace ModelGraph.Core
         #region ReadData  =====================================================
         public void ReadData(DataReader r, Item[] items)
         {
-            var chef = DataChef;
-            var dummyQueryXRef = chef.Get<DummyQueryX>();
+            var root = DataChef;
+            var dummyQueryXRef = root.Get<DummyQueryX>();
 
             var Item_Node = new Dictionary<Item,Node>(1000);
 
@@ -140,11 +140,11 @@ namespace ModelGraph.Core
 
                         var rootIndex = r.ReadInt32();//*************************
                         if (rootIndex < 0 || rootIndex >= items.Length) throw new Exception($"Invalid root index {rootIndex}");
-                        if (!(items[rootIndex] is Item root)) throw new Exception($"GraphXParam root item is null {rootIndex}");
+                        if (!(items[rootIndex] is Item seed)) throw new Exception($"GraphXParam root item is null {rootIndex}");
 
                         var qxCount = r.ReadUInt16();//***************************
                         var QueryX_NodeEdgeList = new Dictionary<QueryX, List<NodeEdge>>(qxCount);
-                        gx.Root_QueryX_Parms[root] = QueryX_NodeEdgeList;
+                        gx.Root_QueryX_Parms[seed] = QueryX_NodeEdgeList;
 
                         for (int k = 0; k < qxCount; k++)
                         {
@@ -248,9 +248,9 @@ namespace ModelGraph.Core
         #region WriteData  ====================================================
         public void WriteData(DataWriter w, Dictionary<Item, int> itemIndex)
         {
-            var chef = DataChef;
-            var dummyQueryXRef = chef.Get<DummyQueryX>();
-            var graphXDomain = chef.Get<GraphXRoot>();
+            var root = DataChef;
+            var dummyQueryXRef = root.Get<DummyQueryX>();
+            var graphXDomain = root.Get<GraphXRoot>();
 
             #region RemoveInvalidItems  =======================================
             // hit list of items that no longer exists
@@ -353,7 +353,7 @@ namespace ModelGraph.Core
                     if (e1.Value.Count > 0)
                     {
                         #region WriteRoots  ===================================
-                        var (x0, y0) = GetCenter(chef, e1.Value); // used to center the drawing arround point(0,0)
+                        var (x0, y0) = GetCenter(root, e1.Value); // used to center the drawing arround point(0,0)
 
                         foreach (var e2 in e1.Value)//QueryX
                         {
@@ -437,14 +437,14 @@ namespace ModelGraph.Core
         }
 
         #region GetCenter  ====================================================
-        private (float X0, float Y0) GetCenter(Chef chef, Dictionary<QueryX, List<NodeEdge>> qxParams)
+        private (float X0, float Y0) GetCenter(Root root, Dictionary<QueryX, List<NodeEdge>> qxParams)
         {
             float x1, y1, x2, y2;
             x1 = y1 = float.MaxValue;
             x2 = y2 = float.MinValue;
             foreach (var e3 in qxParams)
             {
-                if (e3.Key == chef.Get<DummyQueryX>())
+                if (e3.Key == root.Get<DummyQueryX>())
                 {
                     foreach (var gp in e3.Value)//GP
                     {
