@@ -4,7 +4,7 @@ namespace ModelGraph.Core
     public class X619_ComboPropertyModel : PropertyModel
     {
         internal X619_ComboPropertyModel(LineModel owner, Item item, Property prop) : base(owner, item, prop) { }
-        internal override IdKey IdKey => IdKey.ComboPropertyModel;
+        internal override IdKey IdKey => IdKey.ComboProperty_Model;
         public override bool IsComboModel => true;
 
         public override (string kind, string name, int count) GetLineParms(Root root)

@@ -128,8 +128,8 @@ namespace ModelGraph.Core
 
 
         /// <summary>Walk up item tree hierachy to find the parent DataChef</summary>
-        public Root DataChef => GetDataChef();
-        private Root GetDataChef()
+        public Root DataRoot => GetRoot();
+        private Root GetRoot()
         {
             var itm = this;
             for (int i = 0; i < 100; i++)
@@ -138,7 +138,7 @@ namespace ModelGraph.Core
                 if (itm is Root root) return root;
                 itm = itm.Owner;
             }
-            throw new Exception("GetChef: Corrupted item hierarchy"); // I seriously hope this never happens
+            throw new Exception("GetRoot: Corrupted item hierarchy");
         }
 
 
@@ -158,11 +158,9 @@ namespace ModelGraph.Core
         
         #endregion
 
-
-
-        #region Flags  ========================================================
+        #region BitFlags  =====================================================
         // don't read/write missing or default-value propties
-        // these flags indicate which properties were non-default
+        // these bit flags indicate which properties were non-default
         public const byte BZ = 0;
         public const byte B1 = 0x1;
         public const byte B2 = 0x2;

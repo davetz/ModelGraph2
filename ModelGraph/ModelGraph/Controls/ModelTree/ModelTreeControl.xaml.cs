@@ -16,7 +16,7 @@ namespace ModelGraph.Controls
         public ModelTreeControl(TreeModel root)
         {             
             _root = root;
-            _chef = root.DataChef;
+            _chef = root.DataRoot;
 
             InitializeComponent();
             Initialize();

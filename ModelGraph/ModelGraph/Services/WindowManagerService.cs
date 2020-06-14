@@ -39,7 +39,7 @@ namespace ModelGraph.Services
                 var m = view.IModel;
 
                 if (m is null) continue;
-                if (m.DataChef != m.DataChef) continue;
+                if (m.DataRoot != m.DataRoot) continue;
 
                 view.CloseModel();
             }

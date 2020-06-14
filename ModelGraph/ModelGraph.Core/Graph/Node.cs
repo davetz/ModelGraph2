@@ -271,7 +271,7 @@ namespace ModelGraph.Core
 
         internal bool HasOpenPaths => (OpenPathIndex >= 0);
         internal int OpenPathCount => (Graph == null) ? 0 : Graph.OpenPathCount(OpenPathIndex);
-        public override string ToString() => DataChef.GetIdentity(Item, IdentityStyle.Double);
+        public override string ToString() => DataRoot.GetIdentity(Item, IdentityStyle.Double);
         #endregion
     }
 }

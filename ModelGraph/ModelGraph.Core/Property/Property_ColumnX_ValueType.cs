@@ -7,14 +7,14 @@ namespace ModelGraph.Core
     {
         internal override IdKey IdKey => IdKey.ColumnValueTypeProperty;
 
-        internal Property_ColumnX_ValueType(PropertyRoot owner) : base(owner, owner.DataChef.Get<Enum_ValueType>()) { }
+        internal Property_ColumnX_ValueType(PropertyRoot owner) : base(owner, owner.DataRoot.Get<Enum_ValueType>()) { }
 
         internal override int GetItemPropertyValue(Item item) => (int)Cast(item).Value.ValType;
 
         internal override void SetItemPropertyValue(Item item, int val)
         {
             var col = Cast(item);
-            var root = DataChef;
+            var root = DataRoot;
 
             if (val < 0 || val >= (int)ValType.MaximumType) return;
 

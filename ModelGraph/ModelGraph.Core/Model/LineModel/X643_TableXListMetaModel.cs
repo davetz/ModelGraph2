@@ -7,7 +7,7 @@ namespace ModelGraph.Core
     public class X643_TableXListMetaModel : LineModel
     {
         internal X643_TableXListMetaModel(LineModel owner, TableXRoot item) : base(owner, item) { }
-        internal override IdKey IdKey => IdKey.TableXListMetaModel;
+        internal override IdKey IdKey => IdKey.TableXList_MetaModel;
         public override bool CanExpandLeft => true;
 
 
@@ -66,7 +66,7 @@ namespace ModelGraph.Core
                         }
                         else
                         {
-                            new X655_GraphXMetaModel(this, tx);
+                            new X654_TableXMetaModel(this, tx);
                             anyChange = true;
                         }
                     }

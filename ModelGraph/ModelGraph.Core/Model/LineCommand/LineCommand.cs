@@ -18,7 +18,7 @@ namespace ModelGraph.Core
         public void Execute() 
         {
             if (IsValid(Owner))
-                DataChef.PostCommand(this);
+                DataRoot.PostCommand(this);
         }
 
         public virtual bool IsRemoveCommand => false;

@@ -13,7 +13,7 @@ namespace ModelGraph.Core
             owner.Add(this);
         }
 
-        internal override string GetValue(Item item) => DataChef.GetTargetString(Cast(item).PathParm.Target2);
-        internal override void SetValue(Item item, string val) => Cast(item).PathParm.Target2 = DataChef.GetTargetValue(val);
+        internal override string GetValue(Item item) => DataRoot.GetTargetString(Cast(item).PathParm.Target2);
+        internal override void SetValue(Item item, string val) => Cast(item).PathParm.Target2 = DataRoot.GetTargetValue(val);
     }
 }

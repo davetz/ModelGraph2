@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using Windows.Storage.Streams;
 
 namespace ModelGraph.Core
 {
@@ -57,7 +55,7 @@ namespace ModelGraph.Core
                 return false;
             }
 
-            if (_owner.DataChef.TryGetComputedValue(_owner, key))
+            if (_owner.DataRoot.TryGetComputedValue(_owner, key))
                 return _values.TryGetValue(key, out val);
             else
             {

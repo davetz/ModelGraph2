@@ -14,6 +14,6 @@ namespace ModelGraph.Core
             owner.Add(this);
         }
 
-        internal override string GetValue(Item item) => DataChef.GetQueryXRelationName(Cast(item));
+        internal override string GetValue(Item item) => DataRoot.GetQueryXRelationName(Cast(item));
     }
 }

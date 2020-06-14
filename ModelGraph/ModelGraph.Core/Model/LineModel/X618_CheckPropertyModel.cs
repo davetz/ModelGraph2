@@ -4,7 +4,7 @@ namespace ModelGraph.Core
     public class X618_CheckPropertyModel : PropertyModel
     {
         internal X618_CheckPropertyModel(LineModel owner, Item item, Property prop) : base(owner, item, prop) { }
-        internal override IdKey IdKey => IdKey.CheckPropertyModel;
+        internal override IdKey IdKey => IdKey.CheckProperty_Model;
         public override bool IsCheckModel => true;
 
         public override (string kind, string name, int count) GetLineParms(Root root)

@@ -4,50 +4,40 @@ using System.Linq;
 
 namespace ModelGraph.Core
 {
-    public class X661_ColumnXListMetaModel : LineModel
+    public class X647_TableXListModel : LineModel
     {
-        internal X661_ColumnXListMetaModel(LineModel owner, Item item) : base(owner, item) { }
-        internal override IdKey IdKey => IdKey.ColumnXList_MetaModel;
-        public override bool CanExpandLeft => DataRoot.Get<Relation_Store_ColumnX>().ChildCount(Item) > 0;
+        internal X647_TableXListModel(LineModel owner, TableXRoot item) : base(owner, item) { }
+        internal override IdKey IdKey => IdKey.TableXList_Model;
+        public override bool CanExpandLeft => true;
+
 
         public override (string kind, string name, int count) GetLineParms(Root root)
         {
-            var count = DataRoot.Get<Relation_Store_ColumnX>().ChildCount(Item);
             var (kind, name) = GetKindNameId(root);
-            return (kind, name, count);
+            var st = Item as TableXRoot;
+
+            return (kind, name, st.Count);
         }
 
         internal override bool ExpandLeft()
         {
             if (IsExpandedLeft) return false;
-            {
-                IsExpandedLeft = true;
 
-                if (DataRoot.Get<Relation_Store_ColumnX>().TryGetChildren(Item, out IList<ColumnX> cxList))
-                {
-                    foreach (var cx in cxList)
-                    {
-                        new X657_ColumnXMetaModel(this, cx);
-                    }
-                }
+            IsExpandedLeft = true;
+
+            var st = Item as TableXRoot;
+            foreach (var tx in st.Items)
+            {
+                new X654_TableXMetaModel(this, tx);
             }
 
             return true;
         }
+
         public override void GetButtonCommands(Root root, List<LineCommand> list)
         {
             list.Clear();
-            list.Add(new InsertCommand(this, AddNewColumnX));
-        }
-        private void AddNewColumnX()
-        {
-            var root = DataRoot;
-            var cx = new ColumnX(root.Get<ColumnXRoot>(), true);
-            var sto = Item as Store;
-
-            // the data root implements undo/redo functionality
-            ItemCreated.Record(root, cx);
-            ItemLinked.Record(root, root.Get<Relation_Store_ColumnX>(), sto, cx);
+            list.Add(new InsertCommand(this, () => ItemCreated.Record(root, new TableX(Item as TableXRoot, true))));
         }
 
         internal override bool Validate(Dictionary<Item, LineModel> prev)
@@ -59,13 +49,6 @@ namespace ModelGraph.Core
                 {
                     ChildDelta = Item.ChildDelta;
 
-                    if (!DataRoot.Get<Relation_Store_ColumnX>().TryGetChildren(Item, out IList<ColumnX> cxList))
-                    {
-                        IsExpandedLeft = false;
-                        DiscardChildren();
-                        return true;
-                    }
-
                     prev.Clear();
                     foreach (var child in Items)
                     {
@@ -73,16 +56,17 @@ namespace ModelGraph.Core
                     }
                     CovertClear();
 
-                    foreach (var cx in cxList)
+                    var st = Item as TableXRoot;
+                    foreach (var tx in st.Items)
                     {
-                        if (prev.TryGetValue(cx, out LineModel m))
+                        if (prev.TryGetValue(tx, out LineModel m))
                         {
                             CovertAdd(m);
                             prev.Remove(m.Item);
                         }
                         else
                         {
-                            new X657_ColumnXMetaModel(this, cx);
+                            new X654_TableXMetaModel(this, tx);
                             anyChange = true;
                         }
                     }

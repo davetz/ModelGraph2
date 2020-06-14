@@ -3,7 +3,7 @@ namespace ModelGraph.Core
 {
     public interface IModel
     {
-        Root DataChef { get; }          // dataChef
+        Root DataRoot { get; }          // dataChef
         Item RootItem { get; }
         RootTreeModel RootTreeModel { get; }   // there is exactly one rootTreeModel per dataChef
         string TitleName { get; }       // title that appears in the windows title bar

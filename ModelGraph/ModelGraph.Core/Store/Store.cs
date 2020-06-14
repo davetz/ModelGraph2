@@ -21,7 +21,7 @@ namespace ModelGraph.Core
 
         internal bool TryLookUpProperty(string name, out Property property)
         {
-            return DataChef.TryLookUpProperty(this, name, out property);
+            return DataRoot.TryLookUpProperty(this, name, out property);
         }
     }
 }

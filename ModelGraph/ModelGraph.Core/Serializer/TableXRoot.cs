@@ -9,7 +9,7 @@ namespace ModelGraph.Core
     {
         static Guid _serializerGuid = new Guid("93EC136C-6C38-474D-844B-6B8326526CB5");
         static byte _formatVersion = 1;
-        internal override IdKey IdKey => IdKey.TableXDomain;
+        internal override IdKey IdKey => IdKey.TableXRoot;
 
         internal TableXRoot(Root root)
         {

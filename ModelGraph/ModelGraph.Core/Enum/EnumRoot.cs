@@ -23,7 +23,7 @@ namespace ModelGraph.Core
         #endregion
 
         #region Identity  =====================================================
-        internal override IdKey IdKey => IdKey.EnumZStore;
+        internal override IdKey IdKey => IdKey.EnumZRoot;
         #endregion
     }
 }

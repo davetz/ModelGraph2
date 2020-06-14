@@ -5,13 +5,13 @@ namespace ModelGraph.Core
     public class X623_MetaRootModel : LineModel
     {
         internal X623_MetaRootModel(LineModel owner, Item item) : base(owner, item) { }
-        internal override IdKey IdKey => IdKey.MetadataRootModel;
+        internal override IdKey IdKey => IdKey.MetadataRoot_Model;
         public override bool CanExpandLeft => true;
 
         internal override bool ExpandLeft()
         {
             if (IsExpandedLeft) return false;
-            var root = DataChef;
+            var root = DataRoot;
 
             new X623_ViewXListMetaModel(this, root.Get<ViewXRoot>());
             new X642_EnumXListMetaModel(this, root.Get<EnumXRoot>());

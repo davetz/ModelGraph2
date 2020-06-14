@@ -14,7 +14,7 @@ namespace ModelGraph.Core
         #endregion
 
         #region Identity  =====================================================
-        internal override IdKey IdKey => IdKey.ErrorStore;
+        internal override IdKey IdKey => IdKey.ErrorRoot;
         #endregion
     }
 }

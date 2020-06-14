@@ -4,7 +4,7 @@ namespace ModelGraph.Core
     public class X622_ChangeRootModel : LineModel
     {
         internal X622_ChangeRootModel(LineModel owner, ChangeRoot item) : base(owner, item) { }
-        internal override IdKey IdKey => IdKey.ChangeRootModel;
+        internal override IdKey IdKey => IdKey.ChangeRoot_Model;
 
         public override bool CanExpandLeft => (Item as ChangeRoot).Count > 0;
 

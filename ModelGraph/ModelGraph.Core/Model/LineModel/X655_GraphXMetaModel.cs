@@ -5,6 +5,6 @@ namespace ModelGraph.Core
     public class X655_GraphXMetaModel : LineModel
     {
         internal X655_GraphXMetaModel(LineModel owner, Item item) : base(owner, item) { }
-        internal override IdKey IdKey => IdKey.GraphXMetaModel;
+        internal override IdKey IdKey => IdKey.GraphX_MetaModel;
     }
 }

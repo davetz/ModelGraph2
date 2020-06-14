@@ -103,7 +103,7 @@ namespace ModelGraph.Services
             if (ctrl is null) return false;
 
             var oldRootModel = ctrl.IModel;
-            var oldChef = oldRootModel.DataChef;
+            var oldChef = oldRootModel.DataRoot;
             var repo = oldChef.Repository;
 
             RemoveModelPage(oldRootModel);
@@ -112,7 +112,7 @@ namespace ModelGraph.Services
             WindowManagerService.Current.CloseRelatedModels(oldRootModel);
 
             var rootModel = new RootTreeModel();
-            var newChef = rootModel.DataChef;
+            var newChef = rootModel.DataRoot;
 
             _ = await repo.ReloadAsync(newChef).ConfigureAwait(true);
 
@@ -132,7 +132,7 @@ namespace ModelGraph.Services
 
             var rootModel = new RootTreeModel();
             var repo = new StorageFileRepo();
-            repo.New(rootModel.DataChef);
+            repo.New(rootModel.DataRoot);
 
             await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
@@ -150,7 +150,7 @@ namespace ModelGraph.Services
 
             var rootModel = new RootTreeModel();
             var repo = new StorageFileRepo();
-            bool success = await repo.OpenAsync(rootModel.DataChef).ConfigureAwait(true);
+            bool success = await repo.OpenAsync(rootModel.DataRoot).ConfigureAwait(true);
 
 
             await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>

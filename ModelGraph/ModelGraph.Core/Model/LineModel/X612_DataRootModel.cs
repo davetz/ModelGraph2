@@ -2,12 +2,12 @@
 
 namespace ModelGraph.Core
 {
-    public class X612_DataChefModel : LineModel
+    public class X612_DataRootModel : LineModel
     {
-        internal override IdKey IdKey => IdKey.DataChefModel;
+        internal override IdKey IdKey => IdKey.DataRoot_Model;
         public override bool CanExpandLeft => true;
 
-        internal X612_DataChefModel(LineModel owner, Root item) : base(owner, item) 
+        internal X612_DataRootModel(LineModel owner, Root item) : base(owner, item) 
         {
             var root = Item as Root;
             new X620_ParmRootModel(this, Item);

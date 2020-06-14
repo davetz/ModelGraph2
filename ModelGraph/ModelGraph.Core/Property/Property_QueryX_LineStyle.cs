@@ -13,7 +13,7 @@ namespace ModelGraph.Core
             owner.Add(this);
         }
 
-        internal override string GetValue(Item item) { var root = DataChef; return root.Get<Enum_LineStyle>().GetEnumName(root, (int)Cast(item).PathParm.LineStyle); }
-        internal override void SetValue(Item item, string val) { var root = DataChef; Cast(item).PathParm.LineStyle = (LineStyle)root.Get<Enum_LineStyle>().GetKey(root, val); }
+        internal override string GetValue(Item item) { var root = DataRoot; return root.Get<Enum_LineStyle>().GetEnumName(root, (int)Cast(item).PathParm.LineStyle); }
+        internal override void SetValue(Item item, string val) { var root = DataRoot; Cast(item).PathParm.LineStyle = (LineStyle)root.Get<Enum_LineStyle>().GetKey(root, val); }
     }
 }

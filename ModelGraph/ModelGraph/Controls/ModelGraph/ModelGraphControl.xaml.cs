@@ -21,7 +21,7 @@ namespace ModelGraph.Controls
         public ModelGraphControl(IModel model)
         {
             Model = model ?? throw new ArgumentNullException(nameof(model));
-            _chef = model.DataChef;
+            _chef = model.DataRoot;
             _graph = model.RootItem as Graph;
 
             _selector = new Selector(_graph);

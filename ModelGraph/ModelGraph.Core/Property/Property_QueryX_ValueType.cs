@@ -14,6 +14,6 @@ namespace ModelGraph.Core
             owner.Add(this);
         }
 
-        internal override string GetValue(Item item) { var root = DataChef; return root.Get<Enum_ValueType>().GetEnumName(root, (int)root.GetValueType(Cast(item))); }
+        internal override string GetValue(Item item) { var root = DataRoot; return root.Get<Enum_ValueType>().GetEnumName(root, (int)root.GetValueType(Cast(item))); }
     }
 }

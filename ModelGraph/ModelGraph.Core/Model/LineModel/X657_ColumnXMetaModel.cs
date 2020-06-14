@@ -7,7 +7,7 @@ namespace ModelGraph.Core
     public class X657_ColumnXMetaModel : LineModel
     {
         internal X657_ColumnXMetaModel(LineModel owner, Item item) : base(owner, item) { }
-        internal override IdKey IdKey => IdKey.ColumnXMetaModel;
+        internal override IdKey IdKey => IdKey.ColumnX_MetaModel;
         public override bool CanExpandRight => true;
 
         public override (string kind, string name, int count) GetLineParms(Root root)
@@ -19,7 +19,7 @@ namespace ModelGraph.Core
         internal override bool ExpandRight()
         {
             if (IsExpandedRight) return false;
-            var root = DataChef;
+            var root = DataRoot;
 
             new X618_CheckPropertyModel(this, Item, root.Get<Property_ColumnX_IsChoice>());
             new X619_ComboPropertyModel(this, Item, root.Get<Property_ColumnX_ValueType>());

@@ -11,8 +11,8 @@ namespace ModelGraph.Core
         public IPageControl PageControl { get; set; } // reference the UI PageControl       
         public ControlType ControlType { get; private set; }
 
-        public string TitleName => DataChef.TitleName;
-        public string TitleSummary => DataChef.TitleSummary;
+        public string TitleName => DataRoot.TitleName;
+        public string TitleSummary => DataRoot.TitleSummary;
 
         internal LineModel ModelTreeRoot => Items[0];
         internal Dictionary<LineModel, string> LineModel_FilterSort = new Dictionary<LineModel, string>();
@@ -25,7 +25,7 @@ namespace ModelGraph.Core
             ControlType = ControlType.PrimaryTree;
             root.Add(this);
 
-            Add(new X612_DataChefModel(this, root));
+            Add(new X612_DataRootModel(this, root));
         }
         internal TreeModel(RootTreeModel rootModel, Root root, IdKey childId) //======== created by the TreeRootModel
         {
@@ -37,16 +37,16 @@ namespace ModelGraph.Core
             root.Add(this);
             switch (childId)
             {
-                case IdKey.MetadataRootModel:
+                case IdKey.MetadataRoot_Model:
                     new X623_MetaRootModel(this, root);
                     break;
-                case IdKey.ModelingRootModel:
+                case IdKey.ModelingRoot_Model:
                     new X623_MetaRootModel(this, root);
                     break;
-                case IdKey.ChangeRootModel:
+                case IdKey.ChangeRoot_Model:
                     new X622_ChangeRootModel(this, root.Get<ChangeRoot>());
                     break;
-                case IdKey.ErrorRootModel:
+                case IdKey.ErrorRoot_Model:
                     new X621_ErrorRootModel(this, root);
                     break;
                 default:
@@ -60,11 +60,11 @@ namespace ModelGraph.Core
         {
             if (Owner is null) return;
 
-            DataChef.Remove(this);
+            DataRoot.Remove(this);
             Discard(); //discard myself and recursivly discard all my children
 
             if (this is RootTreeModel)
-                DataChef.Discard(); //kill off the dataChef
+                DataRoot.Discard(); //kill off the dataChef
 
             Owner = null;
         }
@@ -111,7 +111,7 @@ namespace ModelGraph.Core
         // Runs on a background thread invoked by the ModelTreeControl 
         public void RefreshViewList(int viewSize, LineModel leading, LineModel selected, ChangeType change = ChangeType.None)
         {
-            var root = DataChef;
+            var root = DataRoot;
             var anyChange = false;
             var isNewBuffer = ValidateBuffer(viewSize);
             bool isValidLead = IsValidModel(leading);

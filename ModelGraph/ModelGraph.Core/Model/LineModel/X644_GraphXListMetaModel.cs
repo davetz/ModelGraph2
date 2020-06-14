@@ -6,7 +6,7 @@ namespace ModelGraph.Core
     public class X644_GraphXListMetaModel : LineModel
     {
         internal X644_GraphXListMetaModel(LineModel owner, Item item) : base(owner, item) { }
-        internal override IdKey IdKey => IdKey.GraphXListMetaModel;
+        internal override IdKey IdKey => IdKey.GraphXList_MetaModel;
 
         internal override bool Validate(Dictionary<Item, LineModel> prev)
         {

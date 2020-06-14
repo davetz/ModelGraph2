@@ -13,7 +13,7 @@ namespace ModelGraph.Core
             owner.Add(this);
         }
 
-        internal override string GetValue(Item item) => DataChef.GetSelectProperty(Cast(item));
-        internal override void SetValue(Item item, string val) => DataChef.TrySetSelectProperty(Cast(item), val);
+        internal override string GetValue(Item item) => DataRoot.GetSelectProperty(Cast(item));
+        internal override void SetValue(Item item, string val) => DataRoot.TrySetSelectProperty(Cast(item), val);
     }
 }
