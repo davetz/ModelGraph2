@@ -105,6 +105,7 @@ namespace ModelGraph.Core
         #endregion
 
         #region CommonMethods   ===============================================
+        internal Store ItemStore => Item as Store;
         internal bool IsValidModel(LineModel m) => !IsInvalidModel(m);
         internal bool IsInvalidModel(LineModel m) => IsInvalid(m) || IsInvalid(m.Item);
         internal bool ToggleLeft() => IsExpandedLeft ? CollapseLeft() : ExpandLeft();
@@ -154,13 +155,13 @@ namespace ModelGraph.Core
             return count;
         }
         /// <summary>Walk up item tree hierachy to find the parent RootTreeModel</summary>
-        public RootTreeModel RootTreeModel => GetRootTreeModel();
-        private RootTreeModel GetRootTreeModel()
+        public RootModel RootTreeModel => GetRootTreeModel();
+        private RootModel GetRootTreeModel()
         {
             var item = this;
             while (item != null)
             {
-                if (item is RootTreeModel root) return root;
+                if (item is RootModel root) return root;
                 item = item.Owner as LineModel;
             }
             throw new Exception("GetRootTreeModel: Corrupted item hierarchy"); // I seriously hope this never happens
@@ -220,7 +221,7 @@ namespace ModelGraph.Core
 
         public virtual Error TryGetError(Root root) => default;
 
-        public virtual string GetModelIdentity() =>  $"{IdKey}  ({ItemKey:X3})";
+        public virtual string GetModelIdentity() =>  $"{IdKey}";
 
         internal virtual bool Validate(Dictionary<Item, LineModel> prev)
         {

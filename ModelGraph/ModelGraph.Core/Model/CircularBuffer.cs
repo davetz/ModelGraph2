@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Windows.UI.Xaml.Shapes;
+﻿using System.Collections.Generic;
 
 namespace ModelGraph.Core
 {

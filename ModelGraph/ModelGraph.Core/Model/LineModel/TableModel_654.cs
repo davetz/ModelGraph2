@@ -1,10 +1,10 @@
 ﻿
 namespace ModelGraph.Core
 {
-    public class X654_TableXMetaModel : LineModel
-    {
-        internal X654_TableXMetaModel(LineModel owner, Item item) : base(owner, item) { }
-        internal override IdKey IdKey => IdKey.TableX_MetaModel;
+    public class TableModel_654 : LineModel
+    {//============================================== In the MetaDataRoot hierarchy  ==============
+        internal TableModel_654(TableListModel_643 owner, Item item) : base(owner, item) { }
+        internal override IdKey IdKey => IdKey.TableModel_654;
         public override bool CanExpandLeft => true;
         public override bool CanExpandRight => true;
 
@@ -18,7 +18,7 @@ namespace ModelGraph.Core
         {
             if (IsExpandedLeft) return false;
 
-            new X661_ColumnXListMetaModel(this, Item);
+            new ColumnListModel_661(this, Item);
 
             IsExpandedLeft = true;
             return true;
@@ -28,8 +28,8 @@ namespace ModelGraph.Core
             if (IsExpandedRight) return false;
             var root = DataRoot;
 
-            new X617_TextPropertyModel(this, Item, root.Get<Property_Item_Summary>());
-            new X617_TextPropertyModel(this, Item, root.Get<Property_Item_Name>());
+            new PropertyTextModel_617(this, Item, root.Get<Property_Item_Summary>());
+            new PropertyTextModel_617(this, Item, root.Get<Property_Item_Name>());
 
             IsExpandedRight = true;
             return true;

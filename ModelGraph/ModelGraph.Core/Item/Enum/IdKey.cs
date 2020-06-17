@@ -1,6 +1,28 @@
 ﻿
 namespace ModelGraph.Core
 {
+    /*
+        Item		- X,R,Z
+        Enum		- X,Z
+        Event		- V
+        Action		- A
+        Store		- X,R,Z
+        Model 		- X,R
+        Group		- X,R
+        Proptery	- X,R
+        Relation	- X,R,Z
+
+        instence    - Y
+        modeling
+        runtime
+        external
+        reference
+        private
+
+        X,Y,Z
+        A,V,I,E,V,S,M,G,P,R
+    */
+
     public enum IdKey : ushort
     {/*
         Provides identity for item, enum, pair, store, model, relation, property, and commands. 
@@ -101,7 +123,7 @@ namespace ModelGraph.Core
         DummyItem = 0x100 | IsReference,
         DummyQueryX = 0x101 | IsReference,
 
-        DataChef = 0x112,
+        DataRoot = 0x112,
 
         //=========================================
         ChangeRoot = 0x131,
@@ -363,53 +385,51 @@ namespace ModelGraph.Core
         //=====================================================================
         ParmDebugListModel = 0x600,
         //=====================================================================
-        DataRoot_Model = 0x612,
-        TextProperty_Model = 0x617,
-        CheckProperty_Model = 0x618,
-        ComboProperty_Model = 0x619,
+        RootModel_612 = 0x612,
+        PropertyTextModel_617 = 0x617,
+        PropertyCheckModel_618 = 0x618,
+        PropertyComboModel_619 = 0x619,
         //=====================================================================
-        ParmRoot_Model = 0x620,
-        ErrorRoot_Model = 0x621,
-        ChangeRoot_Model = 0x622,
-        MetadataRoot_Model = 0x623,
-        ModelingRoot_Model = 0x624,
+        RootParmModel_620 = 0x620,
+        ErrorRootModel_621 = 0x621,
+        ChangeRootModel_622 = 0x622,
+        MetaDataRootModel_623 = 0x623,
+        ModelingRootModel_624 = 0x624,
         MetaRelationList_Model = 0x625,
-        ErrorType_Model = 0x626,
-        ErrorText_Model = 0x627,
-        ChangeSet_Model = 0x628,
-        ItemChange_Model = 0x629,
-        MetadataSubRoot_Model = 0x62E,
-        ModelingSubRoot_Model = 0x62F,
+        ErrorTypeModel_626 = 0x626,
+        ErrorTextModel_627 = 0x627,
+        ChangeSetModel_628 = 0x628,
+        ChangeItemModel_629 = 0x629,
         //=====================================================================
-        ViewXListMeta_Model = 0x631,
+        ViewListModel_631 = 0x631,
         MetaViewView_Model = 0x632,
         MetaViewQuery_Model = 0x633,
         MetaViewCommand_Model = 0x634,
         MetaViewProperty_Model = 0x635,
-        ViewXList_MetaModel = 0x63A,
+        ViewListModel_63A = 0x63A,
         ViewView_Model = 0x63B,
         ViewItem_Model = 0x63C,
         ViewQuery_Model = 0x63D,
         //=====================================================================
-        EnumXList_MetaModel = 0x642,
-        TableXList_MetaModel = 0x643,
-        GraphXList_MetaModel = 0x644,
-        SymbolXList_MetaModel = 0x645,
+        EnumListModel_624 = 0x642,
+        TableListModel_643 = 0x643,
+        GraphListModel_644 = 0x644,
+        SymbolListModel_645 = 0x645,
         GraphParmList_MetaModel = 0x646,
 
-        TableXList_Model = 0x647,
-        GraphXList_Model = 0x648,
+        TableListModel_647 = 0x647,
+        GraphListModel_648 = 0x648,
         //=====================================================================
         PairX_MetaModel = 0x652,
         EnumX_MetaModel = 0x653,
-        TableX_MetaModel = 0x654,
-        GraphX_MetaModel = 0x655,
+        TableModel_654 = 0x654,
+        GraphModel_655 = 0x655,
         SymbolX_MetaModel = 0x656,
-        ColumnX_MetaModel = 0x657,
+        ColumnModel_657 = 0x657,
         ComputeX_MetaModel = 0x658,
         SymbolEditor_Model = 0x659,
         //=====================================================================
-        ColumnXList_MetaModel = 0x661,
+        ColumnListModel_661 = 0x661,
         ChildRelationList_MetaModel = 0x662,
         ParentRelatationList_MetaModel = 0x663,
         EnumXPairList_MetaModel = 0x664,
@@ -444,7 +464,7 @@ namespace ModelGraph.Core
         ValueLink_MetaModel = 0x69F,
         //=====================================================================
         RowX_Model = 0x6A1,
-        TableX_Model = 0x6A4,
+        TableModel_6A4 = 0x6A4,
         GraphX_Model = 0x6A5,
         GraphXRef_Model = 0x6A6,
         RowXChildRelation_Model = 0x6A7,
@@ -494,7 +514,7 @@ namespace ModelGraph.Core
         PrimeCompute_Model = 0x7D0,
         ComputeStore_Model = 0x7D1,
         //=====================================================================
-        InternalStoreList_Model = 0x7F0,
+        InternalRootModel_7F0 = 0x7F0,
         InternalStore_Model = 0x7F1,
 
         StoreItem_Model = 0x7F2,

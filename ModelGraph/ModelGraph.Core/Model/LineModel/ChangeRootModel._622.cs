@@ -1,10 +1,10 @@
 ﻿
 namespace ModelGraph.Core
 {
-    public class X622_ChangeRootModel : LineModel
+    public class ChangeRootModel_622 : LineModel
     {
-        internal X622_ChangeRootModel(LineModel owner, ChangeRoot item) : base(owner, item) { }
-        internal override IdKey IdKey => IdKey.ChangeRoot_Model;
+        internal ChangeRootModel_622(RootModel_612 owner, ChangeRoot item) : base(owner, item) { }
+        internal override IdKey IdKey => IdKey.ChangeRootModel_622;
 
         public override bool CanExpandLeft => (Item as ChangeRoot).Count > 0;
 
@@ -17,7 +17,7 @@ namespace ModelGraph.Core
             var csStore = Item as ChangeRoot;
             foreach (var cs in csStore.Items)
             {
-                new X628_ChangeSetModel(this, cs);
+                new ChangeSetModel_628(this, cs);
             }
 
             return true;

@@ -3,10 +3,10 @@ using System.Linq;
 
 namespace ModelGraph.Core
 {
-    public class X644_GraphXListMetaModel : LineModel
-    {
-        internal X644_GraphXListMetaModel(LineModel owner, Item item) : base(owner, item) { }
-        internal override IdKey IdKey => IdKey.GraphXList_MetaModel;
+    public class GraphListModel_644 : LineModel
+    {//============================================== In the MetaDataRoot hierarchy  ==============
+        internal GraphListModel_644(MetaDataRootModel_623 owner, Item item) : base(owner, item) { }
+        internal override IdKey IdKey => IdKey.GraphListModel_644;
 
         internal override bool Validate(Dictionary<Item, LineModel> prev)
         {
@@ -30,7 +30,7 @@ namespace ModelGraph.Core
                     prev.Remove(m);
                 }
                 else
-                    new X655_GraphXMetaModel(this, gx);
+                    new GraphModel_655(this, gx);
             }
 
             if (prev.Count > 0)

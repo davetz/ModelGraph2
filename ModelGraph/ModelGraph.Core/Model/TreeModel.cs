@@ -5,7 +5,7 @@ using Windows.Media.Devices.Core;
 namespace ModelGraph.Core
 {
     /// <summary>Flat list of LineModel that emulates a UI tree view</summary>
-    public class TreeModel : LineModel, IModel
+    public abstract class TreeModel : LineModel, IModel
     {
         public Item RootItem => Item;
         public IPageControl PageControl { get; set; } // reference the UI PageControl       
@@ -25,33 +25,7 @@ namespace ModelGraph.Core
             ControlType = ControlType.PrimaryTree;
             root.Add(this);
 
-            Add(new X612_DataRootModel(this, root));
-        }
-        internal TreeModel(RootTreeModel rootModel, Root root, IdKey childId) //======== created by the TreeRootModel
-        {
-            Item = root;
-            Owner = rootModel;
-            Depth = 255;
-            ControlType = ControlType.PartialTree;
-
-            root.Add(this);
-            switch (childId)
-            {
-                case IdKey.MetadataRoot_Model:
-                    new X623_MetaRootModel(this, root);
-                    break;
-                case IdKey.ModelingRoot_Model:
-                    new X623_MetaRootModel(this, root);
-                    break;
-                case IdKey.ChangeRoot_Model:
-                    new X622_ChangeRootModel(this, root.Get<ChangeRoot>());
-                    break;
-                case IdKey.ErrorRoot_Model:
-                    new X621_ErrorRootModel(this, root);
-                    break;
-                default:
-                    throw new ArgumentException($"TreeModel constructor, Invalid IdKey child: {childId}");
-            }
+            Add(new RootModel_612(this, root));
         }
         #endregion
 
@@ -63,7 +37,7 @@ namespace ModelGraph.Core
             DataRoot.Remove(this);
             Discard(); //discard myself and recursivly discard all my children
 
-            if (this is RootTreeModel)
+            if (this is RootModel)
                 DataRoot.Discard(); //kill off the dataChef
 
             Owner = null;

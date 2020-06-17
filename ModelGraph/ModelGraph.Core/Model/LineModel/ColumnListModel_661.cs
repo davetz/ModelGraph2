@@ -4,10 +4,10 @@ using System.Linq;
 
 namespace ModelGraph.Core
 {
-    public class X661_ColumnXListMetaModel : LineModel
-    {
-        internal X661_ColumnXListMetaModel(LineModel owner, Item item) : base(owner, item) { }
-        internal override IdKey IdKey => IdKey.ColumnXList_MetaModel;
+    public class ColumnListModel_661 : LineModel
+    {//============================================== In the MetaDataRoot hierarchy  ==============
+        internal ColumnListModel_661(TableModel_654 owner, Item item) : base(owner, item) { }
+        internal override IdKey IdKey => IdKey.ColumnListModel_661;
         public override bool CanExpandLeft => DataRoot.Get<Relation_Store_ColumnX>().ChildCount(Item) > 0;
 
         public override (string kind, string name, int count) GetLineParms(Root root)
@@ -27,7 +27,7 @@ namespace ModelGraph.Core
                 {
                     foreach (var cx in cxList)
                     {
-                        new X657_ColumnXMetaModel(this, cx);
+                        new ColumnModel_657(this, cx);
                     }
                 }
             }
@@ -82,7 +82,7 @@ namespace ModelGraph.Core
                         }
                         else
                         {
-                            new X657_ColumnXMetaModel(this, cx);
+                            new ColumnModel_657(this, cx);
                             anyChange = true;
                         }
                     }

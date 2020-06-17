@@ -4,19 +4,17 @@ using System.Linq;
 
 namespace ModelGraph.Core
 {
-    public class X647_TableXListModel : LineModel
-    {
-        internal X647_TableXListModel(LineModel owner, TableXRoot item) : base(owner, item) { }
-        internal override IdKey IdKey => IdKey.TableXList_Model;
-        public override bool CanExpandLeft => true;
+    public class TableListModel_643 : LineModel
+    {//============================================== In the MetaDataRoot hierarchy  ==============
+        internal TableListModel_643(MetaDataRootModel_623 owner, TableXRoot item) : base(owner, item) { }
+        internal override IdKey IdKey => IdKey.TableListModel_643;
+        public override bool CanExpandLeft => ItemStore.Count > 0;
 
 
         public override (string kind, string name, int count) GetLineParms(Root root)
         {
             var (kind, name) = GetKindNameId(root);
-            var st = Item as TableXRoot;
-
-            return (kind, name, st.Count);
+            return (kind, name, ItemStore.Count);
         }
 
         internal override bool ExpandLeft()
@@ -28,7 +26,7 @@ namespace ModelGraph.Core
             var st = Item as TableXRoot;
             foreach (var tx in st.Items)
             {
-                new X654_TableXMetaModel(this, tx);
+                new TableModel_654(this, tx);
             }
 
             return true;
@@ -66,7 +64,7 @@ namespace ModelGraph.Core
                         }
                         else
                         {
-                            new X654_TableXMetaModel(this, tx);
+                            new TableModel_654(this, tx);
                             anyChange = true;
                         }
                     }

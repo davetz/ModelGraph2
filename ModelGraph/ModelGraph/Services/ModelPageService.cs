@@ -111,7 +111,7 @@ namespace ModelGraph.Services
 
             WindowManagerService.Current.CloseRelatedModels(oldRootModel);
 
-            var rootModel = new RootTreeModel();
+            var rootModel = new RootModel();
             var newChef = rootModel.DataRoot;
 
             _ = await repo.ReloadAsync(newChef).ConfigureAwait(true);
@@ -130,7 +130,7 @@ namespace ModelGraph.Services
         {
             if (dispatcher is null) return false;
 
-            var rootModel = new RootTreeModel();
+            var rootModel = new RootModel();
             var repo = new StorageFileRepo();
             repo.New(rootModel.DataRoot);
 
@@ -148,7 +148,7 @@ namespace ModelGraph.Services
         {
             if (dispatcher is null) return false;
 
-            var rootModel = new RootTreeModel();
+            var rootModel = new RootModel();
             var repo = new StorageFileRepo();
             bool success = await repo.OpenAsync(rootModel.DataRoot).ConfigureAwait(true);
 
