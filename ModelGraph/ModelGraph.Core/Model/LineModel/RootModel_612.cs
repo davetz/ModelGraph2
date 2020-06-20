@@ -18,11 +18,5 @@ namespace ModelGraph.Core
 
             IsExpandedLeft = true;
         }
-        
-        public override (string kind, string name, int count) GetLineParms(Root root)
-        {
-            var (kind, name) = GetKindNameId(root);
-            return (kind, name, Count);
-        }
     }
 }

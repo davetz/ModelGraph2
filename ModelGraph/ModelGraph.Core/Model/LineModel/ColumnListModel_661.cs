@@ -8,14 +8,11 @@ namespace ModelGraph.Core
     {//============================================== In the MetaDataRoot hierarchy  ==============
         internal ColumnListModel_661(TableModel_654 owner, Item item) : base(owner, item) { }
         internal override IdKey IdKey => IdKey.ColumnListModel_661;
-        public override bool CanExpandLeft => DataRoot.Get<Relation_Store_ColumnX>().ChildCount(Item) > 0;
+        public override bool CanExpandLeft => TotalCount > 0;
 
-        public override (string kind, string name, int count) GetLineParms(Root root)
-        {
-            var count = DataRoot.Get<Relation_Store_ColumnX>().ChildCount(Item);
-            var (kind, name) = GetKindNameId(root);
-            return (kind, name, count);
-        }
+
+        internal override string GetFilterSortId(Root root) => GetSingleNameId(root);
+        public override int TotalCount => DataRoot.Get<Relation_Store_ColumnX>().ChildCount(Item);
 
         internal override bool ExpandLeft()
         {

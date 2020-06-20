@@ -492,10 +492,10 @@ namespace ModelGraph.Controls
         #endregion
 
         #region AddUsageMode  ==================================================
-        private void AddUsageMode(int index, LineModel model, bool canFilterUsage)
+        private void AddUsageMode(int index, LineModel model, Usage usage)
         {
             var obj = _usageModeCache[index];
-            if (canFilterUsage)
+            if (model.CanFilterUsage)
             {
                 if (obj == null)
                 {
@@ -507,15 +507,18 @@ namespace ModelGraph.Controls
                     obj.PointerReleased += UsageMode_PointerReleased;
                     ToolTipService.SetToolTip(obj, _usageModeTip);
                 }
-                //obj.DataContext = model;
-                obj.Text = model.IsUsedFilter ?
-                    _usageIsUsed : (model.IsNotUsedFilter ? _usageIsNotUsed : _usageAll);
-
+                obj.DataContext = model;
+                switch (usage)
+                {
+                    case Usage.IsNotUsed: obj.Text = _usageIsNotUsed; break;
+                    case Usage.IsUsed: obj.Text = _usageIsUsed; break;
+                    default: obj.Text = _usageAll; break;
+                }
                 _stackPanelCache[index].Children.Add(obj);
             }
             else if (obj != null)
             {
-                //obj.DataContext = null; // needed for "U" keyboard shortcut (TailButton)
+                obj.DataContext = null; // needed for "U" keyboard shortcut (TailButton)
             }
         }
         private void ClearUsageMode(int index)
@@ -526,7 +529,7 @@ namespace ModelGraph.Controls
                 obj.PointerExited -= TextBlockHightlight_PointerExited;
                 obj.PointerEntered -= TextBlockHighlight_PointerEntered;
                 obj.PointerReleased -= UsageMode_PointerReleased;
-                //obj.DataContext = null;
+                obj.DataContext = null;
 
                 _usageModeCache[index] = null;
             }
@@ -550,14 +553,14 @@ namespace ModelGraph.Controls
                     ToolTipService.SetToolTip(obj, _filterExpandTip);
                 }
 
-                //obj.DataContext = model;
+                obj.DataContext = model;
                 obj.Text = model.IsFilterVisible ? _filterIsShowing : _filterCanShow;
 
                 _stackPanelCache[index].Children.Add(obj);
             }
             else if (obj != null)
             {
-                //obj.DataContext = null; // needed for "F" keyboard shortcut (TailButton)
+                obj.DataContext = null; // needed for "F" keyboard shortcut (TailButton)
             }
         }
         private void ClearFilterMode(int index)
@@ -568,7 +571,7 @@ namespace ModelGraph.Controls
                 obj.PointerExited -= TextBlockHightlight_PointerExited;
                 obj.PointerEntered -= TextBlockHighlight_PointerEntered;
                 obj.PointerReleased -= FilterMode_PointerReleased;
-                //obj.DataContext = null;
+                obj.DataContext = null;
 
                 _filterModeCache[index] = null;
             }
@@ -576,7 +579,7 @@ namespace ModelGraph.Controls
         #endregion
 
         #region AddFilterText  ================================================
-        private void AddFilterText(int index, LineModel model)
+        private void AddFilterText(int index, LineModel model, string filterText)
         {
             var obj = _filterTextCache[index];
             if (obj == null)
@@ -588,8 +591,8 @@ namespace ModelGraph.Controls
                 ToolTipService.SetToolTip(obj, _filterTextTip);
             }
 
-            //obj.DataContext = model;
-            var str = string.IsNullOrWhiteSpace(model.ViewFilter) ? string.Empty : model.ViewFilter;
+            obj.DataContext = model;
+            var str = filterText;
             obj.Text = str;
             obj.Tag = str; //save an initial (unmodified) version of the view filter text
 
@@ -602,7 +605,7 @@ namespace ModelGraph.Controls
             {
                 obj.KeyDown -= FilterText_KeyDown;
                 obj.Tag = null;
-                //obj.DataContext = null;
+                obj.DataContext = null;
 
                 _filterTextCache[index] = null;
             }
@@ -621,7 +624,7 @@ namespace ModelGraph.Controls
                 ToolTipService.SetToolTip(obj, _filterCountTip);
             }
 
-            obj.Text = model.FilterCount.ToString();
+            obj.Text = _treeRoot.FilterCount(model).ToString();
 
             _stackPanelCache[index].Children.Add(obj);
         }
@@ -695,7 +698,7 @@ namespace ModelGraph.Controls
             }
 
             obj.DataContext = model;
-            var txt = model.GetTextValue(_chef);
+            var txt = model.GetTextValue(_dataRoot);
             obj.Text = txt ?? string.Empty;
             obj.Tag = obj.Text;
             obj.IsReadOnly = model.IsReadOnly;
@@ -735,7 +738,7 @@ namespace ModelGraph.Controls
             }
 
             obj.DataContext = model;
-            obj.IsChecked = model.GetBoolValue(_chef);
+            obj.IsChecked = model.GetBoolValue(_dataRoot);
 
             _stackPanelCache[index].Children.Add(obj);
         }
@@ -770,8 +773,8 @@ namespace ModelGraph.Controls
             }
 
             //obj.DataContext = model;
-            obj.ItemsSource = model.GetlListValue(_chef);
-            obj.SelectedIndex = model.GetIndexValue(_chef);
+            obj.ItemsSource = model.GetlListValue(_dataRoot);
+            obj.SelectedIndex = model.GetIndexValue(_dataRoot);
 
             _stackPanelCache[index].Children.Add(obj);
         }
@@ -794,7 +797,7 @@ namespace ModelGraph.Controls
         #region CheckItemHasError  ============================================
         private void CheckItemHasError(int index, LineModel model)
         {
-            var error = model.TryGetError(_chef);
+            var error = model.TryGetError(_dataRoot);
             if (error is null) return;
 
             var obj = _itemHasErrorCache[index];
@@ -886,7 +889,7 @@ namespace ModelGraph.Controls
             sp.DataContext = m;
             _modelDeltaCache[index] = m.ItemDelta;
 
-            var (kind, name, count) = m.GetLineParms(_chef);
+            var (kind, name) = m.GetKindNameId(_dataRoot);
 
             AddModelIdentity(index, m);
             AddTreeIndent(index, m);
@@ -918,24 +921,26 @@ namespace ModelGraph.Controls
             }
             else
             {
+                var (sorting, usage, filterText) = _treeRoot.GetFilterSort(m);
                 AddItemKind(index, kind, m);
                 AddItemName(index, name, m);
                 if (m.CanExpandRight) AddExpandRight(index, m);
                 CheckItemHasError(index, m);
 
+                var count = m.TotalCount;
                 if (count > 0)
                 {
                     AddSortMode(index, m, (m.CanSort));
 
                     AddTotalCount(index, count, m);
-                    AddUsageMode(index, m, (m.CanFilterUsage));
+                    AddUsageMode(index, m, usage);
                     AddFilterMode(index, m, m.CanFilter);
 
                     if (m.CanFilter)
                     {
                         if (m.IsFilterVisible)
                         {
-                            AddFilterText(index, m);
+                            AddFilterText(index, m, filterText);
                             AddFilterCount(index, m);
                         }
                         else if (m.IsUsedFilter || m.IsNotUsedFilter)

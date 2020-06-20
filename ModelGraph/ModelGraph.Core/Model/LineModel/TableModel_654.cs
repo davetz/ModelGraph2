@@ -7,13 +7,8 @@ namespace ModelGraph.Core
         internal override IdKey IdKey => IdKey.TableModel_654;
         public override bool CanExpandLeft => true;
         public override bool CanExpandRight => true;
-
-        public override (string kind, string name, int count) GetLineParms(Root root)
-        {
-            var (kind, name) = Item.GetKindNameId(root);
-            return (kind, name, 0);
-        }
-
+        public override (string, string) GetKindNameId(Root root) => Item.GetKindNameId(root);
+        internal override string GetFilterSortId(Root root) => Item.GetSingleNameId(root);
         internal override bool ExpandLeft()
         {
             if (IsExpandedLeft) return false;

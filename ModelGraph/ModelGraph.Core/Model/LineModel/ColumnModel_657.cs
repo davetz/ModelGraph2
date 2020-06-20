@@ -10,11 +10,7 @@ namespace ModelGraph.Core
         internal override IdKey IdKey => IdKey.ColumnModel_657;
         public override bool CanExpandRight => true;
 
-        public override (string kind, string name, int count) GetLineParms(Root root)
-        {
-            var (kind, name) = Item.GetKindNameId(root);
-            return (kind, name, 0);
-        }
+        public override (string, string) GetKindNameId(Root root) => Item.GetKindNameId(root);
 
         internal override bool ExpandRight()
         {

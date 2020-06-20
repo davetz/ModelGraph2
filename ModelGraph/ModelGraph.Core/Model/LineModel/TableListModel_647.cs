@@ -8,16 +8,8 @@ namespace ModelGraph.Core
     {//============================================== In the ModelingRoot hierarchy  ==============
         internal TableListModel_647(ModelingRootModel_624 owner, TableXRoot item) : base(owner, item) { }
         internal override IdKey IdKey => IdKey.TableListModel_647;
-        public override bool CanExpandLeft => ItemStore.Count > 0;
-
-
-        public override (string kind, string name, int count) GetLineParms(Root root)
-        {
-            var (kind, name) = GetKindNameId(root);
-            var st = Item as TableXRoot;
-
-            return (kind, name, st.Count);
-        }
+        public override bool CanExpandLeft => TotalCount > 0;
+        public override int TotalCount => ItemStore.Count;
 
         internal override bool ExpandLeft()
         {

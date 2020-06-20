@@ -44,9 +44,6 @@ namespace ModelGraph.Core
             IsAscendingSort = S11,
             IsDescendingSort = S12,
 
-            HasFailedValueFilter = S13,
-            HasFailedUsageFilter = S14,
-
             IsExpanded = IsExpandLeft | IsExpandRight,
             IsSorted = IsAscendingSort | IsDescendingSort,
             IsUsageFiltered = IsUsedFilter | IsNotUsedFilter,
@@ -62,10 +59,6 @@ namespace ModelGraph.Core
         public bool IsFilterFocus { get { return GetState(ModelState.IsFilterFocus); } set { SetState(ModelState.IsFilterFocus, value); } }
         internal bool HasNoError { get { return GetState(ModelState.HasNoError); } set { SetState(ModelState.HasNoError, value); } }
 
-        internal bool HasFailedValueFilter { get { return GetState(ModelState.HasFailedValueFilter); } set { SetState(ModelState.HasFailedValueFilter, value); } }
-        internal bool HasFailedUsageFilter { get { return GetState(ModelState.HasFailedUsageFilter); } set { SetState(ModelState.HasFailedUsageFilter, value); } }
-        internal bool IsFilteredOut => HasFailedValueFilter || HasFailedUsageFilter;
-
 
         public bool IsUsedFilter { get { return GetState(ModelState.IsUsedFilter); } set { SetState(ModelState.IsUsedFilter, ModelState.ChangedFilter, value); } }
         public bool IsNotUsedFilter { get { return GetState(ModelState.IsNotUsedFilter); } set { SetState(ModelState.IsNotUsedFilter, ModelState.ChangedFilter, value); } }
@@ -77,10 +70,8 @@ namespace ModelGraph.Core
         public bool IsExpandedLeft { get { return GetState(ModelState.IsExpandLeft); } set { SetState(ModelState.IsExpandLeft, value); if (!value) SetState(ModelState.IsExpandRight, false); } }
         public bool IsExpandedRight { get { return GetState(ModelState.IsExpandRight); } set { SetState(ModelState.IsExpandRight, value); } }
 
-        public bool IsFilterVisible { get { return GetState(ModelState.IsFilterVisible); } set { SetState(ModelState.IsFilterVisible, value); if (value) IsFilterFocus = true; else { ClearViewFilter(); _modelState |= ModelState.ChangedFilter; } } }
+        public bool IsFilterVisible { get { return GetState(ModelState.IsFilterVisible); } set { SetState(ModelState.IsFilterVisible, value); if (value) IsFilterFocus = true; else _modelState |= ModelState.ChangedFilter; } }
 
-        internal bool IsSorted => GetState(ModelState.IsSorted);
-        internal bool IsFiltered => IsUsageFiltered || (IsFilterVisible && HasFilterText);
         internal bool IsExpanded => GetState(ModelState.IsExpanded);
         internal bool IsUsageFiltered => GetState(ModelState.IsUsageFiltered);
         internal bool ChangedSort => GetState(ModelState.ChangedSort);
@@ -92,13 +83,38 @@ namespace ModelGraph.Core
 
         #region BufferFillingTraversal  =======================================
         /// <summary>Fill the circular buffer with flattened lineModels, return true if hit end of list</summary>
-        internal bool BufferFillingTraversal(CircularBuffer<LineModel> buffer)
+        internal bool BufferFillingTraversal(CircularBuffer<LineModel> buffer, Dictionary<LineModel, FilterSort> model_filterSort = null)
         {
-            foreach (var child in Items)
+            if (model_filterSort is null || model_filterSort.Count == 0)
             {
-                if (child.IsFilteredOut) continue;
-                if (buffer.Add(child)) return true; // abort, we are done
-                if (child.BufferFillingTraversal(buffer)) return true; // abort, we are done;
+                foreach (var child in Items)
+                {
+                    if (buffer.Add(child)) return true; // abort, we are done
+                    if (child.BufferFillingTraversal(buffer)) return true; // abort, we are done;
+                }
+            }
+            else
+            {
+                if (model_filterSort.TryGetValue(this, out FilterSort filter))
+                {
+                    foreach (var (I, IN, _) in filter.Selector)
+                    {
+                        if (IN && I < Items.Count)
+                        {
+                            var child = Items[I];
+                            if (buffer.Add(child)) return true; // abort, we are done
+                            if (child.BufferFillingTraversal(buffer, model_filterSort)) return true; // abort, we are done;
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (var child in Items)
+                    {
+                        if (buffer.Add(child)) return true; // abort, we are done
+                        if (child.BufferFillingTraversal(buffer, model_filterSort)) return true; // abort, we are done;
+                    }
+                }
             }
             return false; //finished all items with no aborts
         }
@@ -142,18 +158,6 @@ namespace ModelGraph.Core
             }
             return anyChange;
         }
-
-        public int FilterCount => GetFilterCount();
-        private int GetFilterCount()
-        {
-            int count = 0;
-            foreach (var line in Items)
-            {
-                if (line.IsFilteredOut) continue;
-                count++;
-            }
-            return count;
-        }
         /// <summary>Walk up item tree hierachy to find the parent RootTreeModel</summary>
         public RootModel RootTreeModel => GetRootTreeModel();
         private RootModel GetRootTreeModel()
@@ -167,38 +171,17 @@ namespace ModelGraph.Core
             throw new Exception("GetRootTreeModel: Corrupted item hierarchy"); // I seriously hope this never happens
         }
         /// <summary>Walk up item tree hierachy to find the parent TreeModel</summary>
-        public TreeModel TreeModel => GetTreeModel();
-        private TreeModel GetTreeModel()
-        {
-            var mdl = this;
-            for (int i = 0; i < 100; i++)
-            {
-                if (mdl is null) break;
-                if (mdl is TreeModel root) return root;
-                mdl = mdl.Owner as LineModel;
-            }
-            throw new Exception("LineModel GetTreeModel() - Encountered a corrupt model hierarchy");
-        }
-        public bool HasFilterText => GetTreeModel().LineModel_FilterSort.TryGetValue(this, out string fs) && !string.IsNullOrWhiteSpace(fs);
-        public string ViewFilter => GetTreeModel().LineModel_FilterSort.TryGetValue(this, out string fs) ? fs : string.Empty;
-        public virtual void ClearViewFilter() => GetTreeModel().LineModel_FilterSort.Remove(this);
-        public void UpdateViewFilter(string text)
-        {
-            var lineModel_FilterSort = GetTreeModel().LineModel_FilterSort;
-            
-            lineModel_FilterSort[this] = text;
-        }
         #endregion
 
         #region Virtual Functions  ============================================
         internal virtual bool ExpandLeft() => false;
         internal virtual bool ExpandRight() => false;
 
-        public virtual (string kind, string name, int count) GetLineParms(Root root)
-        {
-            var (kind, name) = GetKindNameId(root);
-            return (kind, name, Count);
-        }
+        internal virtual bool IsItemUsed => true;
+
+        public virtual int TotalCount => 0;
+        internal virtual string GetFilterSortId(Root root) => $"{GetKindId(root)}{GetSingleNameId(root)}";
+
         public byte ItemDelta => (byte)(Item.ChildDelta + Item.ModelDelta);
         public virtual bool CanDrag => false;
         public virtual bool CanSort => false;

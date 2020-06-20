@@ -8,14 +8,10 @@ namespace ModelGraph.Core
     {//============================================== In the MetaDataRoot hierarchy  ==============
         internal TableListModel_643(MetaDataRootModel_623 owner, TableXRoot item) : base(owner, item) { }
         internal override IdKey IdKey => IdKey.TableListModel_643;
-        public override bool CanExpandLeft => ItemStore.Count > 0;
+        public override bool CanExpandLeft => TotalCount > 0;
+        public override bool CanFilter => TotalCount > 1;
 
-
-        public override (string kind, string name, int count) GetLineParms(Root root)
-        {
-            var (kind, name) = GetKindNameId(root);
-            return (kind, name, ItemStore.Count);
-        }
+        public override int TotalCount => ItemStore.Count;
 
         internal override bool ExpandLeft()
         {

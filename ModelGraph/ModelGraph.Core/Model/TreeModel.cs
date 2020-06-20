@@ -15,7 +15,6 @@ namespace ModelGraph.Core
         public string TitleSummary => DataRoot.TitleSummary;
 
         internal LineModel ModelTreeRoot => Items[0];
-        internal Dictionary<LineModel, string> LineModel_FilterSort = new Dictionary<LineModel, string>();
 
         #region Constructor  ==================================================
         internal TreeModel(Root root) //==================================== invoked in the RootTreeModel constructor
@@ -42,6 +41,35 @@ namespace ModelGraph.Core
 
             Owner = null;
         }
+        #endregion
+
+        #region FilterSort  ===================================================
+        private readonly Dictionary<LineModel, FilterSort> _model_FilterSort = new Dictionary<LineModel, FilterSort>();
+
+        public int FilterCount(LineModel model) => _model_FilterSort.TryGetValue(model, out FilterSort filter) ? filter.Count : 0;
+
+        public string ViewFilter(LineModel model) => _model_FilterSort.TryGetValue(model, out FilterSort filter) ? filter.FilterString : string.Empty;
+
+        public void SetFilterText(LineModel model, string filterText)
+        {
+            if (_model_FilterSort.TryGetValue(model, out FilterSort filter))
+            {
+                if (filter.SetFilter(model, filterText)) _model_FilterSort.Remove(model);
+
+            }
+            else if (!string.IsNullOrWhiteSpace(filterText))
+            {
+                _model_FilterSort.Add(model, new FilterSort(model, filterText));
+            }
+            PageControl?.Refresh();
+        }
+        public virtual void ClearViewFilter(LineModel model) 
+        { 
+            if (_model_FilterSort.TryGetValue(model, out FilterSort filter)) filter.SetFilter(model, null); 
+        }
+
+        public (Sorting, Usage, string) GetFilterSort(LineModel model) => _model_FilterSort.TryGetValue(model, out FilterSort filter) ? filter.Parms : (Sorting.Unsorted, Usage.None, string.Empty);
+
         #endregion
 
         #region ValidateBuffer  ===============================================
@@ -97,21 +125,23 @@ namespace ModelGraph.Core
                 {
                     case ChangeType.OneDown:
                         if (isValidLead) _buffer.SetTargetItem(leading);
-                        ModelTreeRoot.BufferFillingTraversal(_buffer);
+                        ModelTreeRoot.BufferFillingTraversal(_buffer, _model_FilterSort);
                         break;
                     case ChangeType.ToggleLeft:
                         anyChange |= selected.ToggleLeft();
                         if (isValidLead) _buffer.SetTargetItem(leading);
-                        ModelTreeRoot.BufferFillingTraversal(_buffer);
+                        ModelTreeRoot.BufferFillingTraversal(_buffer, _model_FilterSort);
                         break;
                     case ChangeType.ToggleRight:
                         anyChange |= selected.ToggleRight();
                         if (isValidLead) _buffer.SetTargetItem(leading);
-                        ModelTreeRoot.BufferFillingTraversal(_buffer);
+                        ModelTreeRoot.BufferFillingTraversal(_buffer, _model_FilterSort);
                         break;
                     case ChangeType.ToggleFilter:
+                        selected.IsFilterVisible = !selected.IsFilterVisible;
                         break;
                     case ChangeType.FilterSortChanged:
+                        ModelTreeRoot.BufferFillingTraversal(_buffer, _model_FilterSort);
                         break;
                 }
             }
@@ -125,11 +155,11 @@ namespace ModelGraph.Core
         {
             if (ModelTreeRoot.Validate(new Dictionary<Item, LineModel>())) 
                 PageControl?.Refresh();
-        }        
+        }
         #endregion
 
-    #region OverrideMethods  ==============================================
-    public override (string kind, string name, int count) GetLineParms(Root root) => (null, BlankName, 0);
+        #region OverrideMethods  ==============================================
+        public override (string, string) GetKindNameId(Root root) => (null, BlankName);
         #endregion
     }
 }

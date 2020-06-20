@@ -7,11 +7,8 @@ namespace ModelGraph.Core
         internal override IdKey IdKey => IdKey.PropertyCheckModel_618;
         public override bool IsCheckModel => true;
 
-        public override (string kind, string name, int count) GetLineParms(Root root)
-        {
-            var name = Property.GetSingleNameId(root);
-            return (null, name, 0);
-        }
+        public override (string, string) GetKindNameId(Root root) => (null, Property.GetSingleNameId(root));
+
         public override bool GetBoolValue(Root root) => Property.Value.GetBool(Item);
     }
 }

@@ -7,11 +7,8 @@ namespace ModelGraph.Core
         internal override IdKey IdKey => IdKey.PropertyTextModel_617;
         public override bool IsTextModel => true;
 
-        public override (string kind, string name, int count) GetLineParms(Root root)
-        {
-            var name = Property.GetSingleNameId(root);
-            return (null, name, 0);
-        }
+        public override (string, string) GetKindNameId(Root root) => (null, Property.GetSingleNameId(root));
+
         public override string GetTextValue(Root root) => Property.Value.GetString(Item);
     }
 }
