@@ -6,7 +6,7 @@ namespace ModelGraph.Core
     public abstract class LineModel : StoreOf<LineModel>
     {
         public Item Item { get; protected set; }
-        private ModelState _modelState;
+        private ModelFlags _modelFlags;
         public byte Depth;      // depth of tree hierarchy
 
         public LineModel ParentModel => Owner as LineModel;
@@ -25,7 +25,7 @@ namespace ModelGraph.Core
 
         #region ModelState  ===================================================
         [Flags]
-        private enum ModelState : ushort
+        private enum ModelFlags : ushort
         {
             None = 0,
 
@@ -44,6 +44,8 @@ namespace ModelGraph.Core
             IsAscendingSort = S11,
             IsDescendingSort = S12,
 
+            HasFilterSortAllocation = S13,
+
             IsExpanded = IsExpandLeft | IsExpandRight,
             IsSorted = IsAscendingSort | IsDescendingSort,
             IsUsageFiltered = IsUsedFilter | IsNotUsedFilter,
@@ -51,69 +53,59 @@ namespace ModelGraph.Core
             AnyFilterSortChanged = ChangedSort | ChangedFilter,
             SortUsageMode = IsUsageFiltered | IsSorted | ChangedSort | ChangedFilter,
         }
-        private bool GetState(ModelState state) => (_modelState & state) != 0;
-        private void SetState(ModelState state, bool value) { if (value) _modelState |= state; else _modelState &= ~state; }
-        private void SetState(ModelState state, ModelState changedState, bool value) { var prev = GetState(state); if (value) _modelState |= state; else _modelState &= ~state; if (prev != value) _modelState |= changedState; }
+        private bool GetFlag(ModelFlags flag) => (_modelFlags & flag) != 0;
+        private void SetFlag(ModelFlags flag, bool value) { if (value) _modelFlags |= flag; else _modelFlags &= ~flag; }
+        private void SetFlag(ModelFlags flag, ModelFlags changedState, bool value) { var prev = GetFlag(flag); if (value) _modelFlags |= flag; else _modelFlags &= ~flag; if (prev != value) _modelFlags |= changedState; }
 
-        public bool IsChanged { get { return GetState(ModelState.IsChanged); } set { SetState(ModelState.IsChanged, value); } }
-        public bool IsFilterFocus { get { return GetState(ModelState.IsFilterFocus); } set { SetState(ModelState.IsFilterFocus, value); } }
-        internal bool HasNoError { get { return GetState(ModelState.HasNoError); } set { SetState(ModelState.HasNoError, value); } }
-
-
-        public bool IsUsedFilter { get { return GetState(ModelState.IsUsedFilter); } set { SetState(ModelState.IsUsedFilter, ModelState.ChangedFilter, value); } }
-        public bool IsNotUsedFilter { get { return GetState(ModelState.IsNotUsedFilter); } set { SetState(ModelState.IsNotUsedFilter, ModelState.ChangedFilter, value); } }
+        public bool IsChanged { get { return GetFlag(ModelFlags.IsChanged); } set { SetFlag(ModelFlags.IsChanged, value); } }
+        public bool IsFilterFocus { get { return GetFlag(ModelFlags.IsFilterFocus); } set { SetFlag(ModelFlags.IsFilterFocus, value); } }
+        internal bool HasNoError { get { return GetFlag(ModelFlags.HasNoError); } set { SetFlag(ModelFlags.HasNoError, value); } }
+        internal bool HasFilterSortAllocation { get { return GetFlag(ModelFlags.HasFilterSortAllocation); } set { SetFlag(ModelFlags.HasFilterSortAllocation, value); } }
 
 
-        public bool IsSortAscending { get { return GetState(ModelState.IsAscendingSort); } set { SetState(ModelState.IsAscendingSort, ModelState.ChangedSort, value); } }
-        public bool IsSortDescending { get { return GetState(ModelState.IsDescendingSort); } set { SetState(ModelState.IsDescendingSort, ModelState.ChangedSort, value); } }
+        public bool IsUsedFilter { get { return GetFlag(ModelFlags.IsUsedFilter); } set { SetFlag(ModelFlags.IsUsedFilter, ModelFlags.ChangedFilter, value); } }
+        public bool IsNotUsedFilter { get { return GetFlag(ModelFlags.IsNotUsedFilter); } set { SetFlag(ModelFlags.IsNotUsedFilter, ModelFlags.ChangedFilter, value); } }
 
-        public bool IsExpandedLeft { get { return GetState(ModelState.IsExpandLeft); } set { SetState(ModelState.IsExpandLeft, value); if (!value) SetState(ModelState.IsExpandRight, false); } }
-        public bool IsExpandedRight { get { return GetState(ModelState.IsExpandRight); } set { SetState(ModelState.IsExpandRight, value); } }
 
-        public bool IsFilterVisible { get { return GetState(ModelState.IsFilterVisible); } set { SetState(ModelState.IsFilterVisible, value); if (value) IsFilterFocus = true; else _modelState |= ModelState.ChangedFilter; } }
+        public bool IsSortAscending { get { return GetFlag(ModelFlags.IsAscendingSort); } set { SetFlag(ModelFlags.IsAscendingSort, ModelFlags.ChangedSort, value); } }
+        public bool IsSortDescending { get { return GetFlag(ModelFlags.IsDescendingSort); } set { SetFlag(ModelFlags.IsDescendingSort, ModelFlags.ChangedSort, value); } }
 
-        internal bool IsExpanded => GetState(ModelState.IsExpanded);
-        internal bool IsUsageFiltered => GetState(ModelState.IsUsageFiltered);
-        internal bool ChangedSort => GetState(ModelState.ChangedSort);
-        internal bool ChangedFilter => GetState(ModelState.ChangedFilter);
-        internal bool AnyFilterSortChanged => GetState(ModelState.AnyFilterSortChanged);
-        internal void ClearChangedFlags() => _modelState &= ~ModelState.AnyFilterSortChanged;
-        internal void ClearSortUsageMode() => _modelState &= ~ModelState.SortUsageMode;
+        public bool IsExpandedLeft { get { return GetFlag(ModelFlags.IsExpandLeft); } set { SetFlag(ModelFlags.IsExpandLeft, value); if (!value) SetFlag(ModelFlags.IsExpandRight, false); } }
+        public bool IsExpandedRight { get { return GetFlag(ModelFlags.IsExpandRight); } set { SetFlag(ModelFlags.IsExpandRight, value); } }
+
+        public bool IsFilterVisible { get { return GetFlag(ModelFlags.IsFilterVisible); } set { SetFlag(ModelFlags.IsFilterVisible, value); if (value) IsFilterFocus = true; else _modelFlags |= ModelFlags.ChangedFilter; } }
+
+        internal bool IsExpanded => GetFlag(ModelFlags.IsExpanded);
+        internal bool IsUsageFiltered => GetFlag(ModelFlags.IsUsageFiltered);
+        internal bool ChangedSort => GetFlag(ModelFlags.ChangedSort);
+        internal bool ChangedFilter => GetFlag(ModelFlags.ChangedFilter);
+        internal bool AnyFilterSortChanged => GetFlag(ModelFlags.AnyFilterSortChanged);
+        internal void ClearChangedFlags() => _modelFlags &= ~ModelFlags.AnyFilterSortChanged;
+        internal void ClearSortUsageMode() => _modelFlags &= ~ModelFlags.SortUsageMode;
         #endregion
 
-        #region BufferFillingTraversal  =======================================
+        #region FillBufferTraversal  ==========================================
         /// <summary>Fill the circular buffer with flattened lineModels, return true if hit end of list</summary>
-        internal bool BufferFillingTraversal(CircularBuffer<LineModel> buffer, Dictionary<LineModel, FilterSort> model_filterSort = null)
+        internal bool FillBufferTraversal(CircularBuffer<LineModel> buffer)
         {
-            if (model_filterSort is null || model_filterSort.Count == 0)
+            if (HasFilterSortAllocation && FilterSort.TryGetSelector(this, out List<(int I, bool IN, string TX)> selector))
             {
-                foreach (var child in Items)
+                foreach (var (I, IN, _) in selector)
                 {
-                    if (buffer.Add(child)) return true; // abort, we are done
-                    if (child.BufferFillingTraversal(buffer)) return true; // abort, we are done;
+                    if (IN && I < Items.Count)
+                    {
+                        var child = Items[I];
+                        if (buffer.AddItem(child)) return true; // abort, we are done
+                        if (child.FillBufferTraversal(buffer)) return true; // abort, we are done;
+                    }
                 }
             }
             else
             {
-                if (model_filterSort.TryGetValue(this, out FilterSort filter))
+                foreach (var child in Items)
                 {
-                    foreach (var (I, IN, _) in filter.Selector)
-                    {
-                        if (IN && I < Items.Count)
-                        {
-                            var child = Items[I];
-                            if (buffer.Add(child)) return true; // abort, we are done
-                            if (child.BufferFillingTraversal(buffer, model_filterSort)) return true; // abort, we are done;
-                        }
-                    }
-                }
-                else
-                {
-                    foreach (var child in Items)
-                    {
-                        if (buffer.Add(child)) return true; // abort, we are done
-                        if (child.BufferFillingTraversal(buffer, model_filterSort)) return true; // abort, we are done;
-                    }
+                    if (buffer.AddItem(child)) return true; // abort, we are done
+                    if (child.FillBufferTraversal(buffer)) return true; // abort, we are done;
                 }
             }
             return false; //finished all items with no aborts
@@ -132,8 +124,8 @@ namespace ModelGraph.Core
             IsExpandedLeft = false;
             IsExpandedRight = false;
             if (Count == 0) return false;
-
             DiscardChildren();
+            CovertClear();
             return true;
         }
         protected bool CollapseRight()
@@ -157,6 +149,22 @@ namespace ModelGraph.Core
                 IsExpandedRight = false;
             }
             return anyChange;
+        }
+        internal override void Discard()
+        {
+            FilterSort.ReleaseFilter(this);
+            IsDiscarded = true;
+            DiscardChildren();
+        }
+
+        internal override void DiscardChildren()
+        {
+            foreach (var child in Items) 
+            {
+                FilterSort.ReleaseFilter(child);
+                child.DiscardChildren();
+                child.IsDiscarded = true;
+            }
         }
         /// <summary>Walk up item tree hierachy to find the parent RootTreeModel</summary>
         public RootModel RootTreeModel => GetRootTreeModel();
@@ -206,12 +214,12 @@ namespace ModelGraph.Core
 
         public virtual string GetModelIdentity() =>  $"{IdKey}";
 
-        internal virtual bool Validate(Dictionary<Item, LineModel> prev)
+        internal virtual bool Validate(TreeModel treeRoot, Dictionary<Item, LineModel> prev)
         {
             var anyChange = false;
             foreach (var child in Items)
             {
-                anyChange |= child.Validate(prev);
+                anyChange |= child.Validate(treeRoot, prev);
             }
             return anyChange;
         }

@@ -8,8 +8,9 @@ namespace ModelGraph.Core
         internal GraphListModel_644(MetaDataRootModel_623 owner, Item item) : base(owner, item) { }
         internal override IdKey IdKey => IdKey.GraphListModel_644;
 
-        internal override bool Validate(Dictionary<Item, LineModel> prev)
+        internal override bool Validate(TreeModel treeRoot, Dictionary<Item, LineModel> prev)
         {
+            var anyChange = false;
             if (!IsExpanded) return false;
             if (ChildDelta == Item.ChildDelta) return false;
             ChildDelta = Item.ChildDelta;
@@ -35,11 +36,11 @@ namespace ModelGraph.Core
 
             if (prev.Count > 0)
             {
-                var models = prev.Values.ToArray();
-                foreach (var m in models) m.Discard();
+                anyChange = true;
+                foreach (var model in prev.Values) { model.Discard(); }
             }
 
-            return true;
+            return anyChange;
         }
     }
 }

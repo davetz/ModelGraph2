@@ -36,6 +36,21 @@ namespace ModelGraph.Controls
             await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => { _treeRoot.RefreshViewList(ViewSize, leading, _selected, change); });
             Refresh();
         }
+        private async System.Threading.Tasks.Task PostSetUsageAsync(LineModel model, Usage usage)
+        {
+            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => { _treeRoot.SetUsage(model, usage); });
+            _ = PostRefreshViewListAsync(ChangeType.FilterSortChanged);
+        }
+        private async System.Threading.Tasks.Task PostSetSortingAsync(LineModel model, Sorting sorting)
+        {
+            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => { _treeRoot.SetSorting(model, sorting); });
+            _ = PostRefreshViewListAsync(ChangeType.FilterSortChanged);
+        }
+        private async System.Threading.Tasks.Task PostSetFilterAsync(LineModel model, string text)
+        {
+            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => { _treeRoot.SetFilter(model, text); });
+            _ = PostRefreshViewListAsync(ChangeType.FilterSortChanged);
+        }
         #endregion
 
         #region SetSize  ======================================================
@@ -1064,7 +1079,7 @@ namespace ModelGraph.Controls
                 }
 
                 obj.Tag = txt;
-                _treeRoot.SetFilterText(mdl, txt);
+                PostSetFilterAsync(mdl, txt);
                 mdl.IsExpandedLeft = true;
                 
                 _tryAfterRefresh = true;

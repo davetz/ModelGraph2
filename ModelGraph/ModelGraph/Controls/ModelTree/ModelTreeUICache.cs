@@ -613,7 +613,7 @@ namespace ModelGraph.Controls
         #endregion
 
         #region AddFilterCount  ===============================================
-        private void AddFilterCount(int index, LineModel model)
+        private void AddFilterCount(int index, LineModel model, int filterCount)
         {
             var obj = _filterCountCache[index];
             if (obj == null)
@@ -624,7 +624,7 @@ namespace ModelGraph.Controls
                 ToolTipService.SetToolTip(obj, _filterCountTip);
             }
 
-            obj.Text = _treeRoot.FilterCount(model).ToString();
+            obj.Text = filterCount.ToString();
 
             _stackPanelCache[index].Children.Add(obj);
         }
@@ -921,7 +921,7 @@ namespace ModelGraph.Controls
             }
             else
             {
-                var (sorting, usage, filterText) = _treeRoot.GetFilterSort(m);
+                var (filterCount, sorting, usage, filterText) = _treeRoot.GetFilterParms(m);
                 AddItemKind(index, kind, m);
                 AddItemName(index, name, m);
                 if (m.CanExpandRight) AddExpandRight(index, m);
@@ -941,11 +941,11 @@ namespace ModelGraph.Controls
                         if (m.IsFilterVisible)
                         {
                             AddFilterText(index, m, filterText);
-                            AddFilterCount(index, m);
+                            AddFilterCount(index, m, filterCount);
                         }
                         else if (m.IsUsedFilter || m.IsNotUsedFilter)
                         {
-                            AddFilterCount(index, m);
+                            AddFilterCount(index, m, filterCount);
                         }
                     }
                     //if (false)//_root.ModelInfo != null)

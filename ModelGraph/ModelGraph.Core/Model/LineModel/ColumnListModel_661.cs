@@ -47,7 +47,7 @@ namespace ModelGraph.Core
             ItemLinked.Record(root, root.Get<Relation_Store_ColumnX>(), sto, cx);
         }
 
-        internal override bool Validate(Dictionary<Item, LineModel> prev)
+        internal override bool Validate(TreeModel treeRoot, Dictionary<Item, LineModel> prev)
         {
             var anyChange = false;
             if (IsExpanded)
@@ -60,6 +60,7 @@ namespace ModelGraph.Core
                     {
                         IsExpandedLeft = false;
                         DiscardChildren();
+                        CovertClear();
                         return true;
                     }
 
@@ -87,14 +88,13 @@ namespace ModelGraph.Core
                     if (prev.Count > 0)
                     {
                         anyChange = true;
-                        var models = prev.Values.ToArray();
-                        foreach (var m in models) m.Discard();
+                        foreach (var model in prev.Values) { model.Discard(); }
                     }
                 }
 
                 foreach (var child in Items)
                 {
-                    anyChange |= child.Validate(prev);
+                    anyChange |= child.Validate(treeRoot, prev);
                 }
             }
             return anyChange;

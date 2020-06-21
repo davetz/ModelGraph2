@@ -2,67 +2,69 @@
 
 namespace ModelGraph.Core
 {
-    /// <summary>Single use circular buffer</summary>
+    /// <summary>Continous circular buffer</summary>
     internal class CircularBuffer<T>
     {
-        private T _targetItem;
-        private readonly T[] _buffer;
-        internal int _overshoot;
-        private bool _checkItem;
+        private T _targetItem;                      // one of two end point triggers
+        private readonly T[] _buffer;               // continous circular buffer
+        internal int _overshoot;                    // keep adding items, overshooting the target by half the buffer size
+        private bool _checkingForItem;              // expecting and checking for the target item to be added
 
-        internal int Size { get; }
-        internal int Count { get; private set; }
-        internal int EndCount { get; set; }
-        internal bool HitItem { get; private set; }
-        internal bool HasRolledOver => Count > Size;
-
+        internal int Size { get; }                  // N * the number of lines in the UI window, allow for some UI window scrolling with out having to traverse the model hierarchy 
+        internal int Count { get; private set; }    // number of items added to the buffer since Initialize
+        internal int EndCount { get; set; }         // alternative end point trigger
+        internal bool TargetIsInBuffer { get; private set; }    // detected the target being added to the buffer
+        internal bool HasRolledOver => Count > Size;            // the circular aspect of the buffer has been realized
 
         #region Constructor  ==================================================
-        internal CircularBuffer(int size, int endCount)
+        internal CircularBuffer(int size)
         {
             _buffer = new T[size];
+            Count = 0;
             Size = size;
-
-            SetEndCount(endCount);
-        }
-
-        internal CircularBuffer(int size, T targetItem) //= report finding the target
-        {
-            _buffer = new T[size];
-            Size = size;
-
-            SetTargetItem(targetItem);
+            EndCount = size;
+            _checkingForItem = false;
         }
         #endregion
 
-        internal void SetEndCount(int endCount) { Count = 0; EndCount = endCount; _checkItem = false; }
-        internal void SetEndCount(int count, int endCount) { Count = count; EndCount = endCount; _checkItem = false; }
-        internal void SetTargetItem(T item, int overshoot = -1) { Count = 0; _targetItem = item; _overshoot = (overshoot < 0) ? Size / 2 : overshoot; _checkItem = true; HitItem = false; }
+        #region Initialize  ===================================================
+        internal void Initialize(T targetItem, int overshoot = -1) 
+        { 
+            Count = 0; 
+            _targetItem = targetItem; 
+            _overshoot = (overshoot < 0) ? Size / 2 : overshoot; 
+            _checkingForItem = true; 
+            TargetIsInBuffer = false;
+        }
+        #endregion
 
+        #region AddItem  ======================================================
         /// <summary>Add item to  buffer, return true: if hit target; false: if hit the end of list</summary>
-        internal bool Add(T item)
+        internal bool AddItem(T item)
         {
             var index = Count++ % Size;
             _buffer[index] = item;
 
-            if (HitItem)
+            if (TargetIsInBuffer)
             {
-                if (_overshoot-- < 0) return true;
+                if (_overshoot-- < 0) return true;      // one of two end point triggers
             }
-            else if (_checkItem)
+            else if (_checkingForItem)
             {
                 if (_targetItem.Equals(item))
                 {
-                    HitItem = true;
-                    _checkItem = false;
+                    TargetIsInBuffer = true;
+                    _checkingForItem = false;
                     _overshoot = Size / 2;
                 }
             }
-            else if (Count >= EndCount) return true;
+            else if (Count >= EndCount) return true;    // alternative end point trigger
 
             return false;
         }
+        #endregion
 
+        #region GetList  ======================================================
         internal List<T> GetList()
         {
             var list = new List<T>(Size);
@@ -82,5 +84,6 @@ namespace ModelGraph.Core
             }
             return list;
         }
+        #endregion
     }
 }

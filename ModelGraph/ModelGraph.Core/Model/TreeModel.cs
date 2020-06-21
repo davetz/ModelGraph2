@@ -43,48 +43,27 @@ namespace ModelGraph.Core
         }
         #endregion
 
-        #region FilterSort  ===================================================
-        private readonly Dictionary<LineModel, FilterSort> _model_FilterSort = new Dictionary<LineModel, FilterSort>();
-
-        public int FilterCount(LineModel model) => _model_FilterSort.TryGetValue(model, out FilterSort filter) ? filter.Count : 0;
-
-        public string ViewFilter(LineModel model) => _model_FilterSort.TryGetValue(model, out FilterSort filter) ? filter.FilterString : string.Empty;
-
-        public void SetFilterText(LineModel model, string filterText)
-        {
-            if (_model_FilterSort.TryGetValue(model, out FilterSort filter))
-            {
-                if (filter.SetFilter(model, filterText)) _model_FilterSort.Remove(model);
-
-            }
-            else if (!string.IsNullOrWhiteSpace(filterText))
-            {
-                _model_FilterSort.Add(model, new FilterSort(model, filterText));
-            }
-            PageControl?.Refresh();
-        }
-        public virtual void ClearViewFilter(LineModel model) 
-        { 
-            if (_model_FilterSort.TryGetValue(model, out FilterSort filter)) filter.SetFilter(model, null); 
-        }
-
-        public (Sorting, Usage, string) GetFilterSort(LineModel model) => _model_FilterSort.TryGetValue(model, out FilterSort filter) ? filter.Parms : (Sorting.Unsorted, Usage.None, string.Empty);
-
-        #endregion
-
         #region ValidateBuffer  ===============================================
         private CircularBuffer<LineModel> _buffer;
-        /// <summary>Ensure buffer is not null and large enough, return false if is a new buffer</summary>
+
+        /// <summary>Ensure buffer is not null and large enough, return true if new buffer</summary>
         private bool ValidateBuffer(int viewSize)
         {
             var size = viewSize * 3;
             if (_buffer is null || size > _buffer.Size)
             {
-                _buffer = new CircularBuffer<LineModel>(size, size);
-                return false;
+                _buffer = new CircularBuffer<LineModel>(size);
+                return true;
             }
-            return _buffer.Count > 0;
+            return false;
         }
+        #endregion
+
+        #region FilterParms  =====================================================
+        public void SetUsage(LineModel model, Usage usage) => FilterSort.SetUsage(model, usage);
+        public void SetSorting(LineModel model, Sorting sorting) => FilterSort.SetSorting(model, sorting);
+        public void SetFilter(LineModel model, string text) => FilterSort.SetText(model, text);
+        public (int, Sorting, Usage, string) GetFilterParms(LineModel model) => FilterSort.GetParms(model);
         #endregion
 
         #region GetCurrentView  ===============================================
@@ -92,8 +71,8 @@ namespace ModelGraph.Core
         /// <summary>We are scrolling back and forth in the flattened model hierarchy</summary>
         public (List<LineModel>, LineModel) GetCurrentView(int viewSize, LineModel selected)
         {
-            if (!ValidateBuffer(viewSize))
-                ModelTreeRoot.BufferFillingTraversal(_buffer);
+            if (ValidateBuffer(viewSize))
+                ModelTreeRoot.FillBufferTraversal(_buffer);
 
             var list = _buffer.GetList();
             if (list.Count == 0)
@@ -113,7 +92,6 @@ namespace ModelGraph.Core
         // Runs on a background thread invoked by the ModelTreeControl 
         public void RefreshViewList(int viewSize, LineModel leading, LineModel selected, ChangeType change = ChangeType.None)
         {
-            var root = DataRoot;
             var anyChange = false;
             var isNewBuffer = ValidateBuffer(viewSize);
             bool isValidLead = IsValidModel(leading);
@@ -124,24 +102,25 @@ namespace ModelGraph.Core
                 switch (change)
                 {
                     case ChangeType.OneDown:
-                        if (isValidLead) _buffer.SetTargetItem(leading);
-                        ModelTreeRoot.BufferFillingTraversal(_buffer, _model_FilterSort);
+                        if (isValidLead) _buffer.Initialize(leading);
+                        ModelTreeRoot.FillBufferTraversal(_buffer);
                         break;
                     case ChangeType.ToggleLeft:
                         anyChange |= selected.ToggleLeft();
-                        if (isValidLead) _buffer.SetTargetItem(leading);
-                        ModelTreeRoot.BufferFillingTraversal(_buffer, _model_FilterSort);
+                        if (isValidLead) _buffer.Initialize(leading);
+                        ModelTreeRoot.FillBufferTraversal(_buffer);
                         break;
                     case ChangeType.ToggleRight:
                         anyChange |= selected.ToggleRight();
-                        if (isValidLead) _buffer.SetTargetItem(leading);
-                        ModelTreeRoot.BufferFillingTraversal(_buffer, _model_FilterSort);
+                        if (isValidLead) _buffer.Initialize(leading);
+                        ModelTreeRoot.FillBufferTraversal(_buffer);
                         break;
                     case ChangeType.ToggleFilter:
                         selected.IsFilterVisible = !selected.IsFilterVisible;
                         break;
                     case ChangeType.FilterSortChanged:
-                        ModelTreeRoot.BufferFillingTraversal(_buffer, _model_FilterSort);
+                        if (isValidLead) _buffer.Initialize(leading);
+                        ModelTreeRoot.FillBufferTraversal(_buffer);
                         break;
                 }
             }
@@ -153,7 +132,7 @@ namespace ModelGraph.Core
         #region Validate  =====================================================
         internal void Validate()
         {
-            if (ModelTreeRoot.Validate(new Dictionary<Item, LineModel>())) 
+            if (ModelTreeRoot.Validate(this, new Dictionary<Item, LineModel>())) 
                 PageControl?.Refresh();
         }
         #endregion

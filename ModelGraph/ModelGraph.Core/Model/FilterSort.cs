@@ -2,85 +2,169 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
+using Windows.UI.Xaml.Shapes;
 
 namespace ModelGraph.Core
 {
     internal class FilterSort
     {
-        private int _count;
-        private Usage _usage = Usage.None;
-        private Sorting _sorting = Sorting.Unsorted;
+        private static Dictionary<LineModel, FilterSort> _model_filter = new Dictionary<LineModel, FilterSort>();
+        private string Filter => _filterText is null ? string.Empty : _filterText;
+        private int Count;
+        private Usage Usage = Usage.None;
+        private Sorting Sorting = Sorting.Unsorted;
+        private List<(int I, bool IN, string TX)> Selector;
+
         private byte _delta;
         private bool _sortChanged;
-        private bool _filterChanged;
         private string _filterText;
-        private Regex _filter;
-        private List<(int I, bool IN, string TX)> _selector;
+        private bool _filterChanged;
+        private Regex _filterRx;
 
 
-        public FilterSort(LineModel model, string filterText)
-        {
-            SetFilter(model, filterText);
-        }
+        private FilterSort() { }
 
         #region Parms  ========================================================
-        internal int Count => _count;
-        internal List<(int I, bool IN, string TX)> Selector => _selector is null ? new List<(int I, bool IN, string TX)>(0) : _selector;
-        internal string FilterString => _filterText is null ? string.Empty : _filterText;
-        internal (Sorting, Usage, string) Parms => (_sorting, _usage, _filterText is null ? string.Empty : _filterText);
-
-        internal bool SetUsage(LineModel model, Usage usage) { _filterChanged |= _usage != usage; _usage = usage; return Check(model); }
-        internal bool SetSorting(LineModel model, Sorting sorting) { _sortChanged = _sorting != sorting; _sorting = sorting; return Check(model); }
-        internal bool SetFilter(LineModel model, string filterText)
+        private static List<(int I, bool IN, string TX)> EmptySelector = new List<(int I, bool IN, string TX)>(0);
+        internal static (int, Sorting, Usage, string) GetParms(LineModel m) => _model_filter.TryGetValue(m, out FilterSort f) ? (f.Count, f.Sorting, f.Usage, f.Filter) : (m.Count, Sorting.Unsorted, Usage.None, string.Empty);
+        internal static bool TryGetSelector(LineModel m, out List<(int I, bool IN, string TX)> selector)
         {
-            var noFilter = string.IsNullOrWhiteSpace(filterText);
-            if (noFilter)
-            {
-                _filterChanged |= !(_filterText is null);
-                _filterText = null;
-                _filter = null;
-            }
-            else if (_filter is null || _filterText is null || !IsSame(_filterText, filterText))
-            {
-                _filterChanged = true;
-                _filterText = filterText;
-                _filter = filterText.Contains("*") ?
-                    new Regex(filterText, RegexOptions.Compiled | RegexOptions.IgnoreCase) :
-                    new Regex($".*{filterText}.*", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-            }
-            return Check(model);
+            selector = _model_filter.TryGetValue(m, out FilterSort f) ? f.Selector : null;
+            return selector != null;
         }
-        internal bool ClearFilter(LineModel model) { return SetFilter(model, null); }
 
-        private bool IsSame(string a, string b)
+        internal static bool SetUsage(LineModel model, Usage usage)
         {
+            if (_model_filter.TryGetValue(model, out FilterSort f))
+            {
+                if (f.Usage == usage) return false;
+                f.SetUsage(usage);
+                if (f.HasDefaultParms)
+                {
+                    ReleaseFilter(model);
+                    return true;
+                }
+            }
+            else
+            {
+                if (usage == Usage.None) return false;
+                f = AllocateFilter(model);
+                f.SetUsage(usage);
+            }
+            f.Refresh(model);
+            return true;
+        }
+
+        internal static bool SetSorting(LineModel model, Sorting sorting)
+        {
+            if (_model_filter.TryGetValue(model, out FilterSort f))
+            {
+                if (f.Sorting == sorting) return false;
+                f.SetSorting(sorting);
+                if (f.HasDefaultParms)
+                {
+                    ReleaseFilter(model);
+                    return true;
+                }
+            }
+            else
+            {
+                if (sorting == Sorting.Unsorted) return false;
+                f = AllocateFilter(model);
+                f.SetSorting(sorting);
+            }
+            f.Refresh(model);
+            return true;
+        }
+
+        internal static bool SetText(LineModel model, string text)
+        {
+            if (_model_filter.TryGetValue(model, out FilterSort f))
+            {
+                if (f.IsSame(text)) return false;
+                f.SetText(text);
+                if (f.HasDefaultParms)
+                {
+                    ReleaseFilter(model);
+                    return true;
+                }
+            }
+            else
+            {
+                if (string.IsNullOrWhiteSpace(text)) return false;
+                f = AllocateFilter(model);
+                f.SetText(text);
+            }
+            f.Refresh(model);
+            return true;
+        }
+
+        #region HelperMethods  ================================================
+        private void SetText(string text)
+        {
+            if (string.IsNullOrWhiteSpace(text))
+            {
+                _filterText = null;
+                _filterRx = null;
+            }
+            else
+            {
+                _filterText = text;
+                _filterRx = text.Contains("*") ?
+                    new Regex(text, RegexOptions.Compiled | RegexOptions.IgnoreCase) :
+                    new Regex($".*{text}.*", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            }
+            _filterChanged = true;
+        }
+        private void SetUsage(Usage usage)
+        {
+            _filterChanged |= Usage != usage;
+            Usage = usage;
+        }
+        private void SetSorting(Sorting sorting)
+        {
+            _sortChanged = Sorting != sorting;
+            Sorting = sorting;
+        }
+
+        private bool HasDefaultParms => Usage == Usage.None && Sorting == Sorting.Unsorted && _filterText == null;
+
+        private bool IsSame(string a)
+        {
+            var b = _filterText;
             return N(a) ? N(b) : (!N(b) && E(a, b));
 
             bool N(string v) => string.IsNullOrWhiteSpace(v); //is NULL or blank
             bool E(string p, string q) => (string.Compare(p, q) == 0); //are EQUAL
         }
-
-        private bool Check(LineModel model)
+        private static FilterSort AllocateFilter(LineModel model)
         {
-            var doRefresh = _usage != Usage.None || _sorting != Sorting.Unsorted || !string.IsNullOrWhiteSpace(_filterText);
-            if (doRefresh) Refresh(model);
-            return !doRefresh;
+            model.HasFilterSortAllocation = true;
+            var f = new FilterSort();
+            _model_filter.Add(model, f);
+            return f;
         }
+        internal static void ReleaseFilter(LineModel model)
+        {
+            model.HasFilterSortAllocation = false;
+            _model_filter.Remove(model);
+        }
+        #endregion
         #endregion
 
         #region Refresh  ======================================================
         internal void Refresh(LineModel model)
         {
             var root = model.DataRoot;
-            if (_delta != model.ChildDelta || _selector is null || _selector.Count != model.Count)
+            if (_delta != model.ChildDelta || Selector is null || Selector.Count != model.Count)
             {
                 #region need to build to new selector
                 _delta = model.ChildDelta;
                 _filterChanged = true;
-                _selector = new List<(int I, bool IN, string ID)>(model.Count);
+                Selector = new List<(int I, bool IN, string ID)>(model.Count);
                 for (int i = 0; i < model.Count; i++)
                 {
-                    _selector.Add((i, true, model.Items[i].GetFilterSortId(root)));
+                    Selector.Add((i, true, model.Items[i].GetFilterSortId(root)));
                 }
                 #endregion
             }
@@ -88,50 +172,50 @@ namespace ModelGraph.Core
             if (_filterChanged)
             {
                 #region need to revalidate the selector
-                _count = 0;
-                if (_filterText is null && _usage != Usage.None)
+                Count = 0;
+                if (_filterText is null && Usage != Usage.None)
                 {
-                    for (int i = 0; i < _selector.Count; i++)
+                    for (int i = 0; i < Selector.Count; i++)
                     {
-                        var (I, IN, TX) = _selector[i];
+                        var (I, IN, TX) = Selector[i];
                         var child = model.Items[I];
                         var used = child.IsItemUsed;
-                        var tIN = used ? (_usage == Usage.IsUsed) : (_usage == Usage.IsNotUsed);
-                        if (tIN) _count++;
-                        if (tIN != IN) _selector[i] = (I, tIN, TX);
+                        var tIN = used ? (Usage == Usage.IsUsed) : (Usage == Usage.IsNotUsed);
+                        if (tIN) Count++;
+                        if (tIN != IN) Selector[i] = (I, tIN, TX);
                     }
                 }
-                else if (!(_filterText is null) && _usage == Usage.None)
+                else if (!(_filterText is null) && Usage == Usage.None)
                 {
-                    for (int i = 0; i < _selector.Count; i++)
+                    for (int i = 0; i < Selector.Count; i++)
                     {
-                        var (I, IN, TX) = _selector[i];
-                        var tIN = _filter.IsMatch(TX);
-                        if (tIN) _count++;
-                        if (tIN != IN) _selector[i] = (I, tIN, TX);
+                        var (I, IN, TX) = Selector[i];
+                        var tIN = _filterRx.IsMatch(TX);
+                        if (tIN) Count++;
+                        if (tIN != IN) Selector[i] = (I, tIN, TX);
                     }
                 }
-                else if (!(_filterText is null) && _usage != Usage.None)
+                else if (!(_filterText is null) && Usage != Usage.None)
                 {
-                    for (int i = 0; i < _selector.Count; i++)
+                    for (int i = 0; i < Selector.Count; i++)
                     {
-                        var (I, IN, TX) = _selector[i];
+                        var (I, IN, TX) = Selector[i];
                         var child = model.Items[I];
                         var used = child.IsItemUsed;
-                        var tIN = used ? (_usage == Usage.IsUsed) : (_usage == Usage.IsNotUsed);
-                        tIN |= _filter.IsMatch(TX);
-                        if (tIN) _count++;
-                        if (tIN != IN) _selector[i] = (I, tIN, TX);
+                        var tIN = used ? (Usage == Usage.IsUsed) : (Usage == Usage.IsNotUsed);
+                        tIN |= _filterRx.IsMatch(TX);
+                        if (tIN) Count++;
+                        if (tIN != IN) Selector[i] = (I, tIN, TX);
                     }
                 }
                 else
                 {
-                    for (int i = 0; i < _selector.Count; i++)
+                    for (int i = 0; i < Selector.Count; i++)
                     {
-                        var (I, IN, TX) = _selector[i];
-                        _selector[i] = (I, true, TX);
+                        var (I, IN, TX) = Selector[i];
+                        Selector[i] = (I, true, TX);
                     }
-                    _count = _selector.Count;
+                    Count = Selector.Count;
                 }
                 #endregion
             }
@@ -140,11 +224,12 @@ namespace ModelGraph.Core
             {
                 #region need to resort the selector
                 _sortChanged = false;
-                _selector.Sort(CompareSelector);
+                Selector.Sort(CompareSelector);
                 #endregion
             }
         }
         private static int CompareSelector((int, bool, string) a, (int, bool, string) b) => a.Item3.CompareTo(b.Item3);
         #endregion
+
     }
 }
