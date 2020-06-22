@@ -80,7 +80,7 @@ namespace ModelGraph.Services
         //    GC.Collect();
         //    return false;
         //}
-        internal async Task CreateNewPageAsync(IModel model, ControlType ctlType)
+        internal async Task CreateNewPageAsync(IRootModel model, ControlType ctlType)
         {
             var viewLifetimeControl = await WindowManagerService.Current.TryShowAsStandaloneAsync(model.TitleName, typeof(ModelPage), model).ConfigureAwait(true);
             viewLifetimeControl.Released += ViewLifetimeControl_Released;
@@ -162,7 +162,7 @@ namespace ModelGraph.Services
         }
         #endregion
 
-        public Action<IModel> InsertModelPage { get; set; } //coordination with ShellPage NavigationView
-        public Action<IModel> RemoveModelPage { get; set; } //coordination with ShellPage NavigationView
+        public Action<IRootModel> InsertModelPage { get; set; } //coordination with ShellPage NavigationView
+        public Action<IRootModel> RemoveModelPage { get; set; } //coordination with ShellPage NavigationView
     }
 }

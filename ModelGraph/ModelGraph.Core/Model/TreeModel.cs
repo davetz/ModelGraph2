@@ -5,7 +5,7 @@ using Windows.Media.Devices.Core;
 namespace ModelGraph.Core
 {
     /// <summary>Flat list of LineModel that emulates a UI tree view</summary>
-    public abstract class TreeModel : LineModel, IModel
+    public abstract class TreeModel : LineModel, IRootModel
     {
         public Item RootItem => Item;
         public IPageControl PageControl { get; set; } // reference the UI PageControl       

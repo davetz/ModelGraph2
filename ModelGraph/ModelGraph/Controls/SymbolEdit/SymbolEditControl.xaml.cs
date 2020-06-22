@@ -30,7 +30,7 @@ namespace ModelGraph.Controls
     public sealed partial class SymbolEditControl : Page, IPageControl, IModelPageControl, INotifyPropertyChanged
     {
         private bool _isScratchPad;
-        private IModel _rootModel;
+        private IRootModel _rootModel;
         private SymbolX _symbol;
 
         private List<Shape> SymbolShapes = new List<Shape>();
@@ -63,7 +63,7 @@ namespace ModelGraph.Controls
             this.InitializeComponent();
         }
 
-        public SymbolEditControl(IModel model)
+        public SymbolEditControl(IRootModel model)
         {
             if (model is null || model.RootItem is null || !(model.RootItem is SymbolX))
             {
@@ -98,7 +98,7 @@ namespace ModelGraph.Controls
         #endregion
 
         #region IPageControl  =================================================
-        public void CreateNewPage(IModel model, ControlType ctlType)
+        public void CreateNewPage(IRootModel model, ControlType ctlType)
         {
             if (model is null) return;
             _ = ModelPageService.Current.CreateNewPageAsync(model, ctlType);
@@ -106,7 +106,7 @@ namespace ModelGraph.Controls
         #endregion
 
         #region IModelControl  ================================================
-        public IModel IModel => _rootModel;
+        public IRootModel IModel => _rootModel;
         public void Apply()
         {
             EditorCanvas.Invalidate();

@@ -146,12 +146,12 @@ namespace ModelGraph.Controls
         #endregion
 
         #region IPageControl  =================================================
-        public void CreateNewPage(IModel model, ControlType ctlType)
+        public void CreateNewPage(IRootModel model, ControlType ctlType)
         {
             if (model is null) return;
             _ = ModelPageService.Current.CreateNewPageAsync(model, ctlType);
         }
-        public IModel IModel => _treeRoot;
+        public IRootModel IModel => _treeRoot;
         #endregion
 
         #region IModelControl  ================================================

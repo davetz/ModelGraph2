@@ -16,9 +16,9 @@ namespace ModelGraph.Controls
         private Root _chef;
         private Graph _graph;
         private readonly Size _desiredSize = new Size { Height = 800, Width = 800 };
-        public IModel Model { get; }
+        public IRootModel Model { get; }
 
-        public ModelGraphControl(IModel model)
+        public ModelGraphControl(IRootModel model)
         {
             Model = model ?? throw new ArgumentNullException(nameof(model));
             _chef = model.DataRoot;
@@ -60,7 +60,7 @@ namespace ModelGraph.Controls
             CheckGraphSymbols();
             EditorCanvas.Invalidate();
         }
-        public void CreateNewPage(IModel model, ControlType ctlType)
+        public void CreateNewPage(IRootModel model, ControlType ctlType)
         {
             if (model is null) return;
             _ = ModelPageService.Current.CreateNewPageAsync(model, ctlType);
@@ -131,7 +131,7 @@ namespace ModelGraph.Controls
         }
         public (int Width, int Height) PreferredSize => (400, 320);
 
-        public IModel IModel => throw new NotImplementedException();
+        public IRootModel IModel => throw new NotImplementedException();
 
         public void SetSize(double width, double height)
         {

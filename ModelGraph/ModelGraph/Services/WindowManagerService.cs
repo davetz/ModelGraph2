@@ -31,7 +31,7 @@ namespace ModelGraph.Services
         public CoreDispatcher MainDispatcher { get; private set; }
 
         #region ModelPageService  =============================================
-        public void CloseRelatedModels(IModel model)
+        public void CloseRelatedModels(IRootModel model)
         {
             var views = SecondaryViews.ToArray();
             foreach (var view in views)
@@ -44,7 +44,7 @@ namespace ModelGraph.Services
                 view.CloseModel();
             }
         }
-        public async Task<ViewLifetimeControl> TryShowAsStandaloneAsync(string windowTitle, Type pageType, IModel model)
+        public async Task<ViewLifetimeControl> TryShowAsStandaloneAsync(string windowTitle, Type pageType, IRootModel model)
         {
             ViewLifetimeControl viewControl = await CreateViewLifetimeControlAsync(windowTitle, pageType, model);
             SecondaryViews.Add(viewControl);
@@ -53,7 +53,7 @@ namespace ModelGraph.Services
             viewControl.StopViewInUse();
             return viewControl;
         }
-        private async Task<ViewLifetimeControl> CreateViewLifetimeControlAsync(string windowTitle, Type pageType, IModel model = null)
+        private async Task<ViewLifetimeControl> CreateViewLifetimeControlAsync(string windowTitle, Type pageType, IRootModel model = null)
         {
             ViewLifetimeControl viewControl = null;
 

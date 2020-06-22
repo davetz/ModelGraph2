@@ -1,7 +1,7 @@
 ﻿
 namespace ModelGraph.Core
 {
-    public interface IModel
+    public interface IRootModel
     {
         Root DataRoot { get; }          // dataChef
         Item RootItem { get; }

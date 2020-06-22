@@ -33,7 +33,7 @@ namespace ModelGraph.Services
         public string Title { get; set; }
 
         #region ModelPageService  =============================================
-        public IModel IModel { get; set; }
+        public IRootModel IModel { get; set; }
         public void CloseModel()
         {
             if (IModel is null) return;

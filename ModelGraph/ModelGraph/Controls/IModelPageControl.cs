@@ -15,6 +15,6 @@ namespace ModelGraph.Controls
         void SetSize(double width, double height);
 
         CoreDispatcher Dispatcher { get; }
-        IModel IModel {get;}
+        IRootModel IModel {get;}
     }
 }
