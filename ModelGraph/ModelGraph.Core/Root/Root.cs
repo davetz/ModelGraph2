@@ -3,20 +3,21 @@ using System.Collections.Generic;
 
 namespace ModelGraph.Core
 {
-    public partial class Root : StoreOf<Store>
+    public partial class Root : StoreOf<Item> // items are UI root models (treeModel, graphModel, symbolModel,..)
     {
         private readonly Dictionary<Type, Item> Type_InstanceOf = new Dictionary<Type, Item>(200);  // used to get a specific type instance
         private readonly Dictionary<ushort, Item> IdKey_ReferenceItem = new Dictionary<ushort, Item>(200); // used to get specific type from its IdKey
         private readonly Dictionary<Type, Property[]> Type_StaticProperties = new Dictionary<Type, Property[]>(100); // used for property name lookup
 
-        private readonly List<(Guid, ISerializer)> ItemSerializers = new List<(Guid, ISerializer)>(20);
-        private readonly List<(Guid, ISerializer)> LinkSerializers = new List<(Guid, ISerializer)>(10);
+        private readonly List<(Guid, ISerializer)> ItemSerializers = new List<(Guid, ISerializer)>(20); //serialized first
+        private readonly List<(Guid, ISerializer)> LinkSerializers = new List<(Guid, ISerializer)>(10); //serialized last
 
         public IRepository Repository { get; set; }
         public static LineModel DragDropSource;
         internal override IdKey IdKey => IdKey.DataRoot;
         internal string TitleName => Repository.Name;
         internal string TitleSummary => Repository.FullName;
+
 
         #region Constructor  ==================================================
         internal Root(bool createTestModel = false)
@@ -54,7 +55,7 @@ namespace ModelGraph.Core
         }
         #endregion
 
-        #region ChildItems  ===================================================
+        #region RegisteredItems  ==============================================
         internal T Get<T>() where T : Item
         {
             if (Type_InstanceOf.TryGetValue(typeof(T), out Item itm) && itm is T val)

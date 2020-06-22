@@ -57,7 +57,7 @@ namespace ModelGraph.Core
         Dictionary<Item, int> GetItemIndexDictionary()
         {
             var maxSize = 4;
-            foreach (var itm in Items)
+            foreach (var itm in Type_InstanceOf.Values)
             {
                 if (itm is ISerializer s) maxSize += s.GetSerializerItemCount();
             }
@@ -67,7 +67,7 @@ namespace ModelGraph.Core
                 [Get<DummyQueryX>()] = 0
             };
 
-            foreach (var itm in Items)
+            foreach (var itm in Type_InstanceOf.Values)
             {
                 if (itm is ISerializer s) s.PopulateItemIndex(itemIndex);
             }

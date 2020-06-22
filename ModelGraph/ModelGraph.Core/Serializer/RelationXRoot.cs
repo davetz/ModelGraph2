@@ -26,8 +26,6 @@ namespace ModelGraph.Core
             CreateProperties(root);
 
             new RelationXLink(root, this);
-
-            root.Add(this);
         }
         #endregion
 

@@ -14,8 +14,6 @@ namespace ModelGraph.Core
             SetCapacity(30);
             new RelationLink(root, this);
             CreateRelations(root);
-
-            root.Add(this);
         }
 
         #region CreateRelations  ==============================================

@@ -9,8 +9,6 @@ namespace ModelGraph.Core
 
             SetCapacity(100);
             CreateProperties(root);
-
-            root.Add(this);
         }
 
         #region CreateProperties  =============================================

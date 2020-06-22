@@ -16,8 +16,6 @@ namespace ModelGraph.Core
 
             root.RegisterItemSerializer((_serializerGuid, this));
             CreateProperties(root);
-
-            root.Add(this);
         }
 
         #region CreateProperties  =============================================

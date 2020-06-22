@@ -16,8 +16,6 @@ namespace ModelGraph.Core
         {
             Owner = root;
             Change = new Change(this);
-
-            root.Add(this); // add myself to the dataChef's item tree hierarchy
         }
         #endregion
 

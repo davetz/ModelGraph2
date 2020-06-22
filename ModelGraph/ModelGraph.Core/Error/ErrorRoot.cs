@@ -5,11 +5,10 @@ namespace ModelGraph.Core
     public class ErrorRoot : StoreOf<Error>
     {
         #region Constructors  =================================================
-        internal ErrorRoot(Root owner)
+        internal ErrorRoot(Root root)
         {
-            Owner = owner;
+            Owner = root;
             SetCapacity(20);
-            owner.Add(this);
         }
         #endregion
 

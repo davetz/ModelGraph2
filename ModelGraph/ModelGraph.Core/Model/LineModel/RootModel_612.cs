@@ -7,9 +7,8 @@ namespace ModelGraph.Core
         internal override IdKey IdKey => IdKey.RootModel_612;
         public override bool CanExpandLeft => true;
 
-        internal RootModel_612(LineModel owner, Root item) : base(owner, item) 
+        internal RootModel_612(LineModel owner, Root root) : base(owner, root) 
         {
-            var root = Item as Root;
             new RootParamModel_620(this, Item);
             new ErrorRootModel_621(this, Item);
             new ChangeRootModel_622(this, root.Get<ChangeRoot>());

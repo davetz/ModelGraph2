@@ -9,15 +9,6 @@ namespace ModelGraph.Core
         {
             Owner = root;
             SetCapacity(20);
-            AddChildren(root);
-
-            root.Add(this);
-        }
-        #endregion
-
-        #region AddChildren  ==================================================
-        void AddChildren(Root root)
-        {
             root.RegisterPrivateItem(new Enum_ValueType(this));
         }
         #endregion

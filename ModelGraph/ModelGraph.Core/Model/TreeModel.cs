@@ -22,9 +22,9 @@ namespace ModelGraph.Core
             Owner = Item = root;
             Depth = 254;
             ControlType = ControlType.PrimaryTree;
-            root.Add(this);
-
             Add(new RootModel_612(this, root));
+
+            root.Add(this);
         }
         #endregion
 

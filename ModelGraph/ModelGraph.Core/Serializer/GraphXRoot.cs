@@ -17,10 +17,7 @@ namespace ModelGraph.Core
             root.RegisterItemSerializer((_serializerGuid, this));
 
             new NodeSerializer(root);
-
             CreateProperties(root);
-
-            root.Add(this);
         }
 
         #region CreateProperties  =============================================
