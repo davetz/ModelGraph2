@@ -14,15 +14,14 @@ namespace ModelGraph.Core
         public string TitleName => DataRoot.TitleName;
         public string TitleSummary => DataRoot.TitleSummary;
 
-        internal LineModel TreeRoot => Items[0];
-
         #region Constructor  ==================================================
-        internal TreeModel(Root root) //==================================== invoked in the RootTreeModel constructor
+        internal TreeModel(Root root) //==================================== invoked in the RootModel constructor
         {
             Owner = Item = root;
             Depth = 254;
             ControlType = ControlType.PrimaryTree;
-            Add(new RootModel_612(this, root));
+
+            new RootModel_612(this, root);
 
             root.Add(this);
         }
@@ -72,7 +71,7 @@ namespace ModelGraph.Core
         public (List<LineModel>, LineModel) GetCurrentView(int viewSize, LineModel selected)
         {
             if (ValidateBuffer(viewSize))
-                TreeRoot.FillBufferTraversal(_buffer);
+                RefreshBuffer();
 
             var list = _buffer.GetList();
             if (list.Count == 0)
@@ -93,47 +92,52 @@ namespace ModelGraph.Core
         public void RefreshViewList(int viewSize, LineModel leading, LineModel selected, ChangeType change = ChangeType.None)
         {
             var anyChange = false;
-            var isNewBuffer = ValidateBuffer(viewSize);
-            bool isValidLead = IsValidModel(leading);
             bool isValidSelect = IsValidModel(selected);
 
+            ValidateBuffer(viewSize);
             if (isValidSelect)
             {
                 switch (change)
                 {
                     case ChangeType.OneDown:
-                        if (isValidLead) _buffer.Initialize(leading);
-                        TreeRoot.FillBufferTraversal(_buffer);
+                        RefreshBuffer(leading);
                         break;
                     case ChangeType.ToggleLeft:
                         anyChange |= selected.ToggleLeft();
-                        if (isValidLead) _buffer.Initialize(leading);
-                        TreeRoot.FillBufferTraversal(_buffer);
+                        RefreshBuffer(leading);
                         break;
                     case ChangeType.ToggleRight:
                         anyChange |= selected.ToggleRight();
-                        if (isValidLead) _buffer.Initialize(leading);
-                        TreeRoot.FillBufferTraversal(_buffer);
+                        RefreshBuffer(leading);
                         break;
                     case ChangeType.ToggleFilter:
                         selected.IsFilterVisible = !selected.IsFilterVisible;
                         break;
                     case ChangeType.FilterSortChanged:
-                        if (isValidLead) _buffer.Initialize(leading);
-                        TreeRoot.FillBufferTraversal(_buffer);
+                        RefreshBuffer(leading);
                         break;
                 }
             }
 
             if (anyChange) PageControl?.Refresh();
         }
+        private void RefreshBuffer(LineModel leading = null)
+        {
+            if (IsValidModel(leading)) _buffer.Initialize(leading);
+            Items[0].FillBufferTraversal(_buffer);
+        }
         #endregion
 
         #region Validate  =====================================================
         internal void Validate()
         {
-            if (TreeRoot.Validate(this, new Dictionary<Item, LineModel>())) 
-                PageControl?.Refresh();
+            var prev = new Dictionary<Item, LineModel>();
+            var anyChange = false;
+            foreach (var model in Items)
+            {
+                anyChange |= model.Validate(this, prev);
+            }
+            if (anyChange) PageControl?.Refresh();
         }
         #endregion
 
