@@ -115,13 +115,16 @@ namespace ModelGraph.Core
         /// <summary>Remove references that were created by this dataChef</summary>
         internal override void Discard()
         {
+            IsDiscarded = true;
+            foreach (var item in Type_InstanceOf.Values)
+            {
+                item.Discard();
+            }
             Type_StaticProperties.Clear();
             Type_InstanceOf.Clear();
             IdKey_ReferenceItem.Clear();
             ItemSerializers.Clear();
             LinkSerializers.Clear();
-
-            base.Discard();
         }
         #endregion
     }

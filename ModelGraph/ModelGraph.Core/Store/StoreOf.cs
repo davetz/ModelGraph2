@@ -51,21 +51,13 @@ namespace ModelGraph.Core
             UpdateDelta();
             return _items.Remove(item);
         }
-        // Discard  ===========================================================
-        /// <summary>Discard my self and recursivly discard all child Items</summary>
-        internal override void Discard()
-        {
-            IsDiscarded = true;
-            DiscardChildren();
-        }
         // DiscardChildren  ===================================================
         /// <summary>Recursivly discard all child Items</summary>
         internal override void DiscardChildren()
         {
-            foreach (var item in _items)
-            {
-                item.IsDiscarded = true;
-                if (item is Store sto) sto.DiscardChildren();
+            foreach (var item in _items) 
+            { 
+                item.Discard(); 
             }
             _items.Clear();
         }

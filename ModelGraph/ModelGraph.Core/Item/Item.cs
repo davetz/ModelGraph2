@@ -154,8 +154,17 @@ namespace ModelGraph.Core
             }
             return true;
         }
+        #endregion
 
-        
+        #region Discard  ======================================================
+        // there is no coming back from Discard()
+        /// <summary>Discard my self and recursivly discard all child Items</summary>
+        internal virtual void Discard()
+        {
+            IsDiscarded = true;
+            DiscardChildren();
+        }
+        internal virtual void DiscardChildren() { }
         #endregion
 
         #region BitFlags  =====================================================

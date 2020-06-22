@@ -12,8 +12,6 @@ namespace ModelGraph.Core
         public abstract bool Remove(Item item);
         internal abstract bool IsValidOwnerOf(Item item);
         internal abstract void RemoveAll();
-        internal abstract void Discard();
-        internal abstract void DiscardChildren();
         internal abstract int IndexOf(Item item);
         internal abstract List<Item> GetItems();
         internal abstract int Count { get; }
