@@ -14,7 +14,7 @@ namespace ModelGraph.Core
         public string TitleName => DataRoot.TitleName;
         public string TitleSummary => DataRoot.TitleSummary;
 
-        internal LineModel ModelTreeRoot => Items[0];
+        internal LineModel TreeRoot => Items[0];
 
         #region Constructor  ==================================================
         internal TreeModel(Root root) //==================================== invoked in the RootTreeModel constructor
@@ -59,7 +59,7 @@ namespace ModelGraph.Core
         }
         #endregion
 
-        #region FilterParms  =====================================================
+        #region FilterParms  ==================================================
         public void SetUsage(LineModel model, Usage usage) => FilterSort.SetUsage(model, usage);
         public void SetSorting(LineModel model, Sorting sorting) => FilterSort.SetSorting(model, sorting);
         public void SetFilter(LineModel model, string text) => FilterSort.SetText(model, text);
@@ -72,7 +72,7 @@ namespace ModelGraph.Core
         public (List<LineModel>, LineModel) GetCurrentView(int viewSize, LineModel selected)
         {
             if (ValidateBuffer(viewSize))
-                ModelTreeRoot.FillBufferTraversal(_buffer);
+                TreeRoot.FillBufferTraversal(_buffer);
 
             var list = _buffer.GetList();
             if (list.Count == 0)
@@ -103,24 +103,24 @@ namespace ModelGraph.Core
                 {
                     case ChangeType.OneDown:
                         if (isValidLead) _buffer.Initialize(leading);
-                        ModelTreeRoot.FillBufferTraversal(_buffer);
+                        TreeRoot.FillBufferTraversal(_buffer);
                         break;
                     case ChangeType.ToggleLeft:
                         anyChange |= selected.ToggleLeft();
                         if (isValidLead) _buffer.Initialize(leading);
-                        ModelTreeRoot.FillBufferTraversal(_buffer);
+                        TreeRoot.FillBufferTraversal(_buffer);
                         break;
                     case ChangeType.ToggleRight:
                         anyChange |= selected.ToggleRight();
                         if (isValidLead) _buffer.Initialize(leading);
-                        ModelTreeRoot.FillBufferTraversal(_buffer);
+                        TreeRoot.FillBufferTraversal(_buffer);
                         break;
                     case ChangeType.ToggleFilter:
                         selected.IsFilterVisible = !selected.IsFilterVisible;
                         break;
                     case ChangeType.FilterSortChanged:
                         if (isValidLead) _buffer.Initialize(leading);
-                        ModelTreeRoot.FillBufferTraversal(_buffer);
+                        TreeRoot.FillBufferTraversal(_buffer);
                         break;
                 }
             }
@@ -132,7 +132,7 @@ namespace ModelGraph.Core
         #region Validate  =====================================================
         internal void Validate()
         {
-            if (ModelTreeRoot.Validate(this, new Dictionary<Item, LineModel>())) 
+            if (TreeRoot.Validate(this, new Dictionary<Item, LineModel>())) 
                 PageControl?.Refresh();
         }
         #endregion

@@ -162,8 +162,8 @@ namespace ModelGraph.Core
             foreach (var child in Items) 
             {
                 FilterSort.ReleaseFilter(child);
-                child.DiscardChildren();
                 child.IsDiscarded = true;
+                child.DiscardChildren();
             }
         }
         /// <summary>Walk up item tree hierachy to find the parent RootTreeModel</summary>
