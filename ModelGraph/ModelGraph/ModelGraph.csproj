@@ -150,10 +150,10 @@
     <Compile Include="Controls\ModelGraph\ModelGraphControlEvents.cs" />
     <Compile Include="Controls\ModelGraph\ModelGraphControlPanel.cs" />
     <Compile Include="Controls\ModelGraph\ModelGraphControlVisualAids.cs" />
+    <Compile Include="Controls\ModelTree\LineModelCache.cs" />
     <Compile Include="Controls\ModelTree\ModelTreeControl.xaml.cs">
       <DependentUpon>ModelTreeControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ModelTree\ModelTreeUICache.cs" />
     <Compile Include="Controls\Shapes\Central.cs" />
     <Compile Include="Controls\Shapes\Circle.cs" />
     <Compile Include="Controls\Shapes\Ellipes.cs" />
