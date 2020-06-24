@@ -6,7 +6,7 @@ namespace ModelGraph.Core
         internal TableModel_654(TableListModel_643 owner, Item item) : base(owner, item) { }
         internal override IdKey IdKey => IdKey.TableModel_654;
         public override bool CanExpandLeft => true;
-        public override bool CanExpandRight => true;
+        public override bool CanExpandRight => TotalCount > 0;
         public override (string, string) GetKindNameId(Root root) => Item.GetKindNameId(root);
         internal override string GetFilterSortId(Root root) => Item.GetSingleNameId(root);
         internal override bool ExpandLeft()

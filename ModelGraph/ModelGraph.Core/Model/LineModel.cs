@@ -167,7 +167,7 @@ namespace ModelGraph.Core
             }
         }
         /// <summary>Walk up item tree hierachy to find the parent RootTreeModel</summary>
-        public RootModel RootTreeModel => GetRootTreeModel();
+        public RootModel RootModel => GetRootTreeModel();
         private RootModel GetRootTreeModel()
         {
             var item = this;

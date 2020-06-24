@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using Windows.Media.Devices.Core;
 
 namespace ModelGraph.Core
@@ -7,27 +8,37 @@ namespace ModelGraph.Core
     /// <summary>Flat list of LineModel that emulates a UI tree view</summary>
     public abstract class TreeModel : LineModel, IRootModel
     {
+        private CircularBuffer<LineModel> _buffer = new CircularBuffer<LineModel>(20);
+
         public Item RootItem => Item;
         public IPageControl PageControl { get; set; } // reference the UI PageControl       
         public ControlType ControlType { get; private set; }
 
-        public string TitleName => DataRoot.TitleName;
-        public string TitleSummary => DataRoot.TitleSummary;
-
         #region Constructor  ==================================================
-        internal TreeModel(Root root) //==================================== invoked in the RootModel constructor
+        internal TreeModel(Root root) //========== invoked in the RootModel constructor
         {
             Owner = Item = root;
             Depth = 254;
             ControlType = ControlType.PrimaryTree;
 
             new RootModel_612(this, root);
+            root.Add(this);
+        }
+        internal TreeModel(Root root, Action<Root,TreeModel> newLineModel)
+        {
+            Owner = Item = root;
+            Depth = 254;
+            ControlType = ControlType.PartialTree;
 
+            newLineModel(root, this);
             root.Add(this);
         }
         #endregion
 
-        #region IModel  =======================================================
+        #region IRootModel  ===================================================
+        public string TitleName => DataRoot.TitleName;
+        public string TitleSummary => DataRoot.TitleSummary;
+
         public void Release()
         {
             if (Owner is null) return;
@@ -42,22 +53,6 @@ namespace ModelGraph.Core
         }
         #endregion
 
-        #region ValidateBuffer  ===============================================
-        private CircularBuffer<LineModel> _buffer;
-
-        /// <summary>Ensure buffer is not null and large enough, return true if new buffer</summary>
-        private bool ValidateBuffer(int viewSize)
-        {
-            var size = viewSize * 3;
-            if (_buffer is null || size > _buffer.Size)
-            {
-                _buffer = new CircularBuffer<LineModel>(size);
-                return true;
-            }
-            return false;
-        }
-        #endregion
-
         #region FilterParms  ==================================================
         public void SetUsage(LineModel model, Usage usage) => FilterSort.SetUsage(model, usage);
         public void SetSorting(LineModel model, Sorting sorting) => FilterSort.SetSorting(model, sorting);
@@ -66,12 +61,10 @@ namespace ModelGraph.Core
         #endregion
 
         #region GetCurrentView  ===============================================
-        private int GetScaledSize(int viewSize) => viewSize * 3;
         /// <summary>We are scrolling back and forth in the flattened model hierarchy</summary>
         public (List<LineModel>, LineModel) GetCurrentView(int viewSize, LineModel selected)
         {
-            if (ValidateBuffer(viewSize))
-                RefreshBuffer();
+            if (_buffer.IsEmpty) RefreshBuffer(selected, viewSize);
 
             var list = _buffer.GetList();
             if (list.Count == 0)
@@ -94,36 +87,37 @@ namespace ModelGraph.Core
             var anyChange = false;
             bool isValidSelect = IsValidModel(selected);
 
-            ValidateBuffer(viewSize);
             if (isValidSelect)
             {
                 switch (change)
                 {
                     case ChangeType.OneDown:
-                        RefreshBuffer(leading);
+                        anyChange = true;
+                        if (_buffer.IsInvalidOffset(1))
+                            Items[0].FillBufferTraversal(_buffer);
                         break;
                     case ChangeType.ToggleLeft:
                         anyChange |= selected.ToggleLeft();
-                        RefreshBuffer(leading);
+                        RefreshBuffer(leading, viewSize);
                         break;
                     case ChangeType.ToggleRight:
                         anyChange |= selected.ToggleRight();
-                        RefreshBuffer(leading);
+                        RefreshBuffer(leading, viewSize);
                         break;
                     case ChangeType.ToggleFilter:
                         selected.IsFilterVisible = !selected.IsFilterVisible;
                         break;
                     case ChangeType.FilterSortChanged:
-                        RefreshBuffer(leading);
+                        RefreshBuffer(leading, viewSize);
                         break;
                 }
             }
 
             if (anyChange) PageControl?.Refresh();
         }
-        private void RefreshBuffer(LineModel leading = null)
+        private void RefreshBuffer(LineModel leading, int viewSize)
         {
-            if (IsValidModel(leading)) _buffer.Initialize(leading);
+            _buffer.Initialize(leading, viewSize);
             Items[0].FillBufferTraversal(_buffer);
         }
         #endregion

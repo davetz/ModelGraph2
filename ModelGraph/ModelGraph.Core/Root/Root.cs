@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ModelGraph.Core
 {
-    public partial class Root : StoreOf<Item> // items are UI root models (treeModel, graphModel, symbolModel,..)
+    public partial class Root : StoreOf<Item> // where the items are UI root models (treeModel, graphModel, symbolModel,..)
     {
         private readonly Dictionary<Type, Item> Type_InstanceOf = new Dictionary<Type, Item>(200);  // used to get a specific type instance
         private readonly Dictionary<ushort, Item> IdKey_ReferenceItem = new Dictionary<ushort, Item>(200); // used to get specific type from its IdKey

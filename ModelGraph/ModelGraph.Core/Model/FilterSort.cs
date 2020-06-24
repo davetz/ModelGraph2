@@ -1,11 +1,9 @@
-﻿
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using Windows.UI.Xaml.Shapes;
 
 namespace ModelGraph.Core
 {
+    /// <summary>Provides filter and sort methods for line models</summary>
     internal class FilterSort
     {
         private static Dictionary<LineModel, FilterSort> _model_filter = new Dictionary<LineModel, FilterSort>();
@@ -15,17 +13,16 @@ namespace ModelGraph.Core
         private Sorting Sorting = Sorting.Unsorted;
         private List<(int I, bool IN, string TX)> Selector;
 
-        private byte _delta;
-        private bool _sortChanged;
+        private Regex _filterRx;
         private string _filterText;
         private bool _filterChanged;
-        private Regex _filterRx;
-
+        private bool _sortChanged;
+        private byte _delta;
 
         private FilterSort() { }
 
         #region Parms  ========================================================
-        private static List<(int I, bool IN, string TX)> EmptySelector = new List<(int I, bool IN, string TX)>(0);
+        private static readonly List<(int I, bool IN, string TX)> EmptySelector = new List<(int I, bool IN, string TX)>(0);
         internal static (int, Sorting, Usage, string) GetParms(LineModel m) => _model_filter.TryGetValue(m, out FilterSort f) ? (f.Count, f.Sorting, f.Usage, f.Filter) : (m.Count, Sorting.Unsorted, Usage.None, string.Empty);
         internal static bool TryGetSelector(LineModel m, out List<(int I, bool IN, string TX)> selector)
         {
@@ -81,8 +78,8 @@ namespace ModelGraph.Core
         {
             if (_model_filter.TryGetValue(model, out FilterSort f))
             {
-                if (f.IsSame(text)) return false;
-                f.SetText(text);
+                if (f.HasSameText(text)) return false;
+                f.SetNewText(text);
                 if (f.HasDefaultParms)
                 {
                     ReleaseFilter(model);
@@ -93,14 +90,14 @@ namespace ModelGraph.Core
             {
                 if (string.IsNullOrWhiteSpace(text)) return false;
                 f = AllocateFilter(model);
-                f.SetText(text);
+                f.SetNewText(text);
             }
             f.Refresh(model);
             return true;
         }
 
         #region HelperMethods  ================================================
-        private void SetText(string text)
+        private void SetNewText(string text)
         {
             if (string.IsNullOrWhiteSpace(text))
             {
@@ -129,7 +126,7 @@ namespace ModelGraph.Core
 
         private bool HasDefaultParms => Usage == Usage.None && Sorting == Sorting.Unsorted && _filterText == null;
 
-        private bool IsSame(string a)
+        private bool HasSameText(string a)
         {
             var b = _filterText;
             return N(a) ? N(b) : (!N(b) && E(a, b));
