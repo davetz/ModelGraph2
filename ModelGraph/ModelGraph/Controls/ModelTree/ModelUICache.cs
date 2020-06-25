@@ -6,7 +6,7 @@ using Windows.UI.Xaml.Controls;
 
 namespace ModelGraph.Controls
 {
-    internal class LineModelCache
+    internal class ModelUICache
     {
         private readonly ModelTreeControl TC;
         internal TreeModel TreeRoot { get; private set; }
@@ -38,7 +38,7 @@ namespace ModelGraph.Controls
         internal StackPanel StackPanel { get; private set; }
 
         #region Constructor  ==================================================
-        private LineModelCache(ModelTreeControl tc, Canvas treeCanvas, TreeModel treeRoot, Root dataRoot)
+        private ModelUICache(ModelTreeControl tc, Canvas treeCanvas, TreeModel treeRoot, Root dataRoot)
         {
             TC = tc;
             DataRoot = dataRoot;
@@ -48,11 +48,11 @@ namespace ModelGraph.Controls
         #endregion
 
         #region Allocate  =====================================================
-        internal static void Allocate(ModelTreeControl tc, Canvas treeCanvas, TreeModel treeRoot, Root dataRoot, int count, Stack<LineModelCache> stack)
+        internal static void Allocate(ModelTreeControl tc, Canvas treeCanvas, TreeModel treeRoot, Root dataRoot, int count, Stack<ModelUICache> stack)
         {
             for (int i = 0; i < count; i++)
             {
-                stack.Push(new LineModelCache(tc, treeCanvas, treeRoot, dataRoot));
+                stack.Push(new ModelUICache(tc, treeCanvas, treeRoot, dataRoot));
             }
         }
         #endregion
@@ -883,6 +883,8 @@ namespace ModelGraph.Controls
             {
                 sp.Children.Clear();
                 sp.DataContext = null;
+                Canvas.SetTop(sp, -4 * TC.ElementHieght);
+
                 if (discard)
                 {
                     StackPanel = null;

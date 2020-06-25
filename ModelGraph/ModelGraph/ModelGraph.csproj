@@ -150,7 +150,7 @@
     <Compile Include="Controls\ModelGraph\ModelGraphControlEvents.cs" />
     <Compile Include="Controls\ModelGraph\ModelGraphControlPanel.cs" />
     <Compile Include="Controls\ModelGraph\ModelGraphControlVisualAids.cs" />
-    <Compile Include="Controls\ModelTree\LineModelCache.cs" />
+    <Compile Include="Controls\ModelTree\ModelUICache.cs" />
     <Compile Include="Controls\ModelTree\ModelTreeControl.xaml.cs">
       <DependentUpon>ModelTreeControl.xaml</DependentUpon>
     </Compile>

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Security.Cryptography;
-using Windows.Media.Devices.Core;
 
 namespace ModelGraph.Core
 {
@@ -91,9 +89,34 @@ namespace ModelGraph.Core
             {
                 switch (change)
                 {
+                    case ChangeType.OneUp:
+                        anyChange = true;                        
+                        if (_buffer.IsInvalidOffset(-1))
+                            Items[0].FillBufferTraversal(_buffer);
+                        break;
+                    case ChangeType.TwoUp:
+                        anyChange = true;
+                        if (_buffer.IsInvalidOffset(-2))
+                            Items[0].FillBufferTraversal(_buffer);
+                        break;
+                    case ChangeType.PageUp:
+                        anyChange = true;
+                        if (_buffer.IsInvalidOffset(-viewSize))
+                            Items[0].FillBufferTraversal(_buffer);
+                        break;
                     case ChangeType.OneDown:
                         anyChange = true;
                         if (_buffer.IsInvalidOffset(1))
+                            Items[0].FillBufferTraversal(_buffer);
+                        break;
+                    case ChangeType.TwoDown:
+                        anyChange = true;
+                        if (_buffer.IsInvalidOffset(2))
+                            Items[0].FillBufferTraversal(_buffer);
+                        break;
+                    case ChangeType.PageDown:
+                        anyChange = true;
+                        if (_buffer.IsInvalidOffset(viewSize))
                             Items[0].FillBufferTraversal(_buffer);
                         break;
                     case ChangeType.ToggleLeft:

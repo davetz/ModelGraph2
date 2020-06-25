@@ -204,4 +204,7 @@
   <data name="StorageFileRepo_New" xml:space="preserve">
     <value>New Model</value>
   </data>
+  <data name="ExceptionCorruptLineModelCache" xml:space="preserve">
+    <value>Corrupt line model cache</value>
+  </data>
 </root>
