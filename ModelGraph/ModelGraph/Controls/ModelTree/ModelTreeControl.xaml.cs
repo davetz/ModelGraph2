@@ -17,10 +17,9 @@ namespace ModelGraph.Controls
         Root DataRoot;
         TreeModel TreeRoot;
         LineModel Selected;
-
-        List<LineModel> ViewList = new List<LineModel>();
-        List<LineCommand> MenuCommands = new List<LineCommand>();
-        List<LineCommand> ButtonCommands = new List<LineCommand>();
+        private List<LineModel> ViewList = new List<LineModel>(0);
+        readonly List<LineCommand> MenuCommands = new List<LineCommand>();
+        readonly List<LineCommand> ButtonCommands = new List<LineCommand>();
 
         internal ToolTip ItemIdentityTip { get; private set; }
         internal ToolTip ModelIdentityTip { get; private set; }
@@ -591,6 +590,8 @@ namespace ModelGraph.Controls
                 return;
             }
 
+            SetSelectGridPlacement();
+            
             
             var lc = GetModelUICache(Selected);
 
@@ -713,7 +714,17 @@ namespace ModelGraph.Controls
         }
         #endregion
 
-        
+        #region SetSelectGridPlacement  =======================================
+        void SetSelectGridPlacement()
+        {
+            var i = ViewList.IndexOf(Selected);
+            if (i < 0) i = 0;
+            SelectGrid.Width = ActualWidth;
+            Canvas.SetTop(SelectGrid, (i * ElementHieght));
+
+        }
+        #endregion
+
         #region TrySetControlFocus  ===========================================
         // given the focusModel try to determine what is the most
         // logical text box to enter, then set the keyboard focus to it,
@@ -961,7 +972,7 @@ namespace ModelGraph.Controls
             }
             else
             {
-                obj.Text = " ";
+                obj.Text = string.Empty;
             }
         }
         internal void ExpandTree_PointerReleased(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)

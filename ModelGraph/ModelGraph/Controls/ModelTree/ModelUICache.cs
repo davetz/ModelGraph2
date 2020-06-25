@@ -287,7 +287,7 @@ namespace ModelGraph.Controls
                 obj.Text = string.Empty;
             }
 
-            //obj.DataContext = model;
+            obj.DataContext = Model;
 
             StackPanel.Children.Add(obj);
         }
@@ -362,7 +362,7 @@ namespace ModelGraph.Controls
                     obj.PointerReleased += TC.SortMode_PointerReleased;
                     ToolTipService.SetToolTip(obj, TC.SortModeTip);
                 }
-                //obj.DataContext = model;
+                obj.DataContext = Model;
                 obj.Text = Model.IsSortAscending ?
                     TC.SortAscending : (Model.IsSortDescending ? TC.SortDescending : TC.SortNone);
 
@@ -692,7 +692,7 @@ namespace ModelGraph.Controls
                 obj.KeyDown += TC.ComboProperty_KeyDown;
             }
 
-            //obj.DataContext = model;
+            obj.DataContext = Model;
             obj.ItemsSource = PropModel.GetlListValue(DataRoot);
             obj.SelectedIndex = PropModel.GetIndexValue(DataRoot);
 
@@ -771,7 +771,7 @@ namespace ModelGraph.Controls
                 obj.PointerEntered += TC.ModelIdentity_PointerEntered;
             }
 
-            obj.DataContext =Model;
+            obj.DataContext = Model;
 
             StackPanel.Children.Add(obj);
         }
@@ -800,7 +800,7 @@ namespace ModelGraph.Controls
                 sp = StackPanel = new StackPanel();
 
                 sp.MaxHeight = TC.ElementHieght;
-                sp.Orientation = Windows.UI.Xaml.Controls.Orientation.Horizontal;
+                sp.Orientation = Orientation.Horizontal;
 
                 TreeCanvas.Children.Add(sp);
             }
