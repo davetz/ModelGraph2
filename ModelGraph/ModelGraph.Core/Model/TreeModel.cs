@@ -60,22 +60,27 @@ namespace ModelGraph.Core
 
         #region GetCurrentView  ===============================================
         /// <summary>We are scrolling back and forth in the flattened model hierarchy</summary>
-        public (List<LineModel>, LineModel) GetCurrentView(int viewSize, LineModel selected)
+        public (List<LineModel>, LineModel, bool, bool) GetCurrentView(int viewSize, LineModel leading, LineModel selected)
         {
-            if (_buffer.IsEmpty) RefreshBuffer(selected, viewSize);
+            if (_buffer.IsEmpty) RefreshBuffer(leading, viewSize);
 
-            var list = _buffer.GetList();
+            var list = _buffer.GetList(_atEnd);
             if (list.Count == 0)
-                return (list, null);
+                return (list, null, true, true);
 
             if (list.Count > viewSize)
                 list = list.GetRange(0, viewSize);
 
-            if (IsInvalidModel(selected) || !list.Contains(selected))
-                selected = list[0];
+            if (!IsInvalidModel(selected)) selected = null;
 
-            return (list, selected);
+            var eov = _atEnd;
+            var sov = _atStart;
+            _atEnd = _atStart = false;
+
+            return (list, selected, sov, eov);
         }
+        bool _atEnd;
+        bool _atStart;
         #endregion
 
         #region RefreshViewList  ==============================================
@@ -90,34 +95,28 @@ namespace ModelGraph.Core
                 switch (change)
                 {
                     case ChangeType.OneUp:
-                        anyChange = true;                        
-                        if (_buffer.IsInvalidOffset(-1))
-                            Items[0].FillBufferTraversal(_buffer);
+                        anyChange = true;
+                        RefreshBuffer(-1);
                         break;
                     case ChangeType.TwoUp:
                         anyChange = true;
-                        if (_buffer.IsInvalidOffset(-2))
-                            Items[0].FillBufferTraversal(_buffer);
+                        RefreshBuffer(-2);
                         break;
                     case ChangeType.PageUp:
                         anyChange = true;
-                        if (_buffer.IsInvalidOffset(-viewSize))
-                            Items[0].FillBufferTraversal(_buffer);
+                        RefreshBuffer(-viewSize);
                         break;
                     case ChangeType.OneDown:
                         anyChange = true;
-                        if (_buffer.IsInvalidOffset(1))
-                            Items[0].FillBufferTraversal(_buffer);
+                        RefreshBuffer(1);
                         break;
                     case ChangeType.TwoDown:
                         anyChange = true;
-                        if (_buffer.IsInvalidOffset(2))
-                            Items[0].FillBufferTraversal(_buffer);
+                        RefreshBuffer(2);
                         break;
                     case ChangeType.PageDown:
                         anyChange = true;
-                        if (_buffer.IsInvalidOffset(viewSize))
-                            Items[0].FillBufferTraversal(_buffer);
+                        RefreshBuffer(viewSize);
                         break;
                     case ChangeType.ToggleLeft:
                         anyChange |= selected.ToggleLeft();
@@ -138,10 +137,17 @@ namespace ModelGraph.Core
 
             if (anyChange) PageControl?.Refresh();
         }
+        private void RefreshBuffer(int scroll)
+        {
+            if (_buffer.IsInvalidOffset(scroll))
+                _atEnd = !Items[0].FillBufferTraversal(_buffer);
+            _atStart = _buffer.AtStart;
+        }
         private void RefreshBuffer(LineModel leading, int viewSize)
         {
             _buffer.Initialize(leading, viewSize);
-            Items[0].FillBufferTraversal(_buffer);
+            _atEnd = !Items[0].FillBufferTraversal(_buffer);
+            _atStart = _buffer.AtStart;
         }
         #endregion
 

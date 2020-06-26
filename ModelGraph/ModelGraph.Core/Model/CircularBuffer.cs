@@ -102,9 +102,9 @@ namespace ModelGraph.Core
             _checkingTarget = (_target != null);
             return true;
         }
-        internal List<T> GetList()
+        internal List<T> GetList(bool endOfView = false)
         {
-            var (_, _, uiStart, uiCount) = GetStartCount();
+            var (_, _, uiStart, uiCount) = GetStartCount(endOfView);
             var list = new List<T>(uiCount);
             for (int i = 0, j = uiStart; i < uiCount; i++, j++)
             {
@@ -112,10 +112,11 @@ namespace ModelGraph.Core
             }
             return list;
         }
+        internal bool AtStart => _count <= _uiSize;
         #endregion
 
         #region Parms  ========================================================
-        private (int start, int count, int uiStart, int uiCount) GetStartCount()
+        private (int start, int count, int uiStart, int uiCount) GetStartCount(bool endOfView = false)
         {
             int start, count, uiStart, uiCount;
             if (_count < _size)
@@ -128,10 +129,19 @@ namespace ModelGraph.Core
                 start = (_count - 1) % _size;
                 count = _size;
             }
-            uiStart = GetUiStart();
+
             var ending = start + count;
-            uiCount = ending - uiStart;
-            if (uiCount > _uiSize) uiCount = _uiSize;
+            if (endOfView)
+            {
+                uiCount = (count < _uiSize) ? count : _uiSize;
+                uiStart = ending - uiCount; 
+            }
+            else
+            {
+                uiStart = GetUiStart();
+                uiCount = ending - uiStart;
+                if (uiCount > _uiSize) uiCount = _uiSize;
+            }
             return (start, count, uiStart, uiCount);
         }
         private int GetUiStart()

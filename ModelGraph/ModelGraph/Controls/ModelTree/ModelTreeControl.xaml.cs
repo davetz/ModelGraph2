@@ -87,6 +87,8 @@ namespace ModelGraph.Controls
 
         private bool ScrollingUp;
         private bool ScrollingDown;
+        private bool AtEnd;
+        private bool AtStart;
         #endregion
 
         #region Constructor  ==================================================
@@ -132,6 +134,8 @@ namespace ModelGraph.Controls
         }
         private void RefreshCache(List<LineModel> newModels)
         {
+            ViewList = newModels; // save this for future reference
+
             PrevModels.Clear();
             foreach (var m in Model_Cache.Keys) { PrevModels.Add(m); }
 
@@ -174,7 +178,6 @@ namespace ModelGraph.Controls
             LineModel leading = (ViewList is null || ViewList.Count == 0) ? null : ViewList[0];
             //ResetCacheDelta(_selected);
             await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => { TreeRoot.RefreshViewList(ViewSize, leading, Selected, change); });
-            Refresh();
         }
         private async System.Threading.Tasks.Task PostSetUsageAsync(LineModel model, Usage usage)
         {
@@ -402,7 +405,7 @@ namespace ModelGraph.Controls
             {
                 if (ViewList is null || ViewList.Count == 0) return;
                 Selected = ViewList[0];
-                RefreshSelect();
+                RefreshSelector();
             }
             else
             {
@@ -410,10 +413,13 @@ namespace ModelGraph.Controls
                 if (i >= 0 && i < ViewList.Count)
                 {
                     Selected = ViewList[i];
-                    RefreshSelect();
+                    RefreshSelector();
                 }
-                else
+                else if (!AtStart)
+                {
+                    ScrollingUp = true;
                     _ = PostRefreshViewListAsync(ChangeType.OneUp);
+                }
             }
         }
         void TryGetNextModel()
@@ -423,7 +429,7 @@ namespace ModelGraph.Controls
             {
                 if (ViewList is null || ViewList.Count == 0) return;
                 Selected = ViewList[0];
-                RefreshSelect();
+                RefreshSelector();
             }
             else
             {
@@ -431,10 +437,13 @@ namespace ModelGraph.Controls
                 if (i > 0 && i < ViewList.Count)
                 {
                     Selected = ViewList[i];
-                    RefreshSelect();
+                    RefreshSelector();
                 }
-                else
+                else if (!AtEnd)
+                {
+                    ScrollingDown = true;
                     _ = PostRefreshViewListAsync(ChangeType.OneDown);
+                }
             }
         }
         #endregion
@@ -513,7 +522,7 @@ namespace ModelGraph.Controls
         {
             Selected = PointerModel(e);
             SetDefaultFocus();
-            RefreshSelect();
+            RefreshSelector();
             e.Handled = true;
         }
         LineModel PointerModel(Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
@@ -528,16 +537,29 @@ namespace ModelGraph.Controls
         #region Refresh  ======================================================
         public void Refresh()
         {
-            var (viewList, selected) = TreeRoot.GetCurrentView(ViewSize, Selected);
-            ViewList = viewList;
-            var n = viewList.Count - 1;
-            Selected = viewList.Contains(selected) ? selected : n == -1 ? null : ScrollingUp ? ViewList[0] : ScrollingDown ? ViewList[n] : ViewList[0];
-
             _pointWheelEnabled = false;
+            var leading = (ViewList is null || ViewList.Count == 0) ? null : ViewList[0];
 
-            RefreshCache(ViewList);
+            var (newModels, selected, atStart, atEnd) = TreeRoot.GetCurrentView(ViewSize, leading, Selected);
+            RefreshCache(newModels);
+
+            AtEnd = atEnd;
+            AtStart = atStart;
+            Selected = selected;
+
+            var n = newModels.Count - 1;
+            if (n < 0)
+                Selected = null;
+            else if (ScrollingUp)
+                Selected = newModels[0];
+            else if (ScrollingDown)
+                Selected = newModels[n];
+
+            ScrollingUp = false;
+            ScrollingDown = false;
+
             RefreshRoot();
-            RefreshSelect();
+            RefreshSelector();
 
             _pointWheelEnabled = true;
         }
@@ -575,8 +597,8 @@ namespace ModelGraph.Controls
 
         #endregion
 
-        #region RefreshSelect  ================================================
-        void RefreshSelect(bool restoreFocus = true)
+        #region RefreshSelector  ==============================================
+        void RefreshSelector(bool restoreFocus = true)
         {
             TreeCanvas.KeyboardAccelerators.Clear();
             _acceleratorKeyCommands.Clear();
@@ -590,7 +612,7 @@ namespace ModelGraph.Controls
                 return;
             }
 
-            SetSelectGridPlacement();
+            SetSelectorGridPlacement();
             
             
             var lc = GetModelUICache(Selected);
@@ -714,13 +736,13 @@ namespace ModelGraph.Controls
         }
         #endregion
 
-        #region SetSelectGridPlacement  =======================================
-        void SetSelectGridPlacement()
+        #region SetSelectorGridPlacement  =======================================
+        void SetSelectorGridPlacement()
         {
             var i = ViewList.IndexOf(Selected);
             if (i < 0) i = 0;
-            SelectGrid.Width = ActualWidth;
-            Canvas.SetTop(SelectGrid, (i * ElementHieght));
+            SelectorGrid.Width = ActualWidth;
+            Canvas.SetTop(SelectorGrid, (i * ElementHieght));
 
         }
         #endregion
@@ -1148,7 +1170,7 @@ namespace ModelGraph.Controls
             var obj = sender as TextBox;
             _focusControl = obj;
             Selected = obj.DataContext as LineModel;
-            RefreshSelect(false);
+            RefreshSelector(false);
         }
         internal void TextProperty_LostFocus(object sender, RoutedEventArgs e)
         {
@@ -1195,7 +1217,7 @@ namespace ModelGraph.Controls
             var obj = sender as CheckBox;
             _focusControl = obj;
             Selected = obj.DataContext as LineModel;
-            RefreshSelect(false);
+            RefreshSelector(false);
         }
         internal void Check_KeyDown(object sender, Windows.UI.Xaml.Input.KeyRoutedEventArgs e)
         {
@@ -1243,7 +1265,7 @@ namespace ModelGraph.Controls
             var obj = sender as ComboBox;
             _focusControl = obj;
             Selected = obj.DataContext as LineModel;
-            RefreshSelect(false);
+            RefreshSelector(false);
         }
         internal void ComboProperty_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
