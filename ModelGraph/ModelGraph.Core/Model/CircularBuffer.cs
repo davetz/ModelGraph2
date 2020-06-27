@@ -112,7 +112,7 @@ namespace ModelGraph.Core
             }
             return list;
         }
-        internal bool AtStart => _count <= _uiSize;
+        internal T EndModel => (_count > 0) ? _buffer[(_count - 1) % _size] : default;
         #endregion
 
         #region Parms  ========================================================
@@ -131,16 +131,13 @@ namespace ModelGraph.Core
             }
 
             var ending = start + count;
-            if (endOfView)
+            uiStart = GetUiStart();
+            uiCount = ending - uiStart;
+
+            if (uiCount > _uiSize && count > _uiSize)
             {
                 uiCount = (count < _uiSize) ? count : _uiSize;
                 uiStart = ending - uiCount; 
-            }
-            else
-            {
-                uiStart = GetUiStart();
-                uiCount = ending - uiStart;
-                if (uiCount > _uiSize) uiCount = _uiSize;
             }
             return (start, count, uiStart, uiCount);
         }

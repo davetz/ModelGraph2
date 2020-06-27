@@ -71,16 +71,20 @@ namespace ModelGraph.Core
             if (list.Count > viewSize)
                 list = list.GetRange(0, viewSize);
 
-            if (!IsInvalidModel(selected)) selected = null;
+            if (IsInvalidModel(selected) || !list.Contains(selected)) selected = null;
 
-            var eov = _atEnd;
-            var sov = _atStart;
-            _atEnd = _atStart = false;
+            var n = list.Count - 1;
+            var eov = _atEnd && list[n] == _endModel;
+            var sov = Items[0].Count > 0 && Items[0].Items[0] == list[0];
+            if (eov || sov)
+            {
+                var k = 1;
+            }
 
             return (list, selected, sov, eov);
         }
         bool _atEnd;
-        bool _atStart;
+        LineModel _endModel;
         #endregion
 
         #region RefreshViewList  ==============================================
@@ -140,14 +144,16 @@ namespace ModelGraph.Core
         private void RefreshBuffer(int scroll)
         {
             if (_buffer.IsInvalidOffset(scroll))
+            {
                 _atEnd = !Items[0].FillBufferTraversal(_buffer);
-            _atStart = _buffer.AtStart;
+                _endModel = _buffer.EndModel;
+            }
         }
         private void RefreshBuffer(LineModel leading, int viewSize)
         {
             _buffer.Initialize(leading, viewSize);
             _atEnd = !Items[0].FillBufferTraversal(_buffer);
-            _atStart = _buffer.AtStart;
+            _endModel = _buffer.EndModel;
         }
         #endregion
 

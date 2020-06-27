@@ -493,7 +493,7 @@ namespace ModelGraph.Controls
         {
             var tip = sender as ToolTip;
             var mdl = tip.DataContext as LineModel;
-            var content = mdl.GetSummaryId(DataRoot);
+            var content = mdl?.GetSummaryId(DataRoot);
             tip.Content = string.IsNullOrWhiteSpace(content) ? null : content;
         }
         void ModelIdentityTip_Opened(object sender, RoutedEventArgs e)
