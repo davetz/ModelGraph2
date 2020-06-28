@@ -77,26 +77,15 @@ namespace ModelGraph.Core
         #region SetOffset/GetList  ============================================
         internal bool IsInvalidOffset(int offset)
         {
-            var (start, count, uiStart, uiCount) = GetStartCount();
+            var (start, count, uiStart, _) = GetStartCount();
             var index = uiStart + offset;
-            if (offset < 0)
+            if (index < start) index += count;
+            if ((index + _uiSize) <= (start + count))
             {
-                if (index >= start)
-                {
-                    _target = _buffer[index % _size];
-                    return false;
-                }
-                _target = _buffer[start % _size];
+                _target = _buffer[index % _size];
+                return false;
             }
-            else if (offset > 0)
-            {
-                if ((index + _uiSize) < count)
-                {
-                    _target = _buffer[index % _size];
-                    return false;
-                }
-                _target = _buffer[(count - 1) % _size];
-            }
+
             _count = 0;
             _foundTarget = false;
             _checkingTarget = (_target != null);
@@ -119,36 +108,27 @@ namespace ModelGraph.Core
         private (int start, int count, int uiStart, int uiCount) GetStartCount(bool endOfView = false)
         {
             int start, count, uiStart, uiCount;
-            if (_count < _size)
+            if (_count > _size)
+            {
+                start = _count % _size;
+                count = _size;
+            }
+            else
             {
                 start = 0;
                 count = _count;
             }
-            else
-            {
-                start = (_count - 1) % _size;
-                count = _size;
-            }
-
-            var ending = start + count;
             uiStart = GetUiStart();
-            uiCount = ending - uiStart;
 
-            if (uiCount > _uiSize && count > _uiSize)
-            {
-                uiCount = (count < _uiSize) ? count : _uiSize;
-                uiStart = ending - uiCount; 
-            }
+            uiCount = count > _uiSize ? _uiSize : count - uiStart;
+
             return (start, count, uiStart, uiCount);
         }
         private int GetUiStart()
         {
             if (_target != null)
             {
-            for (int i = 0; i < _size; i++)
-            {
-                if (_buffer[i].Equals(_target)) return i;
-            }
+                for (int i = 0; i < _size; i++) { if (_buffer[i].Equals(_target)) return i; }
             }
             return 0;
         }
