@@ -6,7 +6,7 @@ namespace ModelGraph.Core
     /// <summary>Flat list of LineModel that emulates a UI tree view</summary>
     public abstract class TreeModel : LineModel, IRootModel
     {
-        private CircularBuffer<LineModel> _buffer = new CircularBuffer<LineModel>(20);
+        private ModelBuffer _buffer = new ModelBuffer(20);
 
         public Item RootItem => Item;
         public IPageControl PageControl { get; set; } // reference the UI PageControl       
@@ -62,36 +62,21 @@ namespace ModelGraph.Core
         /// <summary>We are scrolling back and forth in the flattened model hierarchy</summary>
         public (List<LineModel>, LineModel, bool, bool) GetCurrentView(int viewSize, LineModel leading, LineModel selected)
         {
-            if (_buffer.IsEmpty) RefreshBuffer(leading, viewSize);
+            if (_buffer.IsEmpty) _buffer.Refresh(Items[0], viewSize, leading);
 
-            var list = _buffer.GetList(_atEnd);
-            if (list.Count == 0)
-                return (list, null, true, true);
-
-            if (list.Count > viewSize)
-                list = list.GetRange(0, viewSize);
+            var (list, eov, sov) = _buffer.GetList();
 
             if (IsInvalidModel(selected) || !list.Contains(selected)) selected = null;
 
-            var n = list.Count - 1;
-            var eov = _atEnd && list[n] == _endModel;
-            var sov = Items[0].Count > 0 && Items[0].Items[0] == list[0];
-            if (eov || sov)
-            {
-                var k = 1;
-            }
 
             return (list, selected, sov, eov);
         }
-        bool _atEnd;
-        LineModel _endModel;
         #endregion
 
         #region RefreshViewList  ==============================================
         // Runs on a background thread invoked by the ModelTreeControl 
         public void RefreshViewList(int viewSize, LineModel leading, LineModel selected, ChangeType change = ChangeType.None)
         {
-            var anyChange = false;
             bool isValidSelect = IsValidModel(selected);
 
             if (isValidSelect)
@@ -99,61 +84,41 @@ namespace ModelGraph.Core
                 switch (change)
                 {
                     case ChangeType.OneUp:
-                        anyChange = true;
-                        RefreshBuffer(-1);
+                        _buffer.Refresh(Items[0], viewSize, -1);
                         break;
                     case ChangeType.TwoUp:
-                        anyChange = true;
-                        RefreshBuffer(-2);
+                        _buffer.Refresh(Items[0], viewSize, -2);
                         break;
                     case ChangeType.PageUp:
-                        anyChange = true;
-                        RefreshBuffer(-viewSize);
+                        _buffer.Refresh(Items[0], viewSize, -viewSize);
                         break;
                     case ChangeType.OneDown:
-                        anyChange = true;
-                        RefreshBuffer(1);
+                        _buffer.Refresh(Items[0], viewSize, 1);
                         break;
                     case ChangeType.TwoDown:
-                        anyChange = true;
-                        RefreshBuffer(2);
+                        _buffer.Refresh(Items[0], viewSize, 2);
                         break;
                     case ChangeType.PageDown:
-                        anyChange = true;
-                        RefreshBuffer(viewSize);
+                        _buffer.Refresh(Items[0], viewSize, viewSize);
                         break;
                     case ChangeType.ToggleLeft:
-                        anyChange |= selected.ToggleLeft();
-                        RefreshBuffer(leading, viewSize);
+                        selected.ToggleLeft();
+                        _buffer.Refresh(Items[0], viewSize, leading);
                         break;
                     case ChangeType.ToggleRight:
-                        anyChange |= selected.ToggleRight();
-                        RefreshBuffer(leading, viewSize);
+                        selected.ToggleRight();
+                        _buffer.Refresh(Items[0], viewSize, leading);
                         break;
                     case ChangeType.ToggleFilter:
                         selected.IsFilterVisible = !selected.IsFilterVisible;
                         break;
                     case ChangeType.FilterSortChanged:
-                        RefreshBuffer(leading, viewSize);
+                        _buffer.Refresh(Items[0], viewSize, leading);
                         break;
                 }
             }
 
-            if (anyChange) PageControl?.Refresh();
-        }
-        private void RefreshBuffer(int scroll)
-        {
-            if (_buffer.IsInvalidOffset(scroll))
-            {
-                _atEnd = !Items[0].FillBufferTraversal(_buffer);
-                _endModel = _buffer.EndModel;
-            }
-        }
-        private void RefreshBuffer(LineModel leading, int viewSize)
-        {
-            _buffer.Initialize(leading, viewSize);
-            _atEnd = !Items[0].FillBufferTraversal(_buffer);
-            _endModel = _buffer.EndModel;
+            PageControl?.Refresh();
         }
         #endregion
 

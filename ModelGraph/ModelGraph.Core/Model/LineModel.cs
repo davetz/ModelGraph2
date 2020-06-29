@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ModelGraph.Core
 {
-    public abstract class LineModel : StoreOf<LineModel>
+    public class LineModel : StoreOf<LineModel>
     {
         public Item Item { get; protected set; }
         private ModelFlags _modelFlags;
@@ -84,9 +84,9 @@ namespace ModelGraph.Core
         internal void ClearSortUsageMode() => _modelFlags &= ~ModelFlags.SortUsageMode;
         #endregion
 
-        #region FillBufferTraversal  ==========================================
+        #region BufferTraverse  ===============================================
         /// <summary>Fill the circular buffer with flattened lineModels, return true if hit end of list</summary>
-        internal bool FillBufferTraversal(CircularBuffer<LineModel> buffer)
+        internal bool BufferTraverse(ModelBuffer buffer)
         {
             if (HasFilterSortAllocation && FilterSort.TryGetSelector(this, out List<(int I, bool IN, string TX)> selector))
             {
@@ -96,7 +96,7 @@ namespace ModelGraph.Core
                     {
                         var child = Items[I];
                         if (buffer.AddItem(child)) return true; // abort, we are done
-                        if (child.FillBufferTraversal(buffer)) return true; // abort, we are done;
+                        if (child.BufferTraverse(buffer)) return true; // abort, we are done;
                     }
                 }
             }
@@ -105,7 +105,7 @@ namespace ModelGraph.Core
                 foreach (var child in Items)
                 {
                     if (buffer.AddItem(child)) return true; // abort, we are done
-                    if (child.FillBufferTraversal(buffer)) return true; // abort, we are done;
+                    if (child.BufferTraverse(buffer)) return true; // abort, we are done;
                 }
             }
             return false; //finished all items with no aborts
