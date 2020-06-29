@@ -46,14 +46,14 @@ namespace ModelGraph.Core
             var index = indexT + offset;
 
             if (index < 0) 
-                Refresh(root, uiSize, list[0]);
-            else if (index > end) 
+                Refresh(root, uiSize, list[0]);            
+            else if (index + _uiSize > end && list[end] != _ending) 
                 Refresh(root, uiSize, list[end]);
             else
                 _target = list[index];  // set the new target model
         }
 
-        private bool SizeCheck(int uiSize)
+        private void SizeCheck(int uiSize)
         {
             _uiSize = uiSize;
             var minSize = 3 * uiSize;
@@ -61,9 +61,7 @@ namespace ModelGraph.Core
             {
                 _size = minSize;
                 _buffer = new LineModel[minSize];
-                return true;
             }
-            return false;
         }
         #endregion
 
