@@ -85,7 +85,7 @@ namespace ModelGraph.Core
         #endregion
 
         #region BufferTraverse  ===============================================
-        /// <summary>Fill the circular buffer with flattened lineModels, return true if hit end of list</summary>
+        /// <summary>Fill the circular buffer with flattened lineModels, return true if buffer.Add() aborts</summary>
         internal bool BufferTraverse(ModelBuffer buffer)
         {
             if (HasFilterSortAllocation && FilterSort.TryGetSelector(this, out List<(int I, bool IN, string TX)> selector))
@@ -167,8 +167,8 @@ namespace ModelGraph.Core
             }
         }
         /// <summary>Walk up item tree hierachy to find the parent RootTreeModel</summary>
-        public RootModel RootModel => GetRootTreeModel();
-        private RootModel GetRootTreeModel()
+        public RootModel RootModel => GetRootModel();
+        private RootModel GetRootModel()
         {
             var item = this;
             while (item != null)
@@ -176,9 +176,8 @@ namespace ModelGraph.Core
                 if (item is RootModel root) return root;
                 item = item.Owner as LineModel;
             }
-            throw new Exception("GetRootTreeModel: Corrupted item hierarchy"); // I seriously hope this never happens
+            throw new Exception("GetRootModel: Corrupted item hierarchy"); // I seriously hope this never happens
         }
-        /// <summary>Walk up item tree hierachy to find the parent TreeModel</summary>
         #endregion
 
         #region Virtual Functions  ============================================

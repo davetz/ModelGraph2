@@ -113,13 +113,13 @@ namespace ModelGraph.Controls
         #region ModelUICache  =================================================
         readonly Stack<ModelUICache> FreeCacheStack = new Stack<ModelUICache>(37);
         readonly Dictionary<LineModel, ModelUICache> Model_Cache = new Dictionary<LineModel, ModelUICache>(31);
-        readonly HashSet<LineModel> PrevModels = new HashSet<LineModel>();
+        readonly HashSet<LineModel> DefunctModels = new HashSet<LineModel>();
 
         private void InitializeCache()
         {
             ModelUICache.Allocate(this, TreeCanvas, TreeRoot, DataRoot, 31, FreeCacheStack);
         }
-        private void ClearCache()
+        private void DiscardCache()
         {
             while (FreeCacheStack.Count > 0)
             {
@@ -136,8 +136,8 @@ namespace ModelGraph.Controls
         {
             ViewList = newModels; // save this for future reference
 
-            PrevModels.Clear();
-            foreach (var m in Model_Cache.Keys) { PrevModels.Add(m); }
+            DefunctModels.Clear();
+            foreach (var m in Model_Cache.Keys) { DefunctModels.Add(m); }
 
             for (int i = 0; i < newModels.Count; i++)
             {
@@ -145,7 +145,7 @@ namespace ModelGraph.Controls
                 if (Model_Cache.TryGetValue(m, out ModelUICache mc))
                 {
                     mc.SetPosition(i);
-                    PrevModels.Remove(m);
+                    DefunctModels.Remove(m);
                 }
                 else
                 {
@@ -155,7 +155,7 @@ namespace ModelGraph.Controls
                     Model_Cache.Add(m, c);
                 }
             }
-            foreach (var m in PrevModels)
+            foreach (var m in DefunctModels)  // reclaim and save the uiCach from the defunct models
             {
                 var oc = GetModelUICache(m);
                 oc.Clear();
@@ -165,34 +165,39 @@ namespace ModelGraph.Controls
         }
         private ModelUICache GetModelUICache(LineModel m)
         {
-            if (!Model_Cache.TryGetValue(m, out ModelUICache lc))
+            if (!Model_Cache.TryGetValue(m, out ModelUICache mc))
                 throw new Exception("ExceptionCorruptLineModelCache".GetLocalized());
-            return lc;
+            return mc;
         }
         #endregion
 
-
-        #region PostRefreshViewList  ==========================================
-        private async System.Threading.Tasks.Task PostRefreshViewListAsync(ChangeType change = ChangeType.None)
+        #region RefreshViewListAsync  =========================================
+        private async System.Threading.Tasks.Task RefreshViewListAsync(ChangeType change = ChangeType.None)
         {
-            LineModel leading = (ViewList is null || ViewList.Count == 0) ? null : ViewList[0];
+            var (leading, selected) = GetLeadingSelected();
             //ResetCacheDelta(_selected);
-            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => { TreeRoot.RefreshViewList(ViewSize, leading, Selected, change); });
+            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => { TreeRoot.RefreshViewList(ViewSize, leading, selected, change); });
         }
-        private async System.Threading.Tasks.Task PostSetUsageAsync(LineModel model, Usage usage)
+        private async System.Threading.Tasks.Task SetUsageAsync(LineModel model, Usage usage)
         {
             await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => { TreeRoot.SetUsage(model, usage); });
-            _ = PostRefreshViewListAsync(ChangeType.FilterSortChanged);
+            _ = RefreshViewListAsync(ChangeType.FilterSortChanged);
         }
-        private async System.Threading.Tasks.Task PostSetSortingAsync(LineModel model, Sorting sorting)
+        private async System.Threading.Tasks.Task SetSortingAsync(LineModel model, Sorting sorting)
         {
             await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => { TreeRoot.SetSorting(model, sorting); });
-            _ = PostRefreshViewListAsync(ChangeType.FilterSortChanged);
+            _ = RefreshViewListAsync(ChangeType.FilterSortChanged);
         }
-        private async System.Threading.Tasks.Task PostSetFilterAsync(LineModel model, string text)
+        private async System.Threading.Tasks.Task SetFilterAsync(LineModel model, string text)
         {
             await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => { TreeRoot.SetFilter(model, text); });
-            _ = PostRefreshViewListAsync(ChangeType.FilterSortChanged);
+            _ = RefreshViewListAsync(ChangeType.FilterSortChanged);
+        }
+        private (LineModel, LineModel) GetLeadingSelected()
+        {
+            var leading = (ViewList is null || ViewList.Count == 0) ? null : ViewList[0];
+            var selected = (Selected is null) ? leading : Selected;
+            return (leading, selected);
         }
         #endregion
 
@@ -205,7 +210,7 @@ namespace ModelGraph.Controls
                 TreeCanvas.Width = Width = width;
                 TreeCanvas.Height = Height = height;
 
-                _ = PostRefreshViewListAsync();
+                _ = RefreshViewListAsync();
             }
         }
         int ViewSize => (int)(Height / ElementHieght);
@@ -233,7 +238,6 @@ namespace ModelGraph.Controls
         #region Initialize  ===================================================
         void Initialize()
         {
-
             ItemIdentityTip = new ToolTip();
             ItemIdentityTip.Opened += ItemIdentityTip_Opened;
 
@@ -262,15 +266,15 @@ namespace ModelGraph.Controls
             ModelIdentityStyle = Resources["ModelIdentityStyle"] as Style;
             PropertyBorderStyle = Resources["PropertyBorderStyle"] as Style;
 
-            SortModeTip = "010S".GetLocalized();
-            UsageModeTip = "00ES".GetLocalized();
-            LeftExpandTip = "006S".GetLocalized();
-            TotalCountTip = "007S".GetLocalized();
-            FilterTextTip = "008S".GetLocalized();
-            FilterCountTip = "009S".GetLocalized();
-            RightExpandTip = "00AS".GetLocalized();
-            FilterExpandTip = "00BS".GetLocalized();
-            ItemHasErrorTip = "00FS".GetLocalized();
+            SortModeTip = "ModelTree_SortModeTip".GetLocalized();
+            UsageModeTip = "ModelTree_UsageModeTip".GetLocalized();
+            LeftExpandTip = "ModelTree_LeftExpandTip".GetLocalized();
+            TotalCountTip = "ModelTree_TotalCountTip".GetLocalized();
+            FilterTextTip = "ModelTree_FilterTextTip".GetLocalized();
+            FilterCountTip = "ModelTree_FilterCountTip".GetLocalized();
+            RightExpandTip = "ModelTree_RightExpandTip".GetLocalized();
+            FilterExpandTip = "ModelTree_FilterExpandTip".GetLocalized();
+            ItemHasErrorTip = "ModelTree_ItemHasErrorTip".GetLocalized();
 
             ItemButtons = new Button[]
             {
@@ -309,7 +313,7 @@ namespace ModelGraph.Controls
         #region Release  ======================================================
         public void Release()
         {
-            ClearCache();
+            DiscardCache();
 
             TreeCanvas.Children.Clear();
             TreeCanvas = null;
@@ -330,12 +334,12 @@ namespace ModelGraph.Controls
         #region KeyboardAccelerators  =========================================
         private void KeyPageUp_Invoked(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
         {
-            _ = PostRefreshViewListAsync(ChangeType.PageUp);
+            _ = RefreshViewListAsync(ChangeType.PageUp);
             args.Handled = true;
         }
         private void KeyPageDown_Invoked(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
         {
-            _ = PostRefreshViewListAsync(ChangeType.PageDown);
+            _ = RefreshViewListAsync(ChangeType.PageDown);
             args.Handled = true;
         }
 
@@ -352,12 +356,12 @@ namespace ModelGraph.Controls
 
         private void KeyEnd_Invoked(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
         {
-            _ = PostRefreshViewListAsync(ChangeType.GoToBottom);
+            _ = RefreshViewListAsync(ChangeType.GoToBottom);
             args.Handled = true;
         }
         private void KeyHome_Invoked(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
         {
-            _ = PostRefreshViewListAsync(ChangeType.GoToTop);
+            _ = RefreshViewListAsync(ChangeType.GoToTop);
             args.Handled = true;
         }
 
@@ -365,7 +369,7 @@ namespace ModelGraph.Controls
         {
             if (Selected.CanExpandLeft)
             {
-                _ = PostRefreshViewListAsync(ChangeType.ToggleLeft);
+                _ = RefreshViewListAsync(ChangeType.ToggleLeft);
             }
             args.Handled = true;
         }
@@ -373,7 +377,7 @@ namespace ModelGraph.Controls
         {
             if (Selected.CanExpandRight)
             {
-                _ = PostRefreshViewListAsync(ChangeType.ToggleRight);
+                _ = RefreshViewListAsync(ChangeType.ToggleRight);
             }
             args.Handled = true;
         }
@@ -390,7 +394,7 @@ namespace ModelGraph.Controls
             {
                 Selected.IsFilterVisible = false;
                 Selected.IsExpandedLeft = false;
-                _ = PostRefreshViewListAsync(ChangeType.FilterSortChanged);
+                _ = RefreshViewListAsync(ChangeType.FilterSortChanged);
             }
             args.Handled = true;
         }
@@ -418,7 +422,7 @@ namespace ModelGraph.Controls
                 else if (!AtStart)
                 {
                     ScrollingUp = true;
-                    _ = PostRefreshViewListAsync(ChangeType.OneUp);
+                    _ = RefreshViewListAsync(ChangeType.OneUp);
                 }
             }
         }
@@ -442,7 +446,7 @@ namespace ModelGraph.Controls
                 else if (!AtEnd)
                 {
                     ScrollingDown = true;
-                    _ = PostRefreshViewListAsync(ChangeType.OneDown);
+                    _ = RefreshViewListAsync(ChangeType.OneDown);
                 }
             }
         }
@@ -481,9 +485,9 @@ namespace ModelGraph.Controls
             {
                 var cp = e.GetCurrentPoint(TreeCanvas);
                 if (cp.Properties.MouseWheelDelta < 0)
-                    _ = PostRefreshViewListAsync(ChangeType.TwoUp);
+                    _ = RefreshViewListAsync(ChangeType.TwoUp);
                 else
-                    _ = PostRefreshViewListAsync(ChangeType.TwoDown);
+                    _ = RefreshViewListAsync(ChangeType.TwoDown);
             }
         }
         #endregion
@@ -538,14 +542,13 @@ namespace ModelGraph.Controls
         public void Refresh()
         {
             _pointWheelEnabled = false;
-            var leading = (ViewList is null || ViewList.Count == 0) ? null : ViewList[0];
 
-            var (newModels, selected, atStart, atEnd) = TreeRoot.GetCurrentView(ViewSize, leading, Selected);
-            RefreshCache(newModels);
+            var (oldLeading, oldSelected) = GetLeadingSelected();
+            var (newModels, newSelected, atStart, atEnd) = TreeRoot.GetCurrentView(ViewSize, oldLeading, oldSelected);
 
             AtEnd = atEnd;
             AtStart = atStart;
-            Selected = selected;
+            Selected = newSelected;
 
             var n = newModels.Count - 1;
             if (n < 0)
@@ -558,6 +561,7 @@ namespace ModelGraph.Controls
             ScrollingUp = false;
             ScrollingDown = false;
 
+            RefreshCache(newModels);
             RefreshRoot();
             RefreshSelector();
 
@@ -767,7 +771,7 @@ namespace ModelGraph.Controls
                 else
                 {
                     _tryAfterRefresh = true;
-                    _ = PostRefreshViewListAsync(ChangeType.ToggleFilter);
+                    _ = RefreshViewListAsync(ChangeType.ToggleFilter);
                 }
             }
             else if (Selected is PropertyModel pm)
@@ -1003,7 +1007,7 @@ namespace ModelGraph.Controls
             {
                 var obj = sender as TextBlock;
                 Selected = obj.DataContext as LineModel;
-                _ = PostRefreshViewListAsync(ChangeType.ToggleLeft);
+                _ = RefreshViewListAsync(ChangeType.ToggleLeft);
             }
         }
         #endregion
@@ -1015,7 +1019,7 @@ namespace ModelGraph.Controls
             {
                 var obj = sender as TextBlock;
                 Selected = obj.DataContext as LineModel;
-                _ = PostRefreshViewListAsync(ChangeType.ToggleRight);
+                _ = RefreshViewListAsync(ChangeType.ToggleRight);
             }
         }
         #endregion
@@ -1065,7 +1069,7 @@ namespace ModelGraph.Controls
                 obj.Text = SortAscending;
             }
 
-            _ = PostRefreshViewListAsync(ChangeType.FilterSortChanged);
+            _ = RefreshViewListAsync(ChangeType.FilterSortChanged);
         }
         #endregion
 
@@ -1104,7 +1108,7 @@ namespace ModelGraph.Controls
                 mdl.IsUsedFilter = true;
                 obj.Text = UsageIsUsed;
             }
-            _ = PostRefreshViewListAsync(ChangeType.FilterSortChanged);
+            _ = RefreshViewListAsync(ChangeType.FilterSortChanged);
         }
         #endregion
 
@@ -1124,7 +1128,7 @@ namespace ModelGraph.Controls
 
             var mdl = obj.DataContext as LineModel;
 
-            _ = PostRefreshViewListAsync(ChangeType.ToggleFilter);
+            _ = RefreshViewListAsync(ChangeType.ToggleFilter);
         }
         #endregion
 
@@ -1146,11 +1150,11 @@ namespace ModelGraph.Controls
                 }
 
                 obj.Tag = txt;
-                PostSetFilterAsync(mdl, txt);
+                SetFilterAsync(mdl, txt);
                 mdl.IsExpandedLeft = true;
                 
                 _tryAfterRefresh = true;
-                _ = PostRefreshViewListAsync(ChangeType.FilterSortChanged);
+                _ = RefreshViewListAsync(ChangeType.FilterSortChanged);
             }
             if (e.Key == Windows.System.VirtualKey.Escape)
             {
@@ -1159,7 +1163,7 @@ namespace ModelGraph.Controls
                 mdl.IsFilterVisible = false;
                 mdl.IsExpandedLeft = false;
                 SetDefaultFocus();
-                _ = PostRefreshViewListAsync(ChangeType.FilterSortChanged);
+                _ = RefreshViewListAsync(ChangeType.FilterSortChanged);
             }
         }
         #endregion

@@ -207,4 +207,31 @@
   <data name="ExceptionCorruptLineModelCache" xml:space="preserve">
     <value>Corrupt line model cache</value>
   </data>
+  <data name="ModelTree_FilterCountTip" xml:space="preserve">
+    <value>Filtered Count</value>
+  </data>
+  <data name="ModelTree_FilterExpandTip" xml:space="preserve">
+    <value>Show/Hide Item Filter String</value>
+  </data>
+  <data name="ModelTree_FilterTextTip" xml:space="preserve">
+    <value>Enter a filter string</value>
+  </data>
+  <data name="ModelTree_ItemHasErrorTip" xml:space="preserve">
+    <value>Has an Error,  Click to expand.</value>
+  </data>
+  <data name="ModelTree_LeftExpandTip" xml:space="preserve">
+    <value>Expand/Collapse Tree Level</value>
+  </data>
+  <data name="ModelTree_RightExpandTip" xml:space="preserve">
+    <value>Show/Hide Item Properties</value>
+  </data>
+  <data name="ModelTree_SortModeTip" xml:space="preserve">
+    <value>SortMode: (none, assending, descending) </value>
+  </data>
+  <data name="ModelTree_TotalCountTip" xml:space="preserve">
+    <value>Total Count</value>
+  </data>
+  <data name="ModelTree_UsageModeTip" xml:space="preserve">
+    <value>A: Show All,  U: Show Used,  N: Show Not Used</value>
+  </data>
 </root>

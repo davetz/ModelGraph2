@@ -49,7 +49,7 @@ namespace ModelGraph.Core
                 Refresh(root, uiSize, list[0]);            
             else if (index + _uiSize > end && list[end] != _ending) 
                 Refresh(root, uiSize, list[end]);
-            else
+            else if (index <= end)
                 _target = list[index];  // set the new target model
         }
 

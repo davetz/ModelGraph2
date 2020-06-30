@@ -58,11 +58,11 @@ namespace ModelGraph.Controls
         #endregion
 
         #region Initialize/Clear  =============================================
-        internal void Initialize(LineModel model, int viewIndex)
+        internal void Initialize(LineModel model, int index)
         {
             Model = model;
             PropModel = model as PropertyModel;
-            AddStackPanel(viewIndex);
+            AddStackPanel(index);
         }
         internal void Discard() => Clear(true);
         internal void Clear(bool discard = false)
@@ -792,7 +792,7 @@ namespace ModelGraph.Controls
         #endregion
 
         #region AddStackPanel  ================================================
-        private void AddStackPanel(int viewIndex)
+        private void AddStackPanel(int index)
         {
             var sp = StackPanel;
             if (sp == null)
@@ -804,7 +804,7 @@ namespace ModelGraph.Controls
 
                 TreeCanvas.Children.Add(sp);
             }
-            Canvas.SetTop(sp, viewIndex * TC.ElementHieght);
+            Canvas.SetTop(sp, index * TC.ElementHieght);
 
             sp.Children.Clear();
             sp.DataContext = Model;
