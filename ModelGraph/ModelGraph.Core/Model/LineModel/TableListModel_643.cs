@@ -10,6 +10,7 @@ namespace ModelGraph.Core
         internal override IdKey IdKey => IdKey.TableListModel_643;
         public override bool CanExpandLeft => TotalCount > 0;
         public override bool CanFilter => TotalCount > 1;
+        public override bool CanSort => TotalCount > 1;
 
         public override int TotalCount => ItemStore.Count;
 

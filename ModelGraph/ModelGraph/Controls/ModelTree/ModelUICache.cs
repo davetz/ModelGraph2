@@ -8,6 +8,7 @@ namespace ModelGraph.Controls
 {
     internal class ModelUICache
     {
+        #region Properties  ===================================================
         private readonly ModelTreeControl TC;
         internal TreeModel TreeRoot { get; private set; }
         internal Canvas TreeCanvas { get; private set; }
@@ -36,6 +37,7 @@ namespace ModelGraph.Controls
         internal ComboBox ComboProperty { get; private set; }
         internal Border PropertyBorder { get; private set; }
         internal StackPanel StackPanel { get; private set; }
+        #endregion
 
         #region Constructor  ==================================================
         private ModelUICache(ModelTreeControl tc, Canvas treeCanvas, TreeModel treeRoot, Root dataRoot)
@@ -57,12 +59,16 @@ namespace ModelGraph.Controls
         }
         #endregion
 
-        #region Initialize/Clear  =============================================
+        #region Initialize/Validate/Clear  ====================================
         internal void Initialize(LineModel model, int index)
         {
             Model = model;
             PropModel = model as PropertyModel;
-            AddStackPanel(index);
+            ValidateStackPanel(index);
+        }
+        internal void Validate(int index)
+        {
+            ValidateStackPanel(index);
         }
         internal void Discard() => Clear(true);
         internal void Clear(bool discard = false)
@@ -791,8 +797,8 @@ namespace ModelGraph.Controls
         }
         #endregion
 
-        #region AddStackPanel  ================================================
-        private void AddStackPanel(int index)
+        #region ValidateStackPanel  ===========================================
+        private void ValidateStackPanel(int index)
         {
             var sp = StackPanel;
             if (sp == null)
@@ -890,13 +896,6 @@ namespace ModelGraph.Controls
                     StackPanel = null;
                 }
             }
-        }
-        #endregion
-
-        #region SetPostion  ==================================================
-        internal void SetPosition(int viewIndex)
-        {
-            Canvas.SetTop(StackPanel, viewIndex * TC.ElementHieght);
         }
         #endregion
     }

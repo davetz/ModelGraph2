@@ -49,7 +49,7 @@ namespace ModelGraph.Core
                 Refresh(root, uiSize, list[0]);            
             else if (index + _uiSize > end && list[end] != _ending) 
                 Refresh(root, uiSize, list[end]);
-            else if (index <= end)
+            else if (index < end)
                 _target = list[index];  // set the new target model
         }
 
@@ -104,7 +104,7 @@ namespace ModelGraph.Core
 
             if (_foundTarget)
             {
-                return (_overshoot-- < 0 && _count > _size);      // end point triggers
+                return (_overshoot-- < 0 && _count >= _size);      // end point triggers
 
             }
             else if (_checkingTarget)

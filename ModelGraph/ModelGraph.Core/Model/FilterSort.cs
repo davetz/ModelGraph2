@@ -221,7 +221,11 @@ namespace ModelGraph.Core
             {
                 #region need to resort the selector
                 _sortChanged = false;
-                Selector.Sort(CompareSelector);
+                if (Sorting != Sorting.Unsorted)
+                {
+                    Selector.Sort(CompareSelector);
+                    if (Sorting == Sorting.Descending) Selector.Reverse();
+                }
                 #endregion
             }
         }

@@ -9,7 +9,8 @@ namespace ModelGraph.Core
         internal ColumnListModel_661(TableModel_654 owner, Item item) : base(owner, item) { }
         internal override IdKey IdKey => IdKey.ColumnListModel_661;
         public override bool CanExpandLeft => TotalCount > 0;
-
+        public override bool CanFilter => true;
+        public override bool CanSort => true;
 
         internal override string GetFilterSortId(Root root) => GetSingleNameId(root);
         public override int TotalCount => DataRoot.Get<Relation_Store_ColumnX>().ChildCount(Item);

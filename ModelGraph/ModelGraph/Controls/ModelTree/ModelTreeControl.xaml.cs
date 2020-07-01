@@ -144,7 +144,7 @@ namespace ModelGraph.Controls
                 var m = newModels[i];
                 if (Model_Cache.TryGetValue(m, out ModelUICache mc))
                 {
-                    mc.SetPosition(i);
+                    mc.Validate(i);
                     DefunctModels.Remove(m);
                 }
                 else
@@ -619,19 +619,19 @@ namespace ModelGraph.Controls
             SetSelectorGridPlacement();
             
             
-            var lc = GetModelUICache(Selected);
+            var mc = GetModelUICache(Selected);
 
-            if (lc.SortMode != null && lc.SortMode.DataContext != null)
+            if (mc.SortMode != null && mc.SortMode.DataContext != null)
             {
-                _sortControl = lc.SortMode;
+                _sortControl = mc.SortMode;
                 var acc = new KeyboardAccelerator { Key = VirtualKey.S, Modifiers = VirtualKeyModifiers.Control};
                 acc.Invoked += Accelerator_SortMode_Invoked;
                 TreeCanvas.KeyboardAccelerators.Add(acc);
             }
 
-            if (lc.UsageMode != null && lc.UsageMode.DataContext != null)
+            if (mc.UsageMode != null && mc.UsageMode.DataContext != null)
             {
-                _usageControl = lc.UsageMode;
+                _usageControl = mc.UsageMode;
                 var acc = new KeyboardAccelerator { Key = VirtualKey.U, Modifiers = VirtualKeyModifiers.Control };
                 acc.Invoked += Accelerator_UsageMode_Invoked;
                 TreeCanvas.KeyboardAccelerators.Add(acc);
@@ -651,9 +651,9 @@ namespace ModelGraph.Controls
                 TreeCanvas.KeyboardAccelerators.Add(acc);
             }
 
-            if (lc.FilterMode != null && lc.FilterMode.DataContext != null)
+            if (mc.FilterMode != null && mc.FilterMode.DataContext != null)
             {
-                _filterControl = lc.FilterMode;
+                _filterControl = mc.FilterMode;
             }
 
 
@@ -740,7 +740,7 @@ namespace ModelGraph.Controls
         }
         #endregion
 
-        #region SetSelectorGridPlacement  =======================================
+        #region SetSelectorGridPlacement  =====================================
         void SetSelectorGridPlacement()
         {
             var i = ViewList.IndexOf(Selected);
@@ -1056,20 +1056,21 @@ namespace ModelGraph.Controls
                 mdl.IsSortAscending = false;
                 mdl.IsSortDescending = true;
                 obj.Text = SortDescending;
+                _ = SetSortingAsync(mdl, Sorting.Descending);
             }
             else if (mdl.IsSortDescending)
             {
                 mdl.IsSortAscending = false;
                 mdl.IsSortDescending = false;
                 obj.Text = SortNone;
+                _ = SetSortingAsync(mdl, Sorting.Unsorted);
             }
             else
             {
                 mdl.IsSortAscending = true;
                 obj.Text = SortAscending;
+                _ = SetSortingAsync(mdl, Sorting.Ascending);
             }
-
-            _ = RefreshViewListAsync(ChangeType.FilterSortChanged);
         }
         #endregion
 
@@ -1316,6 +1317,5 @@ namespace ModelGraph.Controls
             SetDefaultFocus();
         }
         #endregion
-
     }
 }

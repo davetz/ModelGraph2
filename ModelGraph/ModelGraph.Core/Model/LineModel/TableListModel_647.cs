@@ -9,6 +9,8 @@ namespace ModelGraph.Core
         internal TableListModel_647(ModelingRootModel_624 owner, TableXRoot item) : base(owner, item) { }
         internal override IdKey IdKey => IdKey.TableListModel_647;
         public override bool CanExpandLeft => TotalCount > 0;
+        public override bool CanFilter => TotalCount > 1;
+        public override bool CanSort => TotalCount > 1;
         public override int TotalCount => ItemStore.Count;
 
         internal override bool ExpandLeft()
