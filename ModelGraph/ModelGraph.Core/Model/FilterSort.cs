@@ -22,7 +22,7 @@ namespace ModelGraph.Core
         private FilterSort() { }
 
         #region Parms  ========================================================
-        private static readonly List<(int I, bool IN, string TX)> EmptySelector = new List<(int I, bool IN, string TX)>(0);
+        //private static readonly List<(int I, bool IN, string TX)> EmptySelector = new List<(int I, bool IN, string TX)>(0);
         internal static (int, Sorting, Usage, string) GetParms(LineModel m) => _model_filter.TryGetValue(m, out FilterSort f) ? (f.Count, f.Sorting, f.Usage, f.Filter) : (m.Count, Sorting.Unsorted, Usage.None, string.Empty);
         internal static bool TryGetSelector(LineModel m, out List<(int I, bool IN, string TX)> selector)
         {
@@ -221,15 +221,20 @@ namespace ModelGraph.Core
             {
                 #region need to resort the selector
                 _sortChanged = false;
-                if (Sorting != Sorting.Unsorted)
+                if (Sorting == Sorting.Unsorted)
                 {
-                    Selector.Sort(CompareSelector);
+                    Selector.Sort(RestoreSelectorOrder);
+                }
+                else
+                {
+                    Selector.Sort(AlphaSortSelector);
                     if (Sorting == Sorting.Descending) Selector.Reverse();
                 }
                 #endregion
             }
         }
-        private static int CompareSelector((int, bool, string) a, (int, bool, string) b) => a.Item3.CompareTo(b.Item3);
+        private static int AlphaSortSelector((int, bool, string) a, (int, bool, string) b) => a.Item3.CompareTo(b.Item3);
+        private static int RestoreSelectorOrder((int, bool, string) a, (int, bool, string) b) => a.Item1.CompareTo(b.Item1);
         #endregion
 
     }
