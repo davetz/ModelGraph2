@@ -15,7 +15,7 @@ namespace ModelGraph.Core
         internal override IdKey IdKey => IdKey.ItemChildMoved;
 
         #region Constructor  ==================================================
-        private ItemChildMoved(Change owner, Relation relation, Item key, Item item, int index1, int index2, string name)
+        private ItemChildMoved(ChangeSet owner, Relation relation, Item key, Item item, int index1, int index2, string name)
         {
             Owner = owner;
             _name = name;
@@ -38,7 +38,7 @@ namespace ModelGraph.Core
             var n2 = index2 + 1;
 
             var name = $" [{relation.GetSingleNameId(root)}]     {item.GetDoubleNameId(root)}     {n1}->{n2}";
-            var chg = new ItemChildMoved(root.Get<ChangeRoot>().Change, relation, key, item, index1, index2, name);
+            var chg = new ItemChildMoved(root.Get<ChangeRoot>().ChangeSet, relation, key, item, index1, index2, name);
             chg.Redo();
         }
         #endregion

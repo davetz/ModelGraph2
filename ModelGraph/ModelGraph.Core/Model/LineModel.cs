@@ -222,12 +222,12 @@ namespace ModelGraph.Core
         /// <summary>Validate model against the model's item, return true if any child list changed</summary>
         internal virtual bool Validate(TreeModel treeRoot, Dictionary<Item, LineModel> prev)
         {
-            var anyListChanged = false;
+            var viewListChange = false;
             foreach (var child in Items)
             {
-                anyListChanged |= child.Validate(treeRoot, prev);
+                viewListChange |= child.Validate(treeRoot, prev);
             }
-            return anyListChanged;
+            return viewListChange;
         }
         #endregion
     }

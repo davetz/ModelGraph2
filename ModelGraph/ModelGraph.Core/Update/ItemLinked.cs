@@ -12,7 +12,7 @@ namespace ModelGraph.Core
         internal override IdKey IdKey =>  IdKey.ItemLinked;
 
         #region Constructor  ==================================================
-        internal ItemLinked(Change owner, Relation relation, Item parent, Item child, int parentIndex, int childIndex, string name)
+        internal ItemLinked(ChangeSet owner, Relation relation, Item parent, Item child, int parentIndex, int childIndex, string name)
         {
             Owner = owner;
             _name = name;
@@ -36,7 +36,7 @@ namespace ModelGraph.Core
 
             var name = $" [{rnam}]   ({nam1}) --> ({nam2})";
             (int parentIndex, int chilldIndex) = rel.AppendLink(item1, item2);
-            var chg = new ItemLinked(root.Get<ChangeRoot>().Change, rel, item1, item2, parentIndex, chilldIndex, name);
+            var chg = new ItemLinked(root.Get<ChangeRoot>().ChangeSet, rel, item1, item2, parentIndex, chilldIndex, name);
             chg.DoNow();
         }
         #endregion

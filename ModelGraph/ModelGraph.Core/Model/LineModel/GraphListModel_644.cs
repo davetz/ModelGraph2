@@ -10,7 +10,7 @@ namespace ModelGraph.Core
 
         internal override bool Validate(TreeModel treeRoot, Dictionary<Item, LineModel> prev)
         {
-            var anyListChanged = false;
+            var viewListChange = false;
             if (!IsExpanded) return false;
             if (ChildDelta == Item.ChildDelta) return false;
             ChildDelta = Item.ChildDelta;
@@ -32,18 +32,18 @@ namespace ModelGraph.Core
                 }
                 else
                 {
-                    anyListChanged = true;
+                    viewListChange = true;
                     new GraphModel_655(this, gx);
                 }
             }
 
             if (prev.Count > 0)
             {
-                anyListChanged = true;
+                viewListChange = true;
                 foreach (var model in prev.Values) { model.Discard(); }
             }
 
-            return anyListChanged;
+            return viewListChange | base.Validate(treeRoot, prev);
         }
     }
 }

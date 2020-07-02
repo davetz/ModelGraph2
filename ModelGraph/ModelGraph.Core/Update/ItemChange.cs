@@ -8,7 +8,7 @@ namespace ModelGraph.Core
         internal override State State { get; set; }
 
 
-        internal Change Change => Owner as Change;
+        internal ChangeSet Change => Owner as ChangeSet;
         internal bool CanUndo => !IsUndone;
         internal bool CanRedo => IsUndone;
 

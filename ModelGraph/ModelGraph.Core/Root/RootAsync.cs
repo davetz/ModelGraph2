@@ -54,6 +54,8 @@ namespace ModelGraph.Core
             lock (this)
             {
                 action();
+                var cr = Get<ChangeRoot>();
+                cr.RecordChanges();
             }
         }
         #endregion

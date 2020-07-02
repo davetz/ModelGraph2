@@ -2,7 +2,7 @@
 
 namespace ModelGraph.Core
 {
-    public class Change : StoreOf<ItemChange>
+    public class ChangeSet : StoreOf<ItemChange>
     {
         private static int SequenceCount;
         internal DateTime DateTime;
@@ -13,7 +13,7 @@ namespace ModelGraph.Core
         internal override string Name { get => Sequence.ToString(); }
 
         #region Constructor  ==================================================
-        internal Change(ChangeRoot owner)
+        internal ChangeSet(ChangeRoot owner)
         {
             Owner = owner;
             DateTime = DateTime.Now;

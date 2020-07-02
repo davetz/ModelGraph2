@@ -2,9 +2,9 @@
 
 namespace ModelGraph.Core
 {
-    public class ChangeRoot : StoreOf<Change>
+    public class ChangeRoot : StoreOf<ChangeSet>
     {
-        internal Change Change { get; private set; } //aggragates all changes made durring ModelRequest(Action)
+        internal ChangeSet ChangeSet { get; private set; } //aggragates all changes made durring ModelRequest(Action)
         private string _infoText;
         private Item _infoItem;
         private int _infoCount;
@@ -15,7 +15,7 @@ namespace ModelGraph.Core
         internal ChangeRoot(Root root)
         {
             Owner = root;
-            Change = new Change(this);
+            ChangeSet = new ChangeSet(this);
         }
         #endregion
 
@@ -23,17 +23,17 @@ namespace ModelGraph.Core
         /// <summary>Check for updates and save them</summary>
         internal void RecordChanges()
         {
-            if (Change.Count > 0)
+            if (ChangeSet.Count > 0)
             {
-                Add(Change);
-                Change = new Change(this);
+                Add(ChangeSet);
+                ChangeSet = new ChangeSet(this);
             }
         }
         #endregion
 
 
         #region Undo  =========================================================
-        internal bool CanUndo(Change chg)
+        internal bool CanUndo(ChangeSet chg)
         {
             var last = Count - 1;
             for (int i = last; i >= 0; i--)
@@ -49,10 +49,10 @@ namespace ModelGraph.Core
         #endregion
 
         #region TryMerge  =====================================================
-        internal void Mege(Change chg) => TryMerge(chg);
-        internal bool CanMerge(Change chg) => TryMerge(chg, true);
+        internal void Mege(ChangeSet chg) => TryMerge(chg);
+        internal bool CanMerge(ChangeSet chg) => TryMerge(chg, true);
 
-        private bool TryMerge(Change cs, bool testIfCanMerge = false)
+        private bool TryMerge(ChangeSet cs, bool testIfCanMerge = false)
         {
             if (cs.IsCongealed) return false;
 
@@ -89,7 +89,7 @@ namespace ModelGraph.Core
             {
                 ModelDelta++;
                 ChildDelta++;
-                Change save = null;
+                ChangeSet save = null;
                 var last = Count - 1;
                 for (int i = last; i >= 0; i--)
                 {
@@ -144,7 +144,7 @@ namespace ModelGraph.Core
                 {
                     var N = r.GetLinks(out List<Item> parents, out List<Item> children);
 
-                    for (int i = 0; i < N; i++) { ItemUnLinked.Record(Change, root, r, parents[i], children[i], history); }
+                    for (int i = 0; i < N; i++) { ItemUnLinked.Record(ChangeSet, root, r, parents[i], children[i], history); }
                 }
                 if (TryGetParentRelations(item, out IList<Relation> relations, stoPRels))
                 {
@@ -152,7 +152,7 @@ namespace ModelGraph.Core
                     {
                         if (!rel.TryGetParents(item, out List<Item> parents)) continue;
 
-                        foreach (var parent in parents) { ItemUnLinked.Record(Change, root, rel, parent, item, history); }
+                        foreach (var parent in parents) { ItemUnLinked.Record(ChangeSet, root, rel, parent, item, history); }
                     }
                 }
                 if (TryGetChildRelations(item, out relations, stoCRels))
@@ -161,14 +161,14 @@ namespace ModelGraph.Core
                     {
                         if (!rel.TryGetChildren(item, out List<Item> children)) continue;
 
-                        foreach (var child in children) { ItemUnLinked.Record(Change, root, rel, item, child, history); }
+                        foreach (var child in children) { ItemUnLinked.Record(ChangeSet, root, rel, item, child, history); }
                     }
                 }
             }
 
-            foreach (var item in hitList) { ItemRemoved.Record(Change, root, item); }
+            foreach (var item in hitList) { ItemRemoved.Record(ChangeSet, root, item); }
 
-            Change.Redo(); //now finally do all changes in the correct order
+            ChangeSet.Redo(); //now finally do all changes in the correct order
         }
         #region PrivateMethods  ===========================================
 

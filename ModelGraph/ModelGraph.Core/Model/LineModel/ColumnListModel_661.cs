@@ -50,7 +50,7 @@ namespace ModelGraph.Core
 
         internal override bool Validate(TreeModel treeRoot, Dictionary<Item, LineModel> prev)
         {
-            var anyListChanged = false;
+            var viewListChange = false;
             if (IsExpanded || AutoExpandLeft)
             {
                 AutoExpandLeft = false;
@@ -85,23 +85,18 @@ namespace ModelGraph.Core
                         else
                         {
                             new ColumnModel_657(this, cx);
-                            anyListChanged = true;
+                            viewListChange = true;
                         }
                     }
 
                     if (prev.Count > 0)
                     {
-                        anyListChanged = true;
+                        viewListChange = true;
                         foreach (var model in prev.Values) { model.Discard(); }
                     }
                 }
-
-                foreach (var child in Items)
-                {
-                    anyListChanged |= child.Validate(treeRoot, prev);
-                }
             }
-            return anyListChanged;
+            return viewListChange || base.Validate(treeRoot, prev);
         }
     }
 }

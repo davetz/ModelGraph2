@@ -8,7 +8,7 @@
         internal override IdKey IdKey => IdKey.ItemMoved;
 
         #region Constructor  ==================================================
-        private ItemMoved(Change owner, Item item, int index1, int index2, string name)
+        private ItemMoved(ChangeSet owner, Item item, int index1, int index2, string name)
         {
             Owner = owner;
             _name = name;
@@ -28,7 +28,7 @@
             var n1 = index1 + 1;
             var n2 = index2 + 1;
             var name = $"{item.GetDoubleNameId(root)}     {n1}->{n2}";
-            var chg = new ItemMoved(root.Get<ChangeRoot>().Change, item, index1, index2, name);
+            var chg = new ItemMoved(root.Get<ChangeRoot>().ChangeSet, item, index1, index2, name);
             chg.DoNow();
         }
         #endregion

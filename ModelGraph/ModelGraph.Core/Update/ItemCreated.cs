@@ -10,7 +10,7 @@ namespace ModelGraph.Core
         internal override IdKey IdKey => IdKey.ItemCreated;
 
         #region Constructor  ==================================================
-        private ItemCreated(Change owner, Item item, int index, string name)
+        private ItemCreated(ChangeSet owner, Item item, int index, string name)
         {
             Owner = owner;
             _name = name;
@@ -26,7 +26,7 @@ namespace ModelGraph.Core
         /// <summary>Record the new Item created event</summary>
         internal static void Record(Root root, Item item)
         {
-            var cs = root.Get<ChangeRoot>().Change;
+            var cs = root.Get<ChangeRoot>().ChangeSet;
 
             string name = item.GetChangeLogId(root);
             var store = item.Owner as Store;

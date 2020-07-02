@@ -11,7 +11,7 @@ namespace ModelGraph.Core
         internal override IdKey IdKey =>  IdKey.ItemUpdated;
 
         #region Constructor  ==================================================
-        private ItemUpdated(Change owner, Item item, Property property, string oldValue, string newValue, string name)
+        private ItemUpdated(ChangeSet owner, Item item, Property property, string oldValue, string newValue, string name)
         {
             Owner = owner;
             _name = name;
@@ -50,7 +50,7 @@ namespace ModelGraph.Core
                 var name = $"{itm.GetChangeLogId(root)}    {prop.GetSingleNameId(root)}:  old<{oldValue}>  new<{newValue}>";
                 if (prop.Value.SetString(itm, newValue))
                 {
-                    new ItemUpdated(root.Get<ChangeRoot>().Change, itm, prop, oldValue, newValue, name);
+                    new ItemUpdated(root.Get<ChangeRoot>().ChangeSet, itm, prop, oldValue, newValue, name);
                 }
             }
         }

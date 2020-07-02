@@ -12,7 +12,7 @@ namespace ModelGraph.Core
         internal override IdKey IdKey => IdKey.ItemUnlinked;
 
         #region Constructor  ==================================================
-        private ItemUnLinked(Change owner, Relation relation, Item parent, Item child, int parentIndex, int childIndex, string name)
+        private ItemUnLinked(ChangeSet owner, Relation relation, Item parent, Item child, int parentIndex, int childIndex, string name)
         {
             Owner = owner;
             _name = name;
@@ -29,7 +29,7 @@ namespace ModelGraph.Core
         #endregion
 
         #region Record  =======================================================
-        internal static bool Record(Change owner, Root root, Relation rel, Item item1, Item item2, Dictionary<Relation, Dictionary<Item, List<Item>>> history)
+        internal static bool Record(ChangeSet owner, Root root, Relation rel, Item item1, Item item2, Dictionary<Relation, Dictionary<Item, List<Item>>> history)
         {
             #region track/check the history  ==================================
             // Avoid attempts to unlink the same relationship multiple times,
