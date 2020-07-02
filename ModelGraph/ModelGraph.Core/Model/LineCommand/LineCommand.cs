@@ -19,6 +19,12 @@ namespace ModelGraph.Core
         {
             if (IsValid(Owner))
                 DataRoot.PostCommand(this);
+            if (IsInsertCommand)
+            {
+                var model = Owner as LineModel;
+                model.AutoExpandLeft = true;
+                model.ChildDelta -= 2;
+            }
         }
 
         public virtual bool IsRemoveCommand => false;

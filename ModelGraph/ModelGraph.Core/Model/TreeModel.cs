@@ -77,6 +77,17 @@ namespace ModelGraph.Core
         // Runs on a background thread invoked by the ModelTreeControl 
         public void RefreshViewList(int viewSize, LineModel leading, LineModel selected, ChangeType change = ChangeType.None)
         {
+            _viewSize = viewSize;
+            _leading = leading;
+            _selected = selected;
+            RefreshViewList(change);
+        }
+        public void RefreshViewList(ChangeType change = ChangeType.None)
+        {
+            var viewSize = _viewSize;
+            var leading = _leading;
+            var selected = _selected;
+
             bool isValidSelect = IsValidModel(selected);
 
             if (isValidSelect)
@@ -112,26 +123,33 @@ namespace ModelGraph.Core
                     case ChangeType.ToggleFilter:
                         selected.IsFilterVisible = !selected.IsFilterVisible;
                         break;
+                    case ChangeType.ViewListChanged:
                     case ChangeType.FilterSortChanged:
                         _buffer.Refresh(Items[0], viewSize, leading);
                         break;
                 }
             }
-
             PageControl?.Refresh();
         }
+        int _viewSize;
+        LineModel _leading;
+        LineModel _selected;
         #endregion
 
         #region Validate  =====================================================
+        /// <summary>Validate model against the model's item, return true if any child list changed</summary>
         internal void Validate()
         {
             var prev = new Dictionary<Item, LineModel>();
-            var anyChange = false;
+            var viewListChanged = false;
             foreach (var model in Items)
             {
-                anyChange |= model.Validate(this, prev);
+                viewListChanged |= model.Validate(this, prev);
             }
-            if (anyChange) PageControl?.Refresh();
+            if (viewListChanged) 
+                RefreshViewList(ChangeType.ViewListChanged);
+            else
+                PageControl?.Refresh();
         }
         #endregion
 

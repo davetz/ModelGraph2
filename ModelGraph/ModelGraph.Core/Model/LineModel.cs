@@ -19,6 +19,12 @@ namespace ModelGraph.Core
             Owner = owner;
             Depth = (byte)(owner.Depth + 1);
 
+            if( item.AutoExpandRight)
+            {
+                item.AutoExpandRight = false;
+                ExpandRight();
+            }
+
             owner.CovertAdd(this);
         }
         #endregion
@@ -213,14 +219,15 @@ namespace ModelGraph.Core
 
         public virtual string GetModelIdentity() =>  $"{IdKey}";
 
+        /// <summary>Validate model against the model's item, return true if any child list changed</summary>
         internal virtual bool Validate(TreeModel treeRoot, Dictionary<Item, LineModel> prev)
         {
-            var anyChange = false;
+            var anyListChanged = false;
             foreach (var child in Items)
             {
-                anyChange |= child.Validate(treeRoot, prev);
+                anyListChanged |= child.Validate(treeRoot, prev);
             }
-            return anyChange;
+            return anyListChanged;
         }
         #endregion
     }
