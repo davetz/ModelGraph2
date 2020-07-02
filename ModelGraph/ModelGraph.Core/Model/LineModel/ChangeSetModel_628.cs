@@ -13,7 +13,7 @@ namespace ModelGraph.Core
 
         public override (string, string) GetKindNameId(Root root) => (string.Empty, ChangeSet.Name);
 
-        public override string GetSummaryId(Root root) => $"#{ChangeSet.Name}   -   {ChangeSet.DateTime:T}";
+        public override string GetSummaryId(Root root) => $"{ChangeSet.Name}   -   {ChangeSet.DateTime:T}";
 
         ChangeSet ChangeSet => Item as ChangeSet;
 

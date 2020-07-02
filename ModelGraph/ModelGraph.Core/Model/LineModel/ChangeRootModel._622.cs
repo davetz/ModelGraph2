@@ -1,5 +1,6 @@
 ﻿
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ModelGraph.Core
 {
@@ -18,7 +19,7 @@ namespace ModelGraph.Core
             IsExpandedLeft = true;
 
             var csStore = Item as ChangeRoot;
-            foreach (var cs in csStore.Items)
+            foreach (var cs in csStore.Items.Reverse())
             {
                 new ChangeSetModel_628(this, cs);
             }
@@ -39,7 +40,7 @@ namespace ModelGraph.Core
                     ChildDelta = Item.ChildDelta;
 
                     prev.Clear();
-                    foreach (var child in Items)
+                    foreach (var child in Items.Reverse())
                     {
                         prev[child.Item] = child;
                     }

@@ -10,7 +10,7 @@ namespace ModelGraph.Core
         internal override State State { get; set; }
 
         internal override IdKey IdKey => IdKey.ChangeSet;
-        internal override string Name { get => Sequence.ToString(); }
+        internal override string Name => $"#{Sequence}";
 
         #region Constructor  ==================================================
         internal ChangeSet(ChangeRoot owner)
