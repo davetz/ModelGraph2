@@ -31,7 +31,10 @@ namespace ModelGraph.Core
         }
         internal void PostSetIndexValue(Item item, Property prop, int index)
         {
-
+            if (prop is EnumProperty enu)
+            {
+                PostSetStringValue(item, prop, enu.GetValue(index));
+            }
         }
         #endregion
 

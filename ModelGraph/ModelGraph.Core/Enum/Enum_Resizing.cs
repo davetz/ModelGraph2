@@ -1,7 +1,6 @@
 ﻿
 namespace ModelGraph.Core
-{/*
- */
+{
     public class Enum_Resizing : EnumZ
     {
         internal override IdKey IdKey => IdKey.ResizingEnum;
@@ -20,9 +19,9 @@ namespace ModelGraph.Core
         #region CreateChildren  ===============================================
         void CreateChildren()
         {
-            Add(new PairZ(this, IdKey.Resizing_Auto));
-            Add(new PairZ(this, IdKey.Resizing_Fixed));
-            Add(new PairZ(this, IdKey.Resizing_Manual));
+            new PairZ(this, IdKey.Resizing_Auto);
+            new PairZ(this, IdKey.Resizing_Fixed);
+            new PairZ(this, IdKey.Resizing_Manual);
         }
         #endregion
     }

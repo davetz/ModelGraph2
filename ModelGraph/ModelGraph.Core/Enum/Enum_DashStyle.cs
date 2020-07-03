@@ -19,11 +19,11 @@ namespace ModelGraph.Core
         #region CreateChildren  ===============================================
         void CreateChildren()
         {
-            Add(new PairZ(this, IdKey.DashStyle_Solid));
-            Add(new PairZ(this, IdKey.DashStyle_Dashed));
-            Add(new PairZ(this, IdKey.DashStyle_Dotted));
-            Add(new PairZ(this, IdKey.DashStyle_DashDot));
-            Add(new PairZ(this, IdKey.DashStyle_DashDotDot));
+            new PairZ(this, IdKey.DashStyle_Solid);
+            new PairZ(this, IdKey.DashStyle_Dashed);
+            new PairZ(this, IdKey.DashStyle_Dotted);
+            new PairZ(this, IdKey.DashStyle_DashDot);
+            new PairZ(this, IdKey.DashStyle_DashDotDot);
         }
         #endregion
     }

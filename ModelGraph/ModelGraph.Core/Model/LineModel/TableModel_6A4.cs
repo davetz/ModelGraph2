@@ -9,6 +9,7 @@ namespace ModelGraph.Core
         public override int TotalCount => ItemStore.Count;
         public override (string, string) GetKindNameId(Root root) => Item.GetKindNameId(root);
         internal override string GetFilterSortId(Root root) => Item.GetSingleNameId(root);
+        public override string GetSummaryId(Root root) => Item.GetSummaryId(root);
 
         internal override bool ExpandLeft()
         {

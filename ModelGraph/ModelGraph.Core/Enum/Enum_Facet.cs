@@ -1,7 +1,6 @@
 ﻿
 namespace ModelGraph.Core
-{/*
- */
+{
     public class Enum_Facet : EnumZ
     {
         internal override IdKey IdKey => IdKey.FacetEnum;
@@ -20,14 +19,14 @@ namespace ModelGraph.Core
         #region CreateChildren  ===============================================
         void CreateChildren()
         {
-            Add(new PairZ(this, IdKey.Facet_None));
-            Add(new PairZ(this, IdKey.Facet_Nubby));
-            Add(new PairZ(this, IdKey.Facet_Diamond));
-            Add(new PairZ(this, IdKey.Facet_InArrow));
-            Add(new PairZ(this, IdKey.Facet_Force_None));
-            Add(new PairZ(this, IdKey.Facet_Force_Nubby));
-            Add(new PairZ(this, IdKey.Facet_Force_Diamond));
-            Add(new PairZ(this, IdKey.Facet_Force_InArrow));
+            new PairZ(this, IdKey.Facet_None);
+            new PairZ(this, IdKey.Facet_Nubby);
+            new PairZ(this, IdKey.Facet_Diamond);
+            new PairZ(this, IdKey.Facet_InArrow);
+            new PairZ(this, IdKey.Facet_Force_None);
+            new PairZ(this, IdKey.Facet_Force_Nubby);
+            new PairZ(this, IdKey.Facet_Force_Diamond);
+            new PairZ(this, IdKey.Facet_Force_InArrow);
         }
         #endregion
     }

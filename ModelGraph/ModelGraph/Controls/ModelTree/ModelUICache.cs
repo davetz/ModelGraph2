@@ -12,8 +12,8 @@ namespace ModelGraph.Controls
         private readonly ModelTreeControl TC;
         internal TreeModel TreeRoot { get; private set; }
         internal Canvas TreeCanvas { get; private set; }
-        internal LineModel Model { get; private set; }
-        internal PropertyModel PropModel {get; private set;}
+        public LineModel Model { get; private set; }
+        public PropertyModel PropModel {get; private set;}
         internal Root DataRoot { get; private set; }
         internal short ModelDelta { get; private set; }
         internal TextBlock ItemKind { get; private set; }
@@ -111,13 +111,13 @@ namespace ModelGraph.Controls
                 obj.DragOver += TC.ItemName_DragOver;
                 obj.Drop += TC.ItemName_Drop;
                 obj.PointerEntered += TC.ItemName_PointerEntered;
+                obj.DataContext = this;
                 ToolTipService.SetToolTip(obj, TC.ItemIdentityTip);
             }
 
             obj.Text = kind;
             obj.CanDrag = Model.CanDrag;
             obj.AllowDrop = true;
-            obj.DataContext = Model;
 
             StackPanel.Children.Add(obj);
         }
@@ -126,9 +126,9 @@ namespace ModelGraph.Controls
             var obj = ItemKind;
             if (obj != null)
             {
-                obj.DataContext = null;
                 if (discard)
                 {
+                    obj.DataContext = null;
                     obj.DragStarting -= TC.ItemName_DragStarting;
                     obj.DragOver -= TC.ItemName_DragOver;
                     obj.Drop -= TC.ItemName_Drop;
@@ -152,12 +152,12 @@ namespace ModelGraph.Controls
                 obj.DragOver += TC.ItemName_DragOver;
                 obj.Drop += TC.ItemName_Drop;
                 obj.PointerEntered += TC.ItemName_PointerEntered;
+                obj.DataContext = this;
             }
 
             obj.Text = name;
             obj.CanDrag = Model.CanDrag;
             obj.AllowDrop = true;
-            obj.DataContext = Model;
 
             StackPanel.Children.Add(obj);
         }
@@ -166,9 +166,9 @@ namespace ModelGraph.Controls
             var obj = ItemName;
             if (obj != null)
             {
-                obj.DataContext = null;
                 if (discard)
                 {
+                    obj.DataContext = null;
                     obj.DragStarting -= TC.ItemName_DragStarting;
                     obj.DragOver -= TC.ItemName_DragOver;
                     obj.Drop -= TC.ItemName_Drop;
@@ -189,10 +189,10 @@ namespace ModelGraph.Controls
                 obj = ItemInfo = new TextBlock();
 
                 obj.Style = TC.ItemInfoStyle;
+                obj.DataContext = this;
             }
 
             obj.Text = string.Empty;
-            obj.DataContext = Model;
 
             StackPanel.Children.Add(obj);
         }
@@ -201,9 +201,9 @@ namespace ModelGraph.Controls
             var obj = ItemInfo;
             if (obj != null)
             {
-                obj.DataContext = null;
                 if (discard)
                 {
+                    obj.DataContext = null;
                     ItemInfo = null;
                 }
             }
@@ -247,10 +247,10 @@ namespace ModelGraph.Controls
             {
                 obj = IndentTree = new TextBlock();
                 obj.Style = TC.IndentTreeStyle;
+                obj.DataContext = this;
             }
 
             obj.Text = string.Empty;
-            obj.DataContext = Model;
             obj.MinWidth = Model.Depth * TC.LevelIndent;
 
             StackPanel.Children.Add(obj);
@@ -260,9 +260,9 @@ namespace ModelGraph.Controls
             var obj = IndentTree;
             if (obj != null)
             {
-                obj.DataContext = null;
                 if (discard)
                 {
+                    obj.DataContext = null;
                     IndentTree = null;
                 }
             }
@@ -281,6 +281,7 @@ namespace ModelGraph.Controls
                 obj.PointerExited += TC.TextBlockHightlight_PointerExited;
                 obj.PointerEntered += TC.TextBlockHighlight_PointerEntered;
                 obj.PointerReleased += TC.ExpandTree_PointerReleased;
+                obj.DataContext = this;
                 ToolTipService.SetToolTip(obj, TC.LeftExpandTip);
             }
 
@@ -293,8 +294,6 @@ namespace ModelGraph.Controls
                 obj.Text = string.Empty;
             }
 
-            obj.DataContext = Model;
-
             StackPanel.Children.Add(obj);
         }
         private void ClearExpandLeft(bool discard)
@@ -302,9 +301,9 @@ namespace ModelGraph.Controls
             var obj = ExpandLeft;
             if (obj != null)
             {
-                obj.DataContext = null;
                 if (discard)
                 {
+                    obj.DataContext = null;
                     obj.PointerExited -= TC.TextBlockHightlight_PointerExited;
                     obj.PointerEntered -= TC.TextBlockHighlight_PointerEntered;
                     obj.PointerReleased -= TC.ExpandTree_PointerReleased;
@@ -326,11 +325,11 @@ namespace ModelGraph.Controls
                 obj.PointerExited += TC.TextBlockHightlight_PointerExited;
                 obj.PointerEntered += TC.TextBlockHighlight_PointerEntered;
                 obj.PointerReleased += TC.ExpandChoice_PointerReleased;
+                obj.DataContext = this;
                 ToolTipService.SetToolTip(obj, TC.RightExpandTip);
             }
 
             obj.Text = Model.IsExpandedRight ? TC.RightIsExtended : TC.RightCanExtend;
-            obj.DataContext = Model;
 
             StackPanel.Children.Add(obj);
         }
@@ -339,9 +338,9 @@ namespace ModelGraph.Controls
             var obj = ExpandRight;
             if (obj != null)
             {
-                obj.DataContext = null;
                 if (discard)
                 {
+                    obj.DataContext = null;
                     obj.PointerExited -= TC.TextBlockHightlight_PointerExited;
                     obj.PointerEntered -= TC.TextBlockHighlight_PointerEntered;
                     obj.PointerReleased -= TC.ExpandChoice_PointerReleased;
@@ -353,40 +352,34 @@ namespace ModelGraph.Controls
         #endregion
 
         #region AddSortMode  ==================================================
-        private void AddSortMode(bool canSort)
+        private void AddSortMode()
         {
             var obj = SortMode;
-            if (canSort)
+            if (obj == null)
             {
-                if (obj == null)
-                {
-                    obj = SortMode = new TextBlock();
+                obj = SortMode = new TextBlock();
 
-                    obj.Style = TC.SortModeStyle;
-                    obj.PointerExited += TC.TextBlockHightlight_PointerExited;
-                    obj.PointerEntered += TC.TextBlockHighlight_PointerEntered;
-                    obj.PointerReleased += TC.SortMode_PointerReleased;
-                    ToolTipService.SetToolTip(obj, TC.SortModeTip);
-                }
-                obj.DataContext = Model;
-                obj.Text = Model.IsSortAscending ?
-                    TC.SortAscending : (Model.IsSortDescending ? TC.SortDescending : TC.SortNone);
+                obj.Style = TC.SortModeStyle;
+                obj.PointerExited += TC.TextBlockHightlight_PointerExited;
+                obj.PointerEntered += TC.TextBlockHighlight_PointerEntered;
+                obj.PointerReleased += TC.SortMode_PointerReleased;
+                obj.DataContext = this;
+                ToolTipService.SetToolTip(obj, TC.SortModeTip);
+            }
+            obj.Text = Model.IsSortAscending ?
+                TC.SortAscending : (Model.IsSortDescending ? TC.SortDescending : TC.SortNone);
 
-                StackPanel.Children.Add(obj);
-            }
-            else if (obj != null)
-            {
-                obj.DataContext = null; // needed for "S" keyboard shortcut (TailButton)
-            }
+            StackPanel.Children.Add(obj);
         }
-        private void ClearSortMode(bool discard)
+        private void ClearSortMode(bool discard = false)
         {
             var obj = SortMode;
             if (obj != null)
             {
-                obj.DataContext = null;
+                obj.Text = string.Empty; // prevent keyboardAccelerator assignment
                 if (discard)
                 {
+                    obj.DataContext = null;
                     obj.PointerExited -= TC.TextBlockHightlight_PointerExited;
                     obj.PointerEntered -= TC.TextBlockHighlight_PointerEntered;
                     obj.PointerReleased -= TC.SortMode_PointerReleased;
@@ -401,40 +394,35 @@ namespace ModelGraph.Controls
         private void AddUsageMode(Usage usage)
         {
             var obj = UsageMode;
-            if (Model.CanFilterUsage)
+            if (obj == null)
             {
-                if (obj == null)
-                {
-                    obj = UsageMode = new TextBlock();
+                obj = UsageMode = new TextBlock();
 
-                    obj.Style = TC.UsageModeStyle;
-                    obj.PointerExited += TC.TextBlockHightlight_PointerExited;
-                    obj.PointerEntered += TC.TextBlockHighlight_PointerEntered;
-                    obj.PointerReleased += TC.UsageMode_PointerReleased;
-                    ToolTipService.SetToolTip(obj, TC.UsageModeTip);
-                }
-                obj.DataContext = Model;
-                switch (usage)
-                {
-                    case Usage.IsNotUsed: obj.Text = TC.UsageIsNotUsed; break;
-                    case Usage.IsUsed: obj.Text = TC.UsageIsUsed; break;
-                    default: obj.Text = TC.UsageAll; break;
-                }
-                StackPanel.Children.Add(obj);
+                obj.Style = TC.UsageModeStyle;
+                obj.PointerExited += TC.TextBlockHightlight_PointerExited;
+                obj.PointerEntered += TC.TextBlockHighlight_PointerEntered;
+                obj.PointerReleased += TC.UsageMode_PointerReleased;
+                obj.DataContext = this;
+                ToolTipService.SetToolTip(obj, TC.UsageModeTip);
             }
-            else if (obj != null)
+            switch (usage)
             {
-                obj.DataContext = null; // needed for "U" keyboard shortcut (TailButton)
+                case Usage.IsNotUsed: obj.Text = TC.UsageIsNotUsed; break;
+                case Usage.IsUsed: obj.Text = TC.UsageIsUsed; break;
+                default: obj.Text = TC.UsageAll; break;
             }
+            StackPanel.Children.Add(obj);
         }
-        private void ClearUsageMode(bool discard)
+        private void ClearUsageMode(bool discard = false)
         {
             var obj = UsageMode;
             if (obj != null)
             {
-                obj.DataContext = null;
+                obj.Text = string.Empty; // prevent keyboardAccelerator assignment
+
                 if (discard)
                 {
+                    obj.DataContext = null;
                     obj.PointerExited -= TC.TextBlockHightlight_PointerExited;
                     obj.PointerEntered -= TC.TextBlockHighlight_PointerEntered;
                     obj.PointerReleased -= TC.UsageMode_PointerReleased;
@@ -446,40 +434,34 @@ namespace ModelGraph.Controls
         #endregion
 
         #region AddFilterMode  ================================================
-        private void AddFilterMode(bool canFilter)
+        private void AddFilterMode()
         {
             var obj = FilterMode;
-            if (canFilter)
+            if (obj == null)
             {
-                if (obj == null)
-                {
-                    obj = FilterMode = new TextBlock();
+                obj = FilterMode = new TextBlock();
 
-                    obj.Style = TC.FilterModeStyle;
-                    obj.PointerExited += TC.TextBlockHightlight_PointerExited;
-                    obj.PointerEntered += TC.TextBlockHighlight_PointerEntered;
-                    obj.PointerReleased += TC.FilterMode_PointerReleased;
-                    ToolTipService.SetToolTip(obj, TC.FilterExpandTip);
-                }
-
-                obj.DataContext = Model;
-                obj.Text = Model.IsFilterVisible ? TC.FilterIsShowing : TC.FilterCanShow;
-
-                StackPanel.Children.Add(obj);
+                obj.Style = TC.FilterModeStyle;
+                obj.PointerExited += TC.TextBlockHightlight_PointerExited;
+                obj.PointerEntered += TC.TextBlockHighlight_PointerEntered;
+                obj.PointerReleased += TC.FilterMode_PointerReleased;
+                obj.DataContext = this;
+                ToolTipService.SetToolTip(obj, TC.FilterExpandTip);
             }
-            else if (obj != null)
-            {
-                obj.DataContext = null; // needed for "F" keyboard shortcut (TailButton)
-            }
+
+            obj.Text = Model.IsFilterVisible ? TC.FilterIsShowing : TC.FilterCanShow;
+
+            StackPanel.Children.Add(obj);
         }
-        private void ClearFilterMode(bool discard)
+        private void ClearFilterMode(bool discard = false)
         {
             var obj = FilterMode;
             if (obj != null)
             {
-                obj.DataContext = null;
+                obj.Text = string.Empty; // prevent keyboardAccelerator assignment
                 if (discard)
                 {
+                    obj.DataContext = null;
                     obj.PointerExited -= TC.TextBlockHightlight_PointerExited;
                     obj.PointerEntered -= TC.TextBlockHighlight_PointerEntered;
                     obj.PointerReleased -= TC.FilterMode_PointerReleased;
@@ -501,9 +483,9 @@ namespace ModelGraph.Controls
                 obj.Style = TC.FilterTextStyle;
                 obj.KeyDown += TC.FilterText_KeyDown;
                 ToolTipService.SetToolTip(obj, TC.FilterTextTip);
+                obj.DataContext = this;
             }
 
-            obj.DataContext = Model;
             var str = filterText;
             obj.Text = str;
             obj.Tag = str; //save an initial (unmodified) version of the view filter text
@@ -515,10 +497,10 @@ namespace ModelGraph.Controls
             var obj = FilterText;
             if (obj != null)
             {
-                obj.DataContext = null;
                 obj.Tag = null;
                 if (discard)
                 {
+                    obj.DataContext = null;
                     obj.KeyDown -= TC.FilterText_KeyDown;
 
                     FilterText = null;
@@ -568,17 +550,17 @@ namespace ModelGraph.Controls
 
                 bdr.Style = TC.PropertyBorderStyle;
                 bdr.PointerEntered += TC.PropertyBorder_PointerEntered;
+                bdr.DataContext = this;
                 ToolTipService.SetToolTip(bdr, TC.ItemIdentityTip);
 
                 obj.Style = TC.PropertyNameStyle;
                 obj.PointerEntered += TC.ItemName_PointerEntered;
+                obj.DataContext = this;
                 ToolTipService.SetToolTip(obj, TC.ItemIdentityTip);
 
                 bdr.Child = obj;
             }
 
-            bdr.DataContext = Model;
-            obj.DataContext = Model;
             obj.Text = name;
 
             StackPanel.Children.Add(bdr);
@@ -589,10 +571,10 @@ namespace ModelGraph.Controls
             var bdr = PropertyBorder;
             if (obj != null)
             {
-                bdr.DataContext = null;
-                obj.DataContext = null;
                 if (discard)
                 {
+                    bdr.DataContext = null;
+                    obj.DataContext = null;
                     bdr.PointerEntered -= TC.PropertyBorder_PointerEntered;
                     obj.PointerEntered -= TC.ItemName_PointerEntered;
 
@@ -615,9 +597,9 @@ namespace ModelGraph.Controls
                 obj.KeyDown += TC.TextProperty_KeyDown;
                 obj.LostFocus += TC.TextProperty_LostFocus;
                 obj.GotFocus += TC.TextProperty_GotFocus;
+                obj.DataContext = this;
             }
 
-            obj.DataContext = Model;
             var txt = PropModel.GetTextValue(DataRoot);
             obj.Text = txt ?? string.Empty;
             obj.Tag = obj.Text;
@@ -631,10 +613,10 @@ namespace ModelGraph.Controls
             var obj = TextProperty;
             if (obj != null)
             {
-                obj.DataContext = null;
                 obj.Tag = null;
                 if (discard)
                 {
+                    obj.DataContext = null;
                     obj.KeyDown -= TC.TextProperty_KeyDown;
                     obj.GotFocus -= TC.TextProperty_GotFocus;
                     obj.LostFocus -= TC.TextProperty_LostFocus;
@@ -658,9 +640,9 @@ namespace ModelGraph.Controls
                 obj.Checked += TC.CheckProperty_Checked;
                 obj.Unchecked += TC.CheckProperty_Checked;
                 obj.KeyDown += TC.Check_KeyDown;
+                obj.DataContext = this;
             }
 
-            obj.DataContext = Model;
             obj.IsChecked = PropModel.GetBoolValue(DataRoot);
 
             StackPanel.Children.Add(obj);
@@ -670,9 +652,9 @@ namespace ModelGraph.Controls
             var obj = CheckProperty;
             if (obj != null)
             {
-                obj.DataContext = null;
                 if (discard)
                 {
+                    obj.DataContext = null;
                     obj.GotFocus -= TC.CheckProperty_GotFocus;
                     obj.Checked -= TC.CheckProperty_Checked;
                     obj.Unchecked -= TC.CheckProperty_Checked;
@@ -696,9 +678,9 @@ namespace ModelGraph.Controls
                 obj.GotFocus += TC.ComboProperty_GotFocus;
                 obj.SelectionChanged += TC.ComboProperty_SelectionChanged;
                 obj.KeyDown += TC.ComboProperty_KeyDown;
+                obj.DataContext = this;
             }
 
-            obj.DataContext = Model;
             obj.ItemsSource = PropModel.GetlListValue(DataRoot);
             obj.SelectedIndex = PropModel.GetIndexValue(DataRoot);
 
@@ -709,10 +691,10 @@ namespace ModelGraph.Controls
             var obj = ComboProperty;
             if (obj != null)
             {
-                obj.DataContext = null;
                 obj.ItemsSource = null;
                 if (discard)
                 {
+                    obj.DataContext = null;
                     obj.SelectionChanged -= TC.ComboProperty_SelectionChanged;
                     obj.GotFocus -= TC.ComboProperty_GotFocus;
                     obj.KeyDown -= TC.ComboProperty_KeyDown;
@@ -739,11 +721,11 @@ namespace ModelGraph.Controls
                 obj.PointerExited += TC.TextBlockHightlight_PointerExited;
                 obj.PointerEntered += TC.TextBlockHighlight_PointerEntered;
                 obj.PointerReleased += TC.ExpandChoice_PointerReleased;
+                obj.DataContext = this;
                 ToolTipService.SetToolTip(obj, TC.ItemHasErrorTip);
             }
 
             obj.Tag = error;
-            obj.DataContext = Model;
 
             StackPanel.Children.Add(obj);
         }
@@ -752,9 +734,9 @@ namespace ModelGraph.Controls
             var obj = ItemHasError;
             if (obj != null)
             {
-                obj.DataContext = null;
                 if (discard)
                 {
+                    obj.DataContext = null;
                     obj.PointerExited -= TC.TextBlockHightlight_PointerExited;
                     obj.PointerEntered -= TC.TextBlockHighlight_PointerEntered;
                     obj.PointerReleased -= TC.ExpandChoice_PointerReleased;
@@ -775,9 +757,9 @@ namespace ModelGraph.Controls
 
                 obj.Style = TC.ModelIdentityStyle;
                 obj.PointerEntered += TC.ModelIdentity_PointerEntered;
+                obj.DataContext = this;
             }
 
-            obj.DataContext = Model;
 
             StackPanel.Children.Add(obj);
         }
@@ -786,9 +768,9 @@ namespace ModelGraph.Controls
             var obj = ModelIdentity;
             if (obj != null)
             {
-                obj.DataContext = null;
                 if (discard)
                 {
+                    obj.DataContext = null;
                     obj.PointerEntered -= TC.ModelIdentity_PointerEntered;
 
                     ModelIdentity = null;
@@ -807,13 +789,13 @@ namespace ModelGraph.Controls
 
                 sp.MaxHeight = TC.ElementHieght;
                 sp.Orientation = Orientation.Horizontal;
+                sp.DataContext = this;
 
                 TreeCanvas.Children.Add(sp);
             }
             Canvas.SetTop(sp, index * TC.ElementHieght);
 
             sp.Children.Clear();
-            sp.DataContext = Model;
             ModelDelta = Model.ItemDelta;
 
             var (kind, name) = Model.GetKindNameId(DataRoot);
@@ -857,11 +839,22 @@ namespace ModelGraph.Controls
                 var count = Model.TotalCount;
                 if (count > 0)
                 {
-                    AddSortMode((Model.CanSort));
+                    if (Model.CanSort)
+                        AddSortMode();
+                    else
+                        ClearSortMode();
 
                     AddTotalCount(count);
-                    AddUsageMode(usage);
-                    AddFilterMode(Model.CanFilter);
+
+                    if (Model.CanFilterUsage)
+                        AddUsageMode(usage);
+                    else
+                        ClearUsageMode();
+
+                    if (Model.CanFilter)
+                        AddFilterMode();
+                    else
+                        ClearFilterMode();
 
                     if (Model.CanFilter)
                     {
@@ -888,11 +881,11 @@ namespace ModelGraph.Controls
             if (sp != null)
             {
                 sp.Children.Clear();
-                sp.DataContext = null;
                 Canvas.SetTop(sp, -4 * TC.ElementHieght);
 
                 if (discard)
                 {
+                    sp.DataContext = null;
                     StackPanel = null;
                 }
             }

@@ -1,7 +1,6 @@
 ﻿
 namespace ModelGraph.Core
-{/*
- */
+{
     public class Enum_BarWidth : EnumZ
     {
         internal override IdKey IdKey => IdKey.BarWidthEnum;
@@ -20,9 +19,9 @@ namespace ModelGraph.Core
         #region CreateChildren  ===============================================
         void CreateChildren()
         {
-            Add(new PairZ(this, IdKey.BarWidth_Thin));
-            Add(new PairZ(this, IdKey.BarWidth_Wide));
-            Add(new PairZ(this, IdKey.BarWidth_ExtraWide));
+            new PairZ(this, IdKey.BarWidth_Thin);
+            new PairZ(this, IdKey.BarWidth_Wide);
+            new PairZ(this, IdKey.BarWidth_ExtraWide);
         }
         #endregion
     }

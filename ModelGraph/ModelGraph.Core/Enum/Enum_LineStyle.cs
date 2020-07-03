@@ -19,9 +19,9 @@ namespace ModelGraph.Core
         #region CreateChildren  ===============================================
         void CreateChildren()
         {
-            Add(new PairZ(this, IdKey.LineStyle_PointToPoint));
-            Add(new PairZ(this, IdKey.LineStyle_SimpleSpline));
-            Add(new PairZ(this, IdKey.LineStyle_DoubleSpline));
+            new PairZ(this, IdKey.LineStyle_PointToPoint);
+            new PairZ(this, IdKey.LineStyle_SimpleSpline);
+            new PairZ(this, IdKey.LineStyle_DoubleSpline);
         }
         #endregion
     }

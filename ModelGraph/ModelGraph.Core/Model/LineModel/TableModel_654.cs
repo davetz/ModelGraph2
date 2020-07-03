@@ -1,14 +1,26 @@
 ﻿
+using System.Collections.Generic;
+
 namespace ModelGraph.Core
 {
     public class TableModel_654 : LineModel
     {//============================================== In the MetaDataRoot hierarchy  ==============
-        internal TableModel_654(TableListModel_643 owner, Item item) : base(owner, item) { }
+        internal TableModel_654(TableListModel_643 owner, TableX item) : base(owner, item) { }
         internal override IdKey IdKey => IdKey.TableModel_654;
+
         public override bool CanExpandLeft => true;
         public override bool CanExpandRight => true;
+
         public override (string, string) GetKindNameId(Root root) => Item.GetKindNameId(root);
+        public override string GetSummaryId(Root root) => Item.GetSummaryId(root);
         internal override string GetFilterSortId(Root root) => Item.GetSingleNameId(root);
+
+        public override void GetMenuCommands(Root root, List<LineCommand> list)
+        {
+            list.Clear();
+            list.Add(new RemoveCommand(this, () => root.Get<ChangeRoot>().RemoveItem(Item)));
+        }
+
         internal override bool ExpandLeft()
         {
             if (IsExpandedLeft) return false;
@@ -18,6 +30,7 @@ namespace ModelGraph.Core
             IsExpandedLeft = true;
             return true;
         }
+
         internal override bool ExpandRight()
         {
             if (IsExpandedRight) return false;

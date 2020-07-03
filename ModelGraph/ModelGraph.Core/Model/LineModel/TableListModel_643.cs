@@ -8,11 +8,13 @@ namespace ModelGraph.Core
     {//============================================== In the MetaDataRoot hierarchy  ==============
         internal TableListModel_643(MetaDataRootModel_623 owner, TableXRoot item) : base(owner, item) { }
         internal override IdKey IdKey => IdKey.TableListModel_643;
+
         public override bool CanExpandLeft => TotalCount > 0;
         public override bool CanFilter => TotalCount > 1;
         public override bool CanSort => TotalCount > 1;
-
         public override int TotalCount => ItemStore.Count;
+
+        private TableXRoot TableXRoot => Item as TableXRoot;
 
         internal override bool ExpandLeft()
         {
@@ -20,8 +22,7 @@ namespace ModelGraph.Core
 
             IsExpandedLeft = true;
 
-            var st = Item as TableXRoot;
-            foreach (var tx in st.Items)
+            foreach (var tx in TableXRoot.Items)
             {
                 new TableModel_654(this, tx);
             }
@@ -54,8 +55,7 @@ namespace ModelGraph.Core
                     }
                     CovertClear();
 
-                    var st = Item as TableXRoot;
-                    foreach (var tx in st.Items)
+                    foreach (var tx in TableXRoot.Items)
                     {
                         if (prev.TryGetValue(tx, out LineModel m))
                         {

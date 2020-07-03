@@ -19,7 +19,7 @@ namespace ModelGraph.Core
         internal abstract int GetItemPropertyValue(Item item); //get the item's proproperty enum key value
         internal abstract void SetItemPropertyValue(Item item, int val); //set the item's proproperty enum key value
 
-
+        internal string GetValue(int index) => EnumZ.GetEnumName(DataRoot, index);
         internal override string GetValue(Item item) => EnumZ.GetEnumName(DataRoot, GetItemPropertyValue(item));
         internal override void SetValue(Item item, string val) => SetItemPropertyValue(item, EnumZ.GetKey(DataRoot, val));
 

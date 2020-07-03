@@ -1,7 +1,6 @@
 ﻿
 namespace ModelGraph.Core
-{/*
- */
+{
     public class Enum_SideType : EnumZ
     {
         internal override IdKey IdKey => IdKey.SideEnum;
@@ -20,11 +19,11 @@ namespace ModelGraph.Core
         #region CreateChildren  ===============================================
         void CreateChildren()
         {
-            Add(new PairZ(this, IdKey.Side_Any));
-            Add(new PairZ(this, IdKey.Side_East));
-            Add(new PairZ(this, IdKey.Side_West));
-            Add(new PairZ(this, IdKey.Side_North));
-            Add(new PairZ(this, IdKey.Side_South));
+            new PairZ(this, IdKey.Side_Any);
+            new PairZ(this, IdKey.Side_East);
+            new PairZ(this, IdKey.Side_West);
+            new PairZ(this, IdKey.Side_North);
+            new PairZ(this, IdKey.Side_South);
         }
         #endregion
     }

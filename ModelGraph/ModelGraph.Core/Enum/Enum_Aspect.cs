@@ -1,7 +1,6 @@
 ﻿
 namespace ModelGraph.Core
-{/*
- */
+{
     public class Enum_Aspect : EnumZ
     {
         internal override IdKey IdKey => IdKey.AspectEnum;
@@ -20,10 +19,10 @@ namespace ModelGraph.Core
         #region CreateChildren  ===============================================
         void CreateChildren()
         {
-            Add(new PairZ(this, IdKey.Aspect_Point));
-            Add(new PairZ(this, IdKey.Aspect_Square));
-            Add(new PairZ(this, IdKey.Aspect_Vertical));
-            Add(new PairZ(this, IdKey.Aspect_Horizontal));
+            new PairZ(this, IdKey.Aspect_Point);
+            new PairZ(this, IdKey.Aspect_Square);
+            new PairZ(this, IdKey.Aspect_Vertical);
+            new PairZ(this, IdKey.Aspect_Horizontal);
         }
         #endregion
     }

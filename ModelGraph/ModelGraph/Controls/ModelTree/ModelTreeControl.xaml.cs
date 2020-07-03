@@ -496,15 +496,26 @@ namespace ModelGraph.Controls
         void ItemIdentityTip_Opened(object sender, RoutedEventArgs e)
         {
             var tip = sender as ToolTip;
-            var mdl = tip.DataContext as LineModel;
-            var content = mdl?.GetSummaryId(DataRoot);
-            tip.Content = string.IsNullOrWhiteSpace(content) ? null : content;
+            if (tip.DataContext is ModelUICache mc)
+            {
+                var mdl = mc.Model;
+                var content = mdl?.GetSummaryId(DataRoot);
+                tip.Content = string.IsNullOrWhiteSpace(content) ? null : content;
+            }
+            else
+                tip.Content = null;
         }
         void ModelIdentityTip_Opened(object sender, RoutedEventArgs e)
         {
             var tip = sender as ToolTip;
-            var mdl = tip.DataContext as LineModel;
-            tip.Content = mdl.GetModelIdentity();
+            if (tip.DataContext is ModelUICache mc)
+            {
+                var mdl = mc.Model;
+                var content = mdl.GetModelIdentity();
+                tip.Content = string.IsNullOrWhiteSpace(content) ? null : content;
+            }
+            else
+                tip.Content = null;
         }
         #endregion
 
@@ -621,7 +632,7 @@ namespace ModelGraph.Controls
             
             var mc = GetModelUICache(Selected);
 
-            if (mc.SortMode != null && mc.SortMode.DataContext != null)
+            if (mc.SortMode != null && !string.IsNullOrEmpty(mc.SortMode.Text))
             {
                 _sortControl = mc.SortMode;
                 var acc = new KeyboardAccelerator { Key = VirtualKey.S, Modifiers = VirtualKeyModifiers.Control};
@@ -629,7 +640,7 @@ namespace ModelGraph.Controls
                 TreeCanvas.KeyboardAccelerators.Add(acc);
             }
 
-            if (mc.UsageMode != null && mc.UsageMode.DataContext != null)
+            if (mc.UsageMode != null && !string.IsNullOrEmpty(mc.UsageMode.Text))
             {
                 _usageControl = mc.UsageMode;
                 var acc = new KeyboardAccelerator { Key = VirtualKey.U, Modifiers = VirtualKeyModifiers.Control };
@@ -651,7 +662,7 @@ namespace ModelGraph.Controls
                 TreeCanvas.KeyboardAccelerators.Add(acc);
             }
 
-            if (mc.FilterMode != null && mc.FilterMode.DataContext != null)
+            if (mc.FilterMode != null && string.IsNullOrEmpty(mc.FilterMode.Text))
             {
                 _filterControl = mc.FilterMode;
             }
@@ -838,8 +849,6 @@ namespace ModelGraph.Controls
         }
         private readonly Dictionary<KeyboardAccelerator, LineCommand> _acceleratorKeyCommands = new Dictionary<KeyboardAccelerator, LineCommand>();
 
-        private readonly List<KeyboardAccelerator> menuCommandAccelerators = new List<KeyboardAccelerator>(4);
-        private readonly List<KeyboardAccelerator> buttonCommandAccelerators = new List<KeyboardAccelerator>(4);
 
         static readonly Dictionary<string, Windows.System.VirtualKey> _virtualKeys = new Dictionary<string, VirtualKey>
         {
@@ -933,48 +942,52 @@ namespace ModelGraph.Controls
         {
             //args.DragUI.SetContentFromDataPackage();
             var obj = sender as TextBlock;
-            var mdl = obj.DataContext as LineModel;
-
-            if (mdl.CanDrag)
+            if (obj.DataContext is ModelUICache mc && mc.Model is LineModel mdl)
             {
-                mdl.DragStart(DataRoot);
-            }
-            else
-            {
-                args.Cancel = true;
+                if (mdl.CanDrag)
+                {
+                    mdl.DragStart(DataRoot);
+                }
+                else
+                {
+                    args.Cancel = true;
+                }
             }
         }
         internal void ItemName_DragOver(object sender, DragEventArgs e)
         {
             e.DragUIOverride.IsContentVisible = false;
             var obj = sender as TextBlock;
-            var mdl = obj.DataContext as LineModel;
-
-            var type = mdl.DragEnter(DataRoot);
-            switch (type)
+            if (obj.DataContext is ModelUICache mc && mc.Model is LineModel mdl)
             {
-                case DropAction.None:
-                    e.AcceptedOperation = Windows.ApplicationModel.DataTransfer.DataPackageOperation.None;
-                    break;
-                case DropAction.Move:
-                    e.AcceptedOperation = Windows.ApplicationModel.DataTransfer.DataPackageOperation.Move;
-                    break;
-                case DropAction.Link:
-                    e.AcceptedOperation = Windows.ApplicationModel.DataTransfer.DataPackageOperation.Link;
-                    break;
-                case DropAction.Copy:
-                    e.AcceptedOperation = Windows.ApplicationModel.DataTransfer.DataPackageOperation.Copy;
-                    break;
-                default:
-                    e.AcceptedOperation = Windows.ApplicationModel.DataTransfer.DataPackageOperation.None;
-                    break;
+                var type = mdl.DragEnter(DataRoot);
+                switch (type)
+                {
+                    case DropAction.None:
+                        e.AcceptedOperation = Windows.ApplicationModel.DataTransfer.DataPackageOperation.None;
+                        break;
+                    case DropAction.Move:
+                        e.AcceptedOperation = Windows.ApplicationModel.DataTransfer.DataPackageOperation.Move;
+                        break;
+                    case DropAction.Link:
+                        e.AcceptedOperation = Windows.ApplicationModel.DataTransfer.DataPackageOperation.Link;
+                        break;
+                    case DropAction.Copy:
+                        e.AcceptedOperation = Windows.ApplicationModel.DataTransfer.DataPackageOperation.Copy;
+                        break;
+                    default:
+                        e.AcceptedOperation = Windows.ApplicationModel.DataTransfer.DataPackageOperation.None;
+                        break;
+                }
             }
         }
         internal void ItemName_Drop(object sender, DragEventArgs e)
         {
             var obj = sender as TextBlock;
-            var mdl = obj.DataContext as LineModel;
-            mdl.DragDrop(DataRoot);
+            if (obj.DataContext is ModelUICache mc && mc.Model is LineModel mdl)
+            {
+                mdl.DragDrop(DataRoot);
+            }
         }
         #endregion
 
@@ -1006,8 +1019,11 @@ namespace ModelGraph.Controls
             if (Selected == PointerModel(e))
             {
                 var obj = sender as TextBlock;
-                Selected = obj.DataContext as LineModel;
-                _ = RefreshViewListAsync(ChangeType.ToggleLeft);
+                if (obj.DataContext is ModelUICache mc && mc.Model is LineModel mdl)
+                {
+                    Selected = mdl;
+                    _ = RefreshViewListAsync(ChangeType.ToggleLeft);
+                }
             }
         }
         #endregion
@@ -1018,8 +1034,11 @@ namespace ModelGraph.Controls
             if (Selected == PointerModel(e))
             {
                 var obj = sender as TextBlock;
-                Selected = obj.DataContext as LineModel;
-                _ = RefreshViewListAsync(ChangeType.ToggleRight);
+                if (obj.DataContext is ModelUICache mc && mc.Model is LineModel mdl)
+                {
+                    Selected = mdl;
+                    _ = RefreshViewListAsync(ChangeType.ToggleRight);
+                }
             }
         }
         #endregion
@@ -1028,7 +1047,7 @@ namespace ModelGraph.Controls
         internal void ModelIdentity_PointerEntered(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
         {
             var obj = sender as TextBlock;
-            ModelIdentityTip.DataContext = obj.DataContext as LineModel;
+            ModelIdentityTip.DataContext = obj.DataContext;
             ToolTipService.SetToolTip(obj, ModelIdentityTip);
         }
         #endregion
@@ -1045,31 +1064,28 @@ namespace ModelGraph.Controls
         }
         void ExecuteSort(TextBlock obj)
         {
-            if (obj == null)
+            if (obj != null && obj.DataContext is ModelUICache mc && mc.Model is LineModel mdl)
             {
-                return;
-            }
-
-            var mdl = obj.DataContext as LineModel;
-            if (mdl.IsSortAscending)
-            {
-                mdl.IsSortAscending = false;
-                mdl.IsSortDescending = true;
-                obj.Text = SortDescending;
-                _ = SetSortingAsync(mdl, Sorting.Descending);
-            }
-            else if (mdl.IsSortDescending)
-            {
-                mdl.IsSortAscending = false;
-                mdl.IsSortDescending = false;
-                obj.Text = SortNone;
-                _ = SetSortingAsync(mdl, Sorting.Unsorted);
-            }
-            else
-            {
-                mdl.IsSortAscending = true;
-                obj.Text = SortAscending;
-                _ = SetSortingAsync(mdl, Sorting.Ascending);
+                if (mdl.IsSortAscending)
+                {
+                    mdl.IsSortAscending = false;
+                    mdl.IsSortDescending = true;
+                    obj.Text = SortDescending;
+                    _ = SetSortingAsync(mdl, Sorting.Descending);
+                }
+                else if (mdl.IsSortDescending)
+                {
+                    mdl.IsSortAscending = false;
+                    mdl.IsSortDescending = false;
+                    obj.Text = SortNone;
+                    _ = SetSortingAsync(mdl, Sorting.Unsorted);
+                }
+                else
+                {
+                    mdl.IsSortAscending = true;
+                    obj.Text = SortAscending;
+                    _ = SetSortingAsync(mdl, Sorting.Ascending);
+                }
             }
         }
         #endregion
@@ -1086,30 +1102,27 @@ namespace ModelGraph.Controls
         }
         void ExecuteUsage(TextBlock obj)
         {
-            if (obj == null)
+            if (obj != null && obj.DataContext is ModelUICache mc && mc.Model is LineModel mdl)
             {
-                return;
+                if (mdl.IsUsedFilter)
+                {
+                    mdl.IsUsedFilter = false;
+                    mdl.IsNotUsedFilter = true;
+                    obj.Text = UsageIsNotUsed;
+                }
+                else if (mdl.IsNotUsedFilter)
+                {
+                    mdl.IsUsedFilter = false;
+                    mdl.IsNotUsedFilter = false;
+                    obj.Text = UsageAll;
+                }
+                else
+                {
+                    mdl.IsUsedFilter = true;
+                    obj.Text = UsageIsUsed;
+                }
+                _ = RefreshViewListAsync(ChangeType.FilterSortChanged);
             }
-
-            var mdl = obj.DataContext as LineModel;
-            if (mdl.IsUsedFilter)
-            {
-                mdl.IsUsedFilter = false;
-                mdl.IsNotUsedFilter = true;
-                obj.Text = UsageIsNotUsed;
-            }
-            else if (mdl.IsNotUsedFilter)
-            {
-                mdl.IsUsedFilter = false;
-                mdl.IsNotUsedFilter = false;
-                obj.Text = UsageAll;
-            }
-            else
-            {
-                mdl.IsUsedFilter = true;
-                obj.Text = UsageIsUsed;
-            }
-            _ = RefreshViewListAsync(ChangeType.FilterSortChanged);
         }
         #endregion
 
@@ -1127,8 +1140,6 @@ namespace ModelGraph.Controls
         {
             if (obj == null) return;
 
-            var mdl = obj.DataContext as LineModel;
-
             _ = RefreshViewListAsync(ChangeType.ToggleFilter);
         }
         #endregion
@@ -1137,34 +1148,35 @@ namespace ModelGraph.Controls
         internal void FilterText_KeyDown(object sender, Windows.UI.Xaml.Input.KeyRoutedEventArgs e)
         {
             var obj = sender as TextBox;
-            var mdl = obj.DataContext as LineModel;
-
-            if (e.Key == Windows.System.VirtualKey.Enter || e.Key == Windows.System.VirtualKey.Tab)
+            if (obj != null && obj.DataContext is ModelUICache mc && mc.Model is LineModel mdl)
             {
-                e.Handled = true;
-
-                var txt = string.IsNullOrWhiteSpace(obj.Text) ? string.Empty : obj.Text;
-                if (string.Compare(txt, (string)obj.Tag, true) == 0)
+                if (e.Key == Windows.System.VirtualKey.Enter || e.Key == Windows.System.VirtualKey.Tab)
                 {
-                    SetDefaultFocus();
-                    return;
+                    e.Handled = true;
+
+                    var txt = string.IsNullOrWhiteSpace(obj.Text) ? string.Empty : obj.Text;
+                    if (string.Compare(txt, (string)obj.Tag, true) == 0)
+                    {
+                        SetDefaultFocus();
+                        return;
+                    }
+
+                    obj.Tag = txt;
+                    _ = SetFilterAsync(mdl, txt);
+                    mdl.IsExpandedLeft = true;
+
+                    _tryAfterRefresh = true;
+                    _ = RefreshViewListAsync(ChangeType.FilterSortChanged);
                 }
+                if (e.Key == Windows.System.VirtualKey.Escape)
+                {
+                    e.Handled = true;
 
-                obj.Tag = txt;
-                SetFilterAsync(mdl, txt);
-                mdl.IsExpandedLeft = true;
-                
-                _tryAfterRefresh = true;
-                _ = RefreshViewListAsync(ChangeType.FilterSortChanged);
-            }
-            if (e.Key == Windows.System.VirtualKey.Escape)
-            {
-                e.Handled = true;
-
-                mdl.IsFilterVisible = false;
-                mdl.IsExpandedLeft = false;
-                SetDefaultFocus();
-                _ = RefreshViewListAsync(ChangeType.FilterSortChanged);
+                    mdl.IsFilterVisible = false;
+                    mdl.IsExpandedLeft = false;
+                    SetDefaultFocus();
+                    _ = RefreshViewListAsync(ChangeType.FilterSortChanged);
+                }
             }
         }
         #endregion
@@ -1174,16 +1186,21 @@ namespace ModelGraph.Controls
         {
             var obj = sender as TextBox;
             _focusControl = obj;
-            Selected = obj.DataContext as LineModel;
-            RefreshSelector(false);
+            if (obj.DataContext is ModelUICache mc && mc.Model is LineModel mdl)
+            {
+                Selected = mdl;
+                RefreshSelector(false);
+            }
         }
         internal void TextProperty_LostFocus(object sender, RoutedEventArgs e)
         {
             var obj = sender as TextBox;
-            var mdl = obj.DataContext as PropertyModel;
-            if ((string)obj.Tag != obj.Text)
+            if (obj.DataContext is ModelUICache mc && mc.PropModel is PropertyModel mdl)
             {
-                mdl.PostSetValue(DataRoot, obj.Text);
+                if ((string)obj.Tag != obj.Text)
+                {
+                    mdl.PostSetValue(DataRoot, obj.Text);
+                }
             }
         }
         internal void TextProperty_KeyDown(object sender, Windows.UI.Xaml.Input.KeyRoutedEventArgs e)
@@ -1192,24 +1209,28 @@ namespace ModelGraph.Controls
             {
                 e.Handled = true;
                 var obj = sender as TextBox;
-                var mdl = obj.DataContext as PropertyModel;
-                if ((string)obj.Tag != obj.Text)
+                if (obj.DataContext is ModelUICache mc && mc.PropModel is PropertyModel mdl)
                 {
-                    mdl.PostSetValue(DataRoot, obj.Text);
-                }                
-                if (e.Key == Windows.System.VirtualKey.Enter)
-                    FocusButton.Focus(FocusState.Keyboard);
-                else
-                    FindNextItemModel(mdl);
+                    if ((string)obj.Tag != obj.Text)
+                    {
+                        mdl.PostSetValue(DataRoot, obj.Text);
+                    }
+                    if (e.Key == Windows.System.VirtualKey.Enter)
+                        FocusButton.Focus(FocusState.Keyboard);
+                    else
+                        FindNextItemModel(mdl);
+                }
             }
             else if (e.Key == Windows.System.VirtualKey.Escape)
             {
                 e.Handled = true;
                 var obj = sender as TextBox;
-                var mdl = obj.DataContext as PropertyModel;
-                if ((string)obj.Tag != obj.Text)
+                if (obj.DataContext is ModelUICache mc && mc.PropModel is PropertyModel mdl)
                 {
-                    obj.Text = mdl.GetTextValue(DataRoot) ?? string.Empty;
+                    if ((string)obj.Tag != obj.Text)
+                    {
+                        obj.Text = mdl.GetTextValue(DataRoot) ?? string.Empty;
+                    }
                 }
                 SetDefaultFocus();
             }
@@ -1221,30 +1242,35 @@ namespace ModelGraph.Controls
         {
             var obj = sender as CheckBox;
             _focusControl = obj;
-            Selected = obj.DataContext as LineModel;
-            RefreshSelector(false);
+            if (obj.DataContext is ModelUICache mc && mc.Model is LineModel mdl)
+            {
+                Selected = mdl;
+                RefreshSelector(false);
+            }
         }
         internal void Check_KeyDown(object sender, Windows.UI.Xaml.Input.KeyRoutedEventArgs e)
         {
             var obj = sender as CheckBox;
-            var mdl = obj.DataContext as PropertyModel;
-            var val = obj.IsChecked ?? false;
+            if (obj.DataContext is ModelUICache mc && mc.PropModel is PropertyModel mdl)
+            {
+                var val = obj.IsChecked ?? false;
 
-            if (e.Key == VirtualKey.Escape)
-            {
-                e.Handled = true;
-                SetDefaultFocus();
-            }
-            else if (e.Key == Windows.System.VirtualKey.Enter)
-            {
-                e.Handled = true;
-                _ignoreNextCheckBoxEvent = true;
-                mdl.PostSetValue(DataRoot, !val);
-            }
-            else if (e.Key == Windows.System.VirtualKey.Tab)
-            {
-                e.Handled = true;
-                FindNextItemModel(mdl);
+                if (e.Key == VirtualKey.Escape)
+                {
+                    e.Handled = true;
+                    SetDefaultFocus();
+                }
+                else if (e.Key == Windows.System.VirtualKey.Enter)
+                {
+                    e.Handled = true;
+                    _ignoreNextCheckBoxEvent = true;
+                    mdl.PostSetValue(DataRoot, !val);
+                }
+                else if (e.Key == Windows.System.VirtualKey.Tab)
+                {
+                    e.Handled = true;
+                    FindNextItemModel(mdl);
+                }
             }
         }
         bool _ignoreNextCheckBoxEvent;
@@ -1257,9 +1283,11 @@ namespace ModelGraph.Controls
             else
             {
                 var obj = sender as CheckBox;
-                var mdl = obj.DataContext as PropertyModel;
-                var val = obj.IsChecked ?? false;
-                mdl.PostSetValue(DataRoot, val);
+                if (obj.DataContext is ModelUICache mc && mc.PropModel is PropertyModel mdl)
+                {
+                    var val = obj.IsChecked ?? false;
+                    mdl.PostSetValue(DataRoot, val);
+                }
             }
         }
         #endregion
@@ -1269,28 +1297,35 @@ namespace ModelGraph.Controls
         {
             var obj = sender as ComboBox;
             _focusControl = obj;
-            Selected = obj.DataContext as LineModel;
-            RefreshSelector(false);
+            if (obj.DataContext is ModelUICache mc && mc.Model is LineModel mdl)
+            {
+                Selected = mdl;
+                RefreshSelector(false);
+            }
         }
         internal void ComboProperty_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var obj = sender as ComboBox;
-            var mdl = obj.DataContext as PropertyModel;
-            //mdl.PostSetValue(_chef, obj.SelectedIndex);
+            if (obj.DataContext is ModelUICache mc && mc.PropModel is PropertyModel mdl)
+            {
+                mdl.PostSetValue(DataRoot, obj.SelectedIndex);
+            }
         }
         internal void ComboProperty_KeyDown(object sender, Windows.UI.Xaml.Input.KeyRoutedEventArgs e)
         {
             var obj = sender as ComboBox;
-            var mdl = obj.DataContext as LineModel;
-            if (e.Key == VirtualKey.Escape)
+            if (obj.DataContext is ModelUICache mc && mc.Model is LineModel mdl)
             {
-                e.Handled = true;
-                SetDefaultFocus();
-            }
-            else if (e.Key == VirtualKey.Tab)
-            {
-                e.Handled = true;
-                FindNextItemModel(mdl);
+                if (e.Key == VirtualKey.Escape)
+                {
+                    e.Handled = true;
+                    SetDefaultFocus();
+                }
+                else if (e.Key == VirtualKey.Tab)
+                {
+                    e.Handled = true;
+                    FindNextItemModel(mdl);
+                }
             }
         }
         #endregion
@@ -1299,7 +1334,7 @@ namespace ModelGraph.Controls
         internal void PropertyBorder_PointerEntered(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
         {
             var obj = sender as Border;
-            ItemIdentityTip.DataContext = obj.DataContext as LineModel;
+            ItemIdentityTip.DataContext = obj.DataContext;
         }
         #endregion
 

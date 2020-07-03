@@ -19,9 +19,9 @@ namespace ModelGraph.Core
         #region CreateChildren  ===============================================
         void CreateChildren()
         {
-            Add(new PairZ(this, IdKey.Contact_Any));
-            Add(new PairZ(this, IdKey.Contact_One));
-            Add(new PairZ(this, IdKey.Contact_None));
+            new PairZ(this, IdKey.Contact_Any);
+            new PairZ(this, IdKey.Contact_One);
+            new PairZ(this, IdKey.Contact_None);
         }
         #endregion
     }

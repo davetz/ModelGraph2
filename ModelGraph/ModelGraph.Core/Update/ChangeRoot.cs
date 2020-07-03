@@ -126,7 +126,7 @@ namespace ModelGraph.Core
         #endregion
 
         #region RemoveItem  ===================================================
-        private void RemoveItem(Item target)
+        internal void RemoveItem(Item target)
         {
             var root = DataRoot;// big daddy
             var hitList = new List<Item>();//======================== dependant items that also need to be killed off

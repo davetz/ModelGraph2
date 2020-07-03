@@ -8,10 +8,14 @@ namespace ModelGraph.Core
     {//============================================== In the ModelingRoot hierarchy  ==============
         internal TableListModel_647(ModelingRootModel_624 owner, TableXRoot item) : base(owner, item) { }
         internal override IdKey IdKey => IdKey.TableListModel_647;
+
         public override bool CanExpandLeft => TotalCount > 0;
         public override bool CanFilter => TotalCount > 1;
         public override bool CanSort => TotalCount > 1;
         public override int TotalCount => ItemStore.Count;
+
+        private TableXRoot TableXRoot => Item as TableXRoot;
+
 
         internal override bool ExpandLeft()
         {
@@ -19,8 +23,7 @@ namespace ModelGraph.Core
 
             IsExpandedLeft = true;
 
-            var st = Item as TableXRoot;
-            foreach (var tx in st.Items)
+            foreach (var tx in TableXRoot.Items)
             {
                 new TableModel_6A4(this, tx);
             }
@@ -30,7 +33,7 @@ namespace ModelGraph.Core
 
         internal override bool Validate(TreeModel treeRoot, Dictionary<Item, LineModel> prev)
         {
-            var anyChange = false;
+            var viewListChanged = false;
             if (IsExpanded)
             {
                 if (ChildDelta != Item.ChildDelta)
@@ -44,8 +47,7 @@ namespace ModelGraph.Core
                     }
                     CovertClear();
 
-                    var st = Item as TableXRoot;
-                    foreach (var tx in st.Items)
+                    foreach (var tx in TableXRoot.Items)
                     {
                         if (prev.TryGetValue(tx, out LineModel m))
                         {
@@ -55,23 +57,18 @@ namespace ModelGraph.Core
                         else
                         {
                             new TableModel_6A4(this, tx);
-                            anyChange = true;
+                            viewListChanged = true;
                         }
                     }
 
                     if (prev.Count > 0)
                     {
-                        anyChange = true;
+                        viewListChanged = true;
                         foreach (var model in prev.Values) { model.Discard(); }
                     }
                 }
-
-                foreach (var child in Items)
-                {
-                    anyChange |= child.Validate(treeRoot, prev);
-                }
             }
-            return anyChange;
+            return viewListChanged || base.Validate(treeRoot, prev);
         }
     }
 }

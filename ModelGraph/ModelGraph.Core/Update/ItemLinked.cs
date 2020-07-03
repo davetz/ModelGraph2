@@ -36,8 +36,8 @@ namespace ModelGraph.Core
 
             var name = $" [{rnam}]   ({nam1}) --> ({nam2})";
             (int parentIndex, int chilldIndex) = rel.AppendLink(item1, item2);
-            var chg = new ItemLinked(root.Get<ChangeRoot>().ChangeSet, rel, item1, item2, parentIndex, chilldIndex, name);
-            chg.DoNow();
+            var cs = new ItemLinked(root.Get<ChangeRoot>().ChangeSet, rel, item1, item2, parentIndex, chilldIndex, name);
+            cs.DoNow();
         }
         #endregion
 
