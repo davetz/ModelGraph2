@@ -21,9 +21,9 @@ namespace ModelGraph.Core
         }
         internal void PostSetBoolValue(Item item, Property prop, bool value)
         {
-            PostSetStringValue(item, prop, value.ToString());
+            PostSetTextValue(item, prop, value.ToString());
         }
-        internal void PostSetStringValue(Item item, Property prop, string value)
+        internal void PostSetTextValue(Item item, Property prop, string value)
         {
             if (ItemUpdated.IsNotRequired(item, prop, value)) return;
 
@@ -33,7 +33,7 @@ namespace ModelGraph.Core
         {
             if (prop is EnumProperty enu)
             {
-                PostSetStringValue(item, prop, enu.GetValue(index));
+                PostSetTextValue(item, prop, enu.GetValue(index));
             }
         }
         #endregion

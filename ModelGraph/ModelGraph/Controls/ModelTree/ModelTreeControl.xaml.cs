@@ -1199,7 +1199,7 @@ namespace ModelGraph.Controls
             {
                 if ((string)obj.Tag != obj.Text)
                 {
-                    mdl.PostSetValue(DataRoot, obj.Text);
+                    mdl.PostSetTextValue(DataRoot, obj.Text);
                 }
             }
         }
@@ -1213,7 +1213,7 @@ namespace ModelGraph.Controls
                 {
                     if ((string)obj.Tag != obj.Text)
                     {
-                        mdl.PostSetValue(DataRoot, obj.Text);
+                        mdl.PostSetTextValue(DataRoot, obj.Text);
                     }
                     if (e.Key == Windows.System.VirtualKey.Enter)
                         FocusButton.Focus(FocusState.Keyboard);
@@ -1264,7 +1264,7 @@ namespace ModelGraph.Controls
                 {
                     e.Handled = true;
                     _ignoreNextCheckBoxEvent = true;
-                    mdl.PostSetValue(DataRoot, !val);
+                    mdl.PostSetBoolValue(DataRoot, !val);
                 }
                 else if (e.Key == Windows.System.VirtualKey.Tab)
                 {
@@ -1286,7 +1286,7 @@ namespace ModelGraph.Controls
                 if (obj.DataContext is ModelUICache mc && mc.PropModel is PropertyModel mdl)
                 {
                     var val = obj.IsChecked ?? false;
-                    mdl.PostSetValue(DataRoot, val);
+                    mdl.PostSetBoolValue(DataRoot, val);
                 }
             }
         }
@@ -1306,9 +1306,9 @@ namespace ModelGraph.Controls
         internal void ComboProperty_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var obj = sender as ComboBox;
-            if (obj.DataContext is ModelUICache mc && mc.PropModel is PropertyModel mdl)
+            if (obj.DataContext is ModelUICache mc && mc.PropModel is PropertyModel mdl && obj.SelectedIndex >= 0)
             {
-                mdl.PostSetValue(DataRoot, obj.SelectedIndex);
+                mdl.PostSetIndexValue(DataRoot, obj.SelectedIndex);
             }
         }
         internal void ComboProperty_KeyDown(object sender, Windows.UI.Xaml.Input.KeyRoutedEventArgs e)

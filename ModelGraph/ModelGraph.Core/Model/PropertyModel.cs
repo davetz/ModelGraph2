@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Windows.Web.Http;
 
 namespace ModelGraph.Core
 {
@@ -32,9 +33,9 @@ namespace ModelGraph.Core
         public virtual string GetTextValue(Root root) => default;
         public virtual string[] GetlListValue(Root root) => default;
 
-        public  void PostSetValue(Root root, int val) => root.PostSetIndexValue(Item, Property, val);
-        public  void PostSetValue(Root root, bool val) => root.PostSetBoolValue(Item, Property, val);
-        public void PostSetValue(Root root, string val) => root.PostSetStringValue(Item, Property, val);
+        public void PostSetIndexValue(Root root, int val) { if (val != GetIndexValue(root)) root.PostSetIndexValue(Item, Property, val); }
+        public void PostSetBoolValue(Root root, bool val) { if (val != GetBoolValue(root)) root.PostSetBoolValue(Item, Property, val); }
+        public void PostSetTextValue(Root root, string val) { if (val != GetTextValue(root)) root.PostSetTextValue(Item, Property, val); }
 
         public override (string, string) GetKindNameId(Root root)
         {

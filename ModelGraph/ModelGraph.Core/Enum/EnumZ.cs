@@ -39,7 +39,7 @@ namespace ModelGraph.Core
         #endregion
 
         #region GetEnumName  =================================================
-        internal string GetEnumName(Root root, int key)
+        internal string GetEnumValueName(Root root, int key)
         {
             foreach (var pz in Items)
             {
@@ -47,6 +47,7 @@ namespace ModelGraph.Core
             }
             return InvalidItem;
         }
+        internal string GetEnumIndexName(Root root, int index) =>  (index >= 0 && index < Count) ? Items[index].GetSingleNameId(root) : InvalidItem;
         #endregion
 
         #region GetEnumNames  ================================================
