@@ -1,17 +1,19 @@
-﻿using System.Collections.Generic;
+﻿
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ModelGraph.Core
 {
-    public class ColumnListModel_661 : LineModel
+    public class ComputeListModel_666 : LineModel
     {//============================================== In the MetaDataRoot hierarchy  ==============
-        internal ColumnListModel_661(TableModel_654 owner, Item item) : base(owner, item) { }
-        internal override IdKey IdKey => IdKey.ColumnListModel_661;
+        internal ComputeListModel_666(TableModel_654 owner, Item item) : base(owner, item) { }
+        internal override IdKey IdKey => IdKey.ComputeListModel_666;
         public override bool CanExpandLeft => TotalCount > 0;
         public override bool CanFilter => true;
         public override bool CanSort => true;
 
         internal override string GetFilterSortId(Root root) => GetSingleNameId(root);
-        public override int TotalCount => DataRoot.Get<Relation_Store_ColumnX>().ChildCount(Item);
+        public override int TotalCount => DataRoot.Get<Relation_Store_ComputeX>().ChildCount(Item);
 
         internal override bool ExpandLeft()
         {
@@ -23,7 +25,7 @@ namespace ModelGraph.Core
                 {
                     foreach (var cx in cxList)
                     {
-                        new ColumnModel_657(this, cx);
+                        //new ColumnModel_657(this, cx);
                     }
                 }
             }
@@ -33,9 +35,9 @@ namespace ModelGraph.Core
         public override void GetButtonCommands(Root root, List<LineCommand> list)
         {
             list.Clear();
-            list.Add(new InsertCommand(this, AddNewColumnX));
+            list.Add(new InsertCommand(this, AddNewComputeX));
         }
-        private void AddNewColumnX()
+        private void AddNewComputeX()
         {
             var root = DataRoot;
             var cx = new ColumnX(root.Get<ColumnXRoot>(), true);
@@ -58,7 +60,7 @@ namespace ModelGraph.Core
                 {
                     ChildDelta = Item.ChildDelta;
 
-                    if (!DataRoot.Get<Relation_Store_ColumnX>().TryGetChildren(Item, out IList<ColumnX> cxList))
+                    if (!DataRoot.Get<Relation_Store_ComputeX>().TryGetChildren(Item, out IList<ComputeX> cxList))
                     {
                         IsExpandedLeft = false;
                         DiscardChildren();
@@ -82,7 +84,7 @@ namespace ModelGraph.Core
                         }
                         else
                         {
-                            new ColumnModel_657(this, cx);
+                            //new ColumnModel_657(this, cx);
                             viewListChange = true;
                         }
                     }

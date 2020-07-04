@@ -395,7 +395,7 @@ namespace ModelGraph.Core
         ChangeRootModel_622 = 0x622,
         MetaDataRootModel_623 = 0x623,
         ModelingRootModel_624 = 0x624,
-        MetaRelationList_Model = 0x625,
+        MetaRelationListModel_625 = 0x625, // defunct - remove this
         ErrorTypeModel_626 = 0x626,
         ErrorTextModel_627 = 0x627,
         ChangeSetModel_628 = 0x628,
@@ -430,11 +430,11 @@ namespace ModelGraph.Core
         SymbolEditor_Model = 0x659,
         //=====================================================================
         ColumnListModel_661 = 0x661,
-        ChildRelationList_MetaModel = 0x662,
-        ParentRelatationList_MetaModel = 0x663,
+        ChildRelationListModel_662 = 0x662,
+        ParentRelatationListModel_663 = 0x663,
         EnumXPairList_MetaModel = 0x664,
         EnumXColumnList_MetaModel = 0x665,
-        ComputeXList_MetaModel = 0x666,
+        ComputeListModel_666 = 0x666,
         EnumXRelatedColumn_MetaModel = 0x667,
         //=====================================================================
         MetaChildRelation_Model = 0x671,

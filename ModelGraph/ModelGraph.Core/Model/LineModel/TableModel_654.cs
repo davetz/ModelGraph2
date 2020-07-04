@@ -26,6 +26,9 @@ namespace ModelGraph.Core
             if (IsExpandedLeft) return false;
 
             new ColumnListModel_661(this, Item);
+            new ComputeListModel_666(this, Item);
+            new ChildRelationListModel_662(this, Item);
+            new ParentRelatationListModel_663(this, Item);
 
             IsExpandedLeft = true;
             return true;

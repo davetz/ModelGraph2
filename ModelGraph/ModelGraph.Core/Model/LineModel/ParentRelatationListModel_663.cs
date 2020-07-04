@@ -1,17 +1,19 @@
-﻿using System.Collections.Generic;
+﻿
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ModelGraph.Core
 {
-    public class ColumnListModel_661 : LineModel
+    public class ParentRelatationListModel_663 : LineModel
     {//============================================== In the MetaDataRoot hierarchy  ==============
-        internal ColumnListModel_661(TableModel_654 owner, Item item) : base(owner, item) { }
-        internal override IdKey IdKey => IdKey.ColumnListModel_661;
+        internal ParentRelatationListModel_663(TableModel_654 owner, Item item) : base(owner, item) { }
+        internal override IdKey IdKey => IdKey.ParentRelatationListModel_663;
         public override bool CanExpandLeft => TotalCount > 0;
         public override bool CanFilter => true;
         public override bool CanSort => true;
 
         internal override string GetFilterSortId(Root root) => GetSingleNameId(root);
-        public override int TotalCount => DataRoot.Get<Relation_Store_ColumnX>().ChildCount(Item);
+        public override int TotalCount => DataRoot.Get<Relation_Store_ParentRelation>().ChildCount(Item);
 
         internal override bool ExpandLeft()
         {
@@ -19,11 +21,11 @@ namespace ModelGraph.Core
             {
                 IsExpandedLeft = true;
 
-                if (DataRoot.Get<Relation_Store_ColumnX>().TryGetChildren(Item, out IList<ColumnX> cxList))
+                if (DataRoot.Get<Relation_Store_ParentRelation>().TryGetChildren(Item, out IList<Relation> cxList))
                 {
                     foreach (var cx in cxList)
                     {
-                        new ColumnModel_657(this, cx);
+                        //new ColumnModel_657(this, cx);
                     }
                 }
             }
@@ -58,7 +60,7 @@ namespace ModelGraph.Core
                 {
                     ChildDelta = Item.ChildDelta;
 
-                    if (!DataRoot.Get<Relation_Store_ColumnX>().TryGetChildren(Item, out IList<ColumnX> cxList))
+                    if (!DataRoot.Get<Relation_Store_ParentRelation>().TryGetChildren(Item, out IList<Relation> cxList))
                     {
                         IsExpandedLeft = false;
                         DiscardChildren();
@@ -82,7 +84,7 @@ namespace ModelGraph.Core
                         }
                         else
                         {
-                            new ColumnModel_657(this, cx);
+                            //new ColumnModel_657(this, cx);
                             viewListChange = true;
                         }
                     }
