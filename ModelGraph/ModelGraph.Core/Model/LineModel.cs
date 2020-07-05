@@ -22,7 +22,7 @@ namespace ModelGraph.Core
             if( item.AutoExpandRight)
             {
                 item.AutoExpandRight = false;
-                ExpandRight();
+                ExpandRight(DataRoot);
             }
 
             owner.CovertAdd(this);
@@ -122,8 +122,8 @@ namespace ModelGraph.Core
         internal Store ItemStore => Item as Store;
         internal bool IsValidModel(LineModel m) => !IsInvalidModel(m);
         internal bool IsInvalidModel(LineModel m) => IsInvalid(m) || IsInvalid(m.Item);
-        internal bool ToggleLeft() => IsExpandedLeft ? CollapseLeft() : ExpandLeft();
-        internal bool ToggleRight() => IsExpandedRight ? CollapseRight() : ExpandRight();
+        internal bool ToggleLeft(Root root) => IsExpandedLeft ? CollapseLeft() : ExpandLeft(root);
+        internal bool ToggleRight(Root root) => IsExpandedRight ? CollapseRight() : ExpandRight(root);
 
         protected bool CollapseLeft()
         {
@@ -187,8 +187,8 @@ namespace ModelGraph.Core
         #endregion
 
         #region Virtual Functions  ============================================
-        internal virtual bool ExpandLeft() => false;
-        internal virtual bool ExpandRight() => false;
+        internal virtual bool ExpandLeft(Root root) => false;
+        internal virtual bool ExpandRight(Root root) => false;
 
         internal virtual bool IsItemUsed => true;
 
@@ -220,12 +220,12 @@ namespace ModelGraph.Core
         public virtual string GetModelIdentity() =>  $"{IdKey}";
 
         /// <summary>Validate model against the model's item, return true if any child list changed</summary>
-        internal virtual bool Validate(TreeModel treeRoot, Dictionary<Item, LineModel> prev)
+        internal virtual bool Validate(Root root, Dictionary<Item, LineModel> prev)
         {
             var viewListChange = false;
             foreach (var child in Items)
             {
-                viewListChange |= child.Validate(treeRoot, prev);
+                viewListChange |= child.Validate(root, prev);
             }
             return viewListChange;
         }

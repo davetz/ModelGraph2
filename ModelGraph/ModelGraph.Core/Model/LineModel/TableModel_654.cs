@@ -21,7 +21,7 @@ namespace ModelGraph.Core
             list.Add(new RemoveCommand(this, () => root.Get<ChangeRoot>().RemoveItem(Item)));
         }
 
-        internal override bool ExpandLeft()
+        internal override bool ExpandLeft(Root root)
         {
             if (IsExpandedLeft) return false;
 
@@ -34,10 +34,9 @@ namespace ModelGraph.Core
             return true;
         }
 
-        internal override bool ExpandRight()
+        internal override bool ExpandRight(Root root)
         {
             if (IsExpandedRight) return false;
-            var root = DataRoot;
 
             new PropertyTextModel_617(this, Item, root.Get<Property_Item_Summary>());
             new PropertyTextModel_617(this, Item, root.Get<Property_Item_Name>());

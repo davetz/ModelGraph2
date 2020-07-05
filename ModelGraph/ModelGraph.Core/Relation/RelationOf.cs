@@ -15,6 +15,26 @@ namespace ModelGraph.Core
 
         override internal bool IsValidParentChild(Item parentItem, Item childItem) { return (parentItem is T1 && childItem is T2); }
 
+        #region Identity  =====================================================
+        public override string GetSingleNameId(Root root)
+        {
+            var (head, tail) = GetHeadTail(root);
+            var myName = Name;
+            if (string.IsNullOrWhiteSpace(myName) || myName.StartsWith("?")) myName = string.Empty;
+            var headName = (head is null) ? BlankName : head.GetSingleNameId(root);
+            var tailName = (tail is null) ? BlankName : tail.GetSingleNameId(root);
+
+            return $"({myName})    {headName} --> {tailName}";
+        }
+
+        internal  (Store, Store) GetHeadTail(Root root)
+        {
+            root.Get<Relation_Store_ChildRelation>().TryGetParent(this, out Store head);
+            root.Get<Relation_Store_ParentRelation>().TryGetParent(this, out Store tail);
+            return (head, tail);
+        }
+        #endregion
+
         #region Initialize  ===================================================
         internal void Initialize(int parentCount, int childCount)
         {

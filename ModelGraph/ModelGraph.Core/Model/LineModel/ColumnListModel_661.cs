@@ -13,13 +13,13 @@ namespace ModelGraph.Core
         internal override string GetFilterSortId(Root root) => GetSingleNameId(root);
         public override int TotalCount => DataRoot.Get<Relation_Store_ColumnX>().ChildCount(Item);
 
-        internal override bool ExpandLeft()
+        internal override bool ExpandLeft(Root root)
         {
             if (IsExpandedLeft) return false;
             {
                 IsExpandedLeft = true;
 
-                if (DataRoot.Get<Relation_Store_ColumnX>().TryGetChildren(Item, out IList<ColumnX> cxList))
+                if (root.Get<Relation_Store_ColumnX>().TryGetChildren(Item, out IList<ColumnX> cxList))
                 {
                     foreach (var cx in cxList)
                     {
@@ -33,11 +33,10 @@ namespace ModelGraph.Core
         public override void GetButtonCommands(Root root, List<LineCommand> list)
         {
             list.Clear();
-            list.Add(new InsertCommand(this, AddNewColumnX));
+            list.Add(new InsertCommand(this, () => AddNewColumnX(root)));
         }
-        private void AddNewColumnX()
+        private void AddNewColumnX(Root root)
         {
-            var root = DataRoot;
             var cx = new ColumnX(root.Get<ColumnXRoot>(), true);
             var sto = Item as Store;
 
@@ -46,7 +45,7 @@ namespace ModelGraph.Core
             ItemLinked.Record(root, root.Get<Relation_Store_ColumnX>(), sto, cx);
         }
 
-        internal override bool Validate(TreeModel treeRoot, Dictionary<Item, LineModel> prev)
+        internal override bool Validate(Root root, Dictionary<Item, LineModel> prev)
         {
             var viewListChange = false;
             if (IsExpanded || AutoExpandLeft)
@@ -58,7 +57,7 @@ namespace ModelGraph.Core
                 {
                     ChildDelta = Item.ChildDelta;
 
-                    if (!DataRoot.Get<Relation_Store_ColumnX>().TryGetChildren(Item, out IList<ColumnX> cxList))
+                    if (!root.Get<Relation_Store_ColumnX>().TryGetChildren(Item, out IList<ColumnX> cxList))
                     {
                         IsExpandedLeft = false;
                         DiscardChildren();
@@ -94,7 +93,7 @@ namespace ModelGraph.Core
                     }
                 }
             }
-            return viewListChange || base.Validate(treeRoot, prev);
+            return viewListChange || base.Validate(root, prev);
         }
     }
 }

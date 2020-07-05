@@ -1,21 +1,22 @@
 ﻿
 namespace ModelGraph.Core
 {
-    public class ColumnModel_657 : LineModel
+    public class ChildRelationModel_671 : LineModel
     {//============================================== In the MetaDataRoot hierarchy  ==============
-        internal ColumnModel_657(ColumnListModel_661 owner, Item item) : base(owner, item) { }
-        internal override IdKey IdKey => IdKey.ColumnModel_657;
-        public override bool CanExpandRight => true;
+        internal ChildRelationModel_671(ChildRelationListModel_662 owner, Relation item) : base(owner, item) { }
+        internal override IdKey IdKey => IdKey.ChildRelationModel_671;
+        private RelationX_RowX_RowX RX => Item as RelationX_RowX_RowX;
+
 
         public override (string, string) GetKindNameId(Root root) => Item.GetKindNameId(root);
 
+
+        public override bool CanExpandRight => true;
         internal override bool ExpandRight(Root root)
         {
             if (IsExpandedRight) return false;
             IsExpandedRight = true;
 
-            new PropertyCheckModel_618(this, Item, root.Get<Property_ColumnX_IsChoice>());
-            new PropertyComboModel_619(this, Item, root.Get<Property_ColumnX_ValueType>());
             new PropertyTextModel_617(this, Item, root.Get<Property_Item_Summary>());
             new PropertyTextModel_617(this, Item, root.Get<Property_Item_Name>());
 

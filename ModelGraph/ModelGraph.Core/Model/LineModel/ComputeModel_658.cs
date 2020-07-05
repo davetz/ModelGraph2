@@ -1,10 +1,10 @@
 ﻿
 namespace ModelGraph.Core
 {
-    public class ColumnModel_657 : LineModel
+    public class ComputeModel_658 : LineModel
     {//============================================== In the MetaDataRoot hierarchy  ==============
-        internal ColumnModel_657(ColumnListModel_661 owner, Item item) : base(owner, item) { }
-        internal override IdKey IdKey => IdKey.ColumnModel_657;
+        internal ComputeModel_658(ComputeListModel_666 owner, ComputeX item) : base(owner, item) { }
+        internal override IdKey IdKey => IdKey.ComputeModel_658;
         public override bool CanExpandRight => true;
 
         public override (string, string) GetKindNameId(Root root) => Item.GetKindNameId(root);
@@ -14,8 +14,6 @@ namespace ModelGraph.Core
             if (IsExpandedRight) return false;
             IsExpandedRight = true;
 
-            new PropertyCheckModel_618(this, Item, root.Get<Property_ColumnX_IsChoice>());
-            new PropertyComboModel_619(this, Item, root.Get<Property_ColumnX_ValueType>());
             new PropertyTextModel_617(this, Item, root.Get<Property_Item_Summary>());
             new PropertyTextModel_617(this, Item, root.Get<Property_Item_Name>());
 

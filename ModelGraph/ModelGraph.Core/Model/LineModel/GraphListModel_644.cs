@@ -5,10 +5,10 @@ namespace ModelGraph.Core
 {
     public class GraphListModel_644 : LineModel
     {//============================================== In the MetaDataRoot hierarchy  ==============
-        internal GraphListModel_644(MetaDataRootModel_623 owner, Item item) : base(owner, item) { }
+        internal GraphListModel_644(MetadataRootModel_623 owner, Item item) : base(owner, item) { }
         internal override IdKey IdKey => IdKey.GraphListModel_644;
 
-        internal override bool Validate(TreeModel treeRoot, Dictionary<Item, LineModel> prev)
+        internal override bool Validate(Root root, Dictionary<Item, LineModel> prev)
         {
             var viewListChange = false;
             if (!IsExpanded) return false;
@@ -43,7 +43,7 @@ namespace ModelGraph.Core
                 foreach (var model in prev.Values) { model.Discard(); }
             }
 
-            return viewListChange | base.Validate(treeRoot, prev);
+            return viewListChange | base.Validate(root, prev);
         }
     }
 }

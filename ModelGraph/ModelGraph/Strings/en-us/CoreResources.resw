@@ -1248,7 +1248,7 @@ NEC – NWC – SEC - SWC</value>
     <value>List of graphs</value>
   </data>
   <data name="661N" xml:space="preserve">
-    <value>Column</value>
+    <value>Column Property</value>
   </data>
   <data name="661S" xml:space="preserve">
     <value>List of user defined Columns for this table</value>
@@ -1278,7 +1278,7 @@ NEC – NWC – SEC - SWC</value>
     <value>Drag a Column and drop it here to assign this enum.</value>
   </data>
   <data name="666N" xml:space="preserve">
-    <value>Computed</value>
+    <value>Computed Property</value>
   </data>
   <data name="666S" xml:space="preserve">
     <value>List of user defined computed values for this table</value>

@@ -113,11 +113,11 @@ namespace ModelGraph.Core
                         _buffer.Refresh(Items[0], viewSize, viewSize);
                         break;
                     case ChangeType.ToggleLeft:
-                        selected.ToggleLeft();
+                        selected.ToggleLeft(Owner as Root);
                         _buffer.Refresh(Items[0], viewSize, leading);
                         break;
                     case ChangeType.ToggleRight:
-                        selected.ToggleRight();
+                        selected.ToggleRight(Owner as Root);
                         _buffer.Refresh(Items[0], viewSize, leading);
                         break;
                     case ChangeType.ToggleFilter:
@@ -144,7 +144,7 @@ namespace ModelGraph.Core
             var viewListChanged = false;
             foreach (var model in Items)
             {
-                viewListChanged |= model.Validate(this, prev);
+                viewListChanged |= model.Validate(Owner as Root, prev);
             }
             if (viewListChanged) 
                 RefreshViewList(ChangeType.ViewListChanged);

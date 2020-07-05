@@ -15,17 +15,17 @@ namespace ModelGraph.Core
         internal override string GetFilterSortId(Root root) => GetSingleNameId(root);
         public override int TotalCount => DataRoot.Get<Relation_Store_ComputeX>().ChildCount(Item);
 
-        internal override bool ExpandLeft()
+        internal override bool ExpandLeft(Root root)
         {
             if (IsExpandedLeft) return false;
             {
                 IsExpandedLeft = true;
 
-                if (DataRoot.Get<Relation_Store_ColumnX>().TryGetChildren(Item, out IList<ColumnX> cxList))
+                if (root.Get<Relation_Store_ComputeX>().TryGetChildren(Item, out IList<ComputeX> cxList))
                 {
                     foreach (var cx in cxList)
                     {
-                        //new ColumnModel_657(this, cx);
+                        new ComputeModel_658(this, cx);
                     }
                 }
             }
@@ -35,20 +35,19 @@ namespace ModelGraph.Core
         public override void GetButtonCommands(Root root, List<LineCommand> list)
         {
             list.Clear();
-            list.Add(new InsertCommand(this, AddNewComputeX));
+            list.Add(new InsertCommand(this, () => AddNewComputeX(root)));
         }
-        private void AddNewComputeX()
+        private void AddNewComputeX(Root root)
         {
-            var root = DataRoot;
-            var cx = new ColumnX(root.Get<ColumnXRoot>(), true);
+            var cx = new ComputeX(root.Get<ComputeXRoot>(), true);
             var sto = Item as Store;
 
             // the data root implements undo/redo functionality
             ItemCreated.Record(root, cx);
-            ItemLinked.Record(root, root.Get<Relation_Store_ColumnX>(), sto, cx);
+            ItemLinked.Record(root, root.Get<Relation_Store_ComputeX>(), sto, cx);
         }
 
-        internal override bool Validate(TreeModel treeRoot, Dictionary<Item, LineModel> prev)
+        internal override bool Validate(Root root, Dictionary<Item, LineModel> prev)
         {
             var viewListChange = false;
             if (IsExpanded || AutoExpandLeft)
@@ -60,7 +59,7 @@ namespace ModelGraph.Core
                 {
                     ChildDelta = Item.ChildDelta;
 
-                    if (!DataRoot.Get<Relation_Store_ComputeX>().TryGetChildren(Item, out IList<ComputeX> cxList))
+                    if (!root.Get<Relation_Store_ComputeX>().TryGetChildren(Item, out IList<ComputeX> cxList))
                     {
                         IsExpandedLeft = false;
                         DiscardChildren();
@@ -84,7 +83,7 @@ namespace ModelGraph.Core
                         }
                         else
                         {
-                            //new ColumnModel_657(this, cx);
+                            new ComputeModel_658(this, cx);
                             viewListChange = true;
                         }
                     }
@@ -96,7 +95,7 @@ namespace ModelGraph.Core
                     }
                 }
             }
-            return viewListChange || base.Validate(treeRoot, prev);
+            return viewListChange || base.Validate(root, prev);
         }
     }
 }

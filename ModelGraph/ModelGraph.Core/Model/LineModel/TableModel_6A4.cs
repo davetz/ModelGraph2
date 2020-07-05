@@ -11,7 +11,7 @@ namespace ModelGraph.Core
         internal override string GetFilterSortId(Root root) => Item.GetSingleNameId(root);
         public override string GetSummaryId(Root root) => Item.GetSummaryId(root);
 
-        internal override bool ExpandLeft()
+        internal override bool ExpandLeft(Root root)
         {
             if (IsExpandedLeft) return false;
 

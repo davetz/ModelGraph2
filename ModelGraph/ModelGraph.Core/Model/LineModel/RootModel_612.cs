@@ -12,7 +12,7 @@ namespace ModelGraph.Core
             new RootParamModel_620(this, Item);
             new ErrorRootModel_621(this, Item);
             new ChangeRootModel_622(this, root.Get<ChangeRoot>());
-            new MetaDataRootModel_623(this, Item);
+            new MetadataRootModel_623(this, Item);
             new ModelingRootModel_624(this, Item);
 
             IsExpandedLeft = true;

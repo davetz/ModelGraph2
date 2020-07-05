@@ -13,17 +13,17 @@ namespace ModelGraph.Core
         internal override string GetFilterSortId(Root root) => GetSingleNameId(root);
         public override int TotalCount => DataRoot.Get<Relation_Store_ChildRelation>().ChildCount(Item);
 
-        internal override bool ExpandLeft()
+        internal override bool ExpandLeft(Root root)
         {
             if (IsExpandedLeft) return false;
             {
                 IsExpandedLeft = true;
 
-                if (DataRoot.Get<Relation_Store_ColumnX>().TryGetChildren(Item, out IList<ColumnX> cxList))
+                if (root.Get<Relation_Store_ChildRelation>().TryGetChildren(Item, out IList<Relation> rxList))
                 {
-                    foreach (var cx in cxList)
+                    foreach (var cx in rxList)
                     {
-                        //new ColumnModel_657(this, cx);
+                        new ChildRelationModel_671(this, cx);
                     }
                 }
             }
@@ -46,7 +46,7 @@ namespace ModelGraph.Core
             ItemLinked.Record(root, root.Get<Relation_Store_ColumnX>(), sto, cx);
         }
 
-        internal override bool Validate(TreeModel treeRoot, Dictionary<Item, LineModel> prev)
+        internal override bool Validate(Root root, Dictionary<Item, LineModel> prev)
         {
             var viewListChange = false;
             if (IsExpanded || AutoExpandLeft)
@@ -58,7 +58,7 @@ namespace ModelGraph.Core
                 {
                     ChildDelta = Item.ChildDelta;
 
-                    if (!DataRoot.Get<Relation_Store_ChildRelation>().TryGetChildren(Item, out IList<Relation> cxList))
+                    if (!root.Get<Relation_Store_ChildRelation>().TryGetChildren(Item, out IList<Relation> rxList))
                     {
                         IsExpandedLeft = false;
                         DiscardChildren();
@@ -73,16 +73,16 @@ namespace ModelGraph.Core
                     }
                     CovertClear();
 
-                    foreach (var cx in cxList)
+                    foreach (var rx in rxList)
                     {
-                        if (prev.TryGetValue(cx, out LineModel m))
+                        if (prev.TryGetValue(rx, out LineModel m))
                         {
                             CovertAdd(m);
                             prev.Remove(m.Item);
                         }
                         else
                         {
-                            //new ColumnModel_657(this, cx);
+                            new ChildRelationModel_671(this, rx);
                             viewListChange = true;
                         }
                     }
@@ -94,7 +94,7 @@ namespace ModelGraph.Core
                     }
                 }
             }
-            return viewListChange || base.Validate(treeRoot, prev);
+            return viewListChange || base.Validate(root, prev);
         }
     }
 }

@@ -12,7 +12,7 @@ namespace ModelGraph.Core
         public override bool CanExpandLeft => TotalCount > 0;
         public override int TotalCount => ItemStore.Count;
 
-        internal override bool ExpandLeft()
+        internal override bool ExpandLeft(Root root)
         {
             if (IsExpandedLeft) return false;
 
@@ -27,7 +27,7 @@ namespace ModelGraph.Core
             return true;
         }
 
-        internal override bool Validate(TreeModel treeRoot, Dictionary<Item, LineModel> prev)
+        internal override bool Validate(Root root, Dictionary<Item, LineModel> prev)
         {
             var viewListChanged = false;
             if (IsExpanded || AutoExpandLeft)
@@ -68,7 +68,7 @@ namespace ModelGraph.Core
                     }
                 }
             }
-            return viewListChanged || base.Validate(treeRoot, prev);
+            return viewListChanged || base.Validate(root, prev);
         }
     }
 }

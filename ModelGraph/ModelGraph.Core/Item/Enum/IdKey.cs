@@ -393,7 +393,7 @@ namespace ModelGraph.Core
         RootParmModel_620 = 0x620,
         ErrorRootModel_621 = 0x621,
         ChangeRootModel_622 = 0x622,
-        MetaDataRootModel_623 = 0x623,
+        MetadataRootModel_623 = 0x623,
         ModelingRootModel_624 = 0x624,
         MetaRelationListModel_625 = 0x625, // defunct - remove this
         ErrorTypeModel_626 = 0x626,
@@ -426,7 +426,7 @@ namespace ModelGraph.Core
         GraphModel_655 = 0x655,
         SymbolX_MetaModel = 0x656,
         ColumnModel_657 = 0x657,
-        ComputeX_MetaModel = 0x658,
+        ComputeModel_658 = 0x658,
         SymbolEditor_Model = 0x659,
         //=====================================================================
         ColumnListModel_661 = 0x661,
@@ -437,12 +437,12 @@ namespace ModelGraph.Core
         ComputeListModel_666 = 0x666,
         EnumXRelatedColumn_MetaModel = 0x667,
         //=====================================================================
-        MetaChildRelation_Model = 0x671,
-        MetaParentRelation_Model = 0x672,
-        MetaNameColumnRelation_Model = 0x673,
-        MetaSummaryColumnRelation_Model = 0x674,
-        MetaNameColumn_Model = 0x675,
-        MetaSummaryColumn_Model = 0x676,
+        ChildRelationModel_671 = 0x671,
+        ParentRelationModel_672 = 0x672,
+        NameColumnRelationModel_673 = 0x673,
+        SummaryColumnRelationModel_674 = 0x674,
+        NameColumnModel_675 = 0x675,
+        SummaryColumnModel_676 = 0x676,
         //=====================================================================
         MetaGraphColoring_Model = 0x681,
         MetaGraphRootList_Model = 0x682,

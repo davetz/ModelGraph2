@@ -6,7 +6,7 @@ namespace ModelGraph.Core
 {
     public class TableListModel_643 : LineModel
     {//============================================== In the MetaDataRoot hierarchy  ==============
-        internal TableListModel_643(MetaDataRootModel_623 owner, TableXRoot item) : base(owner, item) { }
+        internal TableListModel_643(MetadataRootModel_623 owner, TableXRoot item) : base(owner, item) { }
         internal override IdKey IdKey => IdKey.TableListModel_643;
 
         public override bool CanExpandLeft => TotalCount > 0;
@@ -16,7 +16,7 @@ namespace ModelGraph.Core
 
         private TableXRoot TableXRoot => Item as TableXRoot;
 
-        internal override bool ExpandLeft()
+        internal override bool ExpandLeft(Root root)
         {
             if (IsExpandedLeft) return false;
 
@@ -36,7 +36,7 @@ namespace ModelGraph.Core
             list.Add(new InsertCommand(this, () => ItemCreated.Record(root, new TableX(Item as TableXRoot, true))));
         }
 
-        internal override bool Validate(TreeModel treeRoot, Dictionary<Item, LineModel> prev)
+        internal override bool Validate(Root root, Dictionary<Item, LineModel> prev)
         {
             var viewListChanged = false;
             if (IsExpanded || AutoExpandLeft)
@@ -76,7 +76,7 @@ namespace ModelGraph.Core
                     }
                 }
             }
-            return viewListChanged || base.Validate(treeRoot, prev);
+            return viewListChanged || base.Validate(root, prev);
         }
     }
 }

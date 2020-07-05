@@ -2,16 +2,16 @@
 
 namespace ModelGraph.Core
 {
-    public class MetaDataRootModel_623 : LineModel
+    public class MetadataRootModel_623 : LineModel
     {
-        internal MetaDataRootModel_623(RootModel_612 owner, Item item) : base(owner, item) { }
-        internal override IdKey IdKey => IdKey.MetaDataRootModel_623;
+        internal MetadataRootModel_623(RootModel_612 owner, Item item) : base(owner, item) { }
+        internal override IdKey IdKey => IdKey.MetadataRootModel_623;
         public override bool CanExpandLeft => true;
 
-        internal override bool ExpandLeft()
+        internal override bool ExpandLeft(Root root)
         {
             if (IsExpandedLeft) return false;
-            var root = DataRoot;
+            IsExpandedLeft = true;
 
             new ViewListModel_631(this, root.Get<ViewXRoot>());
             new EnumListModel_624(this, root.Get<EnumXRoot>());
@@ -19,7 +19,6 @@ namespace ModelGraph.Core
             new GraphListModel_644(this, root.Get<GraphXRoot>());
             new InternalRootModel_7F0(this, Item);// TODO: FIX THIS***************
 
-            IsExpandedLeft = true;
             return true;
         }
     }
