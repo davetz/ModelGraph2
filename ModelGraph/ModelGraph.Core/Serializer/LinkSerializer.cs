@@ -337,8 +337,23 @@ namespace ModelGraph.Core
                                 {
                                     foreach (var ix2 in ix2List) { list2.Add((ix2, ix1)); }
                                 }
-                                rel.SetChildren2(list1, items);
-                                rel.SetParents1(list2.ToArray(), items);
+                                if (rel.Pairing == Pairing.ManyToMany) // allow some resiliance for legacy data files
+                                {
+                                    var list3 = new (int, int[])[list2.Count];
+                                    for (int j = 0; j < list2.Count; j++)
+                                    {
+                                        var (ix1, ix2) = list2[j];
+                                        list3[j] = (ix1, new int[1] { ix2 });
+                                    }
+                                    rel.SetChildren2(list1, items);
+                                    rel.SetParents2(list3, items);
+
+                                }
+                                else
+                                {
+                                    rel.SetChildren2(list1, items);
+                                    rel.SetParents1(list2.ToArray(), items);
+                                }
                             }
                             break;
 

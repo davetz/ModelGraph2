@@ -6,6 +6,7 @@ namespace ModelGraph.Core
     public class TableModel_654 : LineModel
     {//============================================== In the MetaDataRoot hierarchy  ==============
         internal TableModel_654(TableListModel_643 owner, TableX item) : base(owner, item) { }
+        private TableX TX => Item as TableX;
         internal override IdKey IdKey => IdKey.TableModel_654;
 
         public override bool CanExpandLeft => true;
@@ -24,13 +25,14 @@ namespace ModelGraph.Core
         internal override bool ExpandLeft(Root root)
         {
             if (IsExpandedLeft) return false;
-
-            new ColumnListModel_661(this, Item);
-            new ComputeListModel_666(this, Item);
-            new ChildRelationListModel_662(this, Item);
-            new ParentRelatationListModel_663(this, Item);
-
             IsExpandedLeft = true;
+            var tx = TX;
+
+            new ColumnListModel_661(this, tx);
+            new ComputeListModel_666(this, tx);
+            new ChildRelationListModel_662(this, tx);
+            new ParentRelatationListModel_663(this, tx);
+
             return true;
         }
 

@@ -4,7 +4,8 @@ namespace ModelGraph.Core
 {
     public class ChildRelationListModel_662 : LineModel
     {//============================================== In the MetaDataRoot hierarchy  ==============
-        internal ChildRelationListModel_662(TableModel_654 owner, Item item) : base(owner, item) { }
+        internal ChildRelationListModel_662(TableModel_654 owner, TableX item) : base(owner, item) { }
+        private TableX TX => Item as TableX;
         internal override IdKey IdKey => IdKey.ChildRelationListModel_662;
         public override bool CanExpandLeft => TotalCount > 0;
         public override bool CanFilter => true;
@@ -33,17 +34,16 @@ namespace ModelGraph.Core
         public override void GetButtonCommands(Root root, List<LineCommand> list)
         {
             list.Clear();
-            list.Add(new InsertCommand(this, AddNewColumnX));
+            list.Add(new InsertCommand(this, () => AddNewChildRelation(root)));
         }
-        private void AddNewColumnX()
+        private void AddNewChildRelation(Root root)
         {
-            var root = DataRoot;
-            var cx = new ColumnX(root.Get<ColumnXRoot>(), true);
-            var sto = Item as Store;
+            var rx = new RelationX_RowX_RowX(root.Get<RelationXRoot>(), true);
 
             // the data root implements undo/redo functionality
-            ItemCreated.Record(root, cx);
-            ItemLinked.Record(root, root.Get<Relation_Store_ColumnX>(), sto, cx);
+            ItemCreated.Record(root, rx);
+            ItemLinked.Record(root, root.Get<Relation_Store_ChildRelation>(), TX, rx);
+            ChildDelta -= 2;
         }
 
         internal override bool Validate(Root root, Dictionary<Item, LineModel> prev)

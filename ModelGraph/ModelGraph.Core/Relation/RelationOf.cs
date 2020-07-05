@@ -599,14 +599,14 @@ namespace ModelGraph.Core
         {
             switch (Pairing)
             {
-                case Pairing.OneToMany:
-                    _parents1.SetLink(val, key);
-                    _children2.SetLink(key, val, capacity);
-                    break;
-
                 case Pairing.OneToOne:
                     _parents1.SetLink(val, key);
                     _children1.SetLink(key, val);
+                    break;
+
+                case Pairing.OneToMany:
+                    _parents1.SetLink(val, key);
+                    _children2.SetLink(key, val, capacity);
                     break;
 
                 case Pairing.ManyToMany:
@@ -614,15 +614,6 @@ namespace ModelGraph.Core
                     _children2.SetLink(key, val, capacity);
                     break;
             }
-        }
-        internal void SetLink(T1 key, IList<T2> vals)
-        {
-            var cap = vals.Count;
-            foreach (var val in vals)
-            {
-                SetLink(key, val, cap);
-            }
-
         }
         #endregion
     }

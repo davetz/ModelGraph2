@@ -6,8 +6,10 @@ namespace ModelGraph.Core
 {
     public class ParentRelatationListModel_663 : LineModel
     {//============================================== In the MetaDataRoot hierarchy  ==============
-        internal ParentRelatationListModel_663(TableModel_654 owner, Item item) : base(owner, item) { }
+        internal ParentRelatationListModel_663(TableModel_654 owner, TableX item) : base(owner, item) { }
+        private TableX TX => Item as TableX;
         internal override IdKey IdKey => IdKey.ParentRelatationListModel_663;
+
         public override bool CanExpandLeft => TotalCount > 0;
         public override bool CanFilter => true;
         public override bool CanSort => true;
@@ -40,11 +42,11 @@ namespace ModelGraph.Core
         private void AddNewParentRelation(Root root)
         {
             var rx = new RelationX_RowX_RowX(root.Get<RelationXRoot>(), true);
-            var sto = Item as Store;
 
             // the data root implements undo/redo functionality
             ItemCreated.Record(root, rx);
-            ItemLinked.Record(root, root.Get<Relation_Store_ParentRelation>(), sto, rx);
+            ItemLinked.Record(root, root.Get<Relation_Store_ParentRelation>(), TX, rx);
+            ChildDelta -= 2;
         }
 
         internal override bool Validate(Root root, Dictionary<Item, LineModel> prev)
