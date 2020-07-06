@@ -9,11 +9,10 @@ namespace ModelGraph.Core
         #region PostUIRequest  ================================================
         // These methods are called from the ui thread and typically they invoke 
         // some change to the dataChefs objects (create, remove, update, link, unlink)
-        internal void PostAction(IRootModel model, Action action)
+        internal void PostRefresh()
         {
-        }
-        internal void PostRefresh(IRootModel model)
-        {
+            PostModelRequest(DoNothing);
+            void DoNothing() { }
         }
         internal void PostCommand(LineCommand command)
         {

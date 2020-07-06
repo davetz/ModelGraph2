@@ -184,6 +184,20 @@ namespace ModelGraph.Core
             }
             throw new Exception("GetRootModel: Corrupted item hierarchy"); // I seriously hope this never happens
         }
+
+        public void DragStart(Root root) => Root.DragDropSource = this;
+        public DropAction DragEnter(Root root) => IsValidModel(Root.DragDropSource) ? ModelDrop(root, Root.DragDropSource, false) : DropAction.None;
+        public void DragDrop(Root root)
+        {
+            var dropModel = Root.DragDropSource;
+
+            if (IsValidModel(dropModel))
+            {
+                ModelDrop(root, Root.DragDropSource, true);
+                root.PostRefresh();
+            }
+        }
+
         #endregion
 
         #region Virtual Functions  ============================================
@@ -208,11 +222,7 @@ namespace ModelGraph.Core
         public virtual void GetMenuCommands(Root root, List<LineCommand> list) { list.Clear(); }
         public virtual void GetButtonCommands(Root root, List<LineCommand> list) { list.Clear(); }
 
-
-        public void DragStart(Root root) => Root.DragDropSource = this;
-        public virtual DropAction DragEnter(Root root) => DropAction.None;
-
-        public virtual DropAction DragDrop(Root root) => DropAction.None;
+        internal  virtual DropAction ModelDrop(Root root, LineModel dropModel, bool doDrop ) => DropAction.None;
         public virtual DropAction ReorderItems(Root root, LineModel target, bool doDrop) => DropAction.None;
 
         public virtual Error TryGetError(Root root) => default;
