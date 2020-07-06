@@ -30,7 +30,7 @@ namespace ModelGraph.Core
         }
         internal void PostSetIndexValue(Item item, Property prop, int index)
         {
-            if (prop is EnumProperty enu)
+            if (prop is IEnumProperty enu)
             {
                 PostSetTextValue(item, prop, enu.GetValue(index));
             }

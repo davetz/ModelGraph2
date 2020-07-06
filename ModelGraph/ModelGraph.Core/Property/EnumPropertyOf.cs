@@ -3,11 +3,11 @@ using System;
 
 namespace ModelGraph.Core
 {
-    public abstract class EnumProperty : PropertyOf<ColumnX, string>
+    public abstract class EnumPropertyOf<T> : PropertyOf<T, string>, IEnumProperty where T : Item
     {
         internal EnumZ EnumZ { get; }
 
-        internal EnumProperty(PropertyRoot owner, EnumZ enumZ)
+        internal EnumPropertyOf(PropertyRoot owner, EnumZ enumZ)
         {
             Owner = owner;
             EnumZ = enumZ;
@@ -19,7 +19,7 @@ namespace ModelGraph.Core
         internal abstract int GetItemPropertyValue(Item item); //get the item's proproperty enum key value
         internal abstract void SetItemPropertyValue(Item item, int key); //set the item's proproperty enum key value
 
-        internal string GetValue(int index) => EnumZ.GetEnumIndexName(DataRoot, index);
+        public string GetValue(int index) => EnumZ.GetEnumIndexName(DataRoot, index);
         internal override string GetValue(Item item) => EnumZ.GetEnumValueName(DataRoot, GetItemPropertyValue(item));
         internal override void SetValue(Item item, string val) => SetItemPropertyValue(item, EnumZ.GetKey(DataRoot, val));
 

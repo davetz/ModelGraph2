@@ -3,7 +3,7 @@ using System;
 
 namespace ModelGraph.Core
 {
-    public class Property_ColumnX_ValueType : EnumProperty
+    public class Property_ColumnX_ValueType : EnumPropertyOf<ColumnX>
     {
         internal override IdKey IdKey => IdKey.ColumnValueTypeProperty;
 
