@@ -6,11 +6,14 @@ namespace ModelGraph.Core
 {
     public class ComputeListModel_666 : LineModel
     {//============================================== In the MetaDataRoot hierarchy  ==============
-        internal ComputeListModel_666(TableModel_654 owner, Item item) : base(owner, item) { }
+        internal ComputeListModel_666(TableModel_654 owner, TableX item) : base(owner, item) { }
+        private TableX TX => Item as TableX;
         internal override IdKey IdKey => IdKey.ComputeListModel_666;
+
         public override bool CanExpandLeft => TotalCount > 0;
         public override bool CanFilter => true;
         public override bool CanSort => true;
+        public override bool CanDrag => true;
 
         internal override string GetFilterSortId(Root root) => GetSingleNameId(root);
         public override int TotalCount => DataRoot.Get<Relation_Store_ComputeX>().ChildCount(Item);
@@ -40,11 +43,10 @@ namespace ModelGraph.Core
         private void AddNewComputeX(Root root)
         {
             var cx = new ComputeX(root.Get<ComputeXRoot>(), true);
-            var sto = Item as Store;
 
             // the data root implements undo/redo functionality
             ItemCreated.Record(root, cx);
-            ItemLinked.Record(root, root.Get<Relation_Store_ComputeX>(), sto, cx);
+            ItemLinked.Record(root, root.Get<Relation_Store_ComputeX>(), TX, cx);
         }
 
         internal override bool Validate(Root root, Dictionary<Item, LineModel> prev)

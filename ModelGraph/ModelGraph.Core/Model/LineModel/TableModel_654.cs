@@ -33,7 +33,8 @@ namespace ModelGraph.Core
             new ComputeListModel_666(this, tx);
             new ChildRelationListModel_662(this, tx);
             new ParentRelatationListModel_663(this, tx);
-
+            new NamePropertyRelationModel_673(this, tx);
+            new SummaryPropertyRelationModel_674(this, tx);
             return true;
         }
 

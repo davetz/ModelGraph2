@@ -439,10 +439,10 @@ namespace ModelGraph.Core
         //=====================================================================
         ChildRelationModel_671 = 0x671,
         ParentRelationModel_672 = 0x672,
-        NameColumnRelationModel_673 = 0x673,
-        SummaryColumnRelationModel_674 = 0x674,
-        NameColumnModel_675 = 0x675,
-        SummaryColumnModel_676 = 0x676,
+        NamePropertyRelationModel_673 = 0x673,
+        SummaryPropertyRelationModel_674 = 0x674,
+        NamePropertyModel_675 = 0x675,
+        SummaryPropertyModel_676 = 0x676,
         //=====================================================================
         MetaGraphColoring_Model = 0x681,
         MetaGraphRootList_Model = 0x682,

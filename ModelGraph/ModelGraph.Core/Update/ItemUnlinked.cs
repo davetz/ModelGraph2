@@ -70,6 +70,22 @@ namespace ModelGraph.Core
 
             return true;
         }
+        internal static bool Record(Root root, Relation rel, Item item1, Item item2)
+        {
+            (int parentIndex, int childIndex) = rel.GetIndex(item1, item2);
+            if (parentIndex < 0 || childIndex < 0) return false; //appearently the relationship doesn't exists
+
+            var nam1 = item1.GetDoubleNameId(root);
+            var nam2 = item2.GetDoubleNameId(root);
+            var rnam = rel.GetSingleNameId(root);
+
+            var name = $" [{rnam}]   ({nam1}) --> ({nam2})";
+
+            var ci = new ItemUnLinked(root.Get<ChangeRoot>().ChangeSet, rel, item1, item2, parentIndex, childIndex, name);
+            ci.DoNow();
+
+            return true;
+        }
         #endregion
 
         #region Undo/Redo  ====================================================

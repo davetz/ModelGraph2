@@ -1231,8 +1231,8 @@ namespace ModelGraph.Controls
                     {
                         obj.Text = mdl.GetTextValue(DataRoot) ?? string.Empty;
                     }
+                    ToggleParentExpandRight(mdl);
                 }
-                SetDefaultFocus();
             }
         }
         #endregion
@@ -1258,7 +1258,7 @@ namespace ModelGraph.Controls
                 if (e.Key == VirtualKey.Escape)
                 {
                     e.Handled = true;
-                    SetDefaultFocus();
+                    ToggleParentExpandRight(mdl);
                 }
                 else if (e.Key == Windows.System.VirtualKey.Enter)
                 {
@@ -1319,13 +1319,25 @@ namespace ModelGraph.Controls
                 if (e.Key == VirtualKey.Escape)
                 {
                     e.Handled = true;
-                    SetDefaultFocus();
+                    ToggleParentExpandRight(mdl);
                 }
                 else if (e.Key == VirtualKey.Tab)
                 {
                     e.Handled = true;
                     FindNextItemModel(mdl);
                 }
+            }
+        }
+        #endregion
+
+        #region ToggleParentExpandRight  ======================================
+        private void ToggleParentExpandRight(LineModel child)
+        {
+            var parent = child.ParentModel;
+            if (ViewList.Contains(parent))
+            {
+                Selected = parent;
+                _ = RefreshViewListAsync(ChangeType.ToggleRight);
             }
         }
         #endregion

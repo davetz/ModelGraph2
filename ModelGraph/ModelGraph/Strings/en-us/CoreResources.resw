@@ -1287,16 +1287,16 @@ NEC – NWC – SEC - SWC</value>
     <value>Column</value>
   </data>
   <data name="673N" xml:space="preserve">
-    <value>Item's Name Column</value>
+    <value>Item's Name Property</value>
   </data>
   <data name="673S" xml:space="preserve">
-    <value>Drag the Column to be use for the item's name and drop it here.</value>
+    <value>Drag the Property to be use for the item's name and drop it here.</value>
   </data>
   <data name="674N" xml:space="preserve">
-    <value>Item's Summary Column</value>
+    <value>Item's Summary Property</value>
   </data>
   <data name="674S" xml:space="preserve">
-    <value>Drag the Column to be use for the item's summary and drop it here.</value>
+    <value>Drag the Propery  to be use for the item's summary and drop it here.</value>
   </data>
   <data name="681N" xml:space="preserve">
     <value>Coloring</value>
