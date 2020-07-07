@@ -648,7 +648,7 @@
                             <KeyboardAccelerator Key="Home" Invoked="KeyHome_Invoked"/>
 
                             <KeyboardAccelerator Key="Enter" Invoked="KeyEnter_Invoked"/>
-                            <KeyboardAccelerator Key="Escape" Invoked="KeyEscape_Invoked"/>
+                            <KeyboardAccelerator Key="Escape" Invoked="FocusButtonKeyEscape_Invoked"/>
                         </Button.KeyboardAccelerators>
                     </Button>
                     <StackPanel x:Name="ButtonStack" Orientation="Horizontal" HorizontalAlignment="Right">

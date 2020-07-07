@@ -1,19 +1,14 @@
 ﻿
 namespace ModelGraph.Core
 {
-    public class Property_Relation_Pairing : PropertyOf<Relation, string>
+    public class Property_Relation_Pairing : EnumPropertyOf<Relation>
     {
         internal override IdKey IdKey => IdKey.RelationPairingProperty;
 
-        internal Property_Relation_Pairing(PropertyRoot owner)
-        {
-            Owner = owner;
-            Value = new StringValue(this);
+        internal Property_Relation_Pairing(PropertyRoot owner) : base(owner, owner.DataRoot.Get<Enum_Pairing>()) { }
 
-            owner.Add(this);
-        }
+        internal override int GetItemPropertyValue(Item item) => (int)Cast(item).Pairing;
 
-        internal override string GetValue(Item item) { var root = DataRoot; return root.Get<Enum_Pairing>().GetEnumValueName(root, (int)Cast(item).Pairing); }
-        internal override void SetValue(Item item, string val) { var root = DataRoot; Cast(item).TrySetPairing((Pairing)root.Get<Enum_Pairing>().GetKey(root, val)); }
+        internal override void SetItemPropertyValue(Item item, int key) => Cast(item).TrySetPairing((Pairing)key);
     }
 }

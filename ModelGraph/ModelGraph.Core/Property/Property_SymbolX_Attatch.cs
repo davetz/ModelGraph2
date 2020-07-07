@@ -1,19 +1,13 @@
 ﻿
 namespace ModelGraph.Core
 {
-    public class Property_SymbolX_Attatch : PropertyOf<SymbolX, string>
+    public class Property_SymbolX_Attatch : EnumPropertyOf<SymbolX>
     {
         internal override IdKey IdKey => IdKey.SymbolXAttatchProperty;
 
-        internal Property_SymbolX_Attatch(PropertyRoot owner)
-        {
-            Owner = owner;
-            Value = new StringValue(this);
+        internal Property_SymbolX_Attatch(PropertyRoot owner) : base(owner, owner.DataRoot.Get<Enum_Attach>()) { }
 
-            owner.Add(this);
-        }
-
-        internal override string GetValue(Item item) { var root = DataRoot; return root.Get<Enum_Attach>().GetEnumValueName(root, (int)Cast(item).Attach); }
-        internal override void SetValue(Item item, string val) { var root = DataRoot; Cast(item).Attach = (Attach)root.Get<Enum_Attach>().GetKey(root, val); }
+        internal override int GetItemPropertyValue(Item item) => (int)Cast(item).Attach;
+        internal override void SetItemPropertyValue(Item item, int key) => Cast(item).Attach = (Attach)key;
     }
 }

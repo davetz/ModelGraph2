@@ -398,6 +398,17 @@ namespace ModelGraph.Controls
             }
             args.Handled = true;
         }
+        private void FocusButtonKeyEscape_Invoked(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
+        {
+            if (Selected != null && Selected.Depth > 0 && Selected.Depth < 100)
+            {
+                var parent = Selected.ParentModel;
+                if (!ViewList.Contains(parent)) ViewList[0] = parent;
+                Selected = parent;
+                _ = RefreshViewListAsync(ChangeType.ToggleLeft);
+            }
+            args.Handled = true;
+        }
         private void KeyMenu_Invoked(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
         {
             args.Handled = true;

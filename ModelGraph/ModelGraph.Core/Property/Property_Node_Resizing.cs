@@ -1,19 +1,13 @@
 ﻿
 namespace ModelGraph.Core
 {
-    public class Property_Node_Resizing : PropertyOf<Node, string>
+    public class Property_Node_Resizing : EnumPropertyOf<Node>
     {
         internal override IdKey IdKey => IdKey.NodeResizingProperty;
 
-        internal Property_Node_Resizing(PropertyRoot owner)
-        {
-            Owner = owner;
-            Value = new StringValue(this);
+        internal Property_Node_Resizing(PropertyRoot owner) : base(owner, owner.DataRoot.Get<Enum_Resizing>()) { }
 
-            owner.Add(this);
-        }
-
-        internal override string GetValue(Item item) { var root = DataRoot; return root.Get<Enum_Resizing>().GetEnumValueName(root, (int)Cast(item).Sizing); }
-        internal override void SetValue(Item item, string val) { var root = DataRoot; Cast(item).Sizing = (Sizing)root.Get<Enum_Resizing>().GetKey(root, val); }
+        internal override int GetItemPropertyValue(Item item) => (int)Cast(item).Sizing;
+        internal override void SetItemPropertyValue(Item item, int key) => Cast(item).Sizing = (Sizing)key;
     }
 }

@@ -1,19 +1,14 @@
 ﻿
 namespace ModelGraph.Core
 {
-    public class Property_Node_Aspect : PropertyOf<Node, string>
+    public class Property_Node_Aspect : EnumPropertyOf<Node>
     {
         internal override IdKey IdKey => IdKey.NodeOrientationProperty;
 
-        internal Property_Node_Aspect(PropertyRoot owner)
-        {
-            Owner = owner;
-            Value = new StringValue(this);
+        internal Property_Node_Aspect(PropertyRoot owner) : base(owner, owner.DataRoot.Get<Enum_Aspect>()) { }
 
-            owner.Add(this);
-        }
+        internal override int GetItemPropertyValue(Item item) => (int)Cast(item).Aspect;
 
-        internal override string GetValue(Item item) { var root = DataRoot; return root.Get<Enum_Aspect>().GetEnumValueName(root, (int)Cast(item).Aspect); }
-        internal override void SetValue(Item item, string val) { var root = DataRoot; Cast(item).Aspect = (Aspect)root.Get<Enum_Aspect>().GetKey(root, val); }
+        internal override void SetItemPropertyValue(Item item, int key) => Cast(item).Aspect = (Aspect)key;
     }
 }

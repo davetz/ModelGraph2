@@ -1,19 +1,13 @@
 ﻿
 namespace ModelGraph.Core
 {
-    public class Property_QueryX_Connect2 : PropertyOf<QueryX, string>
+    public class Property_QueryX_Connect2 : EnumPropertyOf<QueryX>
     {
         internal override IdKey IdKey => IdKey.QueryXConnect2Property;
 
-        internal Property_QueryX_Connect2(PropertyRoot owner)
-        {
-            Owner = owner;
-            Value = new StringValue(this);
+        internal Property_QueryX_Connect2(PropertyRoot owner) : base(owner, owner.DataRoot.Get<Enum_Connect>()) { }
 
-            owner.Add(this);
-        }
-
-        internal override string GetValue(Item item) => DataRoot.GetTargetString(Cast(item).PathParm.Target2);
-        internal override void SetValue(Item item, string val) => Cast(item).PathParm.Target2 = DataRoot.GetTargetValue(val);
+        internal override int GetItemPropertyValue(Item item) => (int)Cast(item).PathParm.Target2;
+        internal override void SetItemPropertyValue(Item item, int key) => Cast(item).PathParm.Target2 = (Target)key;
     }
 }

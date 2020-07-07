@@ -1,19 +1,13 @@
 ﻿
 namespace ModelGraph.Core
 {
-    public class Property_Node_Labeling : PropertyOf<Node, string>
+    public class Property_Node_Labeling : EnumPropertyOf<Node>
     {
         internal override IdKey IdKey => IdKey.NodeLabelingProperty;
 
-        internal Property_Node_Labeling(PropertyRoot owner)
-        {
-            Owner = owner;
-            Value = new StringValue(this);
+        internal Property_Node_Labeling(PropertyRoot owner) : base(owner, owner.DataRoot.Get<Enum_Labeling>()) { }
 
-            owner.Add(this);
-        }
-
-        internal override string GetValue(Item item) { var root = DataRoot; return root.Get<Enum_Labeling>().GetEnumValueName(root, (int)Cast(item).Labeling); }
-        internal override void SetValue(Item item, string val) { var root = DataRoot; Cast(item).Labeling = (Labeling)root.Get<Enum_Labeling>().GetKey(root, val); }
+        internal override int GetItemPropertyValue(Item item) => (int)Cast(item).Labeling;
+        internal override void SetItemPropertyValue(Item item, int key) => Cast(item).Labeling = (Labeling)key;
     }
 }

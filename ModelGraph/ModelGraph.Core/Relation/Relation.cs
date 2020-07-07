@@ -56,7 +56,7 @@ namespace ModelGraph.Core
         internal abstract bool HasChildLink(Item key);
         internal abstract bool HasParentLink(Item key);
 
-        internal abstract bool TrySetPairing(Pairing pairing);
+        internal abstract void TrySetPairing(Pairing pairing);
         internal abstract bool IsValidParentChild(Item parentItem, Item childItem);
         internal abstract int ChildCount(Item key);
         internal abstract int ParentCount(Item key);

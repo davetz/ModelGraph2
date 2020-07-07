@@ -18,6 +18,8 @@ namespace ModelGraph.Core
             if (IsExpandedRight) return false;
             IsExpandedRight = true;
 
+            new PropertyCheckModel_618(this, Item, root.Get<Property_Relation_IsRequired>());
+            new PropertyComboModel_619(this, Item, root.Get<Property_Relation_Pairing>());
             new PropertyTextModel_617(this, Item, root.Get<Property_Item_Summary>());
             new PropertyTextModel_617(this, Item, root.Get<Property_Item_Name>());
 

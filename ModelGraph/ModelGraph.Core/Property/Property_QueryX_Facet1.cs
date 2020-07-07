@@ -1,19 +1,13 @@
 ﻿
 namespace ModelGraph.Core
 {
-    public class Property_QueryX_Facet1 : PropertyOf<QueryX, string>
+    public class Property_QueryX_Facet1 : EnumPropertyOf<QueryX>
     {
         internal override IdKey IdKey => IdKey.QueryXFacet1Property;
 
-        internal Property_QueryX_Facet1(PropertyRoot owner)
-        {
-            Owner = owner;
-            Value = new StringValue(this);
+        internal Property_QueryX_Facet1(PropertyRoot owner) : base(owner, owner.DataRoot.Get<Enum_Facet>()) { }
 
-            owner.Add(this);
-        }
-
-        internal override string GetValue(Item item) { var root = DataRoot; return root.Get<Enum_Facet>().GetEnumValueName(root, (int)Cast(item).PathParm.Facet1); }
-        internal override void SetValue(Item item, string val) { var root = DataRoot; Cast(item).PathParm.Facet1 = (Facet)root.Get<Enum_Facet>().GetKey(root, val); }
+        internal override int GetItemPropertyValue(Item item) => (int)Cast(item).PathParm.Facet1;
+        internal override void SetItemPropertyValue(Item item, int key) => Cast(item).PathParm.Facet1 = (Facet)key;
     }
 }

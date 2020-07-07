@@ -66,24 +66,22 @@ namespace ModelGraph.Core
         #endregion
 
         #region TrySetPairing  ================================================
-        internal override bool TrySetPairing(Pairing pairing)
+        internal override void TrySetPairing(Pairing pairing)
         {
-            if (Pairing == pairing)
-            {
-                return true;
-            }
+            if (Pairing == pairing) return;
+
             if (_children1 == null && _children2 == null)
             {
                 Pairing = pairing;
-                return true;
+                return;
             }
             switch (pairing)
             {
                 case Pairing.OneToOne:
-                    if ((_parents2 != null && !_parents2.CanMapToOne) || (_children2 != null && !_children2.CanMapToOne)) return false;
+                    if ((_parents2 != null && !_parents2.CanMapToOne) || (_children2 != null && !_children2.CanMapToOne)) return;
                     break;
                 case Pairing.OneToMany:
-                    if (_parents2 != null && !_parents2.CanMapToOne) return false;
+                    if (_parents2 != null && !_parents2.CanMapToOne) return;
                     break;
             }
 
@@ -124,7 +122,6 @@ namespace ModelGraph.Core
                     _children2.SetLink(parents[i], (T2)children[i]);
                 }
             }
-            return true;
         }
         #endregion
 

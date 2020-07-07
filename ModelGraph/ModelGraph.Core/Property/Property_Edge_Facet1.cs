@@ -1,19 +1,13 @@
 ﻿
 namespace ModelGraph.Core
 {
-    public class Property_Edge_Facet1 : PropertyOf<Edge, string>
+    public class Property_Edge_Facet1 : EnumPropertyOf<Edge>
     {
         internal override IdKey IdKey => IdKey.EdgeFace1Property;
 
-        internal Property_Edge_Facet1(PropertyRoot owner)
-        {
-            Owner = owner;
-            Value = new StringValue(this);
+        internal Property_Edge_Facet1(PropertyRoot owner) : base(owner, owner.DataRoot.Get<Enum_Facet>()) { }
 
-            owner.Add(this);
-        }
-
-        internal override string GetValue(Item item) { var root = DataRoot; return root.Get<Enum_Facet>().GetEnumValueName(root, (int)Cast(item).Facet1); }
-        internal override void SetValue(Item item, string val) { var root = DataRoot; Cast(item).Facet1 = (Facet)root.Get<Enum_Facet>().GetKey(root, val); }
+        internal override int GetItemPropertyValue(Item item) => (int)Cast(item).Facet1;
+        internal override void SetItemPropertyValue(Item item, int key) => Cast(item).Facet1 = (Facet)key;
     }
 }
