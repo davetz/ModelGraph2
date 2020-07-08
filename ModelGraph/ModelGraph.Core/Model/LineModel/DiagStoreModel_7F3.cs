@@ -4,17 +4,18 @@ using System.Linq;
 
 namespace ModelGraph.Core
 {
-    public class TableListModel_643 : LineModel
+    public class DiagStoreModel_7F3 : LineModel
     {//============================================== In the MetaDataRoot hierarchy  ==============
-        internal TableListModel_643(MetadataRootModel_623 owner, TableXRoot item) : base(owner, item) { }
-        private TableXRoot TX => Item as TableXRoot;
-        internal override IdKey IdKey => IdKey.TableListModel_643;
+        internal DiagStoreModel_7F3(DiagPrimeStoreModel_7F1 owner, Item item) : base(owner, item) { }
+        private Store ST => Item as Store;
+        internal override IdKey IdKey => IdKey.DiagStoreModel_7F3;
 
         public override bool CanExpandLeft => TotalCount > 0;
         public override bool CanFilter => TotalCount > 1;
         public override bool CanSort => TotalCount > 1;
         public override int TotalCount => ItemStore.Count;
 
+        public override (string, string) GetKindNameId(Root root) => Item.GetKindNameId(root);
 
         internal override bool ExpandLeft(Root root)
         {
@@ -22,18 +23,12 @@ namespace ModelGraph.Core
 
             IsExpandedLeft = true;
 
-            foreach (var tx in TX.Items)
+            foreach (var itm in ST.GetItems())
             {
-                new TableModel_654(this, tx);
+                new DiagItemModel_7F2(this, itm);
             }
 
             return true;
-        }
-
-        public override void GetButtonCommands(Root root, List<LineCommand> list)
-        {
-            list.Clear();
-            list.Add(new InsertCommand(this, () => ItemCreated.Record(root, new TableX(Item as TableXRoot, true))));
         }
 
         internal override bool Validate(Root root, Dictionary<Item, LineModel> prev)
@@ -55,16 +50,16 @@ namespace ModelGraph.Core
                     }
                     CovertClear();
 
-                    foreach (var tx in TX.Items)
+                    foreach (var itm in ST.GetItems())
                     {
-                        if (prev.TryGetValue(tx, out LineModel m))
+                        if (prev.TryGetValue(itm, out LineModel m))
                         {
                             CovertAdd(m);
                             prev.Remove(m.Item);
                         }
                         else
                         {
-                            new TableModel_654(this, tx);
+                            new DiagItemModel_7F2(this, itm);
                             viewListChanged = true;
                         }
                     }

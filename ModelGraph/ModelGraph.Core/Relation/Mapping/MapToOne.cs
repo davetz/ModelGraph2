@@ -135,6 +135,19 @@ namespace ModelGraph.Core
         }
 
         internal bool CanMapToOne { get { return true; } }
-    }
 
+
+        // used by DiagChildListModel_7F5 and DiagParentListModel_7F6
+        internal int GetLinkPairCount() => Count;
+
+        internal List<(Item, Item)> GetLinkPairList()
+        {
+            var list = new List<(Item, Item)>(Count);
+            foreach (var val in this)
+            {
+                list.Add((val.Key, val.Value));
+            }
+            return list;
+        }
+    }
 }

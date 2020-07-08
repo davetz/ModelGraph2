@@ -189,5 +189,24 @@ namespace ModelGraph.Core
                 return true;
             }
         }
+
+        // used by DiagChildListModel_7F5 and DiagParentListModel_7F6
+        internal int GetLinkPairCount()
+        {
+            var n = 0;
+            foreach (var e in this) { n += e.Value.Count; }
+            return n;
+        }
+
+        internal List<(Item, Item)> GetLinkPairList()
+        {
+            var list = new List<(Item, Item)>(GetLinkPairCount());
+            foreach (var e in this)
+            {
+                var itm1 = e.Key;
+                foreach (var itm2 in e.Value) { list.Add((itm1, itm2)); }
+            }
+            return list;
+        }
     }
 }

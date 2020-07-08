@@ -514,24 +514,19 @@ namespace ModelGraph.Core
         PrimeCompute_Model = 0x7D0,
         ComputeStore_Model = 0x7D1,
         //=====================================================================
-        InternalRootModel_7F0 = 0x7F0,
-        InternalStore_Model = 0x7F1,
 
-        StoreItem_Model = 0x7F2,
+        DiagRootModel_7F0 = 0x7F0,
+        DiagPrimeStoreModel_7F1 = 0x7F1,
 
-        StoreItemItemList_Model = 0x7F4,
-        StoreRelationLinkList_Model = 0x7F5,
+        DiagItemModel_7F2 = 0x7F2,
+        DiagStoreModel_7F3 = 0x7F3,
+        DiagRelationModel_7F4 = 0x7F4,
 
-        StoreChildRelationList_Model = 0x7F6,
-        StoreParentRelationList_Model = 0x7F7,
+        DiagChildListModel_7F5 = 0x7F5,
+        DiagParentListModel_7F6 = 0x7F6,
+        DiagParentChildModel_7F7 = 0x7F7,
+        DiagChildParentModel_7F8 = 0x7F8,
 
-        StoreItemItem_Model = 0x7F8,
-        StoreRelationLink_Model = 0x7F9,
-
-        StoreChildRelation_Model = 0x7FA,
-        StoreParentRelation_Model = 0x7FB,
-
-        StoreRelatedItem_Model = 0x7FC,
         #endregion
 
         #region Enum  ================================================(800-FFF)

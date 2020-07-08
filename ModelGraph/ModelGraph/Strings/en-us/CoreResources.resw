@@ -1524,40 +1524,28 @@ NEC – NWC – SEC - SWC</value>
     <value>Internal Stores:</value>
   </data>
   <data name="7F4N" xml:space="preserve">
-    <value>Items</value>
+    <value>Relation</value>
   </data>
   <data name="7F4S" xml:space="preserve">
-    <value>Store child items</value>
+    <value>List</value>
   </data>
   <data name="7F5N" xml:space="preserve">
-    <value>Links</value>
+    <value>Link Parent to Child</value>
   </data>
   <data name="7F5S" xml:space="preserve">
-    <value>Relation links</value>
+    <value>Relation link from parent to child</value>
   </data>
   <data name="7F6N" xml:space="preserve">
-    <value>ChildRelations</value>
+    <value>Link Child to Parent</value>
   </data>
   <data name="7F6S" xml:space="preserve">
-    <value>Child relations of this store</value>
+    <value>Relation link from child to parent</value>
   </data>
   <data name="7F7N" xml:space="preserve">
-    <value>ParentRelations</value>
+    <value>Link Parent to Child</value>
   </data>
-  <data name="7F7S" xml:space="preserve">
-    <value>Parent relations of this store</value>
-  </data>
-  <data name="7F8K" xml:space="preserve">
-    <value>Item</value>
-  </data>
-  <data name="7F9K" xml:space="preserve">
-    <value>Link</value>
-  </data>
-  <data name="7FAK" xml:space="preserve">
-    <value>ChildRelation</value>
-  </data>
-  <data name="7FBK" xml:space="preserve">
-    <value>ParentRelation</value>
+  <data name="7F8N" xml:space="preserve">
+    <value>Link Child to Parent</value>
   </data>
   <data name="800N" xml:space="preserve">
     <value>Bool</value>

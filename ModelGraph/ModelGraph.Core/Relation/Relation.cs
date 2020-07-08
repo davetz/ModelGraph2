@@ -44,6 +44,8 @@ namespace ModelGraph.Core
         }
         #endregion
 
+        public override string GetKindId(Root root) => root.GetKindId(IdKey.Relation);
+
         #region RequiredMethods  ==============================================
         internal bool HasNoParent(Item key)
         {
@@ -78,6 +80,12 @@ namespace ModelGraph.Core
         internal abstract bool HasKey2(Item key);
         internal abstract int KeyCount { get; }
         internal abstract int ValueCount { get; }
+
+        internal abstract int GetChildLinkPairCount();
+        internal abstract int GetParentLinkPairCount();
+        internal abstract List<(Item, Item)> GetChildLinkPairList();
+        internal abstract List<(Item, Item)> GetParentLinkPairList();
+
         #endregion
     }
 }

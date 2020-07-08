@@ -510,6 +510,13 @@ namespace ModelGraph.Core
 
         #endregion
 
+        #region DiagRelationModels  ===========================================
+        internal override int GetChildLinkPairCount() => _children1 != null ? _children1.GetLinkPairCount() : _children2 != null ? _children2.GetLinkPairCount() : 0;
+        internal override int GetParentLinkPairCount() => _parents1 != null ? _parents1.GetLinkPairCount() : _parents2 != null ? _children2.GetLinkPairCount() : 0;
+        internal override List<(Item,Item)> GetChildLinkPairList() => _children1 != null ? _children1.GetLinkPairList() : _children2 != null ? _children2.GetLinkPairList() : null;
+        internal override List<(Item, Item)> GetParentLinkPairList() => _parents1 != null ? _parents1.GetLinkPairList() : _parents2 != null ? _parents2.GetLinkPairList() : null;
+        #endregion
+
         #region HasKey<1,2>  ==================================================
         /// <summary>
         /// Does the key item have at least one child item?

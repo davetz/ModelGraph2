@@ -17,7 +17,7 @@ namespace ModelGraph.Core
             new EnumListModel_624(this, root.Get<EnumXRoot>());
             new TableListModel_643(this, root.Get<TableXRoot>());
             new GraphListModel_644(this, root.Get<GraphXRoot>());
-            new InternalRootModel_7F0(this, Item);// TODO: FIX THIS***************
+            new DiagRootModel_7F0(this, root);
 
             return true;
         }
