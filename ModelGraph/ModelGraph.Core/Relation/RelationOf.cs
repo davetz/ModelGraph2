@@ -16,6 +16,7 @@ namespace ModelGraph.Core
         override internal bool IsValidParentChild(Item parentItem, Item childItem) { return (parentItem is T1 && childItem is T2); }
 
         #region Identity  =====================================================
+        internal override string Name { get => GetType().Name; set => _ = value; }
         public override string GetSingleNameId(Root root)
         {
             var (head, tail) = GetHeadTail(root);
@@ -27,10 +28,20 @@ namespace ModelGraph.Core
             return $"({myName})    {headName} --> {tailName}";
         }
 
-        internal  (Store, Store) GetHeadTail(Root root)
+        internal  override (Store, Store) GetHeadTail(Root root)
         {
-            root.Get<Relation_Store_ChildRelation>().TryGetParent(this, out Store head);
-            root.Get<Relation_Store_ParentRelation>().TryGetParent(this, out Store tail);
+            Store head, tail;
+            if (IsExternal)
+            {
+                root.Get<Relation_StoreX_ChildRelation>().TryGetParent(this, out head);
+                root.Get<Relation_StoreX_ParentRelation>().TryGetParent(this, out tail);
+            }
+            else
+            {
+                root.Get<Relation_Store_ChildRelation>().TryGetParent(this, out head);
+                root.Get<Relation_Store_ParentRelation>().TryGetParent(this, out tail);
+            }
+
             return (head, tail);
         }
         #endregion
@@ -618,6 +629,16 @@ namespace ModelGraph.Core
                     _children2.SetLink(key, val, capacity);
                     break;
             }
+        }
+        #endregion
+
+        #region Discard  ======================================================
+        internal override void Discard()
+        {
+            if (_parents1 != null) _parents1.Clear();
+            if (_parents2 != null) _parents2.Clear();
+            if (_children1 != null) _children1.Clear();
+            if (_children2 != null) _children2.Clear();
         }
         #endregion
     }

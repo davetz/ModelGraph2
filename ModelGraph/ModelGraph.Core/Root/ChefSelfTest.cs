@@ -153,8 +153,8 @@ namespace ModelGraph.Core
         internal bool CheckTestRelation(int tx1Index, int tx2Index, Pairing pairing)
         {
             var storeOf_TableX = Get<TableXRoot>();
-            var relation_Store_ChildRelation = Get<Relation_Store_ChildRelation>();
-            var relation_Store_ParentRelation = Get<Relation_Store_ParentRelation>();
+            var relation_Store_ChildRelation = Get<Relation_StoreX_ChildRelation>();
+            var relation_Store_ParentRelation = Get<Relation_StoreX_ParentRelation>();
 
             var tx1 = storeOf_TableX.Items[tx1Index];
             var tx2 = storeOf_TableX.Items[tx2Index];

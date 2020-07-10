@@ -239,8 +239,8 @@ namespace ModelGraph.Core
         Store_ColumnX = 0x312 | IsReference,
         Store_NameProperty = 0x313 | IsReference,
         Store_SummaryProperty = 0x314 | IsReference,
-        TableX_ChildRelationX = 0x315 | IsReference,
-        TableX_ParentRelationX = 0x316 | IsReference,
+        StoreX_ChildRelation = 0x315 | IsReference,
+        StoreX_ParentRelation = 0x316 | IsReference,
 
         //=========================================
         Item_Error = 0x331,

@@ -496,9 +496,9 @@ namespace ModelGraph.Controls
             {
                 var cp = e.GetCurrentPoint(TreeCanvas);
                 if (cp.Properties.MouseWheelDelta < 0)
-                    _ = RefreshViewListAsync(ChangeType.TwoUp);
-                else
                     _ = RefreshViewListAsync(ChangeType.TwoDown);
+                else
+                    _ = RefreshViewListAsync(ChangeType.TwoUp);
             }
         }
         #endregion

@@ -1,24 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Windows.Storage.Streams;
-
+﻿
 namespace ModelGraph.Core
 {
-    public class RelationRoot : InternalRoot<Relation>, IRelationRoot
+    public class RelationRoot : InternalRoot<Relation>, IPrimeRoot, IRelationRoot
     {
         internal RelationRoot(Root root)
         {
             Owner = root;
-
             SetCapacity(30);
-            new RelationLink(root, this);
-            CreateRelations(root);
         }
 
-        #region CreateRelations  ==============================================
-        private void CreateRelations(Root root)
+        #region IPrimeRoot  ===================================================
+        public void CreateSecondaryHierarchy(Root root)
         {
+            new RelationLink(root, this);
+
             root.RegisterPrivateItem(new Relation_Item_Error(this));
 
             root.RegisterReferenceItem(new Relation_ComputeX_QueryX(this));
@@ -33,17 +28,25 @@ namespace ModelGraph.Core
             root.RegisterReferenceItem(new Relation_QueryX_ViewX(this));
             root.RegisterReferenceItem(new Relation_Relation_QueryX(this));
             root.RegisterReferenceItem(new Relation_Relation_ViewX(this));
-            root.RegisterReferenceItem(new Relation_Store_ChildRelation(this));
             root.RegisterReferenceItem(new Relation_Store_ColumnX(this));
             root.RegisterReferenceItem(new Relation_Store_ComputeX(this));
             root.RegisterReferenceItem(new Relation_Store_NameProperty(this));
-            root.RegisterReferenceItem(new Relation_Store_ParentRelation(this));
             root.RegisterReferenceItem(new Relation_Store_QueryX(this));
             root.RegisterReferenceItem(new Relation_Store_SummaryProperty(this));
             root.RegisterReferenceItem(new Relation_SymbolX_QueryX(this));
             root.RegisterReferenceItem(new Relation_ViewX_Property(this));
             root.RegisterReferenceItem(new Relation_ViewX_QueryX(this));
             root.RegisterReferenceItem(new Relation_ViewX_ViewX(this));
+
+            root.RegisterReferenceItem(new Relation_StoreX_ChildRelation(this));
+            root.RegisterReferenceItem(new Relation_StoreX_ParentRelation(this));
+
+
+            Add(root.Get<Relation_Store_ChildRelation>());
+            Add(root.Get<Relation_Store_ParentRelation>());
+        }
+        public void RegisterRelationalReferences(Root root)
+        {
         }
         #endregion
 

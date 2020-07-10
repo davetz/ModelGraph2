@@ -4,7 +4,7 @@ using Windows.Storage.Streams;
 
 namespace ModelGraph.Core
 {
-    public class EnumXRoot : ExternalRoot<EnumX>, ISerializer
+    public class EnumXRoot : ExternalRoot<EnumX>, ISerializer, IPrimeRoot
     {
         static Guid _serializerGuid = new Guid("8D4CEAD8-E3C5-4342-88AC-1B4B625A9A4C");
         static byte _formatVersion = 1;
@@ -13,13 +13,11 @@ namespace ModelGraph.Core
         internal EnumXRoot(Root root)
         {
             Owner = root;
-
             root.RegisterItemSerializer((_serializerGuid, this));
-            CreateProperties(root);
         }
 
-        #region CreateProperties  =============================================
-        private void CreateProperties(Root root)
+        #region IPrimeRoot  ===================================================
+        public void CreateSecondaryHierarchy(Root root)
         {
             var sto = root.Get<PropertyRoot>();
 
@@ -29,6 +27,12 @@ namespace ModelGraph.Core
             root.RegisterStaticProperties(typeof(EnumX), GetProps1(root)); //used by property name lookup
             root.RegisterStaticProperties(typeof(PairX), GetProps2(root)); //used by property name lookup
         }
+
+        public void RegisterRelationalReferences(Root root)
+        {
+            root.RegisterChildRelation(this, root.Get<Relation_EnumX_ColumnX>());
+        }
+
         private Property[] GetProps1(Root root) => new Property[]
         {
             root.Get<Property_Item_Name>(),

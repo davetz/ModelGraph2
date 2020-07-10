@@ -4,7 +4,7 @@ using Windows.Storage.Streams;
 
 namespace ModelGraph.Core
 {
-    public class QueryXRoot : ExternalRoot<QueryX>, ISerializer
+    public class QueryXRoot : ExternalRoot<QueryX>, ISerializer, IPrimeRoot
     {
         static Guid _serializerGuid = new Guid("33B9B8A4-9332-4902-A3C1-37C5F971B6FF");
         static byte _formatVersion = 1;
@@ -13,13 +13,11 @@ namespace ModelGraph.Core
         internal QueryXRoot(Root root)
         {
             Owner = root;
-
             root.RegisterItemSerializer((_serializerGuid, this));
-            CreateProperties(root);
         }
 
-        #region CreateProperties  =============================================
-        private void CreateProperties(Root root)
+        #region IPrimeRoot  ===================================================
+        public void CreateSecondaryHierarchy(Root root)
         {
             var sto = root.Get<PropertyRoot>();
 
@@ -40,6 +38,21 @@ namespace ModelGraph.Core
 
             root.RegisterStaticProperties(typeof(QueryX), GetProps(root)); //used by property name lookup
         }
+
+        public void RegisterRelationalReferences(Root root)
+        {
+            root.RegisterChildRelation(this, root.Get<Relation_QueryX_ViewX>());
+            root.RegisterChildRelation(this, root.Get<Relation_QueryX_QueryX>());
+            root.RegisterChildRelation(this, root.Get<Relation_QueryX_Property>());
+
+            root.RegisterParentRelation(this, root.Get<Relation_ViewX_QueryX>());
+            root.RegisterParentRelation(this, root.Get<Relation_QueryX_QueryX>());
+            root.RegisterParentRelation(this, root.Get<Relation_Store_QueryX>());
+            root.RegisterParentRelation(this, root.Get<Relation_SymbolX_QueryX>());
+            root.RegisterParentRelation(this, root.Get<Relation_Relation_QueryX>());
+        }
+
+
         private Property[] GetProps(Root root) => new Property[]
         {
             root.Get<Property_QueryX_Where>(),

@@ -51,7 +51,7 @@ namespace ModelGraph.Core
             {
                 if (root.Get<Relation_Relation_QueryX>().TryGetParent(this, out Relation re))
                 {
-                    root.GetHeadTail(this, out Store head, out Store tail);
+                    var (head, tail) = re.GetHeadTail(root);
                     name = $"{head.GetSingleNameId(root)} --> {tail.GetSingleNameId(root)}";
                 }
                 else

@@ -30,7 +30,7 @@ namespace ModelGraph.Core
             {
                 if (doDrop)
                 {
-                    ItemLinked.Record(root, root.Get<Relation_Store_ChildRelation>(), tx, RX);
+                    ItemLinked.Record(root, root.Get<Relation_StoreX_ChildRelation>(), tx, RX);
                 }
                 return DropAction.Link;
             }

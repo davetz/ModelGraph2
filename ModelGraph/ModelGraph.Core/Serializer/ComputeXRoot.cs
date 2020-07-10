@@ -4,7 +4,7 @@ using Windows.Storage.Streams;
 
 namespace ModelGraph.Core
 {
-    public class ComputeXRoot : ExternalRoot<ComputeX>, ISerializer
+    public class ComputeXRoot : ExternalRoot<ComputeX>, ISerializer, IPrimeRoot
     {
         static Guid _serializerGuid = new Guid("35522B27-A925-4CE0-8D65-EDEF451097F2");
         static byte _formatVersion = 1;
@@ -13,13 +13,11 @@ namespace ModelGraph.Core
         internal ComputeXRoot(Root root)
         {
             Owner = root;
-
             root.RegisterItemSerializer((_serializerGuid, this));
-            CreateProperties(root);
         }
 
-        #region CreateProperties  =============================================
-        private void CreateProperties(Root root)
+        #region IPrimeRoot  ===================================================
+        public void CreateSecondaryHierarchy(Root root)
         {
             var sto = root.Get<PropertyRoot>();
 
@@ -31,6 +29,17 @@ namespace ModelGraph.Core
 
             root.RegisterStaticProperties(typeof(ComputeX), GetProps(root)); //used by property name lookup
         }
+
+        public void RegisterRelationalReferences(Root root)
+        {
+            root.RegisterChildRelation(this, root.Get<Relation_ComputeX_QueryX>());
+
+            root.RegisterParentRelation(this, root.Get<Relation_Store_ComputeX>());
+            root.RegisterParentRelation(this, root.Get<Relation_Store_NameProperty>());
+            root.RegisterParentRelation(this, root.Get<Relation_Store_SummaryProperty>());
+        }
+
+
         private Property[] GetProps(Root root) => new Property[]
         {
             root.Get<Property_Item_Name>(),

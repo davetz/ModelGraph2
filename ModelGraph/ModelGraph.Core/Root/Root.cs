@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Windows.UI.Xaml.Input;
 
 namespace ModelGraph.Core
 {
@@ -8,6 +10,9 @@ namespace ModelGraph.Core
         private readonly Dictionary<Type, Item> Type_InstanceOf = new Dictionary<Type, Item>(200);  // used to get a specific type instance
         private readonly Dictionary<ushort, Item> IdKey_ReferenceItem = new Dictionary<ushort, Item>(200); // used to get specific type from its IdKey
         private readonly Dictionary<Type, Property[]> Type_StaticProperties = new Dictionary<Type, Property[]>(100); // used for property name lookup
+
+        private readonly Relation_Store_ChildRelation Internal_Store_ChildRelation;     // used to enforce relational integrity
+        private readonly Relation_Store_ParentRelation Internal_Store_ParentRelation;   // used to enforce relational integrity
 
         private readonly List<(Guid, ISerializer)> ItemSerializers = new List<(Guid, ISerializer)>(20); //serialized first
         private readonly List<(Guid, ISerializer)> LinkSerializers = new List<(Guid, ISerializer)>(10); //serialized last
@@ -18,11 +23,13 @@ namespace ModelGraph.Core
         internal string TitleName => Repository.Name;
         internal string TitleSummary => Repository.FullName;
 
-
         #region Constructor  ==================================================
         internal Root(bool createTestModel = false)
         {
             ModelDelta = ChildDelta = 1;
+
+            Internal_Store_ChildRelation = new Relation_Store_ChildRelation(this);
+            Internal_Store_ParentRelation = new Relation_Store_ParentRelation(this);
 
             Initialize(); 
 
@@ -35,6 +42,8 @@ namespace ModelGraph.Core
         {
             RegisterReferenceItem(new DummyItem(this));
             RegisterReferenceItem(new DummyQueryX(this));
+            RegisterReferenceItem(Internal_Store_ChildRelation);
+            RegisterReferenceItem(Internal_Store_ParentRelation);
 
             RegisterReferenceItem(new RelationRoot(this));
             RegisterReferenceItem(new PropertyRoot(this));
@@ -52,6 +61,18 @@ namespace ModelGraph.Core
             RegisterReferenceItem(new SymbolXRoot(this));
             RegisterReferenceItem(new ComputeXRoot(this));
             RegisterReferenceItem(new RelationXRoot(this));
+
+            var instanceList = Type_InstanceOf.Values.ToArray(); // instance of things that I just created and regestered
+            foreach (var item in instanceList)
+            {
+                if (item is IPrimeRoot pr) pr.CreateSecondaryHierarchy(this);
+            }
+
+
+            foreach (var item in instanceList)
+            {
+                if (item is IPrimeRoot pr) pr.RegisterRelationalReferences(this);
+            }
         }
         #endregion
 
@@ -79,6 +100,14 @@ namespace ModelGraph.Core
 
         internal void RegisterReferenceItem(Item item) { IdKey_ReferenceItem[item.ItemKey] = item; Type_InstanceOf[item.GetType()] = item; }
 
+        internal void RegisterChildRelation(Store sto, Relation rel)
+        {
+            Internal_Store_ChildRelation.SetLink(sto, rel);
+        }
+        internal void RegisterParentRelation(Store sto, Relation rel)
+        {
+            Internal_Store_ParentRelation.SetLink(sto, rel);
+        }
         #endregion
 
         #region LookUpProperty  ===============================================
@@ -147,7 +176,9 @@ namespace ModelGraph.Core
             IdKey_ReferenceItem.Clear();
             ItemSerializers.Clear();
             LinkSerializers.Clear();
-        }
-        #endregion
+            Internal_Store_ChildRelation.Discard();
+            Internal_Store_ParentRelation.Discard();
     }
+    #endregion
+}
 }

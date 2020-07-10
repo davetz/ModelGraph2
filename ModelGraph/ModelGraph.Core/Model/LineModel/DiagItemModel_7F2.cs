@@ -7,5 +7,6 @@ namespace ModelGraph.Core
         internal override IdKey IdKey => IdKey.DiagItemModel_7F2;
 
         public override (string, string) GetKindNameId(Root root) => Item.GetKindNameId(root);
+        internal override string GetFilterSortId(Root root) => $"{Item.GetKindId(root)} {Item.GetSingleNameId(root)}";
     }
 }

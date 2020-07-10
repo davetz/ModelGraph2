@@ -79,8 +79,8 @@ namespace ModelGraph.Core
         public bool HasData() => true;
         public void ReadData(DataReader r, Item[] items)
         {
-            var relation_Store_ChildRelation = Get<Relation_Store_ChildRelation>();
-            var relation_Store_ParentRelation = Get<Relation_Store_ParentRelation>();
+            var relation_StoreX_ChildRelation = Get<Relation_StoreX_ChildRelation>();
+            var relation_StoreX_ParentRelation = Get<Relation_StoreX_ParentRelation>();
             var property_Item_Name = Get<Property_Item_Name>();
             var property_Item_Summary = Get<Property_Item_Summary>();
             var property_QueryX_Select = Get<Property_QueryX_Select>();
@@ -98,14 +98,21 @@ namespace ModelGraph.Core
                 {
                     var key = r.ReadUInt16();
                     if (IdKey_ReferenceItem.TryGetValue(key, out Item item))
-                        items[i] = item;
+                    {
+                        if (item is Relation_Store_ChildRelation)
+                            items[i] = relation_StoreX_ChildRelation;
+                        else if (item is Relation_Store_ParentRelation)
+                            items[i] = relation_StoreX_ParentRelation;
+                        else
+                            items[i] = item;
+                    }
                     else
                     {//==================================Refactor Patch
-                        if (key == (ushort)(IdKey.TableX_ChildRelationX & IdKey.KeyMask))
-                            items[i] = relation_Store_ChildRelation;
-                        else if (key == (ushort)(IdKey.TableX_ParentRelationX & IdKey.KeyMask))
-                            items[i] = relation_Store_ParentRelation;
-                        else if (key == (ushort)(IdKey.EnumNameProperty & IdKey.KeyMask))
+                        if (key == (ushort)(IdKey.Store_ChildRelation & IdKey.KeyMask))
+                            items[i] = relation_StoreX_ChildRelation;
+                        else if (key == (ushort)(IdKey.Store_ParentRelation & IdKey.KeyMask))
+                            items[i] = relation_StoreX_ParentRelation;
+                        if (key == (ushort)(IdKey.EnumNameProperty & IdKey.KeyMask))
                             items[i] = property_Item_Name;
                         else if (key == (ushort)(IdKey.TableNameProperty & IdKey.KeyMask))
                             items[i] = property_Item_Name;

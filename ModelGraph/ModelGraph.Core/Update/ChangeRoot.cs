@@ -132,10 +132,12 @@ namespace ModelGraph.Core
             var hitList = new List<Item>();//======================== dependant items that also need to be killed off
             var stoCRels = root.Get<Relation_Store_ChildRelation>();//==== souce1 of relational integrity
             var stoPRels = root.Get<Relation_Store_ParentRelation>();//==== souce2 of relational integrity
+            var stoXCRels = root.Get<Relation_StoreX_ChildRelation>();//==== souce1 of relational integrity
+            var stoXPRels = root.Get<Relation_StoreX_ParentRelation>();//==== souce2 of relational integrity
             var stoCols = root.Get<Relation_Store_ColumnX>(); //======= reference to user created columns
             var history = new Dictionary<Relation, Dictionary<Item, List<Item>>>(); //history of unlinked relationships
 
-            FindDependents(target, hitList, stoCRels);
+            FindDependents(target, hitList, stoCRels, stoXCRels);
             hitList.Reverse();
 
             foreach (var item in hitList)
@@ -146,7 +148,7 @@ namespace ModelGraph.Core
 
                     for (int i = 0; i < N; i++) { ItemUnLinked.Record(ChangeSet, root, r, parents[i], children[i], history); }
                 }
-                if (TryGetParentRelations(item, out IList<Relation> relations, stoPRels))
+                if (TryGetParentRelations(item, out IList<Relation> relations, stoPRels, stoXPRels))
                 {
                     foreach (var rel in relations)
                     {
@@ -155,7 +157,7 @@ namespace ModelGraph.Core
                         foreach (var parent in parents) { ItemUnLinked.Record(ChangeSet, root, rel, parent, item, history); }
                     }
                 }
-                if (TryGetChildRelations(item, out relations, stoCRels))
+                if (TryGetChildRelations(item, out relations, stoCRels, stoXCRels))
                 {
                     foreach (var rel in relations)
                     {
@@ -172,15 +174,15 @@ namespace ModelGraph.Core
         }
         #region PrivateMethods  ===========================================
 
-        void FindDependents(Item target2, List<Item> hitList, Relation_Store_ChildRelation stoCRels)
+        void FindDependents(Item target2, List<Item> hitList, Relation_Store_ChildRelation stoCRels, Relation_StoreX_ChildRelation stoXCRels)
         {
             hitList.Add(target2);
             if (target2 is Store store)
             {
                 var items = store.GetItems();
-                foreach (var item in items) FindDependents(item, hitList, stoCRels);
+                foreach (var item in items) FindDependents(item, hitList, stoCRels, stoXCRels);
             }
-            if (TryGetChildRelations(target2, out IList<Relation> relations, stoCRels))
+            if (TryGetChildRelations(target2, out IList<Relation> relations, stoCRels, stoXCRels))
             {
                 foreach (var rel in relations)
                 {
@@ -188,18 +190,18 @@ namespace ModelGraph.Core
                     {
                         foreach (var child in children)
                         {
-                            FindDependents(child, hitList, stoCRels);
+                            FindDependents(child, hitList, stoCRels, stoXCRels);
                         }
                     }
                 }
             }
         }
 
-        bool TryGetChildRelations(Item item, out IList<Relation> relations, Relation_Store_ChildRelation stoCRels)
+        bool TryGetChildRelations(Item item, out IList<Relation> relations, Relation_Store_ChildRelation stoCRels, Relation_StoreX_ChildRelation stoXCRels)
         {
-            if (item.Owner is TableX tx)
+            if (item.Owner.IsExternal)
             {
-                if (stoCRels.TryGetChildren(tx, out IList<Relation> txRelations))
+                if (stoXCRels.TryGetChildren(item, out IList<Relation> txRelations))
                 {
                     relations = new List<Relation>(txRelations);
                     return true;
@@ -210,11 +212,11 @@ namespace ModelGraph.Core
             return stoCRels.TryGetChildren(item.Owner, out relations);
         }
 
-        bool TryGetParentRelations(Item item, out IList<Relation> relations, Relation_Store_ParentRelation stoPRels)
+        bool TryGetParentRelations(Item item, out IList<Relation> relations, Relation_Store_ParentRelation stoPRels, Relation_StoreX_ParentRelation stoXPRels)
         {
-            if (item.Owner is TableX tx)
+            if (item.Owner.IsExternal)
             {
-                if (stoPRels.TryGetChildren(tx, out IList<Relation> txRelations))
+                if (stoXPRels.TryGetChildren(item, out IList<Relation> txRelations))
                 {
                     relations = new List<Relation>(txRelations);
                     return true;

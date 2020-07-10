@@ -5,7 +5,7 @@ using Windows.Storage.Streams;
 
 namespace ModelGraph.Core
 {
-    public class RelationXRoot : ExternalRoot<Relation>, ISerializer, IRelationRoot
+    public class RelationXRoot : ExternalRoot<Relation>, ISerializer, IPrimeRoot, IRelationRoot
     {
         static Guid _serializerGuid = new Guid("D950F508-B774-4838-B81A-757EFDC40518");
         static byte _formatVersion = 1;
@@ -21,17 +21,14 @@ namespace ModelGraph.Core
         internal RelationXRoot(Root root)
         {
             Owner = root;
-
             root.RegisterItemSerializer((_serializerGuid, this));
-            CreateProperties(root);
-
             new RelationXLink(root, this);
         }
         #endregion
 
 
-        #region CreateProperties  =============================================
-        private void CreateProperties(Root root)
+        #region IPrimeRoot  ===================================================
+        public void CreateSecondaryHierarchy(Root root)
         {
             var sto = root.Get<PropertyRoot>();
 
@@ -40,6 +37,13 @@ namespace ModelGraph.Core
 
             root.RegisterStaticProperties(typeof(Relation), GetProps(root)); //used by property name lookup
         }
+
+        public void RegisterRelationalReferences(Root root)
+        {
+            root.RegisterChildRelation(this, root.Get<Relation_Relation_QueryX>());
+            root.RegisterChildRelation(this, root.Get<Relation_Relation_ViewX>());
+        }
+
         private Property[] GetProps(Root root) => new Property[]
         {
             root.Get<Property_Item_Name>(),

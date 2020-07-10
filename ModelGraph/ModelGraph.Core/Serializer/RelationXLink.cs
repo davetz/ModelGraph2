@@ -16,7 +16,6 @@ namespace ModelGraph.Core
 
         public void PopulateItemIndex(Dictionary<Item, int> itemIndex) { }
 
-        public void RegisterInternal(Dictionary<int, Item> internalItem) { }
         public int GetSerializerItemCount() => 0;
     }
 }

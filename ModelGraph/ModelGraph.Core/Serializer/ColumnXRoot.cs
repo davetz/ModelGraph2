@@ -4,22 +4,20 @@ using Windows.Storage.Streams;
 
 namespace ModelGraph.Core
 {
-    public class ColumnXRoot : ExternalRoot<ColumnX>, ISerializer
+    public class ColumnXRoot : ExternalRoot<ColumnX>, ISerializer, IPrimeRoot
     {
         static Guid _serializerGuid = new Guid("3E7097FE-22D5-43B2-964A-9DB843F6D55B");
         static byte _formatVersion = 1;
         internal override IdKey IdKey => IdKey.ColumnXRoot;
 
-        internal ColumnXRoot(Root root)
-        {
+        internal ColumnXRoot(Root root) 
+        { 
             Owner = root;
-
             root.RegisterItemSerializer((_serializerGuid, this));
-            CreateProperties(root);
         }
 
-        #region CreateProperties  =============================================
-        private void CreateProperties(Root root)
+        #region IPrimeRoot  ===================================================
+        public void CreateSecondaryHierarchy(Root root)
         {
             var sto = root.Get<PropertyRoot>();
 
@@ -28,6 +26,16 @@ namespace ModelGraph.Core
 
             root.RegisterStaticProperties(typeof(ColumnX), GetProps(root)); //used by property name lookup
         }
+
+        public void RegisterRelationalReferences(Root root)
+        {
+            root.RegisterParentRelation(this, root.Get<Relation_Store_ColumnX>());
+            root.RegisterParentRelation(this, root.Get<Relation_EnumX_ColumnX>());
+            root.RegisterParentRelation(this, root.Get<Relation_GraphX_ColorColumnX>());
+            root.RegisterParentRelation(this, root.Get<Relation_Store_NameProperty>());
+            root.RegisterParentRelation(this, root.Get<Relation_Store_SummaryProperty>());
+        }
+
         private Property[] GetProps(Root root) => new Property[]
         {
             root.Get<Property_Item_Name>(),

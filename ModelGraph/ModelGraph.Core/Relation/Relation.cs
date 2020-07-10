@@ -20,30 +20,7 @@ namespace ModelGraph.Core
         internal abstract bool HasLinks { get; }
         #endregion
 
-        #region GetHeadTail  ==================================================
-        static internal void GetHeadTail(Root root, Relation rel, out Store head, out Store tail)
-        {
-            var relation_Store_ChildRelation = root.Get<Relation_Store_ChildRelation>();
-            var relation_Store_ParentRelation = root.Get<Relation_Store_ParentRelation>();
-
-            if (rel == null)
-            {
-                head = null;
-                tail = null;
-            }
-            else if (rel is RelationX_RowX_RowX)
-            {
-                relation_Store_ChildRelation.TryGetParent(rel, out Store ch); head = ch;
-                relation_Store_ParentRelation.TryGetParent(rel, out Store pa); tail = pa;
-            }
-            else
-            {
-                relation_Store_ChildRelation.TryGetParent(rel, out head);
-                relation_Store_ParentRelation.TryGetParent(rel, out tail);
-            }
-        }
-        #endregion
-
+ 
         public override string GetKindId(Root root) => root.GetKindId(IdKey.Relation);
 
         #region RequiredMethods  ==============================================
@@ -85,6 +62,8 @@ namespace ModelGraph.Core
         internal abstract int GetParentLinkPairCount();
         internal abstract List<(Item, Item)> GetChildLinkPairList();
         internal abstract List<(Item, Item)> GetParentLinkPairList();
+
+        internal abstract (Store, Store) GetHeadTail(Root root);
 
         #endregion
     }

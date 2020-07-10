@@ -15,7 +15,7 @@ namespace ModelGraph.Core
         public override bool CanSort => true;
 
         internal override string GetFilterSortId(Root root) => GetSingleNameId(root);
-        public override int TotalCount => DataRoot.Get<Relation_Store_ParentRelation>().ChildCount(Item);
+        public override int TotalCount => DataRoot.Get<Relation_StoreX_ParentRelation>().ChildCount(Item);
 
         internal override bool ExpandLeft(Root root)
         {
@@ -23,7 +23,7 @@ namespace ModelGraph.Core
             {
                 IsExpandedLeft = true;
 
-                if (root.Get<Relation_Store_ParentRelation>().TryGetChildren(Item, out IList<Relation> cxList))
+                if (root.Get<Relation_StoreX_ParentRelation>().TryGetChildren(Item, out IList<Relation> cxList))
                 {
                     foreach (var rx in cxList)
                     {
@@ -45,7 +45,7 @@ namespace ModelGraph.Core
 
             // the data root implements undo/redo functionality
             ItemCreated.Record(root, rx);
-            ItemLinked.Record(root, root.Get<Relation_Store_ParentRelation>(), TX, rx);
+            ItemLinked.Record(root, root.Get<Relation_StoreX_ParentRelation>(), TX, rx);
             ChildDelta -= 2;
         }
 
@@ -61,7 +61,7 @@ namespace ModelGraph.Core
                 {
                     ChildDelta = Item.ChildDelta;
 
-                    if (!root.Get<Relation_Store_ParentRelation>().TryGetChildren(Item, out IList<Relation> rxList))
+                    if (!root.Get<Relation_StoreX_ParentRelation>().TryGetChildren(Item, out IList<Relation> rxList))
                     {
                         IsExpandedLeft = false;
                         DiscardChildren();
