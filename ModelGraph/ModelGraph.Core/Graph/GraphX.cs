@@ -40,8 +40,8 @@ namespace ModelGraph.Core
 
         #region Identity  =====================================================
         internal override IdKey IdKey => IdKey.GraphX;
-        public override string GetSingleNameId(Root root) => string.IsNullOrWhiteSpace(Name) ? BlankName : Name;
-        public override string GetParentNameId(Root root) => GetKindId(root);
+        public override string GetNameId(Root root) => string.IsNullOrWhiteSpace(Name) ? BlankName : Name;
+        public override string GetParentId(Root root) => GetKindId(root);
         public override string GetSummaryId(Root root) => Summary;
         public override string GetDescriptionId(Root root) => Description;
         #endregion

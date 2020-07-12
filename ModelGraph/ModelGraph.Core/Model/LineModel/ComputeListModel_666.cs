@@ -15,7 +15,7 @@ namespace ModelGraph.Core
         public override bool CanSort => true;
         public override bool CanDrag => true;
 
-        internal override string GetFilterSortId(Root root) => GetSingleNameId(root);
+        internal override string GetFilterSortId(Root root) => GetNameId(root);
         public override int TotalCount => DataRoot.Get<Relation_Store_ComputeX>().ChildCount(Item);
 
         internal override bool ExpandLeft(Root root)

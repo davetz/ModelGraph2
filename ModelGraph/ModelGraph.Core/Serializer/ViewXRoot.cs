@@ -30,6 +30,8 @@ namespace ModelGraph.Core
             root.RegisterChildRelation(this, root.Get<Relation_ViewX_ViewX>());
 
             root.RegisterParentRelation(this, root.Get<Relation_ViewX_ViewX>());
+            root.RegisterParentRelation(this, root.Get<Relation_QueryX_ViewX>());
+            root.RegisterParentRelation(this, root.Get<Relation_Property_ViewX>());
         }
 
         private Property[] GetProps(Root root) => new Property[]

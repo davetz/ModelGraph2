@@ -19,6 +19,7 @@ namespace ModelGraph.Core
 
         public void RegisterRelationalReferences(Root root)
         {
+            root.RegisterParentRelation(this, root.Get<Relation_ViewX_Property>());
             root.RegisterParentRelation(this, root.Get<Relation_Store_NameProperty>());
             root.RegisterParentRelation(this, root.Get<Relation_Store_SummaryProperty>());
         }
@@ -26,7 +27,7 @@ namespace ModelGraph.Core
 
         #region Identity  =====================================================
         internal override IdKey IdKey => IdKey.PropertyRoot;
-        public override string GetParentNameId(Root root) => GetKindId(root);
+        public override string GetParentId(Root root) => GetKindId(root);
         #endregion
 
     }

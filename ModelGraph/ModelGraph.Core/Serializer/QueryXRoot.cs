@@ -48,8 +48,11 @@ namespace ModelGraph.Core
             root.RegisterParentRelation(this, root.Get<Relation_ViewX_QueryX>());
             root.RegisterParentRelation(this, root.Get<Relation_QueryX_QueryX>());
             root.RegisterParentRelation(this, root.Get<Relation_Store_QueryX>());
+            root.RegisterParentRelation(this, root.Get<Relation_GraphX_QueryX>());
             root.RegisterParentRelation(this, root.Get<Relation_SymbolX_QueryX>());
+            root.RegisterParentRelation(this, root.Get<Relation_ComputeX_QueryX>());
             root.RegisterParentRelation(this, root.Get<Relation_Relation_QueryX>());
+            root.RegisterParentRelation(this, root.Get<Relation_GraphX_SymbolQueryX>());
         }
 
 

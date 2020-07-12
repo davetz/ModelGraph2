@@ -23,7 +23,7 @@ namespace ModelGraph.Core
 
         #region Identity  =====================================================
         internal override IdKey IdKey => IdKey.TableX;
-        public override string GetSingleNameId(Root root) => string.IsNullOrWhiteSpace(Name) ? BlankName : Name;
+        public override string GetNameId(Root root) => string.IsNullOrWhiteSpace(Name) ? BlankName : Name;
         public override string GetSummaryId(Root root) => Summary;
         public override string GetDescriptionId(Root root) => Description;
         #endregion

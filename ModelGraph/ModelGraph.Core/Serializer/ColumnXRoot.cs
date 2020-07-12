@@ -34,6 +34,7 @@ namespace ModelGraph.Core
             root.RegisterParentRelation(this, root.Get<Relation_GraphX_ColorColumnX>());
             root.RegisterParentRelation(this, root.Get<Relation_Store_NameProperty>());
             root.RegisterParentRelation(this, root.Get<Relation_Store_SummaryProperty>());
+            root.RegisterParentRelation(this, root.Get<Relation_QueryX_Property>());
         }
 
         private Property[] GetProps(Root root) => new Property[]

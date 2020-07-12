@@ -15,7 +15,7 @@ namespace ModelGraph.Core
 
         public override (string, string) GetKindNameId(Root root) => Item.GetKindNameId(root);
         public override string GetSummaryId(Root root) => Item.GetSummaryId(root);
-        internal override string GetFilterSortId(Root root) => Item.GetSingleNameId(root);
+        internal override string GetFilterSortId(Root root) => Item.GetNameId(root);
 
         public override void GetMenuCommands(Root root, List<LineCommand> list)
         {

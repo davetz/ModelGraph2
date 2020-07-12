@@ -12,5 +12,13 @@ namespace ModelGraph.Core
             IsRequired = true;
             Initialize(25, 25);
         }
+        public override string GetNameId(Root root)
+        {
+            var myName = Name;
+            if (string.IsNullOrWhiteSpace(myName) || myName.StartsWith("?")) myName = string.Empty;
+
+            return $"({myName})    {typeof(Store).Name} --> {typeof(Relation).Name}";
+
+        }
     }
 }

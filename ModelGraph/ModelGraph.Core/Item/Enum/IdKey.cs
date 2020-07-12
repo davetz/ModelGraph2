@@ -37,7 +37,7 @@ namespace ModelGraph.Core
      */
         #region Flags  ========================================================
         Empty = 0,
-
+        Item = 1,
         //=====================================================================
         IsCovert = 0x8000, // Don't include this item in the model change log
         IsExternal = 0x4000, // This item is serialized/deserialize to/from a repository
@@ -47,26 +47,6 @@ namespace ModelGraph.Core
         FlagMask = 0xF000,
         EnumMask = 0x3F,
         IndexMask = 0xF,
-
-        #endregion
-
-        #region MainUI  ==============================================(000-01F)
-        // resource string keys used by the main UI 
-        // (not associated with any individual item, model or command)
-
-        BlankName = 0x001,
-        InvalidItem = 0x002,
-        ModelGraphTitle = 0x003,
-        AppRootModelTab = 0x004,
-        ExpandLeft = 0x006,
-        TotalCount = 0x007,
-        FilterText = 0x008,
-        FilterCount = 0X009,
-        ExpandRight = 0x00A,
-        FilterExpand = 0x00B,
-        NewModel = 0x00C,
-        EditSymbol = 0x00D,
-        SortMode = 0x010,
 
         #endregion
 

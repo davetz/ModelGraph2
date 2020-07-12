@@ -14,5 +14,14 @@ namespace ModelGraph.Core
 
             owner.Add(this);
         }
+
+        public override string GetNameId(Root root)
+        {
+            var myName = Name;
+            if (string.IsNullOrWhiteSpace(myName) || myName.StartsWith("?")) myName = string.Empty;
+
+            return $"({myName})    {typeof(Item).Name} --> {typeof(Error).Name}";
+
+        }
     }
 }

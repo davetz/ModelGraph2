@@ -13,5 +13,13 @@ namespace ModelGraph.Core
             Initialize(25, 25);
             owner.Add(this);
         }
+        public override string GetNameId(Root root)
+        {
+            var myName = Name;
+            if (string.IsNullOrWhiteSpace(myName) || myName.StartsWith("?")) myName = string.Empty;
+
+            return $"({myName})    {typeof(Store).Name} --> {typeof(Relation).Name}";
+
+        }
     }
 }

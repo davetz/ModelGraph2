@@ -9,6 +9,7 @@ namespace ModelGraph.Core
 
 
         public override (string, string) GetKindNameId(Root root) => Item.GetKindNameId(root);
+        public override string GetSummaryId(Root root) => Item.GetSummaryId(root);
 
         public override bool CanDrag => true;
         

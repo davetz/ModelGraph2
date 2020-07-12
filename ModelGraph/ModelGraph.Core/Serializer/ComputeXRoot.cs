@@ -37,6 +37,7 @@ namespace ModelGraph.Core
             root.RegisterParentRelation(this, root.Get<Relation_Store_ComputeX>());
             root.RegisterParentRelation(this, root.Get<Relation_Store_NameProperty>());
             root.RegisterParentRelation(this, root.Get<Relation_Store_SummaryProperty>());
+            root.RegisterParentRelation(this, root.Get<Relation_QueryX_Property>());
         }
 
 

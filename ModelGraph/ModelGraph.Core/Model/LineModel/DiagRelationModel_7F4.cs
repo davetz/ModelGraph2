@@ -13,11 +13,11 @@ namespace ModelGraph.Core
         {
             var prop = root.Get<Property_Relation_Pairing>();
             var kind = Item.GetKindId(root);
-            var name = $"{Item.GetSingleNameId(root)}        [{prop.GetValue(RX)}]";
+            var name = $"{Item.GetNameId(root)}        [{prop.GetValue(RX)}]";
             return (kind, name);
         }
         public override string GetSummaryId(Root root) => Item.GetSummaryId(root);
-        internal override string GetFilterSortId(Root root) => Item.GetSingleNameId(root);
+        internal override string GetFilterSortId(Root root) => Item.GetNameId(root);
 
         internal override bool ExpandLeft(Root root)
         {

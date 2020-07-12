@@ -291,7 +291,7 @@ namespace ModelGraph.Core
         #region GetSelectorName  ==============================================
         internal string GetSelectorName(ComputeX item)
         {
-            return Get<Relation_Store_ComputeX>().TryGetParent(item, out Store tbl) ? GetIdentity(tbl, IdentityStyle.Single) : "Select";
+            return Get<Relation_Store_ComputeX>().TryGetParent(item, out Store tbl) ? tbl.GetNameId() : "Select";
         }
         internal int GetValueType(QueryX qx)
         {

@@ -118,40 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="001N" xml:space="preserve">
-    <value>???</value>
-  </data>
-  <data name="001S" xml:space="preserve">
-    <value>Item has a blank name</value>
-  </data>
-  <data name="002N" xml:space="preserve">
-    <value>######</value>
-  </data>
-  <data name="002S" xml:space="preserve">
-    <value>Item is invalid (it should not be here)</value>
-  </data>
-  <data name="003N" xml:space="preserve">
-    <value>Model Graph</value>
-  </data>
-  <data name="003S" xml:space="preserve">
-    <value>Model Graph application</value>
-  </data>
-  <data name="004N" xml:space="preserve">
-    <value>Undo</value>
-  </data>
-  <data name="004S" xml:space="preserve">
-    <value>Undo change</value>
-  </data>
-  <data name="005S" xml:space="preserve">
-    <value>Redo change</value>
-  </data>
-  <data name="00CN" xml:space="preserve">
-    <value>New Model</value>
-  </data>
-  <data name="00CS" xml:space="preserve">
-    <value>New unsaved data model</value>
-  </data>
-  <data name="00DN" xml:space="preserve">
-    <value>Edit Symbol</value>
+    <value>Item</value>
   </data>
   <data name="021N" xml:space="preserve">
     <value>New</value>

@@ -22,15 +22,15 @@ namespace ModelGraph.Core
         internal virtual string Summary { get => ""; set => _ = value; }        //most external items have a summary string
         internal virtual string Description { get => ""; set => _ = value; }    //most external items may have a discription
 
-        public virtual string GetKindId(Root root) => root.GetKindId(IdKey);
-        public virtual string GetSingleNameId(Root root) => root.GetSingleNameId(IdKey);
-        public virtual string GetParentNameId(Root root) => Owner.GetSingleNameId(root);
-        public virtual string GetDoubleNameId(Root root) => $"{GetParentNameId(root)} : {GetSingleNameId(root)}";
-        public virtual string GetChangeLogId(Root root) => GetDoubleNameId(root);
-        public virtual (string, string) GetKindNameId(Root root) => (GetKindId(root), GetSingleNameId(root));
-        public virtual string GetSummaryId(Root root) => root.GetSummaryId(IdKey);
-        public virtual string GetDescriptionId(Root root) => root.GetDescriptionId(IdKey);
-        public virtual string GetAcceleratorId(Root root) => root.GetAcceleratorId(IdKey);
+        public virtual string GetKindId(Root root = null) => root is null ? DataRoot.GetKindId(IdKey) : root.GetKindId(IdKey);
+        public virtual string GetNameId(Root root = null) => root is null ? DataRoot.GetNameId(IdKey) : root.GetNameId(IdKey);
+        public virtual string GetParentId(Root root = null) => Owner.GetNameId(root);
+        public virtual string GetDoubleNameId(Root root = null) => $"{GetParentId(root)} : {GetNameId(root)}";
+        public virtual string GetChangeLogId(Root root = null) => GetDoubleNameId(root);
+        public virtual (string, string) GetKindNameId(Root root = null) => (GetKindId(root), GetNameId(root));
+        public virtual string GetSummaryId(Root root = null) => root is null ? DataRoot.GetSummaryId(IdKey) : root.GetSummaryId(IdKey);
+        public virtual string GetDescriptionId(Root root = null) => root is null ? DataRoot.GetDescriptionId(IdKey) : root.GetDescriptionId(IdKey);
+        public virtual string GetAcceleratorId(Root root = null) => root is null ? DataRoot.GetAcceleratorId(IdKey) : root.GetAcceleratorId(IdKey);
         internal string GetIndexId()
         {
             var inx = Index;

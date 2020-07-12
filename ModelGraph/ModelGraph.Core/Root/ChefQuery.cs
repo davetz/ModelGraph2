@@ -271,12 +271,12 @@ namespace ModelGraph.Core
         internal string GetSelectName(QueryX vx)
         {
             GetHeadTail(vx, out Store head, out Store tail);
-            return GetIdentity(tail, IdentityStyle.Single);
+            return tail.GetNameId();
         }
         internal string GetWhereName(QueryX sx)
         {
             GetHeadTail(sx, out Store head, out Store tail);
-            return GetIdentity(tail, IdentityStyle.Single);
+            return tail.GetNameId();
         }
         #endregion
 
@@ -491,8 +491,8 @@ namespace ModelGraph.Core
             GetHeadTail(sd, out Store head, out Store tail);
             if (head == null || tail == null) return InvalidItem;
 
-            var headName = GetIdentity(head, IdentityStyle.Single);
-            var tailName = GetIdentity(tail, IdentityStyle.Single);
+            var headName = head.GetNameId();
+            var tailName = tail.GetNameId();
             {
                 if (sd.HasWhere)
                     return $"{headName}{parentNameSuffix}{tailName}  ({sd.WhereString})";
@@ -511,9 +511,9 @@ namespace ModelGraph.Core
             GetHeadTail(sd2, out Store head2, out Store tail2);
 
             StringBuilder sb = new StringBuilder(132);
-            sb.Append(GetIdentity(head1, IdentityStyle.Single));
+            sb.Append(head1.GetNameId());
             sb.Append(parentNameSuffix);
-            sb.Append(GetIdentity(tail2, IdentityStyle.Single));
+            sb.Append(tail2.GetNameId());
             return sb.ToString();
         }
 

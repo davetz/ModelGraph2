@@ -13,7 +13,7 @@ namespace ModelGraph.Controls
 {
     public sealed partial class ModelGraphControl : Page, IPageControl, IModelPageControl
     {
-        private Root _chef;
+        private Root _root;
         private Graph _graph;
         private readonly Size _desiredSize = new Size { Height = 800, Width = 800 };
         public IRootModel Model { get; }
@@ -21,7 +21,7 @@ namespace ModelGraph.Controls
         public ModelGraphControl(IRootModel model)
         {
             Model = model ?? throw new ArgumentNullException(nameof(model));
-            _chef = model.DataRoot;
+            _root = model.DataRoot;
             _graph = model.RootItem as Graph;
 
             _selector = new Selector(_graph);

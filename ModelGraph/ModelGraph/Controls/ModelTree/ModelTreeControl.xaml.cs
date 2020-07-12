@@ -607,7 +607,7 @@ namespace ModelGraph.Controls
                     {
                         var cmd = buttonCommands[i];
                         btn.Tag = cmd;
-                        btn.Content = cmd.GetSingleNameId(DataRoot);
+                        btn.Content = cmd.GetNameId(DataRoot);
                         btn.Visibility = Visibility.Visible;
                         ToolTipService.SetToolTip(btn, cmd.GetSummaryId(DataRoot));
                     }
@@ -702,7 +702,7 @@ namespace ModelGraph.Controls
                 {
                     var cmd = ButtonCommands[i];
                     ItemButtons[i].DataContext = cmd;
-                    ItemButtons[i].Content = cmd.GetSingleNameId(DataRoot);
+                    ItemButtons[i].Content = cmd.GetNameId(DataRoot);
                     ItemButtonTips[i].Content = cmd.GetSummaryId(DataRoot);
                     ItemButtons[i].Visibility = Visibility.Visible;
                     var key = cmd.GetAcceleratorId(DataRoot);
@@ -752,7 +752,7 @@ namespace ModelGraph.Controls
                     {
                         var cmd = cmds[i];
                         MenuItems[i].DataContext = cmd;
-                        MenuItems[i].Text = cmd.GetSingleNameId(DataRoot);
+                        MenuItems[i].Text = cmd.GetNameId(DataRoot);
                         MenuItemTips[i].Content = cmd.GetSummaryId(DataRoot);
                     }
                 }

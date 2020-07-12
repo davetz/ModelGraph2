@@ -15,7 +15,7 @@ namespace ModelGraph.Core
         public override bool CanSort => TotalCount > 1;
         public override int TotalCount => ItemStore.Count;
 
-        public override (string, string) GetKindNameId(Root root) => (string.Empty, Item.GetSingleNameId(root));
+        public override (string, string) GetKindNameId(Root root) => (string.Empty, Item.GetNameId(root));
 
         internal override bool ExpandLeft(Root root)
         {

@@ -63,7 +63,7 @@ namespace ModelGraph.Core
 
             var nam1 = item1.GetDoubleNameId(root);
             var nam2 = item2.GetDoubleNameId(root);
-            var rnam = rel.GetSingleNameId(root);
+            var rnam = rel.GetNameId(root);
 
             var name = $" [{rnam}]   ({nam1}) --> ({nam2})";
             new ItemUnLinked(owner, rel, item1, item2, parentIndex, childIndex, name);
@@ -77,7 +77,7 @@ namespace ModelGraph.Core
 
             var nam1 = item1.GetDoubleNameId(root);
             var nam2 = item2.GetDoubleNameId(root);
-            var rnam = rel.GetSingleNameId(root);
+            var rnam = rel.GetNameId(root);
 
             var name = $" [{rnam}]   ({nam1}) --> ({nam2})";
 

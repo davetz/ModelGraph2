@@ -39,7 +39,7 @@ namespace ModelGraph.Core
 
         public override (string, string) GetKindNameId(Root root)
         {
-            var name = Property.GetSingleNameId(root);
+            var name = Property.GetNameId(root);
 
             return (null, Property.HasParentName ? Property.GetParentName(root, Item) : name);
         }

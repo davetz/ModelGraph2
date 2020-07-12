@@ -56,8 +56,8 @@
         public override string ToString()
         {
             var root = DataRoot;
-            var headName = root.GetIdentity(Node1.Item, IdentityStyle.Double);
-            var tailName = root.GetIdentity(Node2.Item, IdentityStyle.Double);
+            var headName = Node1.Item.GetDoubleNameId(root);
+            var tailName = Node2.Item.GetDoubleNameId(root);
             return $"{headName} --> {tailName}  ({LineColor})";
         }
         #endregion

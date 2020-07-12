@@ -31,8 +31,8 @@ namespace ModelGraph.Core
 
         #region Identity  =====================================================
         internal override IdKey IdKey => IdKey.SymbolX;
-        public override string GetSingleNameId(Root root) => string.IsNullOrWhiteSpace(Name) ? BlankName : Name;
-        public override string GetParentNameId(Root root) => root.Get<Relation_GraphX_SymbolX>().TryGetParent(this, out GraphX p) ? p.GetSingleNameId(root) : GetKindId(root);
+        public override string GetNameId(Root root) => string.IsNullOrWhiteSpace(Name) ? BlankName : Name;
+        public override string GetParentId(Root root) => root.Get<Relation_GraphX_SymbolX>().TryGetParent(this, out GraphX p) ? p.GetNameId(root) : GetKindId(root);
         public override string GetSummaryId(Root root) => Summary;
         public override string GetDescriptionId(Root root) => Description;
         #endregion
